@@ -1,0 +1,24 @@
+#**
+Mule Component Exception Velocity Template.
+@author Fady
+@version 0.1
+*#
+#foreach($cixsOperation in $muleComponent.cixsOperations)
+#if ($cixsOperation.name == $operation)
+#parse("vlc/cixsmule-component-common-package.vm")
+
+public class ${cixsOperation.faultType} extends Exception {
+    
+    private static final long serialVersionUID = ${serialVersionID};
+
+    public ${cixsOperation.faultType}(String message) {
+        super(message);
+    }
+    
+    public ${cixsOperation.faultType}(Exception e) {
+        super(e);
+    }
+
+}
+#end
+#end

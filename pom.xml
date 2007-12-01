@@ -43,11 +43,29 @@
 					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
+	        <plugin>
+	          <artifactId>maven-compiler-plugin</artifactId>
+	          <configuration>
+	            <source>1.5</source>
+	            <target>1.5</target>
+	          </configuration>
+	        </plugin>
 		</plugins>
 	</build>
 	<name>Legs4Mule</name>
 	<description>Legacy IBM CICS integration for Mule based on open-source LegStar</description>
 	<dependencies>
+        <dependency>
+            <groupId>org.apache.velocity</groupId>
+            <artifactId>velocity</artifactId>
+            <version>1.5</version>
+        </dependency>
+        <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+            <version>1.6.5</version>
+            <scope>provided</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.mule.transports</groupId>
 			<artifactId>mule-transport-vm</artifactId>
@@ -73,17 +91,17 @@
 			<artifactId>mule-module-client</artifactId>
 			<version>${muleVersion}</version>
 		</dependency>
-                <dependency>
-                        <groupId>org.mule</groupId>
-                        <artifactId>mule-core</artifactId>
-		        <version>${muleVersion}</version>
-                </dependency>
-                <dependency>
-                        <groupId>org.mule.tests</groupId>
-                        <artifactId>mule-tests-functional</artifactId>
-		        <version>${muleVersion}</version>
-                        <scope>test</scope>
-                </dependency>
+		<dependency>
+			<groupId>org.mule</groupId>
+			<artifactId>mule-core</artifactId>
+			<version>${muleVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mule.tests</groupId>
+			<artifactId>mule-tests-functional</artifactId>
+			<version>${muleVersion}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	
 </project>

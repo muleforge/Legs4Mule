@@ -1,0 +1,15 @@
+#**
+Mule Component Common Velocity Template.
+These are the directives and macros shared by the Mule component
+generation artifacts.
+@author Fady
+@version 0.1
+*#
+##
+## ==================================================================
+## All generatedJ ava classes go into the same package
+##
+#if($muleComponent.packageName)
+package $muleComponent.packageName;
+#end
+##
