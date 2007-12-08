@@ -6,7 +6,7 @@
 	<groupId>org.mule.transports</groupId>
 	<artifactId>mule-transport-legstar</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0</version>
+	<version>SNAPSHOT</version>
 	<properties>
 		<muleVersion>1.4.1</muleVersion>
 	</properties>
