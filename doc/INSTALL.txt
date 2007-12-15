@@ -1,0 +1,8 @@
+Unzip the distribution file to a location of your choice.
+
+The ant folder contains a sample build.xml script that you can customize to
+generate a Mule component.
+
+The generated Mule component uses legStar binding classes. These classes are 
+generated using the LegStar binding generator as described here:
+http://www.legsem.com/legstar/legstar-coxbgen/index.html
