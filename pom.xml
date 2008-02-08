@@ -68,17 +68,17 @@
   <name>Legs4Mule</name>
   <description>Legacy IBM CICS integration for Mule based on open-source LegStar</description>
   <dependencies>
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.6.5</version>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+        <groupId>org.apache.velocity</groupId>
+        <artifactId>velocity</artifactId>
+        <version>1.5</version>
+    </dependency>
+    <dependency>
+        <groupId>ant</groupId>
+        <artifactId>ant</artifactId>
+        <version>1.6.5</version>
+        <scope>provided</scope>
+    </dependency>
     <dependency>
       <groupId>org.mule.transports</groupId>
       <artifactId>mule-transport-vm</artifactId>
@@ -88,6 +88,11 @@
       <groupId>org.mule.transports</groupId>
       <artifactId>mule-transport-tcp</artifactId>
       <version>${muleVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.mule.transports</groupId>
+        <artifactId>mule-transport-http</artifactId>
+        <version>${muleVersion}</version>
     </dependency>
     <dependency>
       <groupId>org.mule.transports</groupId>
@@ -114,6 +119,11 @@
       <artifactId>mule-tests-functional</artifactId>
       <version>${muleVersion}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-messaging</artifactId>
+        <version>${legstarVersion}</version>
     </dependency>
   </dependencies>
   
