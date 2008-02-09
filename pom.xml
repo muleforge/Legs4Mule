@@ -9,6 +9,7 @@
   <version>SNAPSHOT</version>
   <properties>
     <muleVersion>1.4.1</muleVersion>
+    <legstarVersion>SNAPSHOT</legstarVersion>
   </properties>
   <url>http://www.legsem.com/legstar</url>
   <developers>
@@ -37,6 +38,19 @@
       <url>dav:https://dav.muleforge.org/legstar-transport/</url>
     </site>
   </distributionManagement>
+  <repositories>
+   <repository>
+    <id>LegStar</id>
+    <url>http://www.legsem.com/legstar/maven/repo</url>
+    <snapshots>
+        <enabled>true</enabled>
+    </snapshots>
+    <releases>
+        <enabled>true</enabled>
+    </releases>
+    <layout>default</layout>
+  </repository>
+</repositories>
   <build>
     <extensions>
       <extension>
