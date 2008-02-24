@@ -1,8 +1,8 @@
-#**
-Mule Component Interface Velocity Template.
-@author Fady
-@version 0.1
-*#
+##/////////////////////////////////////////////////////////////////////
+##Mule Component Interface Velocity Template.
+##@author Fady
+##@version 0.1
+##/////////////////////////////////////////////////////////////////////
 #parse("vlc/cixsmule-component-common-package.vm")
 #parse("vlc/cixsmule-component-common-imports.vm")
 

@@ -6,7 +6,8 @@
   <groupId>org.mule.transports</groupId>
   <version>SNAPSHOT</version>
   <properties>
-    <muleVersion>1.4.1</muleVersion>
+    <muleVersion>1.4.3</muleVersion>
+    <legstarVersion>SNAPSHOT</legstarVersion>
   </properties>
   <artifactId>mule-transport-legstar</artifactId>
   <!-- This should be "pom" not "jar" but if it is set to "pom", the list of dependencies gets ignored
@@ -36,52 +37,58 @@
   </distributionManagement>
   <dependencies>
     <!-- Add dependencies here -->
-        <dependency>
-            <groupId>org.apache.velocity</groupId>
-            <artifactId>velocity</artifactId>
-            <version>1.5</version>
-        </dependency>
-        <dependency>
-            <groupId>ant</groupId>
-            <artifactId>ant</artifactId>
-            <version>1.6.5</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-vm</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-tcp</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-file</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-stream</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-client</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule</groupId>
-            <artifactId>mule-core</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
     <dependency>
-      <groupId>org.mule.tests</groupId>
-      <artifactId>mule-tests-functional</artifactId>
-      <version>1.4.4-SNAPSHOT</version>
-            <scope>test</scope>
+        <groupId>org.apache.velocity</groupId>
+        <artifactId>velocity</artifactId>
+        <version>1.5</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>1.4.2</version>
+    </dependency>
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-log4j12</artifactId>
+        <version>1.4.1</version>
+    </dependency>
+    <dependency>
+        <groupId>ant</groupId>
+        <artifactId>ant</artifactId>
+        <version>1.6.5</version>
+        <scope>provided</scope>
+    </dependency>
+    <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-messaging</artifactId>
+        <version>${legstarVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-cixsgen-model</artifactId>
+        <version>${legstarVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-codegen</artifactId>
+        <version>${legstarVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-cixsgen</artifactId>
+        <version>${legstarVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.legsem.legstar</groupId>
+      <artifactId>legstar-jaxbgen-cases</artifactId>
+      <version>${legstarVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.legsem.legstar</groupId>
+      <artifactId>legstar-coxbgen-cases</artifactId>
+      <version>${legstarVersion}</version>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>

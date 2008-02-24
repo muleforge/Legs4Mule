@@ -1,55 +1,59 @@
-#**
-Mule Component Common Velocity Template.
-These are the directives and macros shared by the Mule component
-generation artifacts.
-@author Fady
-@version 0.1
-*#
-##
-## ==================================================================
-## Operations with multiple inputs or outputs have special import needs
+##/////////////////////////////////////////////////////////////////////
+##Mule Component Common Velocity Template.
+##These are the directives and macros shared by the Mule component
+##generation artifacts.
+##@author Fady
+##@version 0.1
+##/////////////////////////////////////////////////////////////////////
+## Operations with containers have special import needs
 ##
 #set($maps = false)
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-    #if ($cixsOperation.getInput().size() > 1 || $cixsOperation.getOutput().size() > 1)
-        #set ($maps = true)
-    #end
+#if(${cixsOperation.cicsChannel})
+#set ($maps = true)
 #end
-
+#end
+##
 ## ==================================================================
 ## Operations might have a package name that is different from the
 ## component. In this case we need to import these packages.
 ## TODO: Check for same operation package name occurring more than once
 ##
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-    #if($cixsOperation.packageName && $cixsOperation.packageName != $muleComponent.packageName)
+#if($cixsOperation.packageName && $cixsOperation.packageName != $muleComponent.packageName)
 import ${cixsOperation.packageName}.*;
-    #end
 #end
-
-import org.mule.legstar.cixs.invoker.MuleHostHeader;
-    
+#end
+##
 ## ==================================================================
-## Operations with single input or output need an import of the jaxb
-## type as well as the binding type. But the same type should not be
-## imported twice. This loop makes sure we have a single import per
-## jaxb type.
+## Create a list of unique import names
 ##
 #macro(addType)
 #if (!$importTypes.contains($newType))
 #set($ret = $importTypes.add($newType))
 #end
 #end
+## ==================================================================
+## Operations with single input or output need an import of the jaxb
+## type as well as the binding type. But the same type should not be
+## imported twice. This loop makes sure we have a single import per
+## jaxb type.
 ##
 #set($importTypes = [])
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-    #if($cixsOperation.getInput().size() == 1)
-        #set($newType = "${cixsOperation.getInput().get(0).jaxbPackageName}.${cixsOperation.getInput().get(0).jaxbType}")
-        #addType()
-    #end
-    #if($cixsOperation.getOutput().size() == 1)
-        #set($newType = "${cixsOperation.getOutput().get(0).jaxbPackageName}.${cixsOperation.getOutput().get(0).jaxbType}")
-        #addType()
-    #end
+#if($cixsOperation.hasChannel() == false)
+#if($cixsOperation.getInput().size() > 0)
+#set($cixsStructure = ${cixsOperation.getInput().get(0)})
+#set($newType = ${helper.getQualClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#addType()
+#end
+#if($cixsOperation.getOutput().size() > 0)
+#set($cixsStructure = ${cixsOperation.getOutput().get(0)})
+#set($newType = ${helper.getQualClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#addType()
+#end
+#end
 #end
 ##
+
+import org.mule.providers.legstar.cixs.MuleHostHeader;

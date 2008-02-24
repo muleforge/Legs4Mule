@@ -9,13 +9,17 @@
  */
 package org.mule.providers.legstar.gen;
 
-import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.mule.providers.legstar.gen.util.CixsMuleGenUtil;
+import org.mule.providers.legstar.model.CixsMuleComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.legstar.codegen.CodeGenHelper;
+import com.legstar.codegen.CodeGenUtil;
 
 import junit.framework.TestCase;
 
@@ -24,9 +28,11 @@ import junit.framework.TestCase;
  */
 public class InterfaceTemplateTest extends TestCase {
 	
-    /** Velocity template under test. */
-	private static final String TEMPLATE = "vlc/cixsmule-component-interface.vm";
-	
+    /** Code will be generated here. */
+    private static final String GEN_SRC_DIR = "src/test/gen/java";
+
+    private Map <String, Object> mParameters;
+    
     /** Logger. */
     private static final Logger LOG = LoggerFactory.getLogger(
             InterfaceTemplateTest.class);
@@ -35,7 +41,10 @@ public class InterfaceTemplateTest extends TestCase {
     @Override
  	public final void setUp() {
         try {
-            CixsMuleGenUtil.initVelocity();
+            CodeGenUtil.initVelocity();
+            mParameters = new HashMap <String, Object>();
+            CodeGenHelper helper = new CodeGenHelper();
+            mParameters.put("helper", helper);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -46,22 +55,23 @@ public class InterfaceTemplateTest extends TestCase {
      * @throws Exception if test fails
      */
 	public final void testGenerateInterfaceCommareainEqCommareaout() throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfileaeMuleComponent());
+        CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getInterfaceClassName() + ".java");
 
-        StringWriter w = new StringWriter();
-
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package "
-                + Cases.LEGS4MULE_PKG_PREFIX + ".lsfileae;"));
-        assertTrue(w.toString().contains("public interface MuleLsfileae {"));
-        assertTrue(w.toString().contains(Cases.JAXB_PKG_PREFIX
-                + ".DfhcommareaType lsfileae("));
-        assertTrue(w.toString().contains(Cases.JAXB_PKG_PREFIX 
-                + ".DfhcommareaType request,"));
-        assertTrue(w.toString().contains("MuleHostHeader hostHeader)"));
-        assertTrue(w.toString().contains(" throws MuleLsfileaeException;"));
+        assertTrue(resStr.contains("package "
+                + TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileae;"));
+        assertTrue(resStr.contains("public interface Lsfileae {"));
+        assertTrue(resStr.contains("DfhcommareaType lsfileae("));
+        assertTrue(resStr.contains("DfhcommareaType request,"));
+        assertTrue(resStr.contains("MuleHostHeader hostHeader)"));
+        assertTrue(resStr.contains(" throws LsfileaeException;"));
 		
 	}
 	
@@ -70,22 +80,23 @@ public class InterfaceTemplateTest extends TestCase {
      * @throws Exception if test fails
      */
 	public final void testGenerateInterfaceCommareainNeqCommareaout() throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfilealMuleComponent());
+        CixsMuleComponent muleComponent = TestCases.getLsfilealMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getInterfaceClassName() + ".java");
 
-        StringWriter w = new StringWriter();
-
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package "
-                + Cases.LEGS4MULE_PKG_PREFIX + ".lsfileal;"));
-        assertTrue(w.toString().contains("public interface MuleLsfileal {"));
-        assertTrue(w.toString().contains(Cases.JAXB_PKG_PREFIX
-                + ".ReplyDataType lsfileal("));
-        assertTrue(w.toString().contains(Cases.JAXB_PKG_PREFIX 
-                + ".RequestParmsType request,"));
-        assertTrue(w.toString().contains("MuleHostHeader hostHeader)"));
-        assertTrue(w.toString().contains(" throws MuleLsfilealException;"));
+        assertTrue(resStr.contains("package "
+                + TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileal;"));
+        assertTrue(resStr.contains("public interface Lsfileal {"));
+        assertTrue(resStr.contains("ReplyDataType lsfileal("));
+        assertTrue(resStr.contains("RequestParmsType request,"));
+        assertTrue(resStr.contains("MuleHostHeader hostHeader)"));
+        assertTrue(resStr.contains(" throws LsfilealException;"));
 		
 	}
 	
@@ -94,20 +105,23 @@ public class InterfaceTemplateTest extends TestCase {
      * @throws Exception if test fails
      */
 	public final void testGenerateInterfaceContainer() throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfileacMuleComponent());
+        CixsMuleComponent muleComponent = TestCases.getLsfileacMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getInterfaceClassName() + ".java");
 
-        StringWriter w = new StringWriter();
-
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package "
-                + Cases.LEGS4MULE_PKG_PREFIX + ".lsfileac;"));
-        assertTrue(w.toString().contains("public interface MuleLsfileac {"));
-        assertTrue(w.toString().contains("LsfileacResponseHolder lsfileac("));
-        assertTrue(w.toString().contains("LsfileacRequestHolder request,"));
-        assertTrue(w.toString().contains("MuleHostHeader hostHeader)"));
-        assertTrue(w.toString().contains(" throws MuleLsfileacException;"));
+        assertTrue(resStr.contains("package "
+                + TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileac;"));
+        assertTrue(resStr.contains("public interface Lsfileac {"));
+        assertTrue(resStr.contains("LsfileacResponseHolder lsfileac("));
+        assertTrue(resStr.contains("LsfileacRequestHolder request,"));
+        assertTrue(resStr.contains("MuleHostHeader hostHeader)"));
+        assertTrue(resStr.contains(" throws LsfileacException;"));
 		
 	}
 
@@ -116,27 +130,41 @@ public class InterfaceTemplateTest extends TestCase {
      * @throws Exception if test fails
      */
 	public final void testGenerateInterfaceMultipleOperations() throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfileaxMuleComponent());
+        CixsMuleComponent muleComponent = TestCases.getLsfileaxMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getInterfaceClassName() + ".java");
 
-        StringWriter w = new StringWriter();
-
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package "
-                + Cases.LEGS4MULE_PKG_PREFIX + ".lsfileax;"));
-        assertTrue(w.toString().contains("public interface MuleLsfileax {"));
-        assertTrue(w.toString().contains(Cases.JAXB_PKG_PREFIX
-                + ".ReplyDataType lsfileal("));
-        assertTrue(w.toString().contains(Cases.JAXB_PKG_PREFIX
-                + ".RequestParmsType request,"));
-        assertTrue(w.toString().contains("MuleHostHeader hostHeader)"));
-        assertTrue(w.toString().contains(" throws MuleLsfilealException;"));
-        assertTrue(w.toString().contains("LsfileacResponseHolder lsfileac("));
-        assertTrue(w.toString().contains("LsfileacRequestHolder request,"));
-        assertTrue(w.toString().contains("MuleHostHeader hostHeader)"));
-        assertTrue(w.toString().contains(" throws MuleLsfileacException;"));
+        assertTrue(resStr.contains("package "
+                + TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileax;"));
+        assertTrue(resStr.contains("public interface Lsfileax {"));
+        assertTrue(resStr.contains("DfhcommareaType lsfileae("));
+        assertTrue(resStr.contains("DfhcommareaType request,"));
+        assertTrue(resStr.contains("MuleHostHeader hostHeader)"));
+        assertTrue(resStr.contains(" throws LsfileaeException;"));
+        assertTrue(resStr.contains("LsfileacResponseHolder lsfileac("));
+        assertTrue(resStr.contains("LsfileacRequestHolder request,"));
+        assertTrue(resStr.contains("MuleHostHeader hostHeader)"));
+        assertTrue(resStr.contains(" throws LsfileacException;"));
 		
 	}
+    
+    private String getSource(String srcLocation, String srcName) throws Exception {
+        BufferedReader in = new BufferedReader(new FileReader(srcLocation + '/' + srcName));
+        String resStr = "";
+        String str = in.readLine();
+        while (str != null) {
+            LOG.debug(str);
+            resStr += str;
+            str = in.readLine();
+        }
+        in.close();
+        return resStr;
+    }
 
 }

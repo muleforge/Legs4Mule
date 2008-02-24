@@ -26,15 +26,18 @@ Assembly descriptor for the full distribution.
       </includes>
     </fileSet>
     <fileSet>
-      <directory>../target</directory>
-      <outputDirectory>lib/legstar</outputDirectory>
+      <directory>../examples/target</directory>
+      <outputDirectory>.</outputDirectory>
           <includes>
               <include>*.jar</include>
           </includes>
     </fileSet>
+    <!-- The pom in dist results in an empty jar. What we need
+         is to override that jar with the one resulting from
+         the main pom.  -->
     <fileSet>
-      <directory>../examples/target</directory>
-      <outputDirectory>.</outputDirectory>
+      <directory>../target</directory>
+      <outputDirectory>lib/opt</outputDirectory>
           <includes>
               <include>*.jar</include>
           </includes>
@@ -48,31 +51,24 @@ Assembly descriptor for the full distribution.
     </fileSet>
   </fileSets>
   <dependencySets>
-    <!-- Mule libraries -->
+    <!-- Samples/Test libraries -->
     <dependencySet>
       <outputDirectory>lib/user</outputDirectory>
       <outputFileNameMapping>${artifactId}.${extension}</outputFileNameMapping>
       <scope>test</scope>
       <includes>
-        <include>org.mule.tests:mule-tests-functional</include>
+        <include>com.legsem.legstar:legstar-jaxbgen-cases</include>
+        <include>com.legsem.legstar:legstar-coxbgen-cases</include>
       </includes>
     </dependencySet>
-    <!-- Non-Mule libraries -->
+    <!-- Non-Mule libraries. The main jar was previously included using
+         fileset so we exclude that artifact here.  -->
     <dependencySet>
       <outputDirectory>lib/opt</outputDirectory>
       <scope>runtime</scope>
       <excludes>
-        <exclude>org.mule.transports:mule-transport-legstar</exclude>
+        <excludes>org.mule.transports:mule-transport-legstar</excludes>
       </excludes>
     </dependencySet>
-    <!--
-    <dependencySet>
-      <outputDirectory>lib/opt</outputDirectory>
-      <scope>runtime</scope>
-      <includes>
-        <include>com.jcraft:jsch</include>
-      </includes>
-    </dependencySet>
-    -->
   </dependencySets>
 </assembly>

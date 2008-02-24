@@ -13,19 +13,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mule.providers.legstar.model.CixsMuleComponent;
-import org.mule.providers.legstar.model.CixsOperation;
-import org.mule.providers.legstar.model.CixsStructure;
+
+import com.legstar.cixs.gen.model.CixsOperation;
+import com.legstar.cixs.gen.model.CixsStructure;
 
 /**
  * Helper class. Creates models ready for code generation.
  */
-public final class Cases {
+public final class TestCases {
     
-    /** Defeats instantiation.*/
-    private Cases() {
-        
-    }
-
 	/** Target package for generated Mule component. */
     public static final String LEGS4MULE_PKG_PREFIX =
 	    "org.mule.providers.legstar.test";
@@ -38,10 +34,10 @@ public final class Cases {
 	 */
 	public static CixsMuleComponent getLsfileaeMuleComponent() {
         CixsMuleComponent muleComponent = new CixsMuleComponent();
-        muleComponent.setName("MuleLsfileae");
-        muleComponent.setPackageName(Cases.LEGS4MULE_PKG_PREFIX + ".lsfileae");
+        muleComponent.setName("lsfileae");
+        muleComponent.setPackageName(TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileae");
         List <CixsOperation> cixsOperations = new ArrayList <CixsOperation>();
-        cixsOperations.add(Cases.getLsfileaeOperation());
+        cixsOperations.add(TestCases.getLsfileaeOperation());
         muleComponent.setCixsOperations(cixsOperations);
         return muleComponent;
 	}
@@ -51,10 +47,10 @@ public final class Cases {
 	 */
 	public static CixsMuleComponent getLsfilealMuleComponent() {
         CixsMuleComponent muleComponent = new CixsMuleComponent();
-        muleComponent.setName("MuleLsfileal");
-        muleComponent.setPackageName(Cases.LEGS4MULE_PKG_PREFIX + ".lsfileal");
+        muleComponent.setName("lsfileal");
+        muleComponent.setPackageName(TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileal");
         List <CixsOperation> cixsOperations = new ArrayList <CixsOperation>();
-        cixsOperations.add(Cases.getLsfilealOperation());
+        cixsOperations.add(TestCases.getLsfilealOperation());
         muleComponent.setCixsOperations(cixsOperations);
         return muleComponent;
 	}
@@ -63,10 +59,10 @@ public final class Cases {
 	 */
 	public static CixsMuleComponent getLsfileacMuleComponent() {
         CixsMuleComponent muleComponent = new CixsMuleComponent();
-        muleComponent.setName("MuleLsfileac");
-        muleComponent.setPackageName(Cases.LEGS4MULE_PKG_PREFIX + ".lsfileac");
+        muleComponent.setName("lsfileac");
+        muleComponent.setPackageName(TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileac");
         List <CixsOperation> cixsOperations = new ArrayList <CixsOperation>();
-        cixsOperations.add(Cases.getLsfileacOperation());
+        cixsOperations.add(TestCases.getLsfileacOperation());
         muleComponent.setCixsOperations(cixsOperations);
         return muleComponent;
 	}
@@ -75,11 +71,11 @@ public final class Cases {
 	 */
 	public static CixsMuleComponent getLsfileaxMuleComponent() {
         CixsMuleComponent muleComponent = new CixsMuleComponent();
-        muleComponent.setName("MuleLsfileax");
-        muleComponent.setPackageName(Cases.LEGS4MULE_PKG_PREFIX + ".lsfileax");
+        muleComponent.setName("lsfileax");
+        muleComponent.setPackageName(TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileax");
         List <CixsOperation> cixsOperations = new ArrayList <CixsOperation>();
-        cixsOperations.add(Cases.getLsfilealOperation());
-        cixsOperations.add(Cases.getLsfileacOperation());
+        cixsOperations.add(TestCases.getLsfileaeOperation());
+        cixsOperations.add(TestCases.getLsfileacOperation());
         muleComponent.setCixsOperations(cixsOperations);
         return muleComponent;
 	}
@@ -91,7 +87,7 @@ public final class Cases {
         CixsOperation cixsOperation = new CixsOperation();
         cixsOperation.setCicsProgramName("LSFILEAE");
         cixsOperation.setName("lsfileae");
-        cixsOperation.setFaultType("MuleLsfileaeException");
+        cixsOperation.setFaultType("LsfileaeException");
 
         List <CixsStructure> inStructures = new ArrayList <CixsStructure>();
         CixsStructure inStructure = new CixsStructure();
@@ -99,7 +95,6 @@ public final class Cases {
         inStructure.setJaxbType("DfhcommareaType");
         inStructures.add(inStructure);
         cixsOperation.setInput(inStructures);
-        cixsOperation.setRequestHolderType(JAXB_PKG_PREFIX + ".DfhcommareaType");
         
         List <CixsStructure> outStructures = new ArrayList <CixsStructure>();
         CixsStructure outStructure = new CixsStructure();
@@ -107,7 +102,6 @@ public final class Cases {
         outStructure.setJaxbType("DfhcommareaType");
         outStructures.add(outStructure);
         cixsOperation.setOutput(outStructures);
-        cixsOperation.setResponseHolderType(JAXB_PKG_PREFIX + ".DfhcommareaType");
 
         return cixsOperation;
 	}
@@ -120,7 +114,7 @@ public final class Cases {
         CixsOperation cixsOperation = new CixsOperation();
         cixsOperation.setCicsProgramName("LSFILEAL");
         cixsOperation.setName("lsfileal");
-        cixsOperation.setFaultType("MuleLsfilealException");
+        cixsOperation.setFaultType("LsfilealException");
 
         List <CixsStructure> inStructures = new ArrayList <CixsStructure>();
         CixsStructure inStructure = new CixsStructure();
@@ -128,7 +122,6 @@ public final class Cases {
         inStructure.setJaxbType("RequestParmsType");
         inStructures.add(inStructure);
         cixsOperation.setInput(inStructures);
-        cixsOperation.setRequestHolderType(JAXB_PKG_PREFIX + ".RequestParmsType");
         
         List <CixsStructure> outStructures = new ArrayList <CixsStructure>();
         CixsStructure outStructure = new CixsStructure();
@@ -136,7 +129,6 @@ public final class Cases {
         outStructure.setJaxbType("ReplyDataType");
         outStructures.add(outStructure);
         cixsOperation.setOutput(outStructures);
-        cixsOperation.setResponseHolderType(JAXB_PKG_PREFIX + ".ReplyDataType");
 
        return cixsOperation;
 	}
@@ -149,7 +141,7 @@ public final class Cases {
         cixsOperation.setCicsProgramName("LSFILEAC");
         cixsOperation.setName("lsfileac");
         cixsOperation.setCicsChannel("LSFILEAC-CHANNEL");
-        cixsOperation.setFaultType("MuleLsfileacException");
+        cixsOperation.setFaultType("LsfileacException");
 
         List <CixsStructure> inStructures = new ArrayList <CixsStructure>();
         CixsStructure inStructure1 = new CixsStructure();
@@ -165,7 +157,6 @@ public final class Cases {
         inStructures.add(inStructure2);
         
         cixsOperation.setInput(inStructures);
-        cixsOperation.setRequestHolderType("LsfileacRequestHolder");
 
         List <CixsStructure> outStructures = new ArrayList <CixsStructure>();
         CixsStructure outStructure1 = new CixsStructure();
@@ -181,7 +172,6 @@ public final class Cases {
         outStructures.add(outStructure2);
         
         cixsOperation.setOutput(outStructures);
-        cixsOperation.setResponseHolderType("LsfileacResponseHolder");
 
         return cixsOperation;
 	}

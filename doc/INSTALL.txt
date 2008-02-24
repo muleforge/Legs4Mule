@@ -1,8 +1,25 @@
+This distribution contains 2 sets of functionalities:
+
+1. A UMO component generator that creates Mule components with host access
+   capabilities based on LegStar. These components do not internally use
+   the legstar mule transport.
+   
+2. The legstar mule transport prototype. This prototype is derived from
+   the Mule Http transport so it will only allow host connectivity over
+   Http.
+   
+
+Using the UMO component generator:
+---------------------------------
 Unzip the distribution file to a location of your choice.
 
 The ant folder contains a sample build.xml script that you can customize to
 generate a Mule component.
 
-The generated Mule component uses legStar binding classes. These classes are 
-generated using the LegStar binding generator as described here:
+By default, build.xml generates a component for the sample LSFILEAE cobol
+program, part of the standard LegStar delivery.
+
+In order to create your own Mule-LegStar components you will have to
+create legStar binding classes first. These classes are generated using the
+standard LegStar binding generator as described here:
 http://www.legsem.com/legstar/legstar-coxbgen/index.html

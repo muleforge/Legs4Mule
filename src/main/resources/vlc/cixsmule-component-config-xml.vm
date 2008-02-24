@@ -1,0 +1,31 @@
+##/////////////////////////////////////////////////////////////////////
+##Mule Component configuration XML Template.
+##@author Fady
+##@version 0.1
+##/////////////////////////////////////////////////////////////////////
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<!--  This is a sample Mule configuration file for a LegStar project -->
+
+<mule-configuration id="mule-legstar-${muleComponent.name}-config" version="1.0">
+
+    <description>Mule configuration file for a ${muleComponent.name} LegStar component</description>
+
+    <transformers>
+        <transformer name="ByteArrayToObject" className="org.mule.transformers.simple.ByteArrayToObject"/>
+    </transformers>
+        
+    <model name="${muleComponent.name}Model">
+        <mule-descriptor name="${muleComponent.name}UMO" implementation="${helper.getQualClassName(${muleComponent.packageName}, ${muleComponent.implementationClassName})}">
+            <inbound-router>
+                <endpoint address="tcp://localhost:3213/${muleComponent.name}"
+                    transformers="ByteArrayToObject"
+                    synchronous="true"/>
+            </inbound-router>
+        </mule-descriptor>
+    </model>
+    
+</mule-configuration>

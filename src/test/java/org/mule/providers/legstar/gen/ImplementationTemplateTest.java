@@ -9,13 +9,17 @@
  */
 package org.mule.providers.legstar.gen;
 
-import java.io.StringWriter;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.mule.providers.legstar.gen.util.CixsMuleGenUtil;
+import org.mule.providers.legstar.model.CixsMuleComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.legstar.codegen.CodeGenHelper;
+import com.legstar.codegen.CodeGenUtil;
 
 import junit.framework.TestCase;
 
@@ -24,9 +28,11 @@ import junit.framework.TestCase;
  */
 public class ImplementationTemplateTest extends TestCase {
 	
-	/** Velocity template under test. */
-    private static final String TEMPLATE = "vlc/cixsmule-component-implementation.vm";
+    /** Code will be generated here. */
+    private static final String GEN_SRC_DIR = "src/test/gen/java";
 
+    private Map <String, Object> mParameters;
+    
     /** Logger. */
     private static final Logger LOG = LoggerFactory.getLogger(
             ImplementationTemplateTest.class);
@@ -35,7 +41,10 @@ public class ImplementationTemplateTest extends TestCase {
     @Override
     public final void setUp() {
 		try {
-            CixsMuleGenUtil.initVelocity();
+            CodeGenUtil.initVelocity();
+            mParameters = new HashMap <String, Object>();
+            CodeGenHelper helper = new CodeGenHelper();
+            mParameters.put("helper", helper);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -47,33 +56,37 @@ public class ImplementationTemplateTest extends TestCase {
 	 */
 	public final void testGenerateImplementationCommareainEqCommareaout()
 	        throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfileaeMuleComponent());
+	    CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateImplementation(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getImplementationClassName() + ".java");
 
-        StringWriter w = new StringWriter();
-
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package " + Cases.LEGS4MULE_PKG_PREFIX
+        assertTrue(resStr.contains("package " + TestCases.LEGS4MULE_PKG_PREFIX
                 + ".lsfileae;"));
-        assertTrue(w.toString().contains("import " + Cases.JAXB_PKG_PREFIX
+        assertTrue(resStr.contains("import " + TestCases.JAXB_PKG_PREFIX
                 + ".lsfileae.DfhcommareaType;"));
-        assertTrue(w.toString().contains("import " + Cases.JAXB_PKG_PREFIX
+        assertTrue(resStr.contains("import " + TestCases.JAXB_PKG_PREFIX
                 + ".lsfileae.bind.DfhcommareaTypeBinding;"));
-        assertTrue(w.toString().contains(
-                "public class MuleLsfileaeImpl implements MuleLsfileae, Callable {"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains(
+                "public class LsfileaeImpl implements Lsfileae, Callable {"));
+        assertTrue(resStr.contains(
                 "private static final String LSFILEAE_PROP_FILE"
                 + " = \"lsfileae.properties\";"));
-        assertTrue(w.toString().contains("DfhcommareaTypeBinding input1"));
-        assertTrue(w.toString().contains("new DfhcommareaTypeBinding(request);"));
-        assertTrue(w.toString().contains("DfhcommareaTypeBinding output1 ="));
-        assertTrue(w.toString().contains("new DfhcommareaTypeBinding();"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("DfhcommareaTypeBinding inputDfhcommareaTypeBinding ="));
+        assertTrue(resStr.contains("new DfhcommareaTypeBinding(request);"));
+        assertTrue(resStr.contains("DfhcommareaTypeBinding outputDfhcommareaTypeBinding ="));
+        assertTrue(resStr.contains("new DfhcommareaTypeBinding();"));
+        assertTrue(resStr.contains(
                 "mInvoker.invoke(hostHeader.getHostRequestID(),"));
-        assertTrue(w.toString().contains("input1,"));
-        assertTrue(w.toString().contains("output1);"));
-        assertTrue(w.toString().contains("reply = output1.getDfhcommareaType();"));
+        assertTrue(resStr.contains("inputDfhcommareaTypeBinding,"));
+        assertTrue(resStr.contains("outputDfhcommareaTypeBinding);"));
+        assertTrue(resStr.contains("reply = outputDfhcommareaTypeBinding.getDfhcommareaType();"));
+        assertTrue(resStr.contains("if (request instanceof DfhcommareaType) {"));
 	}
 	
 	/**
@@ -82,37 +95,40 @@ public class ImplementationTemplateTest extends TestCase {
 	 */
 	public final void testGenerateImplementationCommareainNeqCommareaout()
 	        throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfilealMuleComponent());
- 
-        StringWriter w = new StringWriter();
+        CixsMuleComponent muleComponent = TestCases.getLsfilealMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateImplementation(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getImplementationClassName() + ".java");
 
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package "
-                + Cases.LEGS4MULE_PKG_PREFIX + ".lsfileal;"));
-        assertTrue(w.toString().contains("import "
-                + Cases.JAXB_PKG_PREFIX + ".lsfileal.RequestParmsType;"));
-        assertTrue(w.toString().contains("import "
-                + Cases.JAXB_PKG_PREFIX + ".lsfileal.bind.RequestParmsTypeBinding;"));
-        assertTrue(w.toString().contains("import "
-                + Cases.JAXB_PKG_PREFIX + ".lsfileal.ReplyDataType;"));
-        assertTrue(w.toString().contains("import "
-                + Cases.JAXB_PKG_PREFIX + ".lsfileal.bind.ReplyDataTypeBinding;"));
-        assertTrue(w.toString().contains(
-                "public class MuleLsfilealImpl implements MuleLsfileal, Callable {"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("package "
+                + TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileal;"));
+        assertTrue(resStr.contains("import "
+                + TestCases.JAXB_PKG_PREFIX + ".lsfileal.RequestParmsType;"));
+        assertTrue(resStr.contains("import "
+                + TestCases.JAXB_PKG_PREFIX + ".lsfileal.bind.RequestParmsTypeBinding;"));
+        assertTrue(resStr.contains("import "
+                + TestCases.JAXB_PKG_PREFIX + ".lsfileal.ReplyDataType;"));
+        assertTrue(resStr.contains("import "
+                + TestCases.JAXB_PKG_PREFIX + ".lsfileal.bind.ReplyDataTypeBinding;"));
+        assertTrue(resStr.contains(
+                "public class LsfilealImpl implements Lsfileal, Callable {"));
+        assertTrue(resStr.contains(
                 "private static final String LSFILEAL_PROP_FILE"
                 + " = \"lsfileal.properties\";"));
-        assertTrue(w.toString().contains("RequestParmsTypeBinding input1"));
-        assertTrue(w.toString().contains("new RequestParmsTypeBinding(request);"));
-        assertTrue(w.toString().contains("ReplyDataTypeBinding output1 ="));
-        assertTrue(w.toString().contains("new ReplyDataTypeBinding();"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("RequestParmsTypeBinding inputRequestParmsTypeBinding"));
+        assertTrue(resStr.contains("new RequestParmsTypeBinding(request);"));
+        assertTrue(resStr.contains("ReplyDataTypeBinding outputReplyDataTypeBinding ="));
+        assertTrue(resStr.contains("new ReplyDataTypeBinding();"));
+        assertTrue(resStr.contains(
                 "mInvoker.invoke(hostHeader.getHostRequestID(),"));
-        assertTrue(w.toString().contains("input1,"));
-        assertTrue(w.toString().contains("output1);"));
-        assertTrue(w.toString().contains("reply = output1.getReplyDataType();"));
+        assertTrue(resStr.contains("inputRequestParmsTypeBinding,"));
+        assertTrue(resStr.contains("outputReplyDataTypeBinding);"));
+        assertTrue(resStr.contains("reply = outputReplyDataTypeBinding.getReplyDataType();"));
 	}
 	
 	/**
@@ -120,51 +136,56 @@ public class ImplementationTemplateTest extends TestCase {
      * @throws Exception if test fails
 	 */
 	public final void testGenerateImplementationContainer() throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfileacMuleComponent());
- 
-        StringWriter w = new StringWriter();
+        CixsMuleComponent muleComponent = TestCases.getLsfileacMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateImplementation(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getImplementationClassName() + ".java");
 
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package "
-                + Cases.LEGS4MULE_PKG_PREFIX + ".lsfileac;"));
-        assertTrue(w.toString().contains("import java.util.LinkedHashMap;"));
-        assertTrue(w.toString().contains("import java.util.Map;"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("package "
+                + TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileac;"));
+        assertTrue(resStr.contains("import java.util.LinkedHashMap;"));
+        assertTrue(resStr.contains("import java.util.Map;"));
+        assertTrue(resStr.contains(
                 "import com.legstar.coxb.ICobolComplexBinding;"));
-        assertTrue(w.toString().contains(
-                "public class MuleLsfileacImpl implements MuleLsfileac, Callable {"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains(
+                "public class LsfileacImpl implements Lsfileac, Callable {"));
+        assertTrue(resStr.contains(
                 "private static final String LSFILEAC_PROP_FILE"
                 + " = \"lsfileac.properties\";"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains(
                 "Map <String, ICobolComplexBinding> inputParts ="));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains(
                 "new LinkedHashMap <String, ICobolComplexBinding>();"));
-        assertTrue(w.toString().contains("QueryDataTypeBinding input1 ="));
-        assertTrue(w.toString().contains(
-                "new QueryDataTypeBinding(request.get(QueryData));"));
-        assertTrue(w.toString().contains("QueryLimitTypeBinding input2 ="));
-        assertTrue(w.toString().contains(
-                "new QueryLimitTypeBinding(request.get(QueryLimit));"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("QueryDataTypeBinding inputQueryDataTypeBinding ="));
+        assertTrue(resStr.contains(
+                "new QueryDataTypeBinding(request.getQueryData());"));
+        assertTrue(resStr.contains("inputParts.put(\"QueryData\", inputQueryDataTypeBinding);"));
+        assertTrue(resStr.contains("QueryLimitTypeBinding inputQueryLimitTypeBinding ="));
+        assertTrue(resStr.contains(
+                "new QueryLimitTypeBinding(request.getQueryLimit());"));
+        assertTrue(resStr.contains("inputParts.put(\"QueryLimit\", inputQueryLimitTypeBinding);"));
+       assertTrue(resStr.contains(
                 "Map <String, ICobolComplexBinding> outputParts ="));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains(
                 "new LinkedHashMap <String, ICobolComplexBinding>();"));
-        assertTrue(w.toString().contains("ReplyDataTypeBinding output1 ="));
-        assertTrue(w.toString().contains("new ReplyDataTypeBinding();"));
-        assertTrue(w.toString().contains("ReplyStatusTypeBinding output2 ="));
-        assertTrue(w.toString().contains("new ReplyStatusTypeBinding();"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("ReplyDataTypeBinding outputReplyDataTypeBinding ="));
+        assertTrue(resStr.contains("new ReplyDataTypeBinding();"));
+        assertTrue(resStr.contains("ReplyStatusTypeBinding outputReplyStatusTypeBinding ="));
+        assertTrue(resStr.contains("new ReplyStatusTypeBinding();"));
+        assertTrue(resStr.contains(
                 "mInvoker.invoke(hostHeader.getHostRequestID(),"));
-        assertTrue(w.toString().contains("inputParts,"));
-        assertTrue(w.toString().contains("outputParts);"));
-        assertTrue(w.toString().contains("reply = new LsfileacResponseHolder();"));
-        assertTrue(w.toString().contains(
-                "reply.setReplyData(output1.getReplyDataType());"));
-        assertTrue(w.toString().contains(
-                "reply.setReplyStatus(output2.getReplyStatusType());"));
+        assertTrue(resStr.contains("inputParts,"));
+        assertTrue(resStr.contains("outputParts);"));
+        assertTrue(resStr.contains("reply = new LsfileacResponseHolder();"));
+        assertTrue(resStr.contains(
+                "reply.setReplyData(outputReplyDataTypeBinding.getReplyDataType());"));
+        assertTrue(resStr.contains(
+                "reply.setReplyStatus(outputReplyStatusTypeBinding.getReplyStatusType());"));
  	}
 
 	/**
@@ -172,65 +193,73 @@ public class ImplementationTemplateTest extends TestCase {
      * @throws Exception if test fails
 	 */
 	public final void testGenerateImplementationMultipleOperations() throws Exception {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("muleComponent", Cases.getLsfileaxMuleComponent());
+        CixsMuleComponent muleComponent = TestCases.getLsfileaxMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        CixsMuleGenerator.generateImplementation(
+                muleComponent, mParameters, componentClassFilesLocation);
+        String resStr = getSource(
+                componentClassFilesLocation,
+                muleComponent.getImplementationClassName() + ".java");
 
-        StringWriter w = new StringWriter();
-
-        Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-        LOG.debug(w.toString());
-        assertTrue(w.toString().contains("package "
-                + Cases.LEGS4MULE_PKG_PREFIX + ".lsfileax;"));
-        assertTrue(w.toString().contains("import java.util.LinkedHashMap;"));
-        assertTrue(w.toString().contains("import java.util.Map;"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("package "
+                + TestCases.LEGS4MULE_PKG_PREFIX + ".lsfileax;"));
+        assertTrue(resStr.contains("import java.util.LinkedHashMap;"));
+        assertTrue(resStr.contains("import java.util.Map;"));
+        assertTrue(resStr.contains(
                 "import com.legstar.coxb.ICobolComplexBinding;"));
-        assertTrue(w.toString().contains(
-                "import " + Cases.JAXB_PKG_PREFIX + ".lsfileal.RequestParmsType;"));
-        assertTrue(w.toString().contains(
-                "import " + Cases.JAXB_PKG_PREFIX
-                + ".lsfileal.bind.RequestParmsTypeBinding;"));
-        assertTrue(w.toString().contains(
-                "import " + Cases.JAXB_PKG_PREFIX + ".lsfileal.ReplyDataType;"));
-        assertTrue(w.toString().contains(
-                "import " + Cases.JAXB_PKG_PREFIX
-                + ".lsfileal.bind.ReplyDataTypeBinding;"));
-        assertTrue(w.toString().contains(
-                "public class MuleLsfileaxImpl implements MuleLsfileax, Callable {"));
-        assertTrue(w.toString().contains(
-                "private static final String LSFILEAL_PROP_FILE"
-                + " = \"lsfileal.properties\";"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains(
+                "import " + TestCases.JAXB_PKG_PREFIX + ".lsfileae.DfhcommareaType;"));
+        assertTrue(resStr.contains(
+                "import " + TestCases.JAXB_PKG_PREFIX
+                + ".lsfileae.bind.DfhcommareaTypeBinding;"));
+        assertTrue(resStr.contains(
+                "public class LsfileaxImpl implements Lsfileax, Callable {"));
+        assertTrue(resStr.contains(
+                "private static final String LSFILEAE_PROP_FILE"
+                + " = \"lsfileae.properties\";"));
+        assertTrue(resStr.contains(
                 "private static final String LSFILEAC_PROP_FILE"
                 + " = \"lsfileac.properties\";"));
-        assertTrue(w.toString().contains("RequestParmsTypeBinding input1 ="));
-        assertTrue(w.toString().contains("new RequestParmsTypeBinding(request);"));
-        assertTrue(w.toString().contains("QueryDataTypeBinding input1 ="));
-        assertTrue(w.toString().contains(
-                "new QueryDataTypeBinding(request.get(QueryData));"));
-        assertTrue(w.toString().contains("QueryLimitTypeBinding input2 ="));
-        assertTrue(w.toString().contains(
-                "new QueryLimitTypeBinding(request.get(QueryLimit));"));
-        assertTrue(w.toString().contains("ReplyDataTypeBinding output1 ="));
-        assertTrue(w.toString().contains("new ReplyDataTypeBinding();"));
-        assertTrue(w.toString().contains("ReplyDataTypeBinding output1 ="));
-        assertTrue(w.toString().contains("new ReplyDataTypeBinding();"));
-        assertTrue(w.toString().contains("ReplyStatusTypeBinding output2 ="));
-        assertTrue(w.toString().contains("new ReplyStatusTypeBinding();"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("DfhcommareaTypeBinding inputDfhcommareaTypeBinding ="));
+        assertTrue(resStr.contains("new DfhcommareaTypeBinding(request);"));
+        assertTrue(resStr.contains("DfhcommareaTypeBinding outputDfhcommareaTypeBinding ="));
+        assertTrue(resStr.contains(
+                "new DfhcommareaTypeBinding();"));
+        assertTrue(resStr.contains("QueryLimitTypeBinding inputQueryLimitTypeBinding ="));
+        assertTrue(resStr.contains(
+                "new QueryLimitTypeBinding(request.getQueryLimit());"));
+        assertTrue(resStr.contains("ReplyDataTypeBinding outputReplyDataTypeBinding ="));
+        assertTrue(resStr.contains("new ReplyDataTypeBinding();"));
+        assertTrue(resStr.contains("ReplyStatusTypeBinding outputReplyStatusTypeBinding ="));
+        assertTrue(resStr.contains("new ReplyStatusTypeBinding();"));
+        assertTrue(resStr.contains(
                 "mInvoker.invoke(hostHeader.getHostRequestID(),"));
-        assertTrue(w.toString().contains("inputParts,"));
-        assertTrue(w.toString().contains("outputParts);"));
-        assertTrue(w.toString().contains(
+        assertTrue(resStr.contains("inputParts,"));
+        assertTrue(resStr.contains("outputParts);"));
+        assertTrue(resStr.contains(
                 "mInvoker.invoke(hostHeader.getHostRequestID(),"));
-        assertTrue(w.toString().contains("input1,"));
-        assertTrue(w.toString().contains("output1);"));
-        assertTrue(w.toString().contains("reply = output1.getReplyDataType();"));
-        assertTrue(w.toString().contains("reply = new LsfileacResponseHolder();"));
-        assertTrue(w.toString().contains(
-                "reply.setReplyData(output1.getReplyDataType());"));
-        assertTrue(w.toString().contains(
-                "reply.setReplyStatus(output2.getReplyStatusType());"));
+        assertTrue(resStr.contains("inputDfhcommareaTypeBinding,"));
+        assertTrue(resStr.contains("outputDfhcommareaTypeBinding);"));
+        assertTrue(resStr.contains("reply = outputDfhcommareaTypeBinding.getDfhcommareaType();"));
+        assertTrue(resStr.contains("reply = new LsfileacResponseHolder();"));
+        assertTrue(resStr.contains(
+                "reply.setReplyData(outputReplyDataTypeBinding.getReplyDataType());"));
+        assertTrue(resStr.contains(
+                "reply.setReplyStatus(outputReplyStatusTypeBinding.getReplyStatusType());"));
 	}
 	
+    private String getSource(String srcLocation, String srcName) throws Exception {
+        BufferedReader in = new BufferedReader(new FileReader(srcLocation + '/' + srcName));
+        String resStr = "";
+        String str = in.readLine();
+        while (str != null) {
+            LOG.debug(str);
+            resStr += str;
+            str = in.readLine();
+        }
+        in.close();
+        return resStr;
+    }
 }

@@ -9,24 +9,21 @@
  */
 package org.mule.providers.legstar.gen;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
-import org.apache.velocity.VelocityContext;
-import org.apache.velocity.app.Velocity;
-import org.apache.velocity.exception.MethodInvocationException;
-import org.apache.velocity.exception.ParseErrorException;
-import org.apache.velocity.exception.ResourceNotFoundException;
-import org.mule.providers.legstar.gen.util.CixsMake;
-import org.mule.providers.legstar.gen.util.CixsMuleGenUtil;
 import org.mule.providers.legstar.model.CixsMuleComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.legstar.cixs.gen.model.CixsOperation;
+import com.legstar.cixs.jaxws.gen.CixsHelper;
+import com.legstar.codegen.CodeGenHelper;
+import com.legstar.codegen.CodeGenMakeException;
+import com.legstar.codegen.CodeGenUtil;
 
 /**
  * This Ant task creates the various Mule Component artifacts needed
@@ -34,21 +31,68 @@ import org.slf4j.LoggerFactory;
  */
 public class CixsMuleGenerator extends Task {
 
+    /** This generator name. */
+    public static final String CIXS_MULE_GENERATOR_NAME =
+        "LegStar Mule Component generator";
+
+    /** Velocity template for component interface. */
+    public static final String COMPONENT_INTERFACE_VLC_TEMPLATE =
+        "vlc/cixsmule-component-interface.vm";
+
+    /** Velocity template for component implementation. */
+    public static final String COMPONENT_IMPLEMENTATION_VLC_TEMPLATE =
+        "vlc/cixsmule-component-implementation.vm";
+
+    /** Velocity template for fault. */
+    public static final String OPERATION_FAULT_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-fault.vm";
+
+    /** Velocity template for holder. */
+    public static final String OPERATION_HOLDER_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-holder.vm";
+
+    /** Velocity template for program. */
+    public static final String OPERATION_PROGRAM_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-program.vm";
+
+    /** Velocity template for ant build jar. */
+    public static final String COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE =
+        "vlc/cixsmule-component-ant-build-jar-xml.vm";
+    
+    /** Velocity template for mule configuration xml. */
+    public static final String COMPONENT_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-config-xml.vm";
+    
     /** Service descriptor. */
     private CixsMuleComponent mCixsMuleComponent;
     
-        /** Target location for generated source. */
+    /** Target location for generated source. */
     private String mTargetSrcDir;
     
-    /** Template for XML holding the make steps. */
-    private static final String TEMPLATE = "vlc/cixsmule-cixsmake-xml.vm";
- 
-    /** Pattern for temporary files. */
-    private static final String TEMP_PATTERN = "cixsmule";
+    /** Target location for ant deployment script. */
+    private String mTargetAntDir;
     
-    /** Suffix for temporary files. */
-    private static final String TEMP_SUFFIX = ".tmp";
-
+    /** Target location for mule jar files. */
+    private String mTargetJarDir;
+    
+    /** Target location for properties files. */
+    private String mTargetPropDir;
+    
+    /** Target location for configuration files. */
+    private String mTargetConfDir;
+    
+    /** Location of jaxb classes binaries. */
+    private String mJaxbBinDir;
+    
+    /** Location of jaxb classes binaries. */
+    private String mCoxbBinDir;
+    
+    /** Location of Mule component binaries. */
+    private String mCixsBinDir;
+    
+    /** Location of custom binaries. */
+    private String mCustBinDir;
+    
     /** Logger. */
     private static final Logger LOG = LoggerFactory.getLogger(CixsMuleGenerator.class);
 
@@ -57,100 +101,303 @@ public class CixsMuleGenerator extends Task {
    public final void init() {
         LOG.info("Initializing Mule component generator");
         try {
-            CixsMuleGenUtil.initVelocity();
+            CodeGenUtil.initVelocity();
         } catch (Exception e) {
             throw new BuildException(e.getMessage());
         }
     }
     
     /**
-     * Create a temporary cixs make file describing the templates that
-     * needs to be applied to create a complete Mule component.
+     * Check that enough input parameters are set and then
+     * generate the requested artifacts.
      * 
      * */
     @Override
     public final void execute() {
+        LOG.info("Generating Mule component artifacts for "
+                + ((mCixsMuleComponent == null) ? "null"
+                        : mCixsMuleComponent.getName()));
         long start = System.currentTimeMillis();
-        
+
         try {
             checkInput();
-            CixsMake cixsMake = new CixsMake();
-            cixsMake.init();
-            cixsMake.setModelName("muleComponent");
-            cixsMake.setModel(mCixsMuleComponent);
-            cixsMake.setCixsMakeFileName(getMakeFileName());
-            cixsMake.execute();
-            
-        } catch (CixsMuleGenerationException e) {
+            generate();
+
+        } catch (CodeGenMakeException e) {
             LOG.error("Mule component generator failure", e);
             throw new BuildException(e);
         }
-        
+
         long end = System.currentTimeMillis();
-        LOG.info("Generation success for {}", mCixsMuleComponent.getName());
-        LOG.info("Duration = {} ms", (end - start));
+        LOG.info("Generation success for " + mCixsMuleComponent.getName());
+        LOG.info("Duration = " + (end - start) + " ms");
     }
     
     /**
      * Check that input values are valid.
-     * @throws CixsMuleGenerationException if input is invalid
+     * @throws CodeGenMakeException if input is invalid
      */
-    private void checkInput() throws CixsMuleGenerationException {
+    private void checkInput() throws CodeGenMakeException {
         if (mCixsMuleComponent == null) {
-            throw new CixsMuleGenerationException(
+            throw new CodeGenMakeException(
                     "Missing cixs mule component parameter");
         }
         try {
-            CixsMuleGenUtil.checkDirectory(mTargetSrcDir, true);
+            CodeGenUtil.checkDirectory(mTargetSrcDir, true);
+            CodeGenUtil.checkDirectory(mTargetAntDir, true);
+            CodeGenUtil.checkDirectory(mTargetPropDir, true);
+            CodeGenUtil.checkDirectory(mTargetConfDir, true);
         } catch (IllegalArgumentException e) {
-            throw new CixsMuleGenerationException(e);
+            throw new CodeGenMakeException(e);
         }
     }
     
     /**
-     * Create a temporary XML holding the make instructions for a Mule
-     * component. The XML is built from a velocity template.
-     * @return the temporary file name.
-     * @throws CixsMuleGenerationException if XML make file creation fails
+     * Create all artifacts for Mule component.
+     * @throws CodeGenMakeException if generation fails
      */
-    public final String getMakeFileName() throws CixsMuleGenerationException {
-        VelocityContext context = CixsMuleGenUtil.getContext();
-        context.put("targetName", mCixsMuleComponent.getName());
-        context.put("targetSrcDir", mTargetSrcDir
-                + CixsMuleGenUtil.relativeLocation(mCixsMuleComponent.getPackageName()));
-        context.put("muleComponent", mCixsMuleComponent);
-        StringWriter w = new StringWriter();
-        try {
-            Velocity.mergeTemplate(TEMPLATE, "UTF-8", context, w);
-            File makeFile = File.createTempFile(TEMP_PATTERN, TEMP_SUFFIX);
-            makeFile.deleteOnExit();
-            BufferedWriter out = null;
-            try {
-                out = new BufferedWriter(new FileWriter(makeFile));
-                out.write(w.toString());
-            } catch (IOException e) {
-                throw new CixsMuleGenerationException(e);
-            } finally {
-                if (out != null) {
-                    out.close();
-                }
-            }
-            return makeFile.getAbsolutePath();
+    private void generate() throws CodeGenMakeException {
+        Map < String, Object > parameters = new HashMap < String, Object >();
+        CodeGenHelper helper = new CodeGenHelper();
+        parameters.put("helper", helper);
+        CixsHelper cixsHelper = new CixsHelper();
+        parameters.put("cixsHelper", cixsHelper);
+
+        /* These parameters are primarily useful for the ant build template */
+        parameters.put("jarDir", getTargetJarDir());
+        parameters.put("jaxbBinDir", getJaxbBinDir());
+        parameters.put("coxbBinDir", getCoxbBinDir());
+        parameters.put("cixsBinDir", getCixsBinDir());
+        parameters.put("custBinDir", getCustBinDir());
+        parameters.put("propDir", getTargetPropDir());
+
+        /* Determine target files locations */
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                mTargetSrcDir, mCixsMuleComponent.getPackageName());
+        String componentAntFilesLocation = getTargetAntDir();
+        CodeGenUtil.checkDirectory(componentAntFilesLocation, true);
+        String componentConfFilesLocation = getTargetConfDir();
+        CodeGenUtil.checkDirectory(componentConfFilesLocation, true);
+        
+        /* Produce artifacts */
+        generateInterface(
+                mCixsMuleComponent, parameters, componentClassFilesLocation);
+        generateImplementation(
+                mCixsMuleComponent, parameters, componentClassFilesLocation);
+        generateAntBuildJar(
+                mCixsMuleComponent, parameters, componentAntFilesLocation);
+        generateConfigXml(
+                mCixsMuleComponent, parameters, componentConfFilesLocation);
+        
+        for (CixsOperation operation : mCixsMuleComponent.getCixsOperations()) {
+            String operationPackageName = cixsHelper.getOperationPackageName(
+                    operation, mCixsMuleComponent.getPackageName());
+            parameters.put("operationPackageName", operationPackageName);
+
+            /* Determine target files locations */
+            String operationClassFilesLocation = CodeGenUtil.classFilesLocation(
+                    mTargetSrcDir, operationPackageName);
+            String operationPropertiesFilesLocation = getTargetPropDir();
+            CodeGenUtil.checkDirectory(operationPropertiesFilesLocation, true);
             
-        } catch (ResourceNotFoundException e) {
-            throw new CixsMuleGenerationException(e);
-        } catch (ParseErrorException e) {
-            throw new CixsMuleGenerationException(e);
-        } catch (MethodInvocationException e) {
-            throw new CixsMuleGenerationException(e);
-        } catch (IOException e) {
-            throw new CixsMuleGenerationException(e);
-        } catch (Exception e) {
-            throw new CixsMuleGenerationException(e);
+            generateFault(
+                    operation, parameters, operationClassFilesLocation);
+            generateHolders(
+                    operation, parameters, operationClassFilesLocation);
+            generateProgramProperties(
+                    operation, parameters, operationPropertiesFilesLocation);
+            
+        }
+        
+    }
+
+    /**
+     * Create the Mule Interface class file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentClassFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateInterface(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final String componentClassFilesLocation)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(componentClassFilesLocation,
+                component.getInterfaceClassName() + ".java");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_INTERFACE_VLC_TEMPLATE,
+                "muleComponent", component,
+                parameters,
+                targetFile);
+    }
+    
+    /**
+     * Create the Mule Implementation class file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentClassFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateImplementation(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final String componentClassFilesLocation)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(componentClassFilesLocation,
+                component.getImplementationClassName() + ".java");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_IMPLEMENTATION_VLC_TEMPLATE,
+                "muleComponent", component,
+                parameters,
+                targetFile);
+    }
+    
+    /**
+     * Create the Propram properties file.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param componentPropertiesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateProgramProperties(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String componentPropertiesLocation)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(componentPropertiesLocation,
+                operation.getCicsProgramName().toLowerCase() + ".properties");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                OPERATION_PROGRAM_VLC_TEMPLATE,
+                "cixsOperation", operation,
+                parameters,
+                targetFile);
+    }
+    
+    /**
+     * Create a fault class (Mule Exception).
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateFault(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(operationClassFilesLocation,
+                operation.getFaultType() + ".java");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                OPERATION_FAULT_VLC_TEMPLATE,
+                "cixsOperation", operation,
+                parameters,
+                targetFile);
+    }
+
+    /**
+     * Create a holder classes for channel/containers.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateHolders(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation)
+    throws CodeGenMakeException {
+
+        if (operation.getCicsChannel() == null
+                || operation.getCicsChannel().length() == 0) {
+            return;
+        }
+        
+        if (operation.getInput().size() > 0) {
+            File targetFile = CodeGenUtil.getFile(operationClassFilesLocation,
+                    operation.getRequestHolderType() + ".java");
+            LOG.info("Generating " + targetFile.getAbsolutePath());
+            parameters.put("propertyName", "Request");
+            CodeGenUtil.processTemplate(
+                    CIXS_MULE_GENERATOR_NAME,
+                    OPERATION_HOLDER_VLC_TEMPLATE,
+                    "cixsOperation", operation,
+                    parameters,
+                    targetFile);
+        }
+        if (operation.getOutput().size() > 0) {
+            File targetFile = CodeGenUtil.getFile(operationClassFilesLocation,
+                    operation.getResponseHolderType() + ".java");
+            LOG.info("Generating " + targetFile.getAbsolutePath());
+            parameters.put("propertyName", "Response");
+            CodeGenUtil.processTemplate(
+                    CIXS_MULE_GENERATOR_NAME,
+                    OPERATION_HOLDER_VLC_TEMPLATE,
+                    "cixsOperation", operation,
+                    parameters,
+                    targetFile);
         }
     }
 
+    /**
+     * Create the Mule Ant Build Jar file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentAntFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAntBuildJar(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final String componentAntFilesLocation)
+    throws CodeGenMakeException {
 
+        File targetFile = CodeGenUtil.getFile(componentAntFilesLocation,
+            "build.xml");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE,
+                "muleComponent", component,
+                parameters,
+                targetFile);
+    }
+    
+    /**
+     * Create the Mule Configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentConfFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final String componentConfFilesLocation)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(componentConfFilesLocation,
+                "mule-config-" + component.getName() + ".xml");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_CONFIG_XML_VLC_TEMPLATE,
+                "muleComponent", component,
+                parameters,
+                targetFile);
+    }
     
     /**
      * @return the Mule component 
@@ -193,6 +440,116 @@ public class CixsMuleGenerator extends Task {
     public final void setTargetSrcDir(final String targetSrcDir) {
         mTargetSrcDir = targetSrcDir;
     }
+    /**
+     * @return custom binaries location
+     */
+    public final String getCustBinDir() {
+        return mCustBinDir;
+    }
 
+    /**
+     * @param custBinDir the custom binaries location to set
+     */
+    public final void setCustBinDir(final String custBinDir) {
+        mCustBinDir = custBinDir;
+    }
+
+    /**
+     * @return the target properties files location
+     */
+    public final String getTargetPropDir() {
+        return mTargetPropDir;
+    }
+
+    /**
+     * @param targetPropDir the target properties files location to set
+     */
+    public final void setTargetPropDir(final String targetPropDir) {
+        mTargetPropDir = targetPropDir;
+    }
+
+    /**
+     * @return the Mule component binaries
+     */
+    public final String getCixsBinDir() {
+        return mCixsBinDir;
+    }
+
+    /**
+     * @param cixsBinDir the Mule component binaries to set
+     */
+    public final void setCixsBinDir(final String cixsBinDir) {
+        mCixsBinDir = cixsBinDir;
+    }
+
+    /**
+     * @return the jaxb binaries location
+     */
+    public final String getJaxbBinDir() {
+        return mJaxbBinDir;
+    }
+
+    /**
+     * @param jaxbBinDir the jaxb binaries location to set
+     */
+    public final void setJaxbBinDir(final String jaxbBinDir) {
+        mJaxbBinDir = jaxbBinDir;
+    }
+
+    /**
+     * @return the coxb binaries location
+     */
+    public final String getCoxbBinDir() {
+        return mCoxbBinDir;
+    }
+
+    /**
+     * @param coxbBinDir the coxb binaries location to set
+     */
+    public final void setCoxbBinDir(final String coxbBinDir) {
+        mCoxbBinDir = coxbBinDir;
+    }
+
+    /**
+     * @return the location for ant deployment script
+     */
+    public final String getTargetAntDir() {
+        return mTargetAntDir;
+    }
+
+    /**
+     * @param targetAntDir the location for ant deployment script to set
+     */
+    public final void setTargetAntDir(final String targetAntDir) {
+        mTargetAntDir = targetAntDir;
+    }
+
+    /**
+     * @return the target mule jar files location
+     */
+    public final String getTargetJarDir() {
+        return mTargetJarDir;
+    }
+
+    /**
+     * @param targetJarDir the target mule jar files location to set
+     */
+    public final void setTargetJarDir(final String targetJarDir) {
+        mTargetJarDir = targetJarDir;
+    }
+
+    /**
+     * @return the target configuration files location
+     */
+    public final String getTargetConfDir() {
+        return mTargetConfDir;
+    }
+
+    /**
+     * @param targetConfDir the target configuration files location to set
+     */
+    public final void setTargetConfDir(final String targetConfDir) {
+        mTargetConfDir = targetConfDir;
+    }
 
 }

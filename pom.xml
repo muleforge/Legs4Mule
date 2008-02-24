@@ -8,7 +8,7 @@
   <packaging>jar</packaging>
   <version>SNAPSHOT</version>
   <properties>
-    <muleVersion>1.4.1</muleVersion>
+    <muleVersion>1.4.3</muleVersion>
     <legstarVersion>SNAPSHOT</legstarVersion>
   </properties>
   <url>http://www.legsem.com/legstar</url>
@@ -39,18 +39,29 @@
     </site>
   </distributionManagement>
   <repositories>
-   <repository>
-    <id>LegStar</id>
-    <url>http://www.legsem.com/legstar/maven/repo</url>
-    <snapshots>
-        <enabled>true</enabled>
-    </snapshots>
-    <releases>
-        <enabled>true</enabled>
-    </releases>
-    <layout>default</layout>
-  </repository>
-</repositories>
+	 <repository>
+	  <id>LegStar distribution</id>
+	  <url>http://www.legsem.com/legstar/maven/repo</url>
+	  <snapshots>
+	      <enabled>false</enabled>
+	  </snapshots>
+	  <releases>
+	      <enabled>true</enabled>
+	  </releases>
+	  <layout>default</layout>
+	</repository>
+     <repository>
+      <id>LegStar snapshots distributions</id>
+      <url>http://www.legsem.com/legstar/maven/snapshots</url>
+      <snapshots>
+          <enabled>true</enabled>
+      </snapshots>
+      <releases>
+          <enabled>false</enabled>
+      </releases>
+      <layout>default</layout>
+    </repository>
+  </repositories>
   <build>
     <extensions>
       <extension>
@@ -63,7 +74,7 @@
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>
-          <finalName>${artifactId}-${version}</finalName>
+          <finalName>${pom.artifactId}-${pom.version}</finalName>
           <descriptors>
             <descriptor>assembly.xml</descriptor>
           </descriptors>
@@ -129,16 +140,45 @@
       <version>${muleVersion}</version>
     </dependency>
     <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-messaging</artifactId>
+        <version>${legstarVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-cixsgen</artifactId>
+        <version>${legstarVersion}</version>
+    </dependency>
+    <dependency>
+        <groupId>com.legsem.legstar</groupId>
+        <artifactId>legstar-codegen</artifactId>
+        <version>${legstarVersion}</version>
+    </dependency>
+    <dependency>
       <groupId>org.mule.tests</groupId>
       <artifactId>mule-tests-functional</artifactId>
       <version>${muleVersion}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
-        <groupId>com.legsem.legstar</groupId>
-        <artifactId>legstar-messaging</artifactId>
-        <version>${legstarVersion}</version>
+      <groupId>com.legsem.legstar</groupId>
+      <artifactId>legstar-jaxbgen-cases</artifactId>
+      <version>${legstarVersion}</version>
+      <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>com.legsem.legstar</groupId>
+      <artifactId>legstar-coxbgen-cases</artifactId>
+      <version>${legstarVersion}</version>
+      <scope>test</scope>
+    </dependency>
+    <!-- There seems to be some version conflict between velocity and
+         LegStar. This ensures we have the correct version of commons-lang -->
+	<dependency> 
+	  <groupId>commons-lang</groupId> 
+	  <artifactId>commons-lang</artifactId> 
+	  <version>2.3</version> 
+	</dependency> 
   </dependencies>
   
 </project>

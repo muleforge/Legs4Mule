@@ -12,7 +12,8 @@ package org.mule.providers.legstar.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mule.providers.legstar.gen.util.CixsMuleGenUtil;
+import com.legstar.cixs.gen.model.CixsOperation;
+import com.legstar.codegen.CodeGenUtil;
 
 /**
  * Describes a Mule-LegStar Component with CICS access capabilities.
@@ -71,7 +72,7 @@ public class CixsMuleComponent {
 	 */
 	public final String getInterfaceClassName() {
 		if (mInterfaceClassName == null || mInterfaceClassName.length() == 0) {
-			return CixsMuleGenUtil.classNormalize(mName);
+			return CodeGenUtil.classNormalize(mName);
 		}
 		return mInterfaceClassName;
 	}
@@ -91,7 +92,7 @@ public class CixsMuleComponent {
 			if (mName == null) {
 				return DEFAULT_IMPL_SUFFIX;
 			}
-			return CixsMuleGenUtil.classNormalize(mName + DEFAULT_IMPL_SUFFIX);
+			return CodeGenUtil.classNormalize(mName + DEFAULT_IMPL_SUFFIX);
 		}
 		return mImplementationClassName;
 	}

@@ -17,6 +17,8 @@ import org.mule.providers.legstar.model.CixsMuleComponent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.legstar.codegen.CodeGenUtil;
+
 import junit.framework.TestCase;
 
 /**
@@ -24,26 +26,51 @@ import junit.framework.TestCase;
  */
 public class CixsMuleGeneratorTest extends TestCase {
 
+    /** Code will be generated here. */
+    private static final String GEN_SRC_DIR = "src/test/gen/java";
+
+    /** Resources will be generated here (absolute location). */
+    private static final String GEN_RES_DIR = "D:/Fady/sandbox/workspace2/legstar-mule/src/test/gen/resources";
+
+    /** Ant scripts will be generated here (relative location). */
+    private static final String GEN_ANT_DIR = "ant";
+
+    /** Configuration files will be generated here. */
+    private static final String GEN_CONF_DIR = "conf";
+    
     /** Logger. */
     private static final Logger LOG = LoggerFactory.getLogger(
             CixsMuleGeneratorTest.class);
 
+    private CixsMuleGenerator mGenerator;
+
+    public void setUp() {
+        mGenerator = new CixsMuleGenerator();
+        mGenerator.init();
+        mGenerator.setTargetSrcDir(GEN_SRC_DIR);
+        mGenerator.setTargetPropDir(GEN_RES_DIR);
+        mGenerator.setTargetJarDir("${env.MULE_HOME}/lib/user");
+        mGenerator.setJaxbBinDir("D:/Legsem/Legstar/Dev/trunk/legstar-jaxbgen-cases/target/classes");
+        mGenerator.setCoxbBinDir("D:/Legsem/Legstar/Dev/trunk/legstar-coxbgen-cases/target/classes");
+        mGenerator.setCixsBinDir("D:/Fady/sandbox/workspace2/legstar-mule/target/gen-classes");
+        mGenerator.setCustBinDir("D:/Legsem/Legstar/Dev/trunk/legstar-coxbgen-cases//target/classes");
+    }
+    
     /**
      * Check controls on input make file.
      */
     public final void testInputValidation() {
-        CixsMuleGenerator generator = new CixsMuleGenerator();
         try {
-            generator.execute();
+            mGenerator.execute();
         } catch (Exception e) {
             assertEquals("Missing cixs mule component parameter",
                     e.getCause().getMessage());
         }
-        CixsMuleComponent cixsMuleComponent = new CixsMuleComponent();
-        cixsMuleComponent.setName("muleComponentName");
+        CixsMuleComponent muleComponent = new CixsMuleComponent();
+        muleComponent.setName("muleComponentName");
         try {
-            generator.setCixsMuleComponent(cixsMuleComponent);
-            generator.execute();
+            mGenerator.setCixsMuleComponent(muleComponent);
+            mGenerator.execute();
         } catch (Exception e) {
             assertEquals("java.lang.IllegalArgumentException:"
                     + " No directory name was specified",
@@ -53,47 +80,19 @@ public class CixsMuleGeneratorTest extends TestCase {
     }
     
     /**
-     * Check the generation of the intermediate cixs make XML file.
-     * @throws Exception if generation fails
-     */
-    public final void testGetMakeFile() throws Exception {
-        CixsMuleGenerator generator = new CixsMuleGenerator();
-        generator.init();
-        CixsMuleComponent cixsMuleComponent = new CixsMuleComponent();
-        cixsMuleComponent.setName("muleComponentName");
-        cixsMuleComponent.setInterfaceClassName("MuleComponent");
-        cixsMuleComponent.setImplementationClassName("MuleComponentImpl");
-        generator.setCixsMuleComponent(cixsMuleComponent);
-        generator.setTargetSrcDir("test-gen");
-        String makeFileName = generator.getMakeFileName();
- 
-        String resStr = getContent(makeFileName);
-        assertTrue(resStr.contains(
-                "<cixstarget name=\"muleComponentName\" targetDir=\"test-gen\">"));
-        assertTrue(resStr.contains(
-                "<cixstemplate name=\"vlc/cixsmule-component-interface.vm\""
-                + " targetFile=\"MuleComponent.java\"/>"));
-        assertTrue(resStr.contains(
-                "<cixstemplate name=\"vlc/cixsmule-component-implementation.vm\""
-                + " targetFile=\"MuleComponentImpl.java\"/>"));
-        assertTrue(resStr.contains("</cixstarget>"));
-    }
-    
-    /**
      * Check generation when no operations are specified.
      * @throws Exception if generation fails
      */
     public final void testGenerateClassesNoOperations() throws Exception {
-        CixsMuleGenerator generator = new CixsMuleGenerator();
-        generator.init();
-        CixsMuleComponent cixsMuleComponent = new CixsMuleComponent();
-        cixsMuleComponent.setName("muleComponentName");
-        cixsMuleComponent.setInterfaceClassName("MuleComponent");
-        cixsMuleComponent.setImplementationClassName("MuleComponentImpl");
-        generator.setCixsMuleComponent(cixsMuleComponent);
-        generator.setTargetSrcDir("test-gen");
-        generator.execute();
-        String resStr = getContent("test-gen/MuleComponent.java");
+        CixsMuleComponent muleComponent = new CixsMuleComponent();
+        muleComponent.setName("muleComponentName");
+        muleComponent.setInterfaceClassName("MuleComponent");
+        muleComponent.setImplementationClassName("MuleComponentImpl");
+        mGenerator.setCixsMuleComponent(muleComponent);
+        mGenerator.setTargetAntDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_ANT_DIR);
+        mGenerator.setTargetConfDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_CONF_DIR);
+        mGenerator.execute();
+        String resStr = getSource(GEN_SRC_DIR, "MuleComponent.java");
         assertTrue(resStr.contains("public interface MuleComponent {"));
         
     }
@@ -103,27 +102,12 @@ public class CixsMuleGeneratorTest extends TestCase {
      * @throws Exception if generation fails
      */
     public final void testLsfileaeGenerateClasses() throws Exception {
-        CixsMuleGenerator generator = new CixsMuleGenerator();
-        generator.init();
-        CixsMuleComponent cixsMuleComponent = Cases.getLsfileaeMuleComponent();
-        generator.setCixsMuleComponent(cixsMuleComponent);
-        generator.setTargetSrcDir("test-gen");
-        generator.execute();
-        String resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileae/Mulelsfileae.java");
-        assertTrue(resStr.contains(
-                "public interface MuleLsfileae {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileae/"
-                + "MulelsfileaeException.java");
-        assertTrue(resStr.contains(
-                "public class MuleLsfileaeException extends Exception {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileae/"
-                + "MulelsfileaeImpl.java");
-        assertTrue(resStr.contains(
-                "public class MuleLsfileaeImpl implements MuleLsfileae, Callable {"));
-        
+        CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
+        mGenerator.setCixsMuleComponent(muleComponent);
+        mGenerator.setTargetAntDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_ANT_DIR);
+        mGenerator.setTargetConfDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_CONF_DIR);
+        mGenerator.execute();
+        checkResults(muleComponent);
     }
     
     /**
@@ -131,27 +115,12 @@ public class CixsMuleGeneratorTest extends TestCase {
      * @throws Exception if generation fails
      */
     public final void testgetLsfilealGenerateClasses() throws Exception {
-        CixsMuleGenerator generator = new CixsMuleGenerator();
-        generator.init();
-        CixsMuleComponent cixsMuleComponent = Cases.getLsfilealMuleComponent();
-        generator.setCixsMuleComponent(cixsMuleComponent);
-        generator.setTargetSrcDir("test-gen");
-        generator.execute();
-        String resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileal/Mulelsfileal.java");
-        assertTrue(resStr.contains(
-                "public interface MuleLsfileal {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileal/"
-                + "MulelsfilealException.java");
-        assertTrue(resStr.contains(
-                "public class MuleLsfilealException extends Exception {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileal/"
-                + "MulelsfilealImpl.java");
-        assertTrue(resStr.contains(
-                "public class MuleLsfilealImpl implements MuleLsfileal, Callable {"));
-        
+        CixsMuleComponent muleComponent = TestCases.getLsfilealMuleComponent();
+        mGenerator.setCixsMuleComponent(muleComponent);
+        mGenerator.setTargetAntDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_ANT_DIR);
+        mGenerator.setTargetConfDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_CONF_DIR);
+        mGenerator.execute();
+        checkResults(muleComponent);
     }
 
     /**
@@ -159,27 +128,12 @@ public class CixsMuleGeneratorTest extends TestCase {
      * @throws Exception if generation fails
      */
     public final void testLsfileacGenerateClasses() throws Exception {
-        CixsMuleGenerator generator = new CixsMuleGenerator();
-        generator.init();
-        CixsMuleComponent cixsMuleComponent = Cases.getLsfileacMuleComponent();
-        generator.setCixsMuleComponent(cixsMuleComponent);
-        generator.setTargetSrcDir("test-gen");
-        generator.execute();
-        String resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileac/Mulelsfileac.java");
-        assertTrue(resStr.contains(
-                "public interface MuleLsfileac {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileac/"
-                + "MulelsfileacException.java");
-        assertTrue(resStr.contains(
-                "public class MuleLsfileacException extends Exception {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileac/"
-                + "MulelsfileacImpl.java");
-        assertTrue(resStr.contains(
-                "public class MuleLsfileacImpl implements MuleLsfileac, Callable {"));
-        
+        CixsMuleComponent muleComponent = TestCases.getLsfileacMuleComponent();
+        mGenerator.setCixsMuleComponent(muleComponent);
+        mGenerator.setTargetAntDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_ANT_DIR);
+        mGenerator.setTargetConfDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_CONF_DIR);
+        mGenerator.execute();
+        checkResults(muleComponent);
     }
     
     /**
@@ -187,51 +141,92 @@ public class CixsMuleGeneratorTest extends TestCase {
      * @throws Exception if generation fails
      */
     public final void testLsfileaxGenerateClasses() throws Exception {
-        CixsMuleGenerator generator = new CixsMuleGenerator();
-        generator.init();
-        CixsMuleComponent cixsMuleComponent = Cases.getLsfileaxMuleComponent();
-        generator.setCixsMuleComponent(cixsMuleComponent);
-        generator.setTargetSrcDir("test-gen");
-        generator.execute();
-        String resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileax/Mulelsfileax.java");
+        CixsMuleComponent muleComponent = TestCases.getLsfileaxMuleComponent();
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName());
+        mGenerator.setCixsMuleComponent(muleComponent);
+        mGenerator.setTargetAntDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_ANT_DIR);
+        mGenerator.setTargetConfDir(GEN_RES_DIR + '/' + muleComponent.getName() + '/' + GEN_CONF_DIR);
+        mGenerator.execute();
+
+        String resStr = getSource(componentClassFilesLocation, 
+                muleComponent.getInterfaceClassName() + ".java");
         assertTrue(resStr.contains(
-                "public interface MuleLsfileax {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileax/"
-                + "MulelsfileacException.java");
+                "public interface Lsfileax {"));
+        
+        resStr = getSource(componentClassFilesLocation, 
+                muleComponent.getCixsOperations().get(0).getFaultType() + ".java");
         assertTrue(resStr.contains(
-                "public class MuleLsfileacException extends Exception {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileax/"
-                + "MulelsfilealException.java");
+                "public class LsfileaeException extends Exception {"));
+        
+        resStr = getSource(componentClassFilesLocation, 
+                muleComponent.getCixsOperations().get(1).getFaultType() + ".java");
         assertTrue(resStr.contains(
-                "public class MuleLsfilealException extends Exception {"));
-        resStr = getContent(
-                "test-gen/org/mule/providers/legstar/test/lsfileax/"
-                + "MulelsfileaxImpl.java");
+                "public class LsfileacException extends Exception {"));
+        
+        resStr = getSource(componentClassFilesLocation, 
+                muleComponent.getImplementationClassName() + ".java");
         assertTrue(resStr.contains(
-                "public class MuleLsfileaxImpl implements MuleLsfileax, Callable {"));
+                "public class LsfileaxImpl implements Lsfileax, Callable {"));
+
+    }
+    
+    private void checkResults(CixsMuleComponent muleComponent)
+                throws Exception{
+        
+        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                mGenerator.getTargetSrcDir(), muleComponent.getPackageName());
+                
+        String resStr = getSource(componentClassFilesLocation, 
+                muleComponent.getInterfaceClassName() + ".java");
+        assertTrue(resStr.contains(
+                "public interface " + muleComponent.getInterfaceClassName() + " {"));
+        
+        resStr = getSource(componentClassFilesLocation, 
+                muleComponent.getCixsOperations().get(0).getFaultType() + ".java");
+        assertTrue(resStr.contains(
+                "public class " + muleComponent.getInterfaceClassName() + "Exception extends Exception {"));
+        
+        resStr = getSource(componentClassFilesLocation, 
+                muleComponent.getImplementationClassName() + ".java");
+        assertTrue(resStr.contains(
+                "public class " + muleComponent.getInterfaceClassName() + "Impl implements " + muleComponent.getInterfaceClassName() + ", Callable {"));
+        
+        resStr = getSource(mGenerator.getTargetAntDir(), "build.xml");
+        assertTrue(resStr.contains(
+                "<property name=\"jarFile\" value=\"${env.MULE_HOME}/lib/user/mule-legstar-" + muleComponent.getName() + ".jar\"/>"));
+        
+        resStr = getSource(mGenerator.getTargetConfDir(),
+                "mule-config-" + muleComponent.getName() + ".xml");
+        assertTrue(resStr.contains(
+                "<mule-descriptor name=\"" + muleComponent.getName() + "UMO\" implementation=\"org.mule.providers.legstar.test." + muleComponent.getName() + "." + muleComponent.getInterfaceClassName() + "Impl\">"));
+
+        resStr = getSource(mGenerator.getTargetPropDir(),
+                muleComponent.getCixsOperations().get(0).getCicsProgramName().toLowerCase() + ".properties");
+        assertTrue(resStr.contains(
+                "CICSProgramName=" + muleComponent.getCixsOperations().get(0).getCicsProgramName() + ""));
     }
     
     
     /**
      * Reads the content of a file in a string.
-     * @param fileName name of the file
+     * @param srcLocation where the file is located
+     * @param srcName name of the file
      * @return a string with the file content
      * @throws IOException if fails to read file
      */
-    private static String getContent(final String fileName) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(fileName));
-        StringBuilder resStr = new StringBuilder();
+    private String getSource(String srcLocation, String srcName) throws Exception {
+        BufferedReader in = new BufferedReader(new FileReader(srcLocation + '/' + srcName));
+        String resStr = "";
         String str = in.readLine();
         while (str != null) {
             LOG.debug(str);
-            resStr.append(str);
+            resStr += str;
             str = in.readLine();
         }
         in.close();
-        return resStr.toString();
+        return resStr;
     }
 
 }

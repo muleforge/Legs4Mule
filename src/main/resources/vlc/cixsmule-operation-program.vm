@@ -1,0 +1,47 @@
+##/////////////////////////////////////////////////////////////////////
+##Mule Operation Program properties Template.
+##@author Fady
+##@version 0.1
+##/////////////////////////////////////////////////////////////////////
+#
+# Host Program parameters
+# -----------------------
+## ==================================================================
+#macro(setContainers $prefix, $structures)
+#set($pos = 0)
+#foreach($cixsStructure in ${structures})
+#set($pos = $pos + 1)
+${prefix}Containers_${pos}=$cixsStructure.cicsContainer
+${prefix}ContainersLength_${pos}=${cixsHelper.getByteLength(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})}
+#end
+#end
+## ==================================================================
+#macro(getLength $structures)
+##
+#set($length = 0)
+#if(${structures.size()} > 0)
+#set($structure = ${structures.get(0)})
+#set($length = ${cixsHelper.getByteLength(${structure.jaxbPackageName}, ${structure.jaxbType})})
+#end
+#end
+## ==================================================================
+CICSProgramName=${cixsOperation.cicsProgramName.toUpperCase()}
+#if(${cixsOperation.cicsChannel})
+CICSChannel=${cixsOperation.cicsChannel}
+#setContainers("CICSIn", ${cixsOperation.getInput()})
+#setContainers("CICSOut", ${cixsOperation.getOutput()})
+#else
+#getLength(${cixsOperation.getInput()})
+#set($inputLength = $length)
+#getLength(${cixsOperation.getOutput()})
+#set($outputLength = $length)
+#if($outputLength > $inputLength)
+CICSLength=$outputLength
+#else
+CICSLength=$inputLength
+#end
+CICSDataLength=$inputLength
+#end
+#CICSSysID
+#CICSSyncOnReturn
+#CICSTransID
