@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<configuration>
+    <engine>
+        <!-- Maximum number of waiting requests. When this number is reached, the
+             engine will stop accepting requests. If the host system is
+             unresponsive it is not useful to continue to accept requests.  -->
+        <maxRequests>100000</maxRequests>
+        <workManager>
+            <!-- Choose between a JNDI implemented work manager or the default
+                 one. The engine will first look at the JNDI so comment out
+                 the JNDILocation element if you would like the default
+                 work manager to be used.  -->
+            <threadPool>
+                <!-- <JNDILocation>java:comp/env/wm/WorkManager</JNDILocation> -->
+            </threadPool>
+            <defaultThreadPool>
+                <!-- The default thread pool works with a fixed number of
+                     reusable threads. The engine itself uses one of the
+                     threads, then there is one thread per active host
+                     connection. This number must be larger than the sum of
+                     all pool sizes (defined in hostEndPoints) plus one.  -->
+                <size>25</size>
+            </defaultThreadPool>
+       </workManager>
+    </engine>
+</configuration>

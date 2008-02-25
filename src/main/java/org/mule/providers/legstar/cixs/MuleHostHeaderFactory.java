@@ -10,22 +10,22 @@ import org.mule.umo.UMOMessage;
 public final class MuleHostHeaderFactory {
 
     /** Host request identifier. */
-    private static final String L4M_KEY_HOSTREQUESTID = "L4MHostRequestID";
+    public static final String L4M_KEY_HOSTREQUESTID = "LegStarRequestID";
     
     /** Host endpoint name property key. */
-    private static final String L4M_KEY_HOSTENDPOINT = "L4MhostEndPoint";
+    public static final String L4M_KEY_HOSTENDPOINT = "LegStarEndPoint";
     
     /** Host character set property key. */
-    private static final String L4M_KEY_HOSTCHARSET = "L4MHostCharset";
+    public static final String L4M_KEY_HOSTCHARSET = "LegStarCharset";
     
     /** Host user ID property key. */
-    private static final String L4M_KEY_HOSTUSERID = "L4MHostUserID";
+    public static final String L4M_KEY_HOSTUSERID = "LegStarUserID";
     
     /** Host password property key. */
-    private static final String L4M_KEY_HOSTPASSWORD = "L4MHostPassword";
+    public static final String L4M_KEY_HOSTPASSWORD = "LegStarPassword";
     
     /** Host trace mode property key. */
-    private static final String L4M_KEY_HOSTTRACEMODE = "L4MHostTraceMode";
+    public static final String L4M_KEY_HOSTTRACEMODE = "LegStarTraceMode";
     
     
      /**
