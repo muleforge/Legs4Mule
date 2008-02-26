@@ -40,49 +40,49 @@ public class LegStarPoolAgent implements UMOAgent{
 	/** Logger. */
 	private static final Log LOG = LogFactory.getLog(LegStarPoolAgent.class);
 	
-	@Override
+	/** {@inheritDoc} */
 	public String getDescription() {
 		return DESCRIPTION;
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public String getName() {
 		return mName;
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public void registered() {
 		LOG.info("registered");
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public void setName(String name) {
 		mName = name;
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public void unregistered() {
 		LOG.info("unregistered");
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public void start() throws UMOException {
 		LOG.info("Pool engine started");
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public void stop() throws UMOException {
 		LOG.info("Pool engine stopped");
 		mServerHandler.stop();
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public void dispose() {
 		mServerHandler = null;
 		LOG.info("Pool engine destroyed");
 	}
 
-	@Override
+    /** {@inheritDoc} */
 	public void initialise() throws InitialisationException {
 		LOG.info("Initializing with " + CONFIG_FILE_NAME
 				+ " configuration file.");
