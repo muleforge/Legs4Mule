@@ -59,9 +59,29 @@ public class CixsMuleGenerator extends Task {
     public static final String COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE =
         "vlc/cixsmule-component-ant-build-jar-xml.vm";
     
-    /** Velocity template for mule configuration xml. */
-    public static final String COMPONENT_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-config-xml.vm";
+    /** Velocity template for standalone mule configuration xml. */
+    public static final String COMPONENT_STANDALONE_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-standalone-config-xml.vm";
+    
+    /** Velocity template for object to host byte array transformer. */
+    public static final String OPERATION_OBJECT_TO_HBA_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-object-to-hba-transformer.vm";
+    
+    /** Velocity template for host byte array to object transformer. */
+    public static final String OPERATION_HBA_TO_OBJECT_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-hba-to-object-transformer.vm";
+    
+    /** Velocity template for object to http response transformer. */
+    public static final String OPERATION_OBJECT_TO_HTTP_RESPONSE_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-object-to-http-response-transformer.vm";
+    
+    /** Velocity template for bridge mule configuration xml. */
+    public static final String COMPONENT_BRIDGE_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-bridge-config-xml.vm";
+    
+    /** Velocity template for local mule configuration xml. */
+    public static final String COMPONENT_LOCAL_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-local-config-xml.vm";
     
     /** Service descriptor. */
     private CixsMuleComponent mCixsMuleComponent;
@@ -179,14 +199,14 @@ public class CixsMuleGenerator extends Task {
         String componentConfFilesLocation = getTargetConfDir();
         CodeGenUtil.checkDirectory(componentConfFilesLocation, true);
         
-        /* Produce artifacts */
+        /* Produce artifacts for standalone component */
         generateInterface(
                 mCixsMuleComponent, parameters, componentClassFilesLocation);
         generateImplementation(
                 mCixsMuleComponent, parameters, componentClassFilesLocation);
         generateAntBuildJar(
                 mCixsMuleComponent, parameters, componentAntFilesLocation);
-        generateConfigXml(
+        generateStandaloneConfigXml(
                 mCixsMuleComponent, parameters, componentConfFilesLocation);
         
         for (CixsOperation operation : mCixsMuleComponent.getCixsOperations()) {
@@ -206,6 +226,48 @@ public class CixsMuleGenerator extends Task {
                     operation, parameters, operationClassFilesLocation);
             generateProgramProperties(
                     operation, parameters, operationPropertiesFilesLocation);
+            
+        }
+        
+        /* Produce artifacts for bridge component  */
+        generateBridgeConfigXml(
+                mCixsMuleComponent, parameters, componentConfFilesLocation);
+        for (CixsOperation operation : mCixsMuleComponent.getCixsOperations()) {
+            String operationPackageName = cixsHelper.getOperationPackageName(
+                    operation, mCixsMuleComponent.getPackageName());
+            parameters.put("operationPackageName", operationPackageName);
+
+            /* Determine target files locations */
+            String operationClassFilesLocation = CodeGenUtil.classFilesLocation(
+                    mTargetSrcDir, operationPackageName);
+            String operationPropertiesFilesLocation = getTargetPropDir();
+            CodeGenUtil.checkDirectory(operationPropertiesFilesLocation, true);
+            
+            generateHbaToObjectTransformers(
+                    operation, parameters, operationClassFilesLocation);
+            generateObjectToHbaTransformers(
+                    operation, parameters, operationClassFilesLocation);
+            
+        }
+        
+        /* Produce artifacts for local component  */
+        generateLocalConfigXml(
+                mCixsMuleComponent, parameters, componentConfFilesLocation);
+        for (CixsOperation operation : mCixsMuleComponent.getCixsOperations()) {
+            String operationPackageName = cixsHelper.getOperationPackageName(
+                    operation, mCixsMuleComponent.getPackageName());
+            parameters.put("operationPackageName", operationPackageName);
+
+            /* Determine target files locations */
+            String operationClassFilesLocation = CodeGenUtil.classFilesLocation(
+                    mTargetSrcDir, operationPackageName);
+            String operationPropertiesFilesLocation = getTargetPropDir();
+            CodeGenUtil.checkDirectory(operationPropertiesFilesLocation, true);
+            
+            generateHbaToObjectTransformers(
+                    operation, parameters, operationClassFilesLocation);
+            generateObjectToHttpResponseTransformers(
+                    operation, parameters, operationClassFilesLocation);
             
         }
         
@@ -376,24 +438,249 @@ public class CixsMuleGenerator extends Task {
     }
     
     /**
-     * Create the Mule Configuration XML file.
+     * Create the Mule stand alone configuration XML file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentConfFilesLocation where to store the generated file
      * @throws CodeGenMakeException if generation fails
      */
-    public static void generateConfigXml(
+    public static void generateStandaloneConfigXml(
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final String componentConfFilesLocation)
     throws CodeGenMakeException {
 
         File targetFile = CodeGenUtil.getFile(componentConfFilesLocation,
-                "mule-config-" + component.getName() + ".xml");
+                "mule-standalone-config-" + component.getName() + ".xml");
         LOG.info("Generating " + targetFile.getAbsolutePath());
         CodeGenUtil.processTemplate(
                 CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_STANDALONE_CONFIG_XML_VLC_TEMPLATE,
+                "muleComponent", component,
+                parameters,
+                targetFile);
+    }
+    
+    /**
+     * Create objects to host byte array transformer for both request
+     * and response objects.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateObjectToHbaTransformers(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation)
+    throws CodeGenMakeException {
+
+        if (operation.getInput().size() > 0) {
+            generateObjectToHbaTransformer(operation, parameters,
+                    operationClassFilesLocation,
+                    operation.getRequestHolderType(),
+                    "Request");
+        }
+        if (operation.getOutput().size() > 0) {
+            generateObjectToHbaTransformer(operation, parameters,
+                    operationClassFilesLocation,
+                    operation.getResponseHolderType(),
+                    "Response");
+        }
+    }
+
+    /**
+     * Create an object to host byte array transformer.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @param holderType the Java class name for the holder
+     * @param propertyName either Request or Response
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateObjectToHbaTransformer(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation,
+            final String holderType,
+            final String propertyName)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(operationClassFilesLocation,
+                holderType + "ToHostByteArray.java");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+
+        parameters.put("propertyName", propertyName);
+        
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                OPERATION_OBJECT_TO_HBA_VLC_TEMPLATE,
+                "cixsOperation", operation,
+                parameters,
+                targetFile);
+    }
+
+    /**
+     * Create host byte array to objects transformer for both request
+     * and response objects.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateHbaToObjectTransformers(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation)
+    throws CodeGenMakeException {
+
+        if (operation.getInput().size() > 0) {
+            generateHbaToObjectTransformer(operation, parameters,
+                    operationClassFilesLocation,
+                    operation.getRequestHolderType(),
+                    "Request");
+        }
+        if (operation.getOutput().size() > 0) {
+            generateHbaToObjectTransformer(operation, parameters,
+                    operationClassFilesLocation,
+                    operation.getResponseHolderType(),
+                    "Response");
+        }
+    }
+
+    /**
+     * Create a host byte array to object transformer.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @param holderType the Java class name for the holder
+     * @param propertyName either Request or Response
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateHbaToObjectTransformer(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation,
+            final String holderType,
+            final String propertyName)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(operationClassFilesLocation,
+                "HostByteArrayTo" + holderType + ".java");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+
+        parameters.put("propertyName", propertyName);
+        
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                OPERATION_HBA_TO_OBJECT_VLC_TEMPLATE,
+                "cixsOperation", operation,
+                parameters,
+                targetFile);
+    }
+
+    /**
+     * Create objects to http response transformer for both request
+     * and response objects.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateObjectToHttpResponseTransformers(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation)
+    throws CodeGenMakeException {
+
+        if (operation.getInput().size() > 0) {
+            generateObjectToHttpResponseTransformer(operation, parameters,
+                    operationClassFilesLocation,
+                    operation.getRequestHolderType(),
+                    "Request");
+        }
+        if (operation.getOutput().size() > 0) {
+            generateObjectToHttpResponseTransformer(operation, parameters,
+                    operationClassFilesLocation,
+                    operation.getResponseHolderType(),
+                    "Response");
+        }
+    }
+
+    /**
+     * Create an object to http response transformer.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param operationClassFilesLocation where to store the generated file
+     * @param holderType the Java class name for the holder
+     * @param propertyName either Request or Response
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateObjectToHttpResponseTransformer(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final String operationClassFilesLocation,
+            final String holderType,
+            final String propertyName)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(operationClassFilesLocation,
+                holderType + "ToHttpResponse.java");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+
+        parameters.put("propertyName", propertyName);
+        
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                OPERATION_OBJECT_TO_HTTP_RESPONSE_VLC_TEMPLATE,
+                "cixsOperation", operation,
+                parameters,
+                targetFile);
+    }
+
+    /**
+     * Create the Mule bridge configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentConfFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateBridgeConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final String componentConfFilesLocation)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(componentConfFilesLocation,
+                "mule-bridge-config-" + component.getName() + ".xml");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_BRIDGE_CONFIG_XML_VLC_TEMPLATE,
+                "muleComponent", component,
+                parameters,
+                targetFile);
+    }
+    
+    /**
+     * Create the Mule local configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentConfFilesLocation where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateLocalConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final String componentConfFilesLocation)
+    throws CodeGenMakeException {
+
+        File targetFile = CodeGenUtil.getFile(componentConfFilesLocation,
+                "mule-local-config-" + component.getName() + ".xml");
+        LOG.info("Generating " + targetFile.getAbsolutePath());
+        CodeGenUtil.processTemplate(
+                CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_LOCAL_CONFIG_XML_VLC_TEMPLATE,
                 "muleComponent", component,
                 parameters,
                 targetFile);

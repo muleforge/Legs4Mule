@@ -1,0 +1,83 @@
+##/////////////////////////////////////////////////////////////////////
+##Mule Component standalone configuration XML Template.
+##@author Fady
+##@version 0.1
+##/////////////////////////////////////////////////////////////////////
+## ==================================================================
+## Create a list of unique transformers
+##
+#macro(addLocalTransformer $operationPackageName $transformerType)
+#if($operationPackageName)
+#set($type = "${operationPackageName}.${transformerType}")
+#else
+#set($type = $transformerType)
+#end
+#if (!$localTransformers.contains($type))
+#set($ret = $localTransformers.add($type))
+#end
+#end
+## ==================================================================
+## Build a list of unique transformer names for a holder type 
+##
+#macro(addLocalTransformers $operationPackageName $holderType)
+#addLocalTransformer($operationPackageName "HostByteArrayTo${holderType}")
+#addLocalTransformer($operationPackageName "${holderType}ToHttpResponse")
+#end
+## ==================================================================
+## Build a list of unique transformers 
+##
+#set($localTransformers = [])
+#foreach ($cixsOperation in $muleComponent.cixsOperations)
+#set($operationPackageName = $cixsHelper.getOperationPackageName(${cixsOperation}, ${muleComponent.packageName}))
+#addLocalTransformers($operationPackageName ${cixsOperation.requestHolderType})
+#addLocalTransformers($operationPackageName ${cixsOperation.responseHolderType})
+#end
+##
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<!--  This Mule configuration adapts a Mule local component so that it is
+      consumable from a legacy application.
+      It uses generated Legs4Mule transformers.
+ -->
+<mule-configuration id="mule-legstar-local-${muleComponent.name}-config" version="1.0">
+
+    <description>Mule configuration file for ${muleComponent.name} local Legs4Mule component</description>
+    <mule-environment-properties enableMessageEvents="true"/>
+    
+    <!-- Legs4Mule connector will be listening for requests from the legacy system -->
+    <connector name="LegstarConnector" className="org.mule.providers.legstar.LegstarConnector">
+        <properties>
+            <property name="port" value="8083"/>
+        </properties>
+    </connector>    
+    
+    <transformers>
+#foreach($transformerType in $localTransformers)
+        <transformer name="${helper.getClassName(${transformerType})}" className="${transformerType}"/>
+#end
+    </transformers>
+
+    <model name="${muleComponent.name}Model">
+
+#foreach ($cixsOperation in $muleComponent.cixsOperations)
+        <!-- Replace implementation with actual component -->
+        <mule-descriptor name="${cixsOperation.name}LocalUMO"
+            implementation="org.mule.providers.legstar.local.components.${cixsOperation.className}Component">
+            <inbound-router>
+                <endpoint address="legstar:http://localhost:8083"
+                    transformers="HostByteArrayTo${cixsOperation.requestHolderType}"
+                    responseTransformers="${cixsOperation.responseHolderType}ToHttpResponse"
+                    synchronous="true">
+                    <properties>
+                         <property name="hostCharset" value="IBM01147"/>
+                    </properties>
+              </endpoint>
+            </inbound-router>
+        </mule-descriptor>
+#end
+
+    </model>
+</mule-configuration>

@@ -1,0 +1,244 @@
+       PROCESS XOPTS(APOST)
+       PROCESS NOSEQ LIB OPTIMIZE(FULL)
+       IDENTIFICATION DIVISION.
+       PROGRAM-ID. LSC2LEAL.
+      *****************************************************************
+      * OVERVIEW                                                      *
+      * --------                                                      *
+      * Calls a remote Service using legstar c2wsrt C API.            *
+      * Remote service mimics the LSFILEAL program.                   *
+      *****************************************************************
+
+       ENVIRONMENT DIVISION.
+       CONFIGURATION SECTION.
+       DATA DIVISION.
+      *****************************************************************
+      *        W O R K I N G    S T O R A G E    S E C T I O N        *
+      *****************************************************************
+       WORKING-STORAGE SECTION.
+
+      *---------------------------------------------------------------*
+      *  C2WS API parameters                                          *
+      *---------------------------------------------------------------*
+      * Address of remote service endpoint.
+      *
+       77  SERVICE-ENDPOINT-URI            PIC X(50) VALUE
+           'http://192.168.0.2:8083'.
+      *
+      * C2ws gateway credentials.
+      *
+       77  C2WS-USERID                 PIC X(5) VALUE 'alice'.
+       77  C2WS-PASSWORD               PIC X(12) VALUE 'inwonderland'.
+      *
+      * Service requested.
+      *
+       77  C2WS-SERVICE-NAME           PIC X(11) VALUE 'CultureInfo'.
+
+      *---------------------------------------------------------------*
+      *  Constants                                                    *
+      *---------------------------------------------------------------*
+       77  OK-CODE                     PIC S9(8) BINARY VALUE 0.
+       77  ERROR-CODE                  PIC S9(8) BINARY VALUE -1.
+       77  THIS-TRACE-ID               PIC X(13) VALUE 'LSC2LEAL'.
+
+      *---------------------------------------------------------------*
+      * Structure shared with c2ws API                                *
+      * C Structures are aligned on natural storage boundaries so we  *
+      * specify SYNCHRONIZED.                                         *
+      * The last character of each string is reserved to hold a       *
+      * C string delimiter.                                           *
+      *---------------------------------------------------------------*
+       01  TRACE-PARMS SYNCHRONIZED.
+           05 TRACE-ID                 PIC X(17) VALUE SPACES.
+           05 TRACE-MODE               PIC S9(8) BINARY VALUE 1.
+              88 TRACES-OFF       VALUE 0.
+              88 TRACES-ON        VALUE 1.
+           05 ERROR-MESSAGE            PIC X(266) VALUE SPACES.
+
+       01  WS-INVOKE-PARMS SYNCHRONIZED.
+           05  WS-URI                  PIC X(513) VALUE SPACES.
+           05  WS-SERVICE-NAME         PIC X(33) VALUE SPACES.
+           05  WS-REQUEST-DATA         POINTER VALUE NULL.
+           05  WS-REQUEST-DATA-LEN     PIC S9(8) BINARY VALUE ZERO.
+           05  WS-REPLY-DATA           POINTER VALUE NULL.
+           05  WS-REPLY-DATA-LEN       PIC S9(8) BINARY VALUE ZERO.
+           05  WS-OPTIONS.
+               10  WS-CONNECT-TIMEOUT  PIC 9(9) BINARY VALUE 3.
+               10  WS-RECV-TIMEOUT     PIC 9(9) BINARY VALUE 10.
+               10  WS-PROXY-URI        PIC X(513) VALUE SPACES.
+               10  WS-USERID           PIC X(33) VALUE SPACES.
+               10  WS-PASSWORD         PIC X(33) VALUE SPACES.
+
+      *---------------------------------------------------------------*
+      *  Work variables                                               *
+      *---------------------------------------------------------------*
+       01  WS-RESP                     PIC S9(8) COMP VALUE ZERO.
+       01  WS-RESP2                    PIC S9(8) COMP VALUE ZERO.
+       01  WS-RDISP                    PIC +9(8) VALUE ZERO.
+       01  WS-I                        PIC 9(8) COMP-3 VALUE ZERO.
+
+      *---------------------------------------------------------------*
+      *  Request parameters expected by target web service            *
+      *---------------------------------------------------------------*
+       01 COM-REQUEST.
+          05 REQUEST-NAME               PIC X(20).
+
+      *****************************************************************
+      *            L I N K A G E       S E C T I O N                  *
+      *****************************************************************
+       LINKAGE SECTION.
+
+      *---------------------------------------------------------------*
+      *  Reply parameters as returned by target web service           *
+      *---------------------------------------------------------------*
+       01 COM-REPLY.
+          05 REPLY-TYPE                 PIC 9(4) COMP.
+             88 REPLY-SUCCESS     VALUE 0.
+             88 REPLY-ERROR       VALUE 1.
+          05 REPLY-SUCCESS-HEADER.
+             10 SEARCH-DURATION         PIC X(8).
+             10 TOTAL-ITEMS-READ        PIC 9(8) COMP-3.
+             10                         PIC X(123).
+          05 REPLY-ERROR-HEADER REDEFINES REPLY-SUCCESS-HEADER.
+             10 REPLY-RESP              PIC S9(8) COMP.
+             10 REPLY-RESP2             PIC S9(8) COMP.
+             10 REPLY-MESSAGE           PIC X(128).
+          05 FILLER.
+             10 REPLY-ITEMSCOUNT        PIC 9(8) COMP-3.
+             10 REPLY-ITEM OCCURS 1 TO 100 
+                DEPENDING ON REPLY-ITEMSCOUNT.
+                15 REPLY-NUMBER         PIC 9(6).
+                15 REPLY-PERSONAL.
+                   20 REPLY-NAME        PIC X(20).
+                   20 REPLY-ADDRESS     PIC X(20).
+                   20 REPLY-PHONE       PIC X(8).
+                15 REPLY-DATE           PIC X(8).
+                15 REPLY-AMOUNT         PIC X(8).
+                15 REPLY-COMMENT        PIC X(9).
+
+      *****************************************************************
+      *    P R O C E D U R E  D I V I S I O N   S E C T I O N         *
+      *****************************************************************
+       PROCEDURE DIVISION.
+
+           IF TRACES-ON
+               DISPLAY
+                   'LSC2LEAL STARTING ==============================='
+           END-IF.
+
+           PERFORM INITIALIZE-C2WS-API THRU
+               END-INITIALIZE-C2WS-API.
+
+           PERFORM SET-REQUEST THRU
+               END-SET-REQUEST.
+
+           PERFORM INVOKE-SERVICE THRU
+               END-INVOKE-SERVICE.
+
+           IF TRACES-ON
+             PERFORM PRINT-RESULTS THRU
+                 END-PRINT-RESULTS
+           END-IF.
+
+           IF TRACES-ON
+               DISPLAY
+                   'LSC2LEAL STOPPING ==============================='
+           END-IF.
+           EXEC CICS RETURN END-EXEC.
+
+           GOBACK.
+
+      *---------------------------------------------------------------*
+      *  Initialize the c2ws API. You can turn traces on and specify  *
+      *  a trace identifier.                                          *
+      *---------------------------------------------------------------*
+       INITIALIZE-C2WS-API.
+
+           MOVE THIS-TRACE-ID TO TRACE-ID.
+
+           CALL 'init' USING dfheiblk TRACE-PARMS
+                       RETURNING WS-RESP.
+           IF (WS-RESP NOT = OK-CODE)
+               DISPLAY 'INITIALIZE-C2WS-API failed'
+               EXEC CICS RETURN END-EXEC
+           END-IF.
+
+       END-INITIALIZE-C2WS-API.   EXIT.
+
+      *---------------------------------------------------------------*
+      *  Populate the request parameters                              *
+      *---------------------------------------------------------------*
+       SET-REQUEST.
+
+           IF TRACES-ON
+             DISPLAY 'START SET-REQUEST'
+           END-IF.
+
+           MOVE 'S*' TO REQUEST-NAME OF COM-REQUEST.
+
+           IF TRACES-ON
+             DISPLAY 'SET-REQUEST ENDED'
+           END-IF.
+
+       END-SET-REQUEST.   EXIT.
+
+      *---------------------------------------------------------------*
+      *  Invoke target mule component                                 *
+      *---------------------------------------------------------------*
+       INVOKE-SERVICE.
+           IF TRACES-ON
+             DISPLAY 'ABOUT TO RUN INVOKE-SERVICE'
+           END-IF.
+      *
+      * Prepare invoke parameter set
+      *
+           MOVE SERVICE-ENDPOINT-URI   TO WS-URI.
+           MOVE C2WS-SERVICE-NAME  TO WS-SERVICE-NAME.
+           SET WS-REQUEST-DATA     TO ADDRESS OF COM-REQUEST.
+           MOVE LENGTH OF COM-REQUEST TO WS-REQUEST-DATA-LEN.
+           MOVE C2WS-USERID        TO WS-USERID.
+           MOVE C2WS-PASSWORD      TO WS-PASSWORD.
+      *
+      * Invoke target web service
+      *
+           CALL 'invoke' USING WS-INVOKE-PARMS
+                         RETURNING WS-RESP.
+           IF (WS-RESP NOT = OK-CODE)
+               COMPUTE WS-RDISP = WS-RESP
+               DISPLAY 'INVOKE-SERVICE failed. Return code=' WS-RDISP
+               EXEC CICS RETURN END-EXEC
+           END-IF.
+
+           SET ADDRESS OF COM-REPLY TO WS-REPLY-DATA.
+
+           IF TRACES-ON
+             DISPLAY 'INVOKE-SERVICE SUCCESS'
+           END-IF.
+
+       END-INVOKE-SERVICE.   EXIT.
+
+      *---------------------------------------------------------------*
+      *  Display results returned from target mule component          *
+      *---------------------------------------------------------------*
+       PRINT-RESULTS.
+
+           DISPLAY 'Response data length=' WS-REPLY-DATA-LEN.
+
+           DISPLAY 'REPLY-TYPE='       REPLY-TYPE OF COM-REPLY.
+           DISPLAY 'SEARCH-DURATION='  SEARCH-DURATION OF COM-REPLY.
+           DISPLAY 'TOTAL-ITEMS-READ=' TOTAL-ITEMS-READ OF COM-REPLY.
+           DISPLAY 'REPLY-ITEMSCOUNT=' REPLY-ITEMSCOUNT OF COM-REPLY.
+           PERFORM VARYING WS-I FROM 1 BY 1
+                   UNTIL WS-I > REPLY-ITEMSCOUNT
+               DISPLAY 'REPLY-NUMBER='  REPLY-NUMBER OF COM-REPLY(WS-I)
+               DISPLAY 'REPLY-NAME='    REPLY-NAME OF COM-REPLY(WS-I)
+               DISPLAY 'REPLY-ADDRESS=' REPLY-ADDRESS OF COM-REPLY(WS-I)
+               DISPLAY 'REPLY-PHONE='   REPLY-PHONE OF COM-REPLY(WS-I)
+               DISPLAY 'REPLY-DATE='    REPLY-DATE OF COM-REPLY(WS-I)
+               DISPLAY 'REPLY-AMOUNT='  REPLY-AMOUNT OF COM-REPLY(WS-I)
+               DISPLAY 'REPLY-COMMENT=' REPLY-COMMENT OF COM-REPLY(WS-I)
+           END-PERFORM.
+
+       END-PRINT-RESULTS.   EXIT.
+
+       END PROGRAM LSC2LEAL.

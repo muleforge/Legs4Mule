@@ -23,7 +23,19 @@ import org.mule.umo.provider.UMOMessageReceiver;
  */
 public class LegstarConnector extends HttpConnector {
     
-    /**
+    /** Name of property holding the mainframe character set. */
+    public static final String HOST_CHARSET_PROPERTY = "hostCharset";
+    
+    /** Name of Property holding jaxb qualified class name. */
+    public static final String JAXB_QUAL_CLASS_NAME = "jaxbClassName";
+    
+    /** Name of Property holding cobol binding qualified class name. */
+    public static final String COXB_QUAL_CLASS_NAME = "coxbClassName";
+    
+    /** Name of Property holding target Mainframe program properties file name. */
+    public static final String PROGRAM_PROP_FILE_NAME = "programPropFileName";
+    
+   /**
      * No-Args constructor. Used to register the legtstar:http
      * as a valid protocol combination.
      */

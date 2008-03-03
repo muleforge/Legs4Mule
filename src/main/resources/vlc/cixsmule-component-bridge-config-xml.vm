@@ -1,0 +1,82 @@
+##/////////////////////////////////////////////////////////////////////
+##Mule Component standalone configuration XML Template.
+##@author Fady
+##@version 0.1
+##/////////////////////////////////////////////////////////////////////
+## ==================================================================
+## Create a list of unique transformers
+##
+#macro(addBridgeTransformer $operationPackageName $transformerType)
+#if($operationPackageName)
+#set($type = "${operationPackageName}.${transformerType}")
+#else
+#set($type = $transformerType)
+#end
+#if (!$bridgeTransformers.contains($type))
+#set($ret = $bridgeTransformers.add($type))
+#end
+#end
+## ==================================================================
+## Build a list of unique transformer names for a holder type 
+##
+#macro(addBridgeTransformers $operationPackageName $holderType)
+#addBridgeTransformer($operationPackageName "HostByteArrayTo${holderType}")
+#addBridgeTransformer($operationPackageName "${holderType}ToHostByteArray")
+#end
+## ==================================================================
+## Build a list of unique transformers 
+##
+#set($bridgeTransformers = [])
+#foreach ($cixsOperation in $muleComponent.cixsOperations)
+#set($operationPackageName = $cixsHelper.getOperationPackageName(${cixsOperation}, ${muleComponent.packageName}))
+#addBridgeTransformers($operationPackageName ${cixsOperation.requestHolderType})
+#addBridgeTransformers($operationPackageName ${cixsOperation.responseHolderType})
+#end
+##
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<!--  This Mule configuration implements an adapter for a legacy function.
+      It uses the bridge component as well as generated Legs4Mule transformers.
+ -->
+<mule-configuration id="mule-legstar-bridge-${muleComponent.name}-config" version="1.0">
+
+    <description>Mule configuration file for ${muleComponent.name} bridge Legs4Mule component</description>
+    <mule-environment-properties enableMessageEvents="true"/>
+    <transformers>
+        <transformer name="ByteArrayToObject" className="org.mule.transformers.simple.ByteArrayToObject"/>
+#foreach($transformerType in $bridgeTransformers)
+        <transformer name="${helper.getClassName(${transformerType})}" className="${transformerType}"/>
+#end
+    </transformers>
+
+    <model name="${muleComponent.name}Model">
+
+#foreach ($cixsOperation in $muleComponent.cixsOperations)
+        <mule-descriptor name="${cixsOperation.name}BridgeUMO"
+            implementation="org.mule.components.simple.BridgeComponent">
+            <inbound-router>
+                <endpoint address="tcp://localhost:3213"
+                  transformers="ByteArrayToObject"
+                  responseTransformers="HostByteArrayTo${cixsOperation.responseHolderType}"
+                  remoteSync="true"/>
+            </inbound-router>
+            <outbound-router>
+                <router className="org.mule.routing.outbound.OutboundPassThroughRouter">
+                    <!-- TODO Change to your host ip address and port. Must be a valid LegStar destination. -->
+                    <endpoint address="legstar:http://192.168.0.110:4081"
+                              transformers="${cixsOperation.requestHolderType}ToHostByteArray" >
+                        <properties>
+                            <property name="hostCharset" value="IBM01147"/>
+                            <property name="programPropFileName" value="${cixsOperation.name}.properties"/>
+                        </properties>
+                    </endpoint>
+                </router>
+            </outbound-router>
+        </mule-descriptor>
+#end
+
+    </model>
+</mule-configuration>

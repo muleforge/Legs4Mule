@@ -22,7 +22,7 @@ import com.legstar.messaging.HostReceiveException;
 import com.legstar.messaging.LegStarMessage;
 
 /**
- * <code>ObjectToLegStarMessage</code> turn a byte array to an architected
+ * <code>ByteArrayToLegStarMessage</code> turn a byte array to an architected
  * LegStarMessage.
  */
 public class ByteArrayToLegStarMessage extends AbstractEventAwareTransformer {

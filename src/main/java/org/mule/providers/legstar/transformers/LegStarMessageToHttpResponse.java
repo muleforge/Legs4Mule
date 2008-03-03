@@ -16,6 +16,7 @@ import java.io.InputStream;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mule.providers.NullPayload;
 import org.mule.providers.http.HttpConstants;
 import org.mule.providers.http.HttpResponse;
 import org.mule.providers.http.transformers.UMOMessageToHttpResponse;
@@ -57,6 +58,13 @@ public class LegStarMessageToHttpResponse extends UMOMessageToHttpResponse {
 	    /* This situation arises if the client starts by an HTTP HEAD method. */
 	    if (src instanceof HttpResponse) {
 	        return src;
+	    }
+	    
+	    /* This situation happens when an exception happened. There is normally
+	     * a 500 http status set by the standard Mule exception mapping 
+	     * mechanism */
+	    if (src instanceof NullPayload) {
+            return super.transform(null, encoding, context);
 	    }
 	    
 		/* Since the only source type registered is LegStarMessage, it is safe
@@ -106,10 +114,12 @@ public class LegStarMessageToHttpResponse extends UMOMessageToHttpResponse {
          * transformed into a byte array.
          * TODO consider case where the Mule component raises an exception
          * what should we send to the host?  */
-        Header header = new Header(
-                HttpConstants.HEADER_CONTENT_LENGTH,
-                Integer.toString(((byte[]) src).length));
-        response.addHeader(header);
+        if (src != null && src instanceof byte[]) {
+            Header header = new Header(
+                    HttpConstants.HEADER_CONTENT_LENGTH,
+                    Integer.toString(((byte[]) src).length));
+            response.addHeader(header);
+        }
 
         return response;
     }

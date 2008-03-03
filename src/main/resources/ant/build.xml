@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================================================
-     This script creates all artifacts needed for a Mule Cixs component using
-     LegStar COXB cobol binding to JAXB and CIXS connectivity.
-     Prerequisite: COXB binding classes should have been generated
+     This script creates all artifacts needed for a Legs4Mule component using
+     LegStar cobol binding to java classes.
+     Artifacts can be used to call a remote Mainframe function or to expose
+     a Mule component for Mainframe consumption.
+     Prerequisite: Cobol binding classes should have been generated
      using LegStar Coxbgen prior to using this script.
      Refer to http://www.legsem.com/legstar for info on generating binding classes.
   -->
@@ -20,14 +22,14 @@
         <property name="package.name" value="org.mule.providers.legstar.test.lsfileae"/>
         <!-- Generated Mule component method name   -->
         <property name="method.name" value="lsfileae" />
-        <!-- CICS program name triggered by the previous method   -->
-        <property name="cics.program.name" value="LSFILEAE" />
+        <!-- Mainframe program name triggered by the previous method   -->
+        <property name="host.program.name" value="LSFILEAE" />
         
         <!-- Generated source code target location   -->
         <property name="src.dir" value="${basedir}/src/main/java"/>
         <!-- Ant scripts target location   -->
         <property name="ant.dir" value="${basedir}/src/main/resources/ant"/>
-        <!-- Mule configuration target location   -->
+        <!-- Mule configurations target location   -->
         <property name="conf.dir" value="${basedir}/src/main/resources/conf"/>
         <!-- Properties files target location   -->
         <property name="prop.dir" value="${basedir}/src/main/resources"/>
@@ -78,7 +80,7 @@
             <cixsMuleComponent name="${mule.component}"
                 packageName="${package.name}">
                 <cixsOperation name="${method.name}"
-                    cicsProgramName="${cics.program.name}">
+                    cicsProgramName="${host.program.name}">
                     <input
                         jaxbType="${jaxb.root.name.in}"
                         jaxbPackageName="${jaxb.package.name}"

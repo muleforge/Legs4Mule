@@ -1,5 +1,5 @@
 ##/////////////////////////////////////////////////////////////////////
-##Mule Component configuration XML Template.
+##Mule Component standalone configuration XML Template.
 ##@author Fady
 ##@version 0.1
 ##/////////////////////////////////////////////////////////////////////
@@ -8,11 +8,14 @@
 <!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
                                 "http://mule.mulesource.org/dtds/mule-configuration.dtd">
 
-<!--  This is a sample Mule configuration file for a LegStar project -->
+<!--  This Mule configuration is for a generated standalone UMO component.
+      Standalone components are adapters for legacy functions. They are regular UMO components
+      from a Mule perspective but, internally, use LegStar to call the function fonction.
+      Standalone components do not use the Legs4Mule transport -->
 
-<mule-configuration id="mule-legstar-${muleComponent.name}-config" version="1.0">
+<mule-configuration id="mule-legstar-standalone-${muleComponent.name}-config" version="1.0">
 
-    <description>Mule configuration file for a ${muleComponent.name} LegStar component</description>
+    <description>Mule configuration file for ${muleComponent.name} standalone LegStar component</description>
 
     <!-- Uncomment to get host connections pooling. 
          You will need legstar-engine-config.xml and legstar-pooling-config.xml
