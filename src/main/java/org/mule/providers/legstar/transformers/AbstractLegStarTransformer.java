@@ -10,7 +10,7 @@
 
 package org.mule.providers.legstar.transformers;
 
-import org.mule.providers.legstar.LegstarConnector;
+import org.mule.providers.legstar.http.LegstarHttpConnector;
 import org.mule.providers.legstar.i18n.LegstarMessages;
 import org.mule.transformers.AbstractEventAwareTransformer;
 import org.mule.umo.transformer.TransformerException;
@@ -45,11 +45,11 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
      */
     public void getProperties(UMOMessage message) throws TransformerException {
         mHostCharset = message.getStringProperty(
-                LegstarConnector.HOST_CHARSET_PROPERTY,
+                LegstarHttpConnector.HOST_CHARSET_PROPERTY,
                 HostContext.getDefaultHostCharsetName());
 
         mProgramPropFileName = message.getStringProperty(
-                LegstarConnector.PROGRAM_PROP_FILE_NAME, null);
+                LegstarHttpConnector.PROGRAM_PROP_FILE_NAME, null);
     }
     
     /**

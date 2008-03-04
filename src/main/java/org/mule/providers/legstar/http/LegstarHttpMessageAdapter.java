@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
 import org.mule.providers.http.HttpMessageAdapter;
 import org.mule.umo.MessagingException;
@@ -17,7 +17,7 @@ import org.mule.umo.MessagingException;
  * <code>LegstarMessageAdapter</code> delegates processing to
  * <code>HttpMessageAdapter</code>.
  */
-public class LegstarMessageAdapter extends HttpMessageAdapter {
+public class LegstarHttpMessageAdapter extends HttpMessageAdapter {
  
     /** Serial ID.   */
     private static final long serialVersionUID = 5737156381082603182L;
@@ -27,7 +27,7 @@ public class LegstarMessageAdapter extends HttpMessageAdapter {
      * @param message the inner message
      * @throws MessagingException if construction fails
      */
-    public LegstarMessageAdapter(
+    public LegstarHttpMessageAdapter(
             final Object message) throws MessagingException {
         super(message);
     }

@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
 import org.mule.providers.AbstractMessageDispatcherFactory;
 import org.mule.umo.UMOException;
@@ -20,13 +20,13 @@ import org.mule.umo.provider.UMOMessageDispatcher;
  * of <code>LegstarMessageDispatcher</code>.
  */
 
-public class LegstarMessageDispatcherFactory 
+public class LegstarHttpMessageDispatcherFactory 
             extends AbstractMessageDispatcherFactory {
 
     /** {@inheritDoc} */
     public UMOMessageDispatcher create(
             final UMOImmutableEndpoint endpoint) throws UMOException {
-        return new LegstarMessageDispatcher(endpoint);
+        return new LegstarHttpMessageDispatcher(endpoint);
     }
 
 }

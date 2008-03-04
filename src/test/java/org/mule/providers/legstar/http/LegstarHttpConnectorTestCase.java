@@ -8,12 +8,13 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
+import org.mule.providers.legstar.http.LegstarHttpConnector;
 import org.mule.tck.providers.AbstractConnectorTestCase;
 import org.mule.umo.provider.UMOConnector;
 
-public class LegstarConnectorTestCase extends AbstractConnectorTestCase
+public class LegstarHttpConnectorTestCase extends AbstractConnectorTestCase
 {
 
     /** Legstar listening port. */
@@ -21,7 +22,7 @@ public class LegstarConnectorTestCase extends AbstractConnectorTestCase
 
     public UMOConnector getConnector() throws Exception {
  
-        LegstarConnector c = new LegstarConnector();
+        LegstarHttpConnector c = new LegstarHttpConnector();
         c.setName("Test-Legstar");
         c.initialise();
         return c;

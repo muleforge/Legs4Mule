@@ -48,7 +48,7 @@
     <mule-environment-properties enableMessageEvents="true"/>
     
     <!-- Legs4Mule connector will be listening for requests from the legacy system -->
-    <connector name="LegstarConnector" className="org.mule.providers.legstar.LegstarConnector">
+    <connector name="LegstarHttpConnector" className="org.mule.providers.legstar.http.LegstarHttpConnector">
         <properties>
             <property name="port" value="8083"/>
         </properties>

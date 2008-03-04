@@ -8,7 +8,11 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,10 +22,13 @@ import org.mule.umo.provider.UMOMessageReceiver;
 
 /**
  * <code>LegstarConnector</code> is essentially and <code>HttpConnector</code>
- * with transformers to handle to special LegStar wrappering of
- * host data.
+ * with transformers to handle to special LegStar messaging to wrap
+ * mainframe data. The LegStar support for HTTP must be installed on the
+ * mainframe (see http://www.legsem.com/legstar/legstar-chttprt).
+ * TODO in this form, LegstarConnector does not have the capability to
+ * support any other transports than HTTP.
  */
-public class LegstarConnector extends HttpConnector {
+public class LegstarHttpConnector extends HttpConnector {
     
     /** Name of property holding the mainframe character set. */
     public static final String HOST_CHARSET_PROPERTY = "hostCharset";
@@ -36,11 +43,10 @@ public class LegstarConnector extends HttpConnector {
     public static final String PROGRAM_PROP_FILE_NAME = "programPropFileName";
     
    /**
-     * No-Args constructor. Used to register the legtstar:http
-     * as a valid protocol combination.
+     * No-Args constructor.
      */
-    public LegstarConnector() {
-        registerSupportedProtocol(getProtocol() + ':' + "http");
+    public LegstarHttpConnector() {
+        registerProtocols();
     }
 
     /** logger used by this class.   */
@@ -52,6 +58,26 @@ public class LegstarConnector extends HttpConnector {
         logger.debug("doInitialise");
     }
 
+    /**
+     * Used to register the legtstar:http
+     * as a valid protocol combination. "legstar" is the scheme
+     * meta info and http is the protocol.
+     */
+    protected void registerProtocols()
+    {
+        List < String > schemes = new ArrayList < String >();
+        schemes.add("http");
+        schemes.add("https");
+
+        for (Iterator< String > iterator = schemes.iterator(); iterator.hasNext();)
+        {
+            String s = (String)iterator.next();
+            registerSupportedProtocol(s);
+        }
+        registerSupportedProtocolWithoutPrefix("legstar:http");
+        registerSupportedProtocolWithoutPrefix("legstar:https");
+    }
+
     /** {@inheritDoc} */
     public String getProtocol() {
         return "legstar";
@@ -59,7 +85,7 @@ public class LegstarConnector extends HttpConnector {
 
     /** 
      * Because UMOMessageReceiver getTargetReceiver does a lookup with
-     * a key like legstar://localhost:8083 instead of legstar://localhost:8083
+     * a key like legstar://localhost:8083 instead of http://localhost:8083
      * we override the standard method.
      * {@inheritDoc}
      *  */

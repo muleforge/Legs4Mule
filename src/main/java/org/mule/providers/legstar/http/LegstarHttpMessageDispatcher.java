@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
 import org.apache.commons.httpclient.HttpMethod;
 import org.mule.providers.http.HttpClientMessageDispatcher;
@@ -21,13 +21,13 @@ import org.mule.umo.transformer.TransformerException;
  * <code>LegstarMessageDispatcher</code> delegates most of its behavior
  * to <code>HttpClientMessageDispatcher</code>.
  */
-public class LegstarMessageDispatcher extends HttpClientMessageDispatcher {
+public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
 
     /**
      * Constructor for a given endpoint.
      * @param endpoint the Mule endpoint
      */
-    public LegstarMessageDispatcher(final UMOImmutableEndpoint endpoint) {
+    public LegstarHttpMessageDispatcher(final UMOImmutableEndpoint endpoint) {
         super(endpoint);
     }
     
@@ -49,8 +49,9 @@ public class LegstarMessageDispatcher extends HttpClientMessageDispatcher {
         method.addRequestHeader("CICSTraceMode", "true");
         
         /* Forces the path assuming it is a Cics Web Services listening.
+         * TODO again this should be externalized in a configuration file
          * */
-        method.setPath("/CICS/CWBA/LSWEBBIN");
+       method.setPath("/CICS/CWBA/LSWEBBIN");
         
         /* This is not propagated by UMOMessageToHttpResponse
          * TODO open an issue with Mule.  */

@@ -8,11 +8,11 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
 import com.mockobjects.dynamic.Mock;
 import org.mule.impl.endpoint.MuleEndpoint;
-import org.mule.providers.legstar.LegstarMessageReceiver;
+import org.mule.providers.legstar.http.LegstarHttpMessageReceiver;
 import org.mule.tck.providers.AbstractMessageReceiverTestCase;
 import org.mule.umo.UMOComponent;
 import org.mule.umo.UMODescriptor;
@@ -20,7 +20,7 @@ import org.mule.umo.endpoint.UMOEndpoint;
 import org.mule.umo.provider.UMOMessageReceiver;
 
 
-public class LegstarMessageReceiverTestCase extends AbstractMessageReceiverTestCase
+public class LegstarHttpMessageReceiverTestCase extends AbstractMessageReceiverTestCase
 {
 
     /** Legstar listening port. */
@@ -34,12 +34,12 @@ public class LegstarMessageReceiverTestCase extends AbstractMessageReceiverTestC
         Mock mockDescriptor = new Mock(UMODescriptor.class);
         mockComponent.expectAndReturn("getDescriptor", mockDescriptor.proxy());
         mockDescriptor.expectAndReturn("getResponseTransformer", null);
-        return new LegstarMessageReceiver(endpoint.getConnector(), (UMOComponent) mockComponent.proxy(), endpoint);
+        return new LegstarHttpMessageReceiver(endpoint.getConnector(), (UMOComponent) mockComponent.proxy(), endpoint);
     }
 
     public UMOEndpoint getEndpoint() throws Exception
     {
-    	return new MuleEndpoint("legstar://localhost:" + Integer.toString(LEGSTAR_PORT), true);
+    	return new MuleEndpoint("legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT), true);
     }
 
 }

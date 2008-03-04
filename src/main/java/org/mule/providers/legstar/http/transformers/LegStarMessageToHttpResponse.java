@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar.transformers;
+package org.mule.providers.legstar.http.transformers;
 
 import java.io.IOException;
 import java.io.InputStream;

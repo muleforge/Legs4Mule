@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
 import org.mule.providers.http.HttpMessageReceiver;
 import org.mule.umo.UMOComponent;
@@ -20,7 +20,7 @@ import org.mule.umo.provider.UMOConnector;
  * <code>LegstarMessageReceiver</code> delegates all processing
  * to <code>HttpMessageReceiver</code>.
  */
-public class LegstarMessageReceiver extends HttpMessageReceiver {
+public class LegstarHttpMessageReceiver extends HttpMessageReceiver {
 
     /**
      * Constructs a message receiver for a component.
@@ -29,7 +29,7 @@ public class LegstarMessageReceiver extends HttpMessageReceiver {
      * @param endpoint the Mule endpoint
      * @throws InitialisationException if construction fails
      */
-    public LegstarMessageReceiver(
+    public LegstarHttpMessageReceiver(
             final UMOConnector connector,
             final UMOComponent component,
             final UMOEndpoint endpoint)

@@ -8,15 +8,16 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
 import org.mule.impl.endpoint.MuleEndpointURI;
+import org.mule.providers.legstar.http.LegstarHttpConnector;
 import org.mule.providers.service.TransportFactory;
 import org.mule.tck.AbstractMuleTestCase;
 import org.mule.umo.endpoint.UMOEndpoint;
 
 
-public class LegstarConnectorFactoryTestCase extends AbstractMuleTestCase
+public class LegstarHttpConnectorFactoryTestCase extends AbstractMuleTestCase
 {
     /** Legstar listening port. */
     private static final int LEGSTAR_PORT = 8083;
@@ -27,7 +28,7 @@ public class LegstarConnectorFactoryTestCase extends AbstractMuleTestCase
         UMOEndpoint endpoint = TransportFactory.createEndpoint(url, UMOEndpoint.ENDPOINT_TYPE_RECEIVER);
         assertNotNull(endpoint);
         assertNotNull(endpoint.getConnector());
-        assertTrue(endpoint.getConnector() instanceof LegstarConnector);
+        assertTrue(endpoint.getConnector() instanceof LegstarHttpConnector);
         assertEquals("http://localhost:8083", endpoint.getEndpointURI().getAddress());
     }
     

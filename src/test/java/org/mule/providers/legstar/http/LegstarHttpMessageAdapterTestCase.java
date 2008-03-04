@@ -8,13 +8,14 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
+import org.mule.providers.legstar.http.LegstarHttpMessageAdapter;
 import org.mule.tck.providers.AbstractMessageAdapterTestCase;
 import org.mule.umo.provider.UMOMessageAdapter;
 import org.mule.umo.MessagingException;
 
-public class LegstarMessageAdapterTestCase extends AbstractMessageAdapterTestCase
+public class LegstarHttpMessageAdapterTestCase extends AbstractMessageAdapterTestCase
 {
 
     /* For general guidelines on writing transports see
@@ -27,7 +28,7 @@ public class LegstarMessageAdapterTestCase extends AbstractMessageAdapterTestCas
 
     public UMOMessageAdapter createAdapter(Object payload) throws MessagingException
     {
-        return new LegstarMessageAdapter(payload);
+        return new LegstarHttpMessageAdapter(payload);
     }
 
 }

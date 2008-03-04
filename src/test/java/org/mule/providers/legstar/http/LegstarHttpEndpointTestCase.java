@@ -8,14 +8,14 @@
  * LICENSE.txt file.
  */
 
-package org.mule.providers.legstar;
+package org.mule.providers.legstar.http;
 
 import org.mule.impl.endpoint.MuleEndpointURI;
 import org.mule.tck.AbstractMuleTestCase;
 import org.mule.umo.endpoint.UMOEndpointURI;
 
 
-public class LegstarEndpointTestCase extends AbstractMuleTestCase
+public class LegstarHttpEndpointTestCase extends AbstractMuleTestCase
 {
 
     /* For general guidelines on writing transports see
@@ -23,14 +23,13 @@ public class LegstarEndpointTestCase extends AbstractMuleTestCase
 
     public void testValidEndpointURI() throws Exception
     {
-        // TODO test creating and asserting Endpoint values eg
-
-        UMOEndpointURI url = new MuleEndpointURI("legstar://localhost:7856");
-        assertEquals("legstar", url.getScheme());
-        assertEquals("legstar://localhost:7856", url.getAddress());
+        UMOEndpointURI url = new MuleEndpointURI("legstar:http://localhost:7856");
+        assertEquals("http", url.getScheme());
+        assertEquals("legstar", url.getSchemeMetaInfo());
+        assertEquals("http://localhost:7856", url.getAddress());
         assertEquals(7856, url.getPort());
         assertEquals("localhost", url.getHost());
-        assertEquals("legstar://localhost:7856", url.getAddress());
+        assertEquals("http://localhost:7856", url.getAddress());
         assertEquals(0, url.getParams().size());
     }
 
