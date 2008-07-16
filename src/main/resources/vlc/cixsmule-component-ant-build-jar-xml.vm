@@ -43,7 +43,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project basedir=".." default="create-jar" name="build-jar">
    <property environment="env"/>
-   <property name="jarFile" value="${jarDir}/mule-legstar-${muleComponent.name}.jar"/>
+   <property name="jarFile" value="${targetJarDir}/mule-legstar-${muleComponent.name}.jar"/>
    <target name="clean">
       <delete file="${jarFile}" includeEmptyDirs="true" quiet="true"/>
    </target>
@@ -59,18 +59,20 @@
             <include name="${coxbPackage.replace(".","/")}/*.class"/>
          </fileset>
 #end
-         <fileset dir="${cixsBinDir}">
-            <include name="**/${muleComponent.name}/**/*.class"/>
+         <fileset dir="${targetBinDir}">
+            <include name="${muleComponent.packageName.replace(".","/")}/*.class"/>
          </fileset>
-#if($cixsBinDir != $custBinDir)
+#if($targetBinDir != $custBinDir)
          <fileset dir="${custBinDir}">
             <include name="**/${muleComponent.name}/**/*.class"/>
          </fileset>
 #end
+#if (${targetPropDir})
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-         <fileset dir="${propDir}">
+         <fileset dir="${targetPropDir}">
             <include name="${cixsOperation.name}.properties"/>
          </fileset>
+#end
 #end
       </jar>
    </target>

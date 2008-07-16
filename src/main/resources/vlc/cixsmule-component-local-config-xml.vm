@@ -28,9 +28,8 @@
 ##
 #set($localTransformers = [])
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-#set($operationPackageName = $cixsHelper.getOperationPackageName(${cixsOperation}, ${muleComponent.packageName}))
-#addLocalTransformers($operationPackageName ${cixsOperation.requestHolderType})
-#addLocalTransformers($operationPackageName ${cixsOperation.responseHolderType})
+#addLocalTransformers($cixsOperation.packageName ${cixsOperation.requestHolderType})
+#addLocalTransformers($cixsOperation.packageName ${cixsOperation.responseHolderType})
 #end
 ##
 <?xml version="1.0" encoding="UTF-8"?>
@@ -63,16 +62,16 @@
     <model name="${muleComponent.name}Model">
 
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-        <!-- Replace implementation with actual component -->
+        <!-- UMO to be consumed by mainframe programs -->
         <mule-descriptor name="${cixsOperation.name}LocalUMO"
-            implementation="org.mule.providers.legstar.local.components.${cixsOperation.className}Component">
+            implementation="${muleComponent.implementationClassName}">
             <inbound-router>
-                <endpoint address="legstar:http://localhost:8083"
+                <endpoint address="legstar:${serviceURI}"
                     transformers="HostByteArrayTo${cixsOperation.requestHolderType}"
                     responseTransformers="${cixsOperation.responseHolderType}ToHttpResponse"
                     synchronous="true">
                     <properties>
-                         <property name="hostCharset" value="IBM01147"/>
+                         <property name="hostCharset" value="${hostCharset}"/>
                     </properties>
               </endpoint>
             </inbound-router>

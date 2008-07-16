@@ -28,9 +28,8 @@
 ##
 #set($bridgeTransformers = [])
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-#set($operationPackageName = $cixsHelper.getOperationPackageName(${cixsOperation}, ${muleComponent.packageName}))
-#addBridgeTransformers($operationPackageName ${cixsOperation.requestHolderType})
-#addBridgeTransformers($operationPackageName ${cixsOperation.responseHolderType})
+#addBridgeTransformers(${cixsOperation.packageName} ${cixsOperation.requestHolderType})
+#addBridgeTransformers(${cixsOperation.packageName} ${cixsOperation.responseHolderType})
 #end
 ##
 <?xml version="1.0" encoding="UTF-8"?>
@@ -66,10 +65,10 @@
             <outbound-router>
                 <router className="org.mule.routing.outbound.OutboundPassThroughRouter">
                     <!-- TODO Change to your host ip address and port. Must be a valid LegStar destination. -->
-                    <endpoint address="legstar:http://192.168.0.110:4081"
+                    <endpoint address="legstar:${hostURI}"
                               transformers="${cixsOperation.requestHolderType}ToHostByteArray" >
                         <properties>
-                            <property name="hostCharset" value="IBM01147"/>
+                            <property name="hostCharset" value="${hostCharset}"/>
                             <property name="programPropFileName" value="${cixsOperation.name}.properties"/>
                         </properties>
                     </endpoint>

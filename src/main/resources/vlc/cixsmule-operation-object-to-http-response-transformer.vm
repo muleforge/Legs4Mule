@@ -3,8 +3,8 @@
 ##@author Fady
 ##@version 0.1
 ##/////////////////////////////////////////////////////////////////////
-#if(${operationPackageName})
-package ${operationPackageName};
+#if(${cixsOperation.packageName})
+package ${cixsOperation.packageName};
 #end
 import org.mule.providers.NullPayload;
 import org.mule.providers.http.HttpResponse;
@@ -22,17 +22,24 @@ import org.mule.umo.UMOEventContext;
 #set($transformerType = "${holderType}ToHttpResponse")
 #set($toHbatransformerType = "${holderType}ToHostByteArray")
 
-#foreach($cixsStructure in $cixsStructures)
-#if(!$cixsStructure.cicsContainer)
-import ${helper.getQualClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})};
+## Multiple input or output operations must use channel/containers
+## In this case, individual objects are packed in a holder.
+## Otherwise the type of Object produced or consumed is
+## either a single JAXB Object or a POJO
+#if ($cixsOperation.hasChannel())
+#set($type = $holderType)
+#set($holder = true)
+#else
+#set($cixsStructure = $cixsStructures.get(0))
+#set($javaClassName = ${coxbHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#set($type = ${helper.getClassName(${javaClassName})})
+import ${javaClassName};
 #end
-#end
-
 
 /**
- * LegStar/Mule Operation $holderType to Http response Transformer.
+ * LegStar/Mule Operation $type to Http response Transformer.
  * 
- * <code>${transformerType}</code> takes a $holderType
+ * <code>${transformerType}</code> takes a $type
  * object as input, as well as a series of properties to create an http
  * response with binary content in host format (EBCDIC) ready to be sent
  * to a target Mainframe.
@@ -44,11 +51,11 @@ public class ${transformerType}
         extends AbstractObjectToHttpResponseTransformer {
 
     /**
-     * Constructs the transformer. Source is a $holderType object.
+     * Constructs the transformer. Source is a $type object.
      */
     public ${transformerType}() {
         super();
-        registerSourceType(${holderType}.class);
+        registerSourceType(${type}.class);
     }
 
     /** {@inheritDoc} */

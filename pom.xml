@@ -8,12 +8,12 @@
     <packaging>jar</packaging>
     <version>SNAPSHOT</version>
     <name>Legs4Mule</name>
-    <description>Legacy IBM CICS integration for Mule based on open-source LegStar</description>
+    <description>Mainframe integration for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>1.4.3</muleVersion>
-        <legstarVersion>SNAPSHOT</legstarVersion>
+        <legstarVersion>1.2.0</legstarVersion>
     </properties>
-    <url>http://www.legsem.com/legstar</url>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
     <developers>
         <developer>
             <id>fady</id>
@@ -91,8 +91,8 @@
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                <source>1.5</source>
-                <target>1.5</target>
+                    <source>1.5</source>
+                    <target>1.5</target>
                 </configuration>
             </plugin>
         </plugins>
@@ -156,7 +156,22 @@
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-engine</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-invoker</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-cixsgen</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-coxbgen</artifactId>
             <version>${legstarVersion}</version>
         </dependency>
         <dependency>
@@ -183,7 +198,7 @@
             <scope>test</scope>
         </dependency>
         <!-- There seems to be some version conflict between velocity and
-        LegStar. This ensures we have the correct version of commons-lang -->
+        commons-configuration. This ensures we have the correct version of commons-lang -->
         <dependency> 
             <groupId>commons-lang</groupId> 
             <artifactId>commons-lang</artifactId> 

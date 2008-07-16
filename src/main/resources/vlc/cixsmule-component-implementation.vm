@@ -106,12 +106,11 @@ public class $muleComponent.implementationClassName implements ${muleComponent.i
     }
 
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-#if(${cixsOperation.cicsChannel})
+#if(!${helper.isEmpty(${cixsOperation.cicsChannel})})
 #set($containers = true)
 #else
 #set($containers = false)
 #end
-#set($operationPackageName = $cixsHelper.getOperationPackageName(${cixsOperation}, ${jaxwsComponent.packageName}))
     /** Properties for operation ${cixsOperation.name}. */
     private static final String ${cixsOperation.name.toUpperCase()}_PROP_FILE = "${cixsOperation.name}.properties";
 

@@ -10,6 +10,7 @@
 package org.mule.providers.legstar.gen;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,12 +59,12 @@ public class ImplementationTemplateTest extends TestCase {
 	        throws Exception {
 	    CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateImplementation(
-                muleComponent, mParameters, componentClassFilesLocation);
+        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
+                new File(GEN_SRC_DIR), muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateImplementation(
+                muleComponent, mParameters, componentClassFilesDir);
         String resStr = getSource(
-                componentClassFilesLocation,
+                componentClassFilesDir,
                 muleComponent.getImplementationClassName() + ".java");
 
         assertTrue(resStr.contains("package " + TestCases.LEGS4MULE_PKG_PREFIX
@@ -97,9 +98,9 @@ public class ImplementationTemplateTest extends TestCase {
 	        throws Exception {
         CixsMuleComponent muleComponent = TestCases.getLsfilealMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateImplementation(
+        File componentClassFilesLocation = CodeGenUtil.classFilesLocation(
+                new File(GEN_SRC_DIR), muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateImplementation(
                 muleComponent, mParameters, componentClassFilesLocation);
         String resStr = getSource(
                 componentClassFilesLocation,
@@ -138,12 +139,12 @@ public class ImplementationTemplateTest extends TestCase {
 	public final void testGenerateImplementationContainer() throws Exception {
         CixsMuleComponent muleComponent = TestCases.getLsfileacMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateImplementation(
-                muleComponent, mParameters, componentClassFilesLocation);
+        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
+                new File(GEN_SRC_DIR), muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateImplementation(
+                muleComponent, mParameters, componentClassFilesDir);
         String resStr = getSource(
-                componentClassFilesLocation,
+                componentClassFilesDir,
                 muleComponent.getImplementationClassName() + ".java");
 
         assertTrue(resStr.contains("package "
@@ -195,12 +196,12 @@ public class ImplementationTemplateTest extends TestCase {
 	public final void testGenerateImplementationMultipleOperations() throws Exception {
         CixsMuleComponent muleComponent = TestCases.getLsfileaxMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateImplementation(
-                muleComponent, mParameters, componentClassFilesLocation);
+        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
+                new File(GEN_SRC_DIR), muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateImplementation(
+                muleComponent, mParameters, componentClassFilesDir);
         String resStr = getSource(
-                componentClassFilesLocation,
+                componentClassFilesDir,
                 muleComponent.getImplementationClassName() + ".java");
 
         assertTrue(resStr.contains("package "
@@ -250,8 +251,8 @@ public class ImplementationTemplateTest extends TestCase {
                 "reply.setReplyStatus(outputReplyStatusTypeBinding.getReplyStatusType());"));
 	}
 	
-    private String getSource(String srcLocation, String srcName) throws Exception {
-        BufferedReader in = new BufferedReader(new FileReader(srcLocation + '/' + srcName));
+    private String getSource(File srcDir, String srcName) throws Exception {
+        BufferedReader in = new BufferedReader(new FileReader(new File(srcDir, srcName)));
         String resStr = "";
         String str = in.readLine();
         while (str != null) {

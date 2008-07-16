@@ -7,7 +7,7 @@
   <version>SNAPSHOT</version>
   <properties>
     <muleVersion>1.4.3</muleVersion>
-    <legstarVersion>SNAPSHOT</legstarVersion>
+    <legstarVersion>1.2.0</legstarVersion>
   </properties>
   <artifactId>mule-transport-legstar</artifactId>
   <!-- This should be "pom" not "jar" but if it is set to "pom", the list of dependencies gets ignored
@@ -58,26 +58,46 @@
         <version>1.6.5</version>
         <scope>provided</scope>
     </dependency>
-    <dependency>
-        <groupId>com.legsem.legstar</groupId>
-        <artifactId>legstar-messaging</artifactId>
-        <version>${legstarVersion}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.legsem.legstar</groupId>
-        <artifactId>legstar-cixsgen-model</artifactId>
-        <version>${legstarVersion}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.legsem.legstar</groupId>
-        <artifactId>legstar-codegen</artifactId>
-        <version>${legstarVersion}</version>
-    </dependency>
-    <dependency>
-        <groupId>com.legsem.legstar</groupId>
-        <artifactId>legstar-cixsgen</artifactId>
-        <version>${legstarVersion}</version>
-    </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-messaging</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-messaging-impl</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-engine</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-invoker</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-cixsgen-model</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-coxbgen</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-codegen</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-c2wsgen</artifactId>
+            <version>${legstarVersion}</version>
+        </dependency>
     <dependency>
       <groupId>com.legsem.legstar</groupId>
       <artifactId>legstar-jaxbgen-cases</artifactId>

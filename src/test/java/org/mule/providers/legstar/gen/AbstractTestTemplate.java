@@ -1,6 +1,7 @@
 package org.mule.providers.legstar.gen;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +9,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.legstar.cixs.jaxws.gen.CixsHelper;
 import com.legstar.codegen.CodeGenHelper;
 import com.legstar.codegen.CodeGenUtil;
+import com.legstar.coxb.gen.CoxbHelper;
 
 import junit.framework.TestCase;
 
@@ -20,27 +21,36 @@ import junit.framework.TestCase;
  */
 public class AbstractTestTemplate extends TestCase {
 
-    /** Code will be generated here. */
-    public static final String GEN_SRC_DIR = "src/test/gen/java";
-
-    /** General location for generated artifacts. */
-    public static final String GEN_RES_DIR = "D:/Fady/sandbox/workspace2/legstar-mule/src/test/gen/resources";
-
-    /** Property files will be generated here. */
-    public static final String GEN_PROP_DIR = GEN_RES_DIR;
-
-    /** Ant scripts will be generated here. */
-    public static final String GEN_ANT_DIR = "ant";
+    /** Parent generation folder. */
+    public static final File GEN_DIR = new File("src/test/gen");
     
+    /** Location of JAXB classes. */
+    public static final File JAXB_BIN_DIR = new File("target/classes");
+
+    /** Code will be generated here. */
+    public static final File GEN_SRC_DIR = new File("src/test/gen/java");
+
     /** Configuration files will be generated here. */
-    public static final String GEN_CONF_DIR = "conf";
+    public static final File GEN_CONF_DIR = new File("src/test/gen/conf");
+    
+    /** Web descriptors files will be generated here. */
+    public static final File GEN_ANT_DIR = new File("src/test/gen/ant");
+    
+    /** Properties files will be generated here. */
+    public static final File GEN_PROP_DIR = new File("src/test/gen/prop");
+    
+    /** Reference to jar files location. */
+    public static final File GEN_JAR_DIR = new File("${env.MULE_HOME}/lib/user");
+
+    /** Reference to binaries location. */
+    public static final File GEN_BIN_DIR = new File("src/test/gen/target/classes");
+
+    /** COBOL code will be generated here. */
+    public static final File GEN_COBOL_DIR = new File("src/test/gen/cobol");
     
     /** Additional parameter set passed to templates */
     private Map <String, Object> mParameters;
     
-    /** Helper methods.  */
-    private CixsHelper mCixsHelper = new CixsHelper();
-
     /** Logger. */
     private static final Logger LOG = LoggerFactory.getLogger(
             AbstractTestTemplate.class);
@@ -49,11 +59,12 @@ public class AbstractTestTemplate extends TestCase {
     @Override
     public void setUp() {
         try {
+            emptyDir(GEN_DIR);
             CodeGenUtil.initVelocity();
             mParameters = new HashMap <String, Object>();
             CodeGenHelper helper = new CodeGenHelper();
             mParameters.put("helper", helper);
-            mParameters.put("cixsHelper", mCixsHelper);
+            mParameters.put("coxbHelper", new CoxbHelper());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -62,15 +73,15 @@ public class AbstractTestTemplate extends TestCase {
     
     /**
      * A general purpose reader that gets the file content into a string.
-     * @param srcLocation the location of the source artifact
+     * @param srcDir the location of the source artifact
      * @param srcName the source artifact name
      * @return a string containing the generated source
      * @throws Exception if something goes wrong
      */
     public String getSource(
-            String srcLocation, String srcName) throws Exception {
+            File srcDir, String srcName) throws Exception {
         BufferedReader in = new BufferedReader(
-                new FileReader(srcLocation + '/' + srcName));
+                new FileReader(new File(srcDir, srcName)));
         String resStr = "";
         String str = in.readLine();
         while (str != null) {
@@ -90,12 +101,28 @@ public class AbstractTestTemplate extends TestCase {
         return mParameters;
     }
 
-
     /**
-     * @return the mCixsHelper
+     * Recreates a folder after emptying its content.
+     * @param dir the folder to empy
      */
-    public final CixsHelper getCixsHelper() {
-        return mCixsHelper;
+    public void emptyDir(File dir) {
+        deleteDir(dir);
+        dir.mkdirs();
+    }
+    
+    /**
+     * Destroys a folder and all of its content.
+     * @param dir the folder to destroy
+     */
+    public void deleteDir(File dir) {
+        if (dir.exists()) {
+            for (File file : dir.listFiles()) {
+                if (file.isDirectory()) {
+                    deleteDir(file);
+                }
+                file.delete();
+            }
+        }
     }
 
 }

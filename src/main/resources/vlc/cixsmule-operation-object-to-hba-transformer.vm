@@ -3,8 +3,8 @@
 ##@author Fady
 ##@version 0.1
 ##/////////////////////////////////////////////////////////////////////
-#if(${operationPackageName})
-package ${operationPackageName};
+#if(${cixsOperation.packageName})
+package ${cixsOperation.packageName};
 #end
 import org.mule.providers.legstar.i18n.LegstarMessages;
 import org.mule.providers.legstar.transformers.AbstractLegStarTransformer;
@@ -22,20 +22,29 @@ import com.legstar.messaging.impl.LegStarMessageImpl;
 #set($holderType = ${cixsOperation.responseHolderType})
 #set($cixsStructures = ${cixsOperation.getOutput()})
 #end
-#set($transformerType = "${holderType}ToHostByteArray")
 
-#foreach($cixsStructure in $cixsStructures)
-#if(!$cixsStructure.cicsContainer)
-import ${helper.getQualClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})};
+## Multiple input or output operations must use channel/containers
+## In this case, individual objects are packed in a holder.
+## Otherwise the type of Object produced or consumed is
+## either a single JAXB Object or a POJO
+#if ($cixsOperation.hasChannel())
+#set($type = $holderType)
+#set($holder = true)
+#else
+#set($cixsStructure = $cixsStructures.get(0))
+#set($javaClassName = ${coxbHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#set($type = ${helper.getClassName(${javaClassName})})
+import ${javaClassName};
 #end
+#set($transformerType = "${holderType}ToHostByteArray")
+#foreach($cixsStructure in $cixsStructures)
 import ${helper.getQualClassName(${cixsStructure.coxbPackageName}, ${cixsStructure.coxbType})};
 #end
 
-
 /**
- * LegStar/Mule Operation $holderType to Host Byte Array Transformer.
+ * LegStar/Mule Operation $type to Host Byte Array Transformer.
  * 
- * <code>${transformerType}</code> takes a $holderType
+ * <code>${transformerType}</code> takes a $type
  * object as input, as well as a series of properties to create a byte array
  * in host format (EBCDIC) ready to be sent to a target Mainframe.
  * 
@@ -45,11 +54,11 @@ import ${helper.getQualClassName(${cixsStructure.coxbPackageName}, ${cixsStructu
 public class ${transformerType} extends AbstractLegStarTransformer {
 
     /**
-     * Constructs the transformer. Source is a $holderType object and
+     * Constructs the transformer. Source is a $type object and
      * result will be a byte array.
      */
     public ${transformerType}() {
-        registerSourceType(${holderType}.class);
+        registerSourceType(${type}.class);
         registerSourceType(LegStarMessage.class);
         setReturnClass(byte[].class);
     }
@@ -71,14 +80,14 @@ public class ${transformerType} extends AbstractLegStarTransformer {
             
             /* Starting from here we are guaranteed to get an instance of the
              * expected object */
-            ${holderType} srcObject = (${holderType}) src;
+            ${type} srcObject = (${type}) src;
             
             /* Build a LegStar message */
             LegStarMessageImpl legstarMessage = getLegStarMessage(
                     context.getMessage());
            
 #foreach($cixsStructure in $cixsStructures)
-#set($hostByteSize = ${cixsHelper.getByteLength(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#set($hostByteSize = ${coxbHelper.getByteLength(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
 #if($cixsStructure.cicsContainer)
             legstarMessage.addMessagePart(
                     new ${cixsStructure.coxbType}(srcObject.get${cixsStructure.jaxbPropertyName}()),

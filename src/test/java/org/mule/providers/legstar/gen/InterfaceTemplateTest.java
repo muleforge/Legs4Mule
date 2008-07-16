@@ -9,34 +9,22 @@
  */
 package org.mule.providers.legstar.gen;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.mule.providers.legstar.model.CixsMuleComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.legstar.codegen.CodeGenHelper;
 import com.legstar.codegen.CodeGenUtil;
 
-import junit.framework.TestCase;
-
 /**
  * Test cases for the interface velocity template.
  */
-public class InterfaceTemplateTest extends TestCase {
+public class InterfaceTemplateTest extends AbstractTestTemplate {
 	
-    /** Code will be generated here. */
-    private static final String GEN_SRC_DIR = "src/test/gen/java";
-
     private Map <String, Object> mParameters;
     
-    /** Logger. */
-    private static final Logger LOG = LoggerFactory.getLogger(
-            InterfaceTemplateTest.class);
-
     /** @{inheritDoc}*/
     @Override
  	public final void setUp() {
@@ -57,12 +45,12 @@ public class InterfaceTemplateTest extends TestCase {
 	public final void testGenerateInterfaceCommareainEqCommareaout() throws Exception {
         CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateInterface(
-                muleComponent, mParameters, componentClassFilesLocation);
+        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesDir);
         String resStr = getSource(
-                componentClassFilesLocation,
+                componentClassFilesDir,
                 muleComponent.getInterfaceClassName() + ".java");
 
         assertTrue(resStr.contains("package "
@@ -82,12 +70,12 @@ public class InterfaceTemplateTest extends TestCase {
 	public final void testGenerateInterfaceCommareainNeqCommareaout() throws Exception {
         CixsMuleComponent muleComponent = TestCases.getLsfilealMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateInterface(
-                muleComponent, mParameters, componentClassFilesLocation);
+        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesDir);
         String resStr = getSource(
-                componentClassFilesLocation,
+                componentClassFilesDir,
                 muleComponent.getInterfaceClassName() + ".java");
 
         assertTrue(resStr.contains("package "
@@ -107,12 +95,12 @@ public class InterfaceTemplateTest extends TestCase {
 	public final void testGenerateInterfaceContainer() throws Exception {
         CixsMuleComponent muleComponent = TestCases.getLsfileacMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateInterface(
-                muleComponent, mParameters, componentClassFilesLocation);
+        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesDir);
         String resStr = getSource(
-                componentClassFilesLocation,
+                componentClassFilesDir,
                 muleComponent.getInterfaceClassName() + ".java");
 
         assertTrue(resStr.contains("package "
@@ -132,12 +120,12 @@ public class InterfaceTemplateTest extends TestCase {
 	public final void testGenerateInterfaceMultipleOperations() throws Exception {
         CixsMuleComponent muleComponent = TestCases.getLsfileaxMuleComponent();
         
-        String componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName());
-        CixsMuleGenerator.generateInterface(
-                muleComponent, mParameters, componentClassFilesLocation);
+        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        Mule2CixsGenerator.generateInterface(
+                muleComponent, mParameters, componentClassFilesDir);
         String resStr = getSource(
-                componentClassFilesLocation,
+                componentClassFilesDir,
                 muleComponent.getInterfaceClassName() + ".java");
 
         assertTrue(resStr.contains("package "
@@ -154,17 +142,4 @@ public class InterfaceTemplateTest extends TestCase {
 		
 	}
     
-    private String getSource(String srcLocation, String srcName) throws Exception {
-        BufferedReader in = new BufferedReader(new FileReader(srcLocation + '/' + srcName));
-        String resStr = "";
-        String str = in.readLine();
-        while (str != null) {
-            LOG.debug(str);
-            resStr += str;
-            str = in.readLine();
-        }
-        in.close();
-        return resStr;
-    }
-
 }
