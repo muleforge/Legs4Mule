@@ -113,61 +113,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-vm</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-tcp</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-http</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-file</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.transports</groupId>
-            <artifactId>mule-transport-stream</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-client</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule</groupId>
-            <artifactId>mule-core</artifactId>
-            <version>${muleVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-messaging</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-messaging-impl</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-engine</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-invoker</artifactId>
-            <version>1.2.0</version>
-        </dependency>
-        <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-cixsgen</artifactId>
             <version>1.2.0</version>
@@ -181,12 +126,6 @@
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-codegen</artifactId>
             <version>1.2.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mule.tests</groupId>
-            <artifactId>mule-tests-functional</artifactId>
-            <version>${muleVersion}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>

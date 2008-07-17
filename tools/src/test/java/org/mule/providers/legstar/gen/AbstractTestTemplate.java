@@ -6,8 +6,8 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import com.legstar.codegen.CodeGenHelper;
 import com.legstar.codegen.CodeGenUtil;
@@ -52,8 +52,7 @@ public class AbstractTestTemplate extends TestCase {
     private Map <String, Object> mParameters;
     
     /** Logger. */
-    private static final Logger LOG = LoggerFactory.getLogger(
-            AbstractTestTemplate.class);
+    private static final Log LOG = LogFactory.getLog(AbstractTestTemplate.class);
     
     /** @{inheritDoc}*/
     @Override

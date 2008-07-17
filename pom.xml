@@ -8,7 +8,7 @@
     <packaging>jar</packaging>
     <version>SNAPSHOT</version>
     <name>Legs4Mule</name>
-    <description>Mainframe integration for Mule based on open-source LegStar</description>
+    <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>1.4.3</muleVersion>
     </properties>

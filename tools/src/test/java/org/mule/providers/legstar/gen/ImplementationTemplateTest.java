@@ -15,9 +15,9 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mule.providers.legstar.model.CixsMuleComponent;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.legstar.codegen.CodeGenHelper;
 import com.legstar.codegen.CodeGenUtil;
@@ -35,8 +35,7 @@ public class ImplementationTemplateTest extends TestCase {
     private Map <String, Object> mParameters;
     
     /** Logger. */
-    private static final Logger LOG = LoggerFactory.getLogger(
-            ImplementationTemplateTest.class);
+    private static final Log LOG = LogFactory.getLog(ImplementationTemplateTest.class);
 
     /** @{inheritDoc}*/
     @Override
