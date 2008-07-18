@@ -218,10 +218,24 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         assertTrue(resStr.contains(
                 "<mule-descriptor name=\"" + muleComponent.getName() + "UMO\" implementation=\"org.mule.providers.legstar.test." + muleComponent.getName() + "." + muleComponent.getInterfaceClassName() + "Impl\">"));
 
+        resStr = getSource(mGenerator.getTargetAntDir(),
+                "start-mule-standalone-config-" + muleComponent.getName() + ".xml");
+        assertTrue(resStr.replace("\\", "/").contains(
+                "<property name=\"conf.file\" value=\"file:///src/test/gen/conf/" +
+                muleComponent.getName() +
+                "/mule-standalone-config-" +
+                muleComponent.getName() +
+                ".xml\"/>"));
+
         resStr = getSource(mGenerator.getTargetPropDir(),
                 muleComponent.getCixsOperations().get(0).getCicsProgramName().toLowerCase() + ".properties");
         assertTrue(resStr.contains(
                 "CICSProgramName=" + muleComponent.getCixsOperations().get(0).getCicsProgramName() + ""));
+
+        resStr = getSource(mGenerator.getTargetPropDir(),
+                "log4j" + ".properties");
+        assertTrue(resStr.contains(
+                "log4j.logger.org.mule=INFO"));
     }
 
     private void checkBridgeResults(CixsMuleComponent muleComponent)
@@ -232,7 +246,16 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         assertTrue(resStr.contains(
                 "<mule-configuration id=\"mule-legstar-bridge-" + muleComponent.getName() + "-config\" version=\"1.0\">"));
         
-        for (CixsOperation operation : muleComponent.getCixsOperations()) {
+        resStr = getSource(mGenerator.getTargetAntDir(),
+                "start-mule-bridge-config-" + muleComponent.getName() + ".xml");
+        assertTrue(resStr.replace("\\", "/").contains(
+                "<property name=\"conf.file\" value=\"file:///src/test/gen/conf/" +
+                muleComponent.getName() +
+                "/mule-bridge-config-" +
+                muleComponent.getName() +
+                ".xml\"/>"));
+
+       for (CixsOperation operation : muleComponent.getCixsOperations()) {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     mGenerator.getTargetSrcDir(), operation.getPackageName(), true);
 

@@ -77,8 +77,10 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
             final Map < String, Object > parameters) throws CodeGenMakeException {
 
         parameters.put("targetJarDir", getTargetJarDir());
+        parameters.put("targetMuleConfigDir", getTargetMuleConfigDir());
         parameters.put("hostCharset", getHostCharset());
         parameters.put("hostURI", getHostURI());
+        parameters.put("generateBaseDir", getGenerateBuildDir());
        
         /* Determine target files locations */
         File componentClassFilesDir = CodeGenUtil.classFilesLocation(
@@ -87,6 +89,8 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         CodeGenUtil.checkDirectory(componentAntFilesDir, true);
         File componentConfFilesDir = getTargetMuleConfigDir();
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        File operationPropertiesFilesDir = getTargetPropDir();
+        CodeGenUtil.checkDirectory(operationPropertiesFilesDir, true);
         
         
         /* Produce artifacts for standalone component */
@@ -98,14 +102,16 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
                 getCixsMuleComponent(), parameters, componentAntFilesDir);
         generateStandaloneConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
+        generateAntStartMuleStandaloneConfigXml(
+                getCixsMuleComponent(), parameters, componentAntFilesDir);
+        generateLog4jProperties(
+                getCixsMuleComponent(), parameters, operationPropertiesFilesDir);
         
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
 
             /* Determine target files locations */
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
-            File operationPropertiesFilesDir = getTargetPropDir();
-            CodeGenUtil.checkDirectory(operationPropertiesFilesDir, true);
             
             generateFault(
                     operation, parameters, operationClassFilesDir);
@@ -119,12 +125,12 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         /* Produce artifacts for bridge component  */
         generateBridgeConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
+        generateAntStartMuleBridgeConfigXml(
+                getCixsMuleComponent(), parameters, componentAntFilesDir);
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
             /* Determine target files locations */
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
-            File operationPropertiesFilesDir = getTargetPropDir();
-            CodeGenUtil.checkDirectory(operationPropertiesFilesDir, true);
             
             generateHbaToObjectTransformers(
                     operation, parameters, operationClassFilesDir);

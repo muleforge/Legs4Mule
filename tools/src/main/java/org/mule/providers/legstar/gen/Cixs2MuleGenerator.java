@@ -50,6 +50,8 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             CodeGenUtil.checkDirectory(
                     getTargetMuleConfigDir(), true, "TargetMuleConfigDir");
             CodeGenUtil.checkDirectory(
+                    getTargetPropDir(), true, "TargetPropDir");
+            CodeGenUtil.checkDirectory(
                     getTargetCobolDir(), true, "TargetCobolDir");
             CodeGenUtil.checkHttpURI(getCixsMuleComponent().getServiceURI());
             
@@ -75,9 +77,11 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             final Map < String, Object > parameters) throws CodeGenMakeException {
         
         parameters.put("targetJarDir", getTargetJarDir());
+        parameters.put("targetMuleConfigDir", getTargetMuleConfigDir());
         parameters.put("serviceURI", getCixsMuleComponent().getServiceURI());
         parameters.put("hostCharset", getHostCharset());
         parameters.put("structHelper", new StructuresGenerator());
+        parameters.put("generateBaseDir", getGenerateBuildDir());
 
         /* Determine target files locations */
         File componentAntFilesDir = getTargetAntDir();
@@ -86,6 +90,8 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
         File componentCobolCicsClientDir = getTargetCobolDir();
         CodeGenUtil.checkDirectory(componentCobolCicsClientDir, true);
+        File operationPropertiesFilesDir = getTargetPropDir();
+        CodeGenUtil.checkDirectory(operationPropertiesFilesDir, true);
         
         /* Produce artifacts for standalone component */
         generateAntBuildJar(
@@ -94,6 +100,11 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         /* Produce artifacts for local component  */
         generateLocalConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
+        generateAntStartMuleLocalConfigXml(
+                getCixsMuleComponent(), parameters, componentAntFilesDir);
+        generateLog4jProperties(
+                getCixsMuleComponent(), parameters, operationPropertiesFilesDir);
+        
         for (CixsOperation operation : getCixsOperations()) {
             /* Determine target files locations */
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(

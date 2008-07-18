@@ -34,7 +34,7 @@
         <!-- Generated binaries target location  -->
         <property name="bin.dir" value="${basedir}/target/classes"/>
         <!-- Generated Ant scripts target location   -->
-        <property name="ant.dir" value="${basedir}/src/main/resources/ant"/>
+        <property name="ant.dir" value="${basedir}/src/main/resources/ant/${mule.component}"/>
         <!-- Generated Mule configurations target location   -->
         <property name="conf.dir" value="${basedir}/src/main/resources/conf"/>
         <!-- Generated Properties files target location   -->
@@ -59,6 +59,7 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
+            <dirset dir="${basedir}/conf"/>
             <fileset dir="${basedir}" includes="lib/user/*.jar" />
             <fileset dir="${basedir}" includes="lib/opt/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
@@ -72,6 +73,9 @@
           classpathref="classpath" 
         /> 
 
+        <mkdir dir="${src.dir}"/>
+        <mkdir dir="${bin.dir}"/>
+        
     </target>
 
     <!-- ===========================================================  -->
@@ -118,7 +122,6 @@
     <!-- Compile the generated artifacts
     -->
     <target name="compileMule2Cixs" depends="generateMule2Cixs">
-        <mkdir dir="${bin.dir}"/>
         <javac srcdir="${src.dir}"
                includes="**/*.java"
                destdir="${bin.dir}"

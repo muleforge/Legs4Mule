@@ -53,6 +53,10 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE =
         "vlc/cixsmule-component-ant-build-jar-xml.vm";
 
+    /** Velocity template for ant mule startup. */
+    public static final String COMPONENT_ANT_START_MULE_VLC_TEMPLATE =
+        "vlc/cixsmule-start-mule-xml.vm";
+
     /** Velocity template for standalone mule configuration xml. */
     public static final String COMPONENT_STANDALONE_CONFIG_XML_VLC_TEMPLATE =
         "vlc/cixsmule-component-standalone-config-xml.vm";
@@ -76,6 +80,10 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     /** Velocity template for local mule configuration xml. */
     public static final String COMPONENT_LOCAL_CONFIG_XML_VLC_TEMPLATE =
         "vlc/cixsmule-component-local-config-xml.vm";
+
+    /** Velocity template for local mule configuration xml. */
+    public static final String COMPONENT_LOG4J_PROP_VLC_TEMPLATE =
+        "vlc/cixsmule-log4j-xml.vm";
 
     /** The service model name is it appears in templates. */
     public static final String COMPONENT_MODEL_NAME = "muleComponent";
@@ -234,6 +242,31 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
+     * Create the Mule Startup ant file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentAntFilesDir where to store the generated file
+     * @param configFileName the name of the configuration file to pass on Mule
+     *  startup
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAntStartMule(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentAntFilesDir,
+            final String configFileName)
+    throws CodeGenMakeException {
+        parameters.put("configFileName", configFileName);
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_ANT_START_MULE_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentAntFilesDir,
+                "start-" + configFileName);
+    }
+
+    /**
      * Create the Mule stand alone configuration XML file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
@@ -251,6 +284,24 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                 component,
                 parameters,
                 componentConfFilesDir,
+                "mule-standalone-config-" + component.getName() + ".xml");
+    }
+
+    /**
+     * Create a Mule startup ant script for stand alone configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentAntFilesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAntStartMuleStandaloneConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentAntFilesDir)
+    throws CodeGenMakeException {
+        generateAntStartMule(component,
+                parameters,
+                componentAntFilesDir,
                 "mule-standalone-config-" + component.getName() + ".xml");
     }
 
@@ -441,6 +492,24 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
+     * Create a Mule startup ant script for bridge configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentAntFilesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAntStartMuleBridgeConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentAntFilesDir)
+    throws CodeGenMakeException {
+        generateAntStartMule(component,
+                parameters,
+                componentAntFilesDir,
+                "mule-bridge-config-" + component.getName() + ".xml");
+    }
+
+    /**
      * Create the Mule local configuration XML file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
@@ -459,6 +528,45 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                  parameters,
                  componentConfFilesDir,
                  "mule-local-config-" + component.getName() + ".xml");
+    }
+
+    /**
+     * Create a Mule startup ant script for local configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentAntFilesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAntStartMuleLocalConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentAntFilesDir)
+    throws CodeGenMakeException {
+        generateAntStartMule(component,
+                parameters,
+                componentAntFilesDir,
+                "mule-local-config-" + component.getName() + ".xml");
+    }
+
+    /**
+     * Create a log4j properties file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentPropertiesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateLog4jProperties(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentPropertiesDir)
+    throws CodeGenMakeException {
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                 COMPONENT_LOG4J_PROP_VLC_TEMPLATE,
+                 COMPONENT_MODEL_NAME,
+                 component,
+                 parameters,
+                 componentPropertiesDir,
+                 "log4j" + ".properties");
     }
 
     /**
@@ -529,6 +637,17 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     @Override
     public String getGeneratorName() {
         return CIXS_MULE_GENERATOR_NAME;
+    }
+    
+    /**
+     * @return the directory from which this ant script is start
+     */
+    public String getGenerateBuildDir() {
+        if (getProject() == null) {
+            return ".";
+        } else {
+            return getProject().getBaseDir().getAbsolutePath();
+        }
     }
 
 }

@@ -98,7 +98,15 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
             generator.execute();
         } catch (Exception e) {
             assertEquals("java.lang.IllegalArgumentException:" +
-            		" TargetCobolDir: No directory name was specified",
+            		" TargetPropDir: No directory name was specified",
+                    e.getCause().getMessage());
+        }
+        try {
+            generator.setTargetPropDir(GEN_PROP_DIR);
+            generator.execute();
+        } catch (Exception e) {
+            assertEquals("java.lang.IllegalArgumentException:" +
+                    " TargetCobolDir: No directory name was specified",
                     e.getCause().getMessage());
         }
         try {
@@ -112,7 +120,7 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
             muleComponent.setServiceURI("http://server.com");
             generator.execute();
         } catch (Exception e) {
-            fail(e.getCause().getMessage());
+            fail(e.getMessage());
         }
 
     }
@@ -139,6 +147,20 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
                 "mule-local-config-" + muleComponent.getName() + ".xml");
         assertTrue(resStr.contains(
                 "<mule-configuration id=\"mule-legstar-local-" + muleComponent.getName() + "-config\" version=\"1.0\">"));
+
+        resStr = getSource(mGenerator.getTargetAntDir(),
+                "start-mule-local-config-" + muleComponent.getName() + ".xml");
+        assertTrue(resStr.replace("\\", "/").contains(
+                "<property name=\"conf.file\" value=\"file:///src/test/gen/conf/" +
+                muleComponent.getName() +
+                "/mule-local-config-" +
+                muleComponent.getName() +
+                ".xml\"/>"));
+
+        resStr = getSource(mGenerator.getTargetPropDir(),
+                "log4j" + ".properties");
+        assertTrue(resStr.contains(
+                "log4j.logger.org.mule=INFO"));
         
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(

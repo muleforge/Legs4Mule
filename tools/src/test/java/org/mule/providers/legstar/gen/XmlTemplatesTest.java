@@ -116,4 +116,28 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         assertTrue(resStr.contains("<endpoint address=\"legstar:http://megamouss:8083\""));
         assertTrue(resStr.contains("<property name=\"hostCharset\" value=\"IBM01140\"/>"));
     }
+
+    public void testAntStartMule() throws Exception {
+        
+        CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
+        getParameters().put("targetMuleConfigDir", GEN_CONF_DIR);
+
+        File componentAntFilesDir = new File(GEN_ANT_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentAntFilesDir, true);
+        Mule2CixsGenerator.generateAntStartMule(
+                muleComponent, getParameters(), componentAntFilesDir,
+                "mule-bridge-config-" + muleComponent.getName() + ".xml");
+        String resStr = getSource(
+                componentAntFilesDir,
+                "start-mule-bridge-config-" + muleComponent.getName() + ".xml");
+
+        assertTrue(resStr.replace("\\", "/").contains("<property name=\"conf.file\" value=\"file:///src/test/gen/conf/mule-bridge-config-lsfileae.xml\"/>"));
+        assertTrue(resStr.replace("\\", "/").contains("<jvmarg value=\"-Dlog4j.configuration=file:///src/test/gen/prop/log4j.properties\"/>"));
+        assertTrue(resStr.contains("<dirset dir=\"target/gen-classes\"/>"));
+        assertTrue(resStr.contains("<dirset dir=\"legstar-coxbgen-cases/target/classes\"/>"));
+        assertTrue(resStr.replace("\\", "/").contains("<dirset dir=\"src/test/gen/prop\"/>"));
+    }
+
+
+
 }

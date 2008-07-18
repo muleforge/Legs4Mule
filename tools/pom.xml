@@ -7,7 +7,7 @@
     <artifactId>mule-transport-legstar-tools</artifactId>
     <packaging>jar</packaging>
     <version>SNAPSHOT</version>
-    <name>Legs4Mule</name>
+    <name>Legs4Mule Tools</name>
     <description>Development time tools needed to generate artefacts for the Mule LegStar transport</description>
     <properties>
         <muleVersion>1.4.3</muleVersion>

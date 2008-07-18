@@ -1,161 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.mule.transports</groupId>
-  <version>SNAPSHOT</version>
-  <properties>
-    <muleVersion>1.4.3</muleVersion>
-    <legstarVersion>1.2.0</legstarVersion>
-  </properties>
-  <artifactId>mule-transport-legstar</artifactId>
-  <!-- This should be "pom" not "jar" but if it is set to "pom", the list of dependencies gets ignored
-  by the assembly plugin. -->
-  <packaging>jar</packaging>
-  <name>Legs4Mule</name>
-  <description>Legacy IBM CICS integration for Mule based on open-source LegStar</description>
-  <repositories>
-  <repository>
-    <id>ibiblio</id>
-    <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
-  </repository>
-  </repositories>
-  <distributionManagement>
-    <repository>
-      <id>muleforge.webdav.releases</id>
-      <name>LEGSTAR Distributions Release Repository</name>
-      <url>dav:https://dav.muleforge.org/dist/legstar-transport</url>
-    </repository>
-    <snapshotRepository>
-      <id>muleforge.webdav.snapshots</id>
-      <name>LEGSTAR Distributions Snapshot Repository</name>
-      <url>
-        dav:https://dav.muleforge.org/snapshots.dist/legstar-transport</url>
-      <uniqueVersion>false</uniqueVersion>
-    </snapshotRepository>
-  </distributionManagement>
-  <dependencies>
-    <!-- Add dependencies here -->
-    <dependency>
-        <groupId>org.apache.velocity</groupId>
-        <artifactId>velocity</artifactId>
-        <version>1.5</version>
-    </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.4.2</version>
-    </dependency>
-    <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-log4j12</artifactId>
-        <version>1.4.1</version>
-    </dependency>
-    <dependency>
-        <groupId>ant</groupId>
-        <artifactId>ant</artifactId>
-        <version>1.6.5</version>
-        <scope>provided</scope>
-    </dependency>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.mule.transports</groupId>
+    <version>SNAPSHOT</version>
+    <properties>
+        <muleVersion>1.4.3</muleVersion>
+        <primaryArtifactId>mule-transport-legstar</primaryArtifactId>
+    </properties>
+    <artifactId>mule-transport-legstar-dist</artifactId>
+    <!-- This should be "pom" not "jar" but if it is set to "pom", the list of dependencies gets ignored
+        by the assembly plugin. -->
+    <packaging>jar</packaging>
+    <name>Legs4Mule Distribution</name>
+    <description>Dsitribution project for the Mule LegStar transport and tools</description>
+    <repositories>
+        <repository>
+            <id>ibiblio</id>
+            <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
+        </repository>
+    </repositories>
+    <distributionManagement>
+        <repository>
+            <id>muleforge.webdav.releases</id>
+            <name>LEGSTAR Distributions Release Repository</name>
+            <url>dav:https://dav.muleforge.org/dist/legstar-transport</url>
+        </repository>
+        <snapshotRepository>
+            <id>muleforge.webdav.snapshots</id>
+            <name>LEGSTAR Distributions Snapshot Repository</name>
+            <url>dav:https://dav.muleforge.org/snapshots.dist/legstar-transport</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
+    <dependencies>
         <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-messaging</artifactId>
-            <version>${legstarVersion}</version>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-legstar</artifactId>
+            <version>SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-legstar-tools</artifactId>
+            <version>SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-messaging-impl</artifactId>
-            <version>${legstarVersion}</version>
+            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <version>1.2.0</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-engine</artifactId>
-            <version>${legstarVersion}</version>
+            <artifactId>legstar-coxbgen-cases</artifactId>
+            <version>1.2.0</version>
+            <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-invoker</artifactId>
-            <version>${legstarVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-cixsgen-model</artifactId>
-            <version>${legstarVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-coxbgen</artifactId>
-            <version>${legstarVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-codegen</artifactId>
-            <version>${legstarVersion}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-c2wsgen</artifactId>
-            <version>${legstarVersion}</version>
-        </dependency>
-    <dependency>
-      <groupId>com.legsem.legstar</groupId>
-      <artifactId>legstar-jaxbgen-cases</artifactId>
-      <version>${legstarVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.legsem.legstar</groupId>
-      <artifactId>legstar-coxbgen-cases</artifactId>
-      <version>${legstarVersion}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-  <build>
-    <defaultGoal>install</defaultGoal>
-    <finalName>${artifactId}</finalName>
-    <plugins>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <!--
-        Uncomment when it's published, contains wildcards functionality.
-        Don't want to go with a SNAPSHOT yet.
-        -->
-        <!-- version>2.2</version -->
-        <configuration>
-          <finalName>${artifactId}-${version}</finalName>
-          <descriptors>
-            <descriptor>assembly.xml</descriptor>
-          </descriptors>
-          <appendAssemblyId>false</appendAssemblyId>
-          <tarLongFileMode>gnu</tarLongFileMode>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>attached</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <configuration>
-          <repositoryId>muleforge.webdav.releases</repositoryId>
-          <snapshotRepositoryId>muleforge.webdav.snapshots</snapshotRepositoryId>
-        </configuration>
-      </plugin>
-    </plugins>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-webdav</artifactId>
-        <version>1.0-beta-2</version>
-      </extension>
-    </extensions>
+    </dependencies>
+    <build>
+        <defaultGoal>install</defaultGoal>
+        <finalName>${primaryArtifactId}</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>${primaryArtifactId}-${version}</finalName>
+                    <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <tarLongFileMode>gnu</tarLongFileMode>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <configuration>
+                    <repositoryId>muleforge.webdav.releases</repositoryId>
+                    <snapshotRepositoryId>muleforge.webdav.snapshots</snapshotRepositoryId>
+                </configuration>
+            </plugin>
+        </plugins>
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+                <version>1.0-beta-2</version>
+            </extension>
+        </extensions>
     
-  </build>
+    </build>
 </project>
