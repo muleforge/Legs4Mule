@@ -100,9 +100,10 @@
             </plugin>
         </plugins>
     </build>
-  <modules>
-    <module>transport</module>
-    <module>tools</module>
-  </modules>
+
+    <modules>
+        <module>transport</module>
+        <module>tools</module>
+    </modules>
   
 </project>
