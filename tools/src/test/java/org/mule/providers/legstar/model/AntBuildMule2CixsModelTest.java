@@ -27,6 +27,7 @@ public class AntBuildMule2CixsModelTest extends TestCase {
 
 		AntBuildMule2CixsModel antModel = new AntBuildMule2CixsModel();
         antModel.setProductLocation("/Users/Fady/sandbox/legstar-1.2.0");
+        antModel.setMulegenProductLocation("/Users/Fady/sandbox/mulegen-1.2.0");
         antModel.setProbeFile(new File("probe.file.tmp"));
 
         CixsMuleComponent cixsMuleComponent = TestCases.getLsfileaeMuleComponent();
@@ -57,9 +58,8 @@ public class AntBuildMule2CixsModelTest extends TestCase {
 		}
 		in.close();
 		assertTrue(resStr.contains("<project basedir=\"/Users/Fady/sandbox/legstar-1.2.0\" default=\"signalSuccess\" name=\"generate-mule2cics\">"));
+        assertTrue(resStr.contains("<fileset dir=\"/Users/Fady/sandbox/mulegen-1.2.0\" includes=\"lib/*.jar\" />"));
 		assertTrue(resStr.contains("<fileset dir=\"${env.MULE_HOME}\" includes=\"lib/mule/*.jar\" />"));
-        assertTrue(resStr.contains("<fileset dir=\"${env.MULE_HOME}\" includes=\"lib/user/*.jar\" />"));
-        assertTrue(resStr.contains("<fileset dir=\"${env.MULE_HOME}\" includes=\"lib/opt/*.jar\" />"));
 		assertTrue(resStr.contains("<taskdef name=\"mule2cixsgen\""));
 		assertTrue(resStr.contains("classname=\"org.mule.providers.legstar.gen.Mule2CixsGenerator\""));
 		assertTrue(resStr.replace('\\', '/').contains("<mule2cixsgen targetSrcDir=\"src/test/gen/java\""));

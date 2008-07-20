@@ -14,6 +14,10 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /** Mule product location on file system.*/
     private String mMuleHome;
     
+    /** Where the LegStar Mule generator product is installed on the file system.
+     * The Mule generator might reside somewhere else than the LegStar core product. */
+    private String mMulegenProductLocation;
+    
     /** The target directory where Mule configuration files will be created. */
     private File mTargetMuleConfigDir;
     
@@ -89,6 +93,23 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     public final void setCixsMuleComponent(
             final CixsMuleComponent cixsMuleComponent) {
         setCixsService(cixsMuleComponent);
+    }
+
+    /**
+     * @return Where the LegStar Mule generator product is installed on the file system.
+     * The Mule generator might reside somewhere else than the LegStar core product.
+     * This is needed for ant scripts classpaths.
+     */
+    public final String getMulegenProductLocation() {
+        return mMulegenProductLocation;
+    }
+
+    /**
+     * @param mulegenProductLocation Where the LegStar Mule generator product
+     *  is installed
+     */
+    public final void setMulegenProductLocation(final String mulegenProductLocation) {
+        mMulegenProductLocation = mulegenProductLocation;
     }
 
 }

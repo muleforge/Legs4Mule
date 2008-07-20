@@ -22,7 +22,7 @@ Assembly descriptor for the full distribution.
             </includes>
         </fileSet>
         <fileSet>
-            <directory>../src/test/resources</directory>
+            <directory>../transport/src/test/resources</directory>
             <outputDirectory>/conf</outputDirectory>
             <includes>
                 <include>*.*</include>

@@ -19,9 +19,10 @@
             <pathelement location="${antModel.coxbBinDir}"/>
             <pathelement location="${antModel.custBinDir}"/>
             <fileset dir="${basedir}" includes="lib/*.jar" />
+#if(${antModel.mulegenProductLocation})
+            <fileset dir="${antModel.mulegenProductLocation}" includes="lib/*.jar" />
+#end
             <fileset dir="${antModel.muleHome}" includes="lib/mule/*.jar" />
-            <fileset dir="${antModel.muleHome}" includes="lib/user/*.jar" />
-            <fileset dir="${antModel.muleHome}" includes="lib/opt/*.jar" />
         </path>
 
         <!-- Mule component Generator ant task -->

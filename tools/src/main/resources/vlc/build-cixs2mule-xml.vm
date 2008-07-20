@@ -20,9 +20,10 @@
             <pathelement location="${antModel.coxbBinDir}"/>
             <pathelement location="${antModel.custBinDir}"/>
             <fileset dir="${basedir}" includes="lib/*.jar" />
+#if(${antModel.mulegenProductLocation})
+            <fileset dir="${antModel.mulegenProductLocation}" includes="lib/*.jar" />
+#end
             <fileset dir="${antModel.muleHome}" includes="lib/mule/*.jar" />
-            <fileset dir="${antModel.muleHome}" includes="lib/user/*.jar" />
-            <fileset dir="${antModel.muleHome}" includes="lib/opt/*.jar" />
         </path>
 
         <!-- Mule component Generator ant task -->
@@ -80,23 +81,9 @@
     </target>
  
     <!-- ===========================================================  -->
-    <!-- Compile the generated artifacts
-    -->
-    <target name="compileMule2Cixs" depends="generateCixs2Mule">
-        <mkdir dir="${antModel.targetBinDir}"/>
-        <javac srcdir="${antModel.targetSrcDir}"
-               includes="**/*.java"
-               destdir="${antModel.targetBinDir}"
-               classpathref="classpath"
-               fork="yes"
-        />
-    </target>
-    
-  
-    <!-- ===========================================================  -->
     <!-- Delete the probe file to signal success
     -->
-    <target name="signalSuccess" depends="compileMule2Cixs">
+    <target name="signalSuccess" depends="generateCixs2Mule">
         <delete file="${antModel.probeFile}" quiet="true"/>
     </target>
     
