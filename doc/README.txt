@@ -1,5 +1,5 @@
-Distribution content:
----------------------
+Legs4Mule Distribution content:
+------------------------------
 This distribution provides a Mule transport for bi-directional mainframe
 access based on the LegStar open-source product.
 
@@ -14,17 +14,17 @@ component interface.
 The generation tool is called mule-transport-legstar-tools-x.jar, where x is
 the version number, under the lib/opt sub-directory.
 
-Besides this distribution, you will also need the LegStar product itself.
-Mule is one of the deployment options for LegStar. Several modules that are
-needed for complete mainframe integration are common to all deployment
-options and are not part of the Mule distribution.
+The lib/opt sub-directory contains all the core LegStar libraries and their
+dependencies.
 
-You can learn more about LegStar at http://www.legsem.com/legstar.
+Before you can use the Mule Legstar transport, you will need to learn how
+to use the LegStar core functionalities. You can learn more about LegStar at
+http://www.legsem.com/legstar.
 
 The rest of this document focuses on the steps that are specific to Mule.
 
-Setting up Mule:
-----------------
+Setting up Legs4Mule:
+--------------------
 Unzip the distribution file to a location of your choice.
 
 The layout of the lib folder mimics the Mule installation folders.
