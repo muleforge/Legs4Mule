@@ -19,13 +19,12 @@ public class LegstarHttpConnectorTestCase extends AbstractConnectorTestCase
 
     /** Legstar listening port. */
     private static final int LEGSTAR_PORT = 8083;
+    
+    /** An instance to the connector. */
+    private LegstarHttpConnector mConnector;
 
-    public UMOConnector getConnector() throws Exception {
- 
-        LegstarHttpConnector c = new LegstarHttpConnector();
-        c.setName("Test-Legstar");
-        c.initialise();
-        return c;
+    public UMOConnector getConnector() {
+        return mConnector;
     }
 
     public String getTestEndpointURI()
@@ -43,6 +42,13 @@ public class LegstarHttpConnectorTestCase extends AbstractConnectorTestCase
     {
         // TODO test setting and retrieving any custom properties on the
         // Connector as necessary
+    }
+
+    public UMOConnector createConnector() throws Exception {
+        mConnector = new LegstarHttpConnector();
+        mConnector.setName("Test-Legstar");
+        mConnector.initialise();
+        return mConnector;
     }
 
 }

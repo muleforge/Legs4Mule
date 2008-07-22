@@ -10,7 +10,8 @@
     <name>Legs4Mule Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
-        <muleVersion>1.4.3</muleVersion>
+        <muleVersion>1.4.4</muleVersion>
+        <legstarVersion>1.2.0</legstarVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
     <developers>
@@ -146,22 +147,22 @@
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-messaging</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-messaging-impl</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-engine</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-invoker</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
         </dependency>
         <dependency>
             <groupId>org.mule.tests</groupId>

@@ -10,7 +10,7 @@
     <name>Legs4Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
-        <muleVersion>1.4.3</muleVersion>
+        <muleVersion>1.4.4</muleVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
     <developers>

@@ -10,7 +10,8 @@
     <name>Legs4Mule Tools</name>
     <description>Development time tools needed to generate artefacts for the Mule LegStar transport</description>
     <properties>
-        <muleVersion>1.4.3</muleVersion>
+        <muleVersion>1.4.4</muleVersion>
+        <legstarVersion>1.2.0</legstarVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
     <developers>
@@ -115,28 +116,28 @@
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-cixsgen</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-coxbgen</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-codegen</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-jaxbgen-cases</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-coxbgen-cases</artifactId>
-            <version>1.2.0</version>
+            <version>${legstarVersion}</version>
             <scope>test</scope>
         </dependency>
         <!-- There seems to be some version conflict between velocity and
