@@ -6,7 +6,7 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar-pom</artifactId>
     <packaging>pom</packaging>
-    <version>SNAPSHOT</version>
+    <version>1.0-RC1-SNAPSHOT</version>
     <name>Legs4Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>

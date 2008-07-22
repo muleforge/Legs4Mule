@@ -4,7 +4,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.mule.transports</groupId>
-    <version>SNAPSHOT</version>
+    <version>1.0-RC1-SNAPSHOT</version>
     <properties>
         <muleVersion>1.4.3</muleVersion>
         <primaryArtifactId>mule-transport-legstar</primaryArtifactId>
@@ -38,12 +38,12 @@
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-legstar</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.0-RC1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-legstar-tools</artifactId>
-            <version>SNAPSHOT</version>
+            <version>1.0-RC1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
