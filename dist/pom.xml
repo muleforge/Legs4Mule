@@ -7,7 +7,6 @@
     <version>1.0-RC1-SNAPSHOT</version>
     <properties>
         <muleVersion>1.4.4</muleVersion>
-        <legstarVersion>1.2.0</legstarVersion>
         <primaryArtifactId>mule-transport-legstar</primaryArtifactId>
     </properties>
     <artifactId>mule-transport-legstar-dist</artifactId>
@@ -15,7 +14,7 @@
         by the assembly plugin. -->
     <packaging>jar</packaging>
     <name>Legs4Mule Distribution</name>
-    <description>Dsitribution project for the Mule LegStar transport and tools</description>
+    <description>Distribution project for the Mule LegStar transport and tools</description>
     <repositories>
         <repository>
             <id>ibiblio</id>
@@ -49,13 +48,13 @@
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-jaxbgen-cases</artifactId>
-            <version>${legstarVersion}</version>
+            <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-coxbgen-cases</artifactId>
-            <version>${legstarVersion}</version>
+            <version>1.2.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
