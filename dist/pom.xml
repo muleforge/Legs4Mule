@@ -21,6 +21,24 @@
             <url>http://mirrors.ibiblio.org/pub/mirrors/maven2</url>
         </repository>
     </repositories>
+
+    <issueManagement>
+        <system>Jira</system>
+        <url>http://mule.mulesource.org/jira/browse/LEGSTAR</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:svn:http://svn.muleforge.org/legstar-transport/trunk</connection>
+        <developerConnection>scm:svn:https://svn.muleforge.org/legstar-transport/trunk</developerConnection>
+        <url>http://svn.muleforge.org/legstar-transport/</url>
+    </scm>
+
+    <ciManagement>
+        <system>Bamboo</system>
+        <url>http://bamboo.muleforge.org/browse/LEGSTAR</url>
+        <notifiers />
+    </ciManagement>
+
     <distributionManagement>
         <repository>
             <id>muleforge.webdav.releases</id>
