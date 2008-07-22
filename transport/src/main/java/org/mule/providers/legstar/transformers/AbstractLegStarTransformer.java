@@ -1,12 +1,12 @@
-/*
+/*******************************************************************************
  * $Id$
- * --------------------------------------------------------------------------------------
- * Copyright (c) MuleSource, Inc.  All rights reserved.  http://www.mulesource.com
- *
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
- */
+ * LICENSE.txt file
+ ******************************************************************************/
 
 package org.mule.providers.legstar.transformers;
 
@@ -43,7 +43,7 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
      * @param message the message in the current context
      * @throws TransformerException if properties cannot be recovered
      */
-    public void getProperties(UMOMessage message) throws TransformerException {
+    public void getProperties(final UMOMessage message) throws TransformerException {
         mHostCharset = message.getStringProperty(
                 LegstarHttpConnector.HOST_CHARSET_PROPERTY,
                 HostContext.getDefaultHostCharsetName());
@@ -142,14 +142,14 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
     /**
      * @param hostCharset the Mainframe character set to set
      */
-    public final void setHostCharset(String hostCharset) {
+    public final void setHostCharset(final String hostCharset) {
         mHostCharset = hostCharset;
     }
 
     /**
      * @param programPropFileName the Target Mainframe program properties file name to set
      */
-    public final void setProgramPropFileName(String programPropFileName) {
+    public final void setProgramPropFileName(final String programPropFileName) {
         mProgramPropFileName = programPropFileName;
     }
 

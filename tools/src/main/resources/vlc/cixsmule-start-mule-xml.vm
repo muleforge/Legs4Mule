@@ -18,11 +18,17 @@
                 fork="true"
                 failonerror="true"
         >
-            <jvmarg value="-Dlog4j.configuration=file:///${targetPropDir}/log4j.properties"/>
             <arg value="-config"/>
             <arg value="${conf.file}"/>
             <classpath>
                 <dirset dir="${basedir}/conf"/>
+#if($muleComponent.muleStartupPathElements.size() > 0)
+                <files>
+#foreach ($classPathElement in $muleComponent.muleStartupPathElements)
+                    <include name="$classPathElement"/>
+#end
+                </files>
+#end
                 <dirset dir="${targetBinDir}"/>
 #if($targetBinDir != $custBinDir)
                 <dirset dir="${custBinDir}"/>
@@ -30,6 +36,7 @@
 #if (${targetPropDir})
                 <dirset dir="${targetPropDir}"/>
 #end
+                <fileset dir="${basedir}" includes="lib/*.jar" />
                 <fileset dir="${basedir}" includes="lib/user/*.jar" />
                 <fileset dir="${basedir}" includes="lib/opt/*.jar" />
                 <fileset dir="${basedir}" includes="lib/mule/*.jar" />

@@ -1,6 +1,17 @@
+/*******************************************************************************
+ * $Id$
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.gen;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.mule.providers.legstar.model.CixsMuleComponent;
 
@@ -121,6 +132,10 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         
         CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
         getParameters().put("targetMuleConfigDir", GEN_CONF_DIR);
+        
+        List < String > pathElements = new ArrayList < String >();
+        pathElements.add("c:/some.additional.jar");
+        muleComponent.setMuleStartupPathElements(pathElements);
 
         File componentAntFilesDir = new File(GEN_ANT_DIR, muleComponent.getName());
         CodeGenUtil.checkDirectory(componentAntFilesDir, true);
@@ -132,7 +147,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
                 "start-mule-bridge-config-" + muleComponent.getName() + ".xml");
 
         assertTrue(resStr.replace("\\", "/").contains("<property name=\"conf.file\" value=\"file:///src/test/gen/conf/mule-bridge-config-lsfileae.xml\"/>"));
-        assertTrue(resStr.replace("\\", "/").contains("<jvmarg value=\"-Dlog4j.configuration=file:///src/test/gen/prop/log4j.properties\"/>"));
+        assertTrue(resStr.replace("\\", "/").contains("<include name=\"c:/some.additional.jar\"/>"));
         assertTrue(resStr.contains("<dirset dir=\"target/gen-classes\"/>"));
         assertTrue(resStr.contains("<dirset dir=\"legstar-coxbgen-cases/target/classes\"/>"));
         assertTrue(resStr.replace("\\", "/").contains("<dirset dir=\"src/test/gen/prop\"/>"));

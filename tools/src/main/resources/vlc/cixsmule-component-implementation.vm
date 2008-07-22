@@ -158,7 +158,7 @@ public class $muleComponent.implementationClassName implements ${muleComponent.i
     }
 
 #end
-    @Override
+    /** {@inheritDoc} */
     public Object onCall(UMOEventContext eventContext) throws Exception {
         MuleHostHeader hostHeader =
             MuleHostHeaderFactory.createHostHeader(eventContext.getMessage());

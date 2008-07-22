@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * $Id$
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.cixs;
 
 import org.mule.umo.UMOException;
@@ -19,7 +28,7 @@ import com.legstar.host.server.EngineStartupException;
  * and will result in all LegStar connections to be pooled. 
  *
  */
-public class LegStarPoolAgent implements UMOAgent{
+public class LegStarPoolAgent implements UMOAgent {
 	
 	/** Describes the Agent. */
     private static final String DESCRIPTION =
@@ -56,7 +65,7 @@ public class LegStarPoolAgent implements UMOAgent{
 	}
 
     /** {@inheritDoc} */
-	public void setName(String name) {
+	public void setName(final String name) {
 		mName = name;
 	}
 

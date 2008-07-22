@@ -65,6 +65,7 @@
         <!-- Classpath setting -->
         <path id="classpath">
             <dirset dir="${basedir}/conf"/>
+            <fileset dir="${basedir}" includes="lib/mule/*.jar" />
             <fileset dir="${basedir}" includes="lib/user/*.jar" />
             <fileset dir="${basedir}" includes="lib/opt/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />

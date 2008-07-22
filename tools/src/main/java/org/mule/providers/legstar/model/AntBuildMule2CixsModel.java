@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * $Id$
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.model;
 
 /**
@@ -23,6 +32,7 @@ public class AntBuildMule2CixsModel extends AbstractAntBuildCixsMuleModel {
      * provide a placeholder. */
     private static final String DEFAULT_HOST_URI = "http://hosturi";
 
+    /** Construct the model. */
     public AntBuildMule2CixsModel() {
         super(MULE2CIXS_GENERATOR_NAME, MULE2CIXS_VELOCITY_MACRO_NAME);
     }

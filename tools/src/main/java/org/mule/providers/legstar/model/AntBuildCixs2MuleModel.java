@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * $Id$
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.model;
 
 import java.io.File;
@@ -21,6 +30,9 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
     /** The target directory where COBOL files will be created. */
     private File mTargetCobolDir;
     
+    /**
+     * Construct the model.
+     */
     public AntBuildCixs2MuleModel() {
         super(CIXS2MULE_GENERATOR_NAME, CIXS2MULE_VELOCITY_MACRO_NAME);
     }
@@ -35,7 +47,7 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
     /**
      * @param targetCobolDir the directory where COBOL files will be created to set
      */
-    public final void setTargetCobolDir(File targetCobolDir) {
+    public final void setTargetCobolDir(final File targetCobolDir) {
         mTargetCobolDir = targetCobolDir;
     }
 

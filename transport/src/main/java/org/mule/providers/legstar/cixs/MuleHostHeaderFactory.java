@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * $Id$
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.cixs;
 
 import org.mule.umo.UMOMessage;
@@ -28,6 +37,10 @@ public final class MuleHostHeaderFactory {
     public static final String L4M_KEY_HOSTTRACEMODE = "LegStarTraceMode";
     
     
+    /** Defeats instanciation since this is a utility class.*/
+    private MuleHostHeaderFactory() {
+        
+    }
      /**
       * Extracts header data from a Mule message properties and create an
       * Host header.
@@ -36,12 +49,18 @@ public final class MuleHostHeaderFactory {
       */
      public static MuleHostHeader createHostHeader(final UMOMessage umoMessage) {
          MuleHostHeader hostHeader = new MuleHostHeader();
-         hostHeader.setHostEndPoint((String) umoMessage.getProperty(L4M_KEY_HOSTENDPOINT));
-         hostHeader.setHostCharset((String) umoMessage.getProperty(L4M_KEY_HOSTCHARSET));
-         hostHeader.setHostUserID((String) umoMessage.getProperty(L4M_KEY_HOSTUSERID));
-         hostHeader.setHostPassword((String) umoMessage.getProperty(L4M_KEY_HOSTPASSWORD));
-         hostHeader.setTraceMode(umoMessage.getBooleanProperty(L4M_KEY_HOSTTRACEMODE, false));
-         hostHeader.setHostRequestID((String) umoMessage.getProperty(L4M_KEY_HOSTREQUESTID));
+         hostHeader.setHostEndPoint(
+                 (String) umoMessage.getProperty(L4M_KEY_HOSTENDPOINT));
+         hostHeader.setHostCharset(
+                 (String) umoMessage.getProperty(L4M_KEY_HOSTCHARSET));
+         hostHeader.setHostUserID(
+                 (String) umoMessage.getProperty(L4M_KEY_HOSTUSERID));
+         hostHeader.setHostPassword(
+                 (String) umoMessage.getProperty(L4M_KEY_HOSTPASSWORD));
+         hostHeader.setTraceMode(
+                 umoMessage.getBooleanProperty(L4M_KEY_HOSTTRACEMODE, false));
+         hostHeader.setHostRequestID(
+                 (String) umoMessage.getProperty(L4M_KEY_HOSTREQUESTID));
          return hostHeader;
      }
 }

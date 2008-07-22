@@ -24,7 +24,10 @@ http://www.legsem.com/legstar.
 The rest of this document focuses on the steps that are specific to Mule.
 
 Setting up Legs4Mule:
---------------------
+---------------------
+You should have Mule installed and the MULE_HOME environment variable should
+point to your Mule installation folder.
+
 Unzip the distribution file to a location of your choice.
 
 The layout of the lib folder mimics the Mule installation folders.

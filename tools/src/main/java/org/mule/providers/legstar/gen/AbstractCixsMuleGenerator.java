@@ -1,12 +1,12 @@
-/*
+/*******************************************************************************
  * $Id$
- * --------------------------------------------------------------------------------------
- * Copyright (c) MuleSource, Inc.  All rights reserved.  http://www.mulesource.com
- *
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
- */
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.gen;
 
 import java.io.File;
@@ -92,7 +92,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      * Constructor.
      * @param model an instance of a generation model
      */
-    public AbstractCixsMuleGenerator(AbstractAntBuildCixsMuleModel model) {
+    public AbstractCixsMuleGenerator(final AbstractAntBuildCixsMuleModel model) {
         super(model);
     }
     
@@ -634,7 +634,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         return (AbstractAntBuildCixsMuleModel) super.getModel();
     }
 
-    @Override
+    /** {@inheritDoc} */
     public String getGeneratorName() {
         return CIXS_MULE_GENERATOR_NAME;
     }

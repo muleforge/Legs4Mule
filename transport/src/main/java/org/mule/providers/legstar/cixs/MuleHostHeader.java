@@ -1,4 +1,12 @@
-
+/*******************************************************************************
+ * $Id$
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.cixs;
 
 import java.io.Serializable;
@@ -34,12 +42,11 @@ public class MuleHostHeader implements Serializable {
     
     /**
      * Create a messaging Address from this host header data.
-     * @param hostHeader the JAXB object mapping the SOAP header element
+     * If no endpoint is explicitly specified, no address can be created.
+     * All defaults from default configuration will apply.
      * @return the new host Address
      */
      public LegStarAddress getAddress() {
-         /* If no endpoint is explicitly specified, no address can be created.
-          * All defaults from default configuration will apply. */
          if (mHostEndPoint == null) {
              return null;
          }

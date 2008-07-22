@@ -1,12 +1,12 @@
-/*
+/*******************************************************************************
  * $Id$
- * --------------------------------------------------------------------------------------
- * Copyright (c) MuleSource, Inc.  All rights reserved.  http://www.mulesource.com
- *
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
  * The software in this package is published under the terms of the CPAL v1.0
  * license, a copy of which has been included with this distribution in the
- * LICENSE.txt file.
- */
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.gen;
 
 import java.io.File;
@@ -158,10 +158,11 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
     /**
      * @param targetCobolDir the directory where COBOL files will be created to set
      */
-    public final void setTargetCobolDir(File targetCobolDir) {
+    public final void setTargetCobolDir(final File targetCobolDir) {
         getModel().setTargetCobolDir(targetCobolDir);
     }
 
+    /** {@inheritDoc} */
     public AntBuildCixs2MuleModel getModel() {
         return (AntBuildCixs2MuleModel) super.getModel();
     }

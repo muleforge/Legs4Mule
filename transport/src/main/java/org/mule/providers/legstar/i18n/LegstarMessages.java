@@ -1,3 +1,12 @@
+/*******************************************************************************
+ * $Id$
+ * -----------------------------------------------------------------------------
+ * Copyright (c) MuleSource, Inc. All rights reserved. http://www.mulesource.com
+ * 
+ * The software in this package is published under the terms of the CPAL v1.0
+ * license, a copy of which has been included with this distribution in the
+ * LICENSE.txt file
+ ******************************************************************************/
 package org.mule.providers.legstar.i18n;
 
 import org.mule.config.i18n.Message;
@@ -44,7 +53,7 @@ public class LegstarMessages extends MessageFactory {
      * @param propertyName name of missing property
      * @return could not find an endpoint property.
      */
-    public static Message missingEndpointProperty(String propertyName) {
+    public static Message missingEndpointProperty(final String propertyName) {
         return createMessage(BUNDLE_PATH, 5, propertyName);
     }
 
@@ -61,7 +70,7 @@ public class LegstarMessages extends MessageFactory {
      *  instantiate
      * @return instantiation of binding class failed.
      */
-    public static Message coxbInstantiationError(String coxbClassName) {
+    public static Message coxbInstantiationError(final String coxbClassName) {
         return createMessage(BUNDLE_PATH, 7, coxbClassName);
     }
 
@@ -69,7 +78,7 @@ public class LegstarMessages extends MessageFactory {
      * @param programPropFileName name of the program properties file
      * @return the file content is invalid.
      */
-    public static Message invalidProgramPropertyFile(String programPropFileName) {
+    public static Message invalidProgramPropertyFile(final String programPropFileName) {
         return createMessage(BUNDLE_PATH, 8, programPropFileName);
     }
 
@@ -92,7 +101,7 @@ public class LegstarMessages extends MessageFactory {
      * @param jaxbClassName the jaxb class name
      * @return failed to load the jaxb class (classpath issue).
      */
-    public static Message jaxbClassLoadFailure(String jaxbClassName) {
+    public static Message jaxbClassLoadFailure(final String jaxbClassName) {
         return createMessage(BUNDLE_PATH, 11, jaxbClassName);
     }
 
@@ -100,7 +109,7 @@ public class LegstarMessages extends MessageFactory {
      * @param coxbClassName the binding class name
      * @return failed to calculate the host byte size for this binding.
      */
-    public static Message hostByteSizeCalcFailure(String coxbClassName) {
+    public static Message hostByteSizeCalcFailure(final String coxbClassName) {
         return createMessage(BUNDLE_PATH, 12, coxbClassName);
     }
 
