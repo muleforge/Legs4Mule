@@ -3,7 +3,7 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar-tools</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-RC1</version>
+    <version>1.0-RC2-SNAPSHOT</version>
     <name>Legs4Mule Tools</name>
     <description>Development time tools needed to generate artefacts for the Mule LegStar transport</description>
     <properties>

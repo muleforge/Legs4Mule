@@ -3,7 +3,7 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-RC1</version>
+    <version>1.0-RC2-SNAPSHOT</version>
     <name>Legs4Mule Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
