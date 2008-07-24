@@ -10,6 +10,7 @@
 package org.mule.providers.legstar.gen;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import org.mule.providers.legstar.model.CixsMuleComponent;
@@ -161,7 +162,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator
                 operation,
                 parameters,
                 componentPropertiesDir,
-                operation.getCicsProgramName().toLowerCase() + ".properties");
+                operation.getCicsProgramName().toLowerCase(Locale.getDefault()) + ".properties");
     }
 
     /**
