@@ -28,7 +28,8 @@ import com.legstar.messaging.impl.LegStarMessageImpl;
  * <code>AbstractLegStarTransformer</code> provides common methods to
  * all LegStar transformers.
  */
-public abstract class AbstractLegStarTransformer extends AbstractEventAwareTransformer {
+public abstract class AbstractLegStarTransformer extends AbstractEventAwareTransformer
+{
 
 
     /** Mainframe character set. */
@@ -43,7 +44,8 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
      * @param message the message in the current context
      * @throws TransformerException if properties cannot be recovered
      */
-    public void getProperties(final UMOMessage message) throws TransformerException {
+    public final void getProperties(final UMOMessage message) throws TransformerException
+    {
         mHostCharset = message.getStringProperty(
                 LegstarHttpConnector.HOST_CHARSET_PROPERTY,
                 HostContext.getDefaultHostCharsetName());
@@ -51,39 +53,47 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
         mProgramPropFileName = message.getStringProperty(
                 LegstarHttpConnector.PROGRAM_PROP_FILE_NAME, null);
     }
-    
+
     /**
      * Creates an instance of a LegStar message.
      * @param message the message in the current context
      * @return an empty LegStar message instance
      * @throws TransformerException if message cannot be created
      */
-    public LegStarMessageImpl getLegStarMessage(
-            final UMOMessage message) throws TransformerException {
+    public final LegStarMessageImpl getLegStarMessage(final UMOMessage message) throws TransformerException
+    {
         /* Get properties from the UMO message, these might help shape
          * the LegStar message */
         getProperties(message);
-        try {
+        try 
+        {
             /* If the LegStar message being prepared is aimed at the host,
              * important parameters are derived from the program structure */
             if (getProgramPropFileName() != null 
-                    && getProgramPropFileName().length() != 0) {
+                    && getProgramPropFileName().length() != 0)
+            {
                 return new LegStarMessageImpl(
                         new CicsProgram(getProgramPropFileName()).
                         getProgramAttrMap());
-            } else {
+            }
+            else
+            {
                 return new LegStarMessageImpl();
             }
-        } catch (CicsProgramException e) {
+        }
+        catch (CicsProgramException e)
+        {
             throw new TransformerException(
                     LegstarMessages.invalidProgramPropertyFile(
                             getProgramPropFileName()), this, e);
-        } catch (HeaderPartException e) {
+        }
+        catch (HeaderPartException e)
+        {
             throw new TransformerException(
                     LegstarMessages.invalidLegstarHeader(), this, e);
         }
     }
-    
+
     /**
      * This method is useful when we need to transform a host byte array
      * into a jaxb object. It will transform the byte array into a
@@ -95,28 +105,36 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
      * @return a LegStar message
      * @throws TransformerException in transformation failed
      */
-    public LegStarMessageImpl getLegStarMessageForByteArray(
+    public final LegStarMessageImpl getLegStarMessageForByteArray(
             final Object src,
             final String encoding,
-            final UMOEventContext context) throws TransformerException {
-        try {
+            final UMOEventContext context)
+    throws TransformerException
+    {
+        try
+        {
             /* Get the properties we need */
             getProperties(context.getMessage());
 
             /* First turn the byte array to a LegStar message */
             LegStarMessage legStarMessage;
-            if (src instanceof byte[]) {
+            if (src instanceof byte[])
+            {
                 ByteArrayToLegStarMessage xformer =
                     new ByteArrayToLegStarMessage();
                 legStarMessage = (LegStarMessage) xformer.transform(
                         src, encoding, context);
-            } else {
+            }
+            else
+            {
                 legStarMessage = (LegStarMessage) src;
             }
 
             /* Unwrap the response and convert to a java data object */
             return new LegStarMessageImpl(legStarMessage);
-        } catch (HeaderPartException e) {
+        }
+        catch (HeaderPartException e)
+        {
             throw new TransformerException(
                     LegstarMessages.invalidLegstarHeader(), this, e);
         }
@@ -125,8 +143,10 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
     /**
      * @return the Mainframe character set
      */
-    public final String getHostCharset() {
-        if (mHostCharset == null || mHostCharset.length() == 0) {
+    public final String getHostCharset()
+    {
+        if (mHostCharset == null || mHostCharset.length() == 0)
+        {
             return HostContext.getDefaultHostCharsetName();
         }
         return mHostCharset;
@@ -135,21 +155,24 @@ public abstract class AbstractLegStarTransformer extends AbstractEventAwareTrans
     /**
      * @return the Target Mainframe program properties file name
      */
-    public final String getProgramPropFileName() {
+    public final String getProgramPropFileName()
+    {
         return mProgramPropFileName;
     }
 
     /**
      * @param hostCharset the Mainframe character set to set
      */
-    public final void setHostCharset(final String hostCharset) {
+    public final void setHostCharset(final String hostCharset)
+    {
         mHostCharset = hostCharset;
     }
 
     /**
      * @param programPropFileName the Target Mainframe program properties file name to set
      */
-    public final void setProgramPropFileName(final String programPropFileName) {
+    public final void setProgramPropFileName(final String programPropFileName)
+    {
         mProgramPropFileName = programPropFileName;
     }
 

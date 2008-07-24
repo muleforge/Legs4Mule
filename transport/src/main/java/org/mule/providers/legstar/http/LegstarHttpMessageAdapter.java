@@ -17,8 +17,9 @@ import org.mule.umo.MessagingException;
  * <code>LegstarMessageAdapter</code> delegates processing to
  * <code>HttpMessageAdapter</code>.
  */
-public class LegstarHttpMessageAdapter extends HttpMessageAdapter {
- 
+public class LegstarHttpMessageAdapter extends HttpMessageAdapter
+{
+
     /** Serial ID.   */
     private static final long serialVersionUID = 5737156381082603182L;
 
@@ -27,8 +28,8 @@ public class LegstarHttpMessageAdapter extends HttpMessageAdapter {
      * @param message the inner message
      * @throws MessagingException if construction fails
      */
-    public LegstarHttpMessageAdapter(
-            final Object message) throws MessagingException {
+    public LegstarHttpMessageAdapter(final Object message) throws MessagingException 
+    {
         super(message);
     }
 

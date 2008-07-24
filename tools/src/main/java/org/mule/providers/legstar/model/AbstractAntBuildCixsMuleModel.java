@@ -18,7 +18,8 @@ import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
  * This can be used by Eclipse plugins to generate ant files.
  * This model is common to all Mule generation types.
  */
-public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixsModel {
+public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixsModel
+{
     
     /** Mule product location on file system.*/
     private String mMuleHome;
@@ -39,21 +40,24 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      * @param vlcTemplate a velocity template that accecpts this model
      */
     public AbstractAntBuildCixsMuleModel(
-            final String generatorName, final String vlcTemplate) {
+            final String generatorName, final String vlcTemplate)
+    {
         super(generatorName, vlcTemplate);
     }
     
     /**
      * @return the Mule product location on file system
      */
-    public final String getMuleHome() {
+    public final String getMuleHome()
+    {
         return mMuleHome;
     }
 
     /**
      * @param muleHome the Mule product location on file system to set
      */
-    public final void setMuleHome(final String muleHome) {
+    public final void setMuleHome(final String muleHome)
+    {
         mMuleHome = muleHome;
     }
 
@@ -61,7 +65,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      * @return the target directory where Mule configuration files will be
      *  created
      */
-    public final File getTargetMuleConfigDir() {
+    public final File getTargetMuleConfigDir()
+    {
         return mTargetMuleConfigDir;
     }
 
@@ -70,28 +75,32 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      *  files will be created to set
      */
     public final void setTargetMuleConfigDir(
-            final File targetMuleConfigDir) {
+            final File targetMuleConfigDir)
+    {
         mTargetMuleConfigDir = targetMuleConfigDir;
     }
 
     /**
      * @return the target location for mule jar files
      */
-    public final File getTargetJarDir() {
+    public final File getTargetJarDir()
+    {
         return mTargetJarDir;
     }
 
     /**
      * @param targetJarDir the target location for mule jar files to set
      */
-    public final void setTargetJarDir(final File targetJarDir) {
+    public final void setTargetJarDir(final File targetJarDir)
+    {
         mTargetJarDir = targetJarDir;
     }
 
     /**
      * @return the the Mule-Legstar component being generated
      */
-    public final CixsMuleComponent getCixsMuleComponent() {
+    public final CixsMuleComponent getCixsMuleComponent()
+    {
         return (CixsMuleComponent) getCixsService();
     }
 
@@ -100,7 +109,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      *  to set
      */
     public final void setCixsMuleComponent(
-            final CixsMuleComponent cixsMuleComponent) {
+            final CixsMuleComponent cixsMuleComponent)
+    {
         setCixsService(cixsMuleComponent);
     }
 
@@ -109,7 +119,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      * The Mule generator might reside somewhere else than the LegStar core product.
      * This is needed for ant scripts classpaths.
      */
-    public final String getMulegenProductLocation() {
+    public final String getMulegenProductLocation()
+    {
         return mMulegenProductLocation;
     }
 
@@ -118,7 +129,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      *  is installed
      */
     public final void setMulegenProductLocation(
-            final String mulegenProductLocation) {
+            final String mulegenProductLocation)
+    {
         mMulegenProductLocation = mulegenProductLocation;
     }
 

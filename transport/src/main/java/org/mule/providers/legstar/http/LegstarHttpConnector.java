@@ -28,32 +28,35 @@ import org.mule.umo.provider.UMOMessageReceiver;
  * TODO in this form, LegstarConnector does not have the capability to
  * support any other transports than HTTP.
  */
-public class LegstarHttpConnector extends HttpConnector {
-    
+public class LegstarHttpConnector extends HttpConnector
+{
+
     /** Name of property holding the mainframe character set. */
     public static final String HOST_CHARSET_PROPERTY = "hostCharset";
-    
+
     /** Name of Property holding jaxb qualified class name. */
     public static final String JAXB_QUAL_CLASS_NAME = "jaxbClassName";
-    
+
     /** Name of Property holding cobol binding qualified class name. */
     public static final String COXB_QUAL_CLASS_NAME = "coxbClassName";
-    
+
     /** Name of Property holding target Mainframe program properties file name. */
     public static final String PROGRAM_PROP_FILE_NAME = "programPropFileName";
-    
-   /**
+
+    /**
      * No-Args constructor.
      */
-    public LegstarHttpConnector() {
+    public LegstarHttpConnector()
+    {
         registerProtocols();
     }
 
     /** logger used by this class.   */
     private final Log logger = LogFactory.getLog(getClass());
-    
+
     /** {@inheritDoc} */
-    public void doInitialise() throws InitialisationException {
+    public final void doInitialise() throws InitialisationException
+    {
         super.doInitialise();
         logger.debug("doInitialise");
     }
@@ -63,12 +66,14 @@ public class LegstarHttpConnector extends HttpConnector {
      * as a valid protocol combination. "legstar" is the scheme
      * meta info and http is the protocol.
      */
-    protected void registerProtocols() {
-        List < String > schemes = new ArrayList < String >();
+    public final void registerProtocols()
+    {
+        List < String > schemes = new ArrayList < String > ();
         schemes.add("http");
         schemes.add("https");
 
-        for (Iterator< String > iterator = schemes.iterator(); iterator.hasNext();) {
+        for (Iterator < String > iterator = schemes.iterator(); iterator.hasNext();)
+        {
             String s = (String) iterator.next();
             registerSupportedProtocol(s);
         }
@@ -77,7 +82,8 @@ public class LegstarHttpConnector extends HttpConnector {
     }
 
     /** {@inheritDoc} */
-    public String getProtocol() {
+    public final String getProtocol()
+    {
         return "legstar";
     }
 
@@ -87,15 +93,20 @@ public class LegstarHttpConnector extends HttpConnector {
      * we override the standard method.
      * {@inheritDoc}
      *  */
-    public UMOMessageReceiver lookupReceiver(final String key) {
-        if (key != null) {
+    public final UMOMessageReceiver lookupReceiver(final String key)
+    {
+        if (key != null)
+        {
             UMOMessageReceiver receiver = (UMOMessageReceiver) receivers.get(key);
-            if (receiver == null) {
+            if (receiver == null)
+            {
                 return (UMOMessageReceiver) receivers.get(
                         key.replace(getProtocol(), "http"));
             }
             return receiver;
-        } else {
+        }
+        else
+        {
             throw new IllegalArgumentException("Receiver key must not be null");
         }
     }

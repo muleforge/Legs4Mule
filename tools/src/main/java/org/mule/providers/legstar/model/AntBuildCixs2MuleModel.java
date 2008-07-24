@@ -16,7 +16,8 @@ import java.io.File;
  * artifacts allow a CICS transaction to call a Mule component.
  *
  */
-public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
+public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel
+{
 
     /** This generator name. */
     public static final String CIXS2MULE_GENERATOR_NAME =
@@ -33,21 +34,24 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
     /**
      * Construct the model.
      */
-    public AntBuildCixs2MuleModel() {
+    public AntBuildCixs2MuleModel()
+    {
         super(CIXS2MULE_GENERATOR_NAME, CIXS2MULE_VELOCITY_MACRO_NAME);
     }
 
     /**
      * @return the directory where COBOL files will be created
      */
-    public final File getTargetCobolDir() {
+    public final File getTargetCobolDir()
+    {
         return mTargetCobolDir;
     }
 
     /**
      * @param targetCobolDir the directory where COBOL files will be created to set
      */
-    public final void setTargetCobolDir(final File targetCobolDir) {
+    public final void setTargetCobolDir(final File targetCobolDir)
+    {
         mTargetCobolDir = targetCobolDir;
     }
 

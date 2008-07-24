@@ -23,7 +23,8 @@ import com.legstar.codegen.CodeGenMakeException;
 /**
  * This class groups methods that are common to all generators.
  */
-public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
+public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator
+{
 
     /** This generator name. */
     public static final String CIXS_MULE_GENERATOR_NAME =
@@ -92,10 +93,11 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      * Constructor.
      * @param model an instance of a generation model
      */
-    public AbstractCixsMuleGenerator(final AbstractAntBuildCixsMuleModel model) {
+    public AbstractCixsMuleGenerator(final AbstractAntBuildCixsMuleModel model)
+    {
         super(model);
     }
-    
+
     /**
      * Create the Mule Interface class file.
      * @param component the Mule component description
@@ -107,7 +109,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentClassFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_INTERFACE_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
@@ -128,7 +131,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentClassFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_IMPLEMENTATION_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
@@ -149,7 +153,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsOperation operation,
             final Map < String, Object > parameters,
             final File componentPropertiesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(Jaxws2CixsGenerator.JAXWS_TO_CIXS_GENERATOR_NAME,
                 Jaxws2CixsGenerator.OPERATION_PROGRAM_VLC_TEMPLATE,
                 "cixsOperation",
@@ -170,7 +175,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsOperation operation,
             final Map < String, Object > parameters,
             final File operationClassFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 OPERATION_FAULT_VLC_TEMPLATE,
                 "cixsOperation",
@@ -191,14 +197,17 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsOperation operation,
             final Map < String, Object > parameters,
             final File operationClassFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
 
         if (operation.getCicsChannel() == null
-                || operation.getCicsChannel().length() == 0) {
+                || operation.getCicsChannel().length() == 0)
+        {
             return;
         }
 
-        if (operation.getInput().size() > 0) {
+        if (operation.getInput().size() > 0)
+        {
             parameters.put("propertyName", "Request");
             generateFile(CIXS_MULE_GENERATOR_NAME,
                     OPERATION_HOLDER_VLC_TEMPLATE,
@@ -208,7 +217,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                     operationClassFilesDir,
                     operation.getRequestHolderType() + ".java");
         }
-        if (operation.getOutput().size() > 0) {
+        if (operation.getOutput().size() > 0)
+        {
             parameters.put("propertyName", "Response");
             generateFile(CIXS_MULE_GENERATOR_NAME,
                     OPERATION_HOLDER_VLC_TEMPLATE,
@@ -231,14 +241,15 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentAntFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
                 component,
                 parameters,
                 componentAntFilesDir,
-                "build.xml");
+        "build.xml");
     }
 
     /**
@@ -255,7 +266,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final Map < String, Object > parameters,
             final File componentAntFilesDir,
             final String configFileName)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         parameters.put("configFileName", configFileName);
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_ANT_START_MULE_VLC_TEMPLATE,
@@ -277,7 +289,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentConfFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_STANDALONE_CONFIG_XML_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
@@ -298,7 +311,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentAntFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateAntStartMule(component,
                 parameters,
                 componentAntFilesDir,
@@ -317,15 +331,18 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsOperation operation,
             final Map < String, Object > parameters,
             final File operationClassFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
 
-        if (operation.getInput().size() > 0) {
+        if (operation.getInput().size() > 0)
+        {
             generateObjectToHbaTransformer(operation, parameters,
                     operationClassFilesDir,
                     operation.getRequestHolderType(),
             "Request");
         }
-        if (operation.getOutput().size() > 0) {
+        if (operation.getOutput().size() > 0)
+        {
             generateObjectToHbaTransformer(operation, parameters,
                     operationClassFilesDir,
                     operation.getResponseHolderType(),
@@ -348,7 +365,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final File operationClassFilesDir,
             final String holderType,
             final String propertyName)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
 
         parameters.put("propertyName", propertyName);
         generateFile(CIXS_MULE_GENERATOR_NAME,
@@ -372,15 +390,18 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsOperation operation,
             final Map < String, Object > parameters,
             final File operationClassFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
 
-        if (operation.getInput().size() > 0) {
+        if (operation.getInput().size() > 0)
+        {
             generateHbaToObjectTransformer(operation, parameters,
                     operationClassFilesDir,
                     operation.getRequestHolderType(),
             "Request");
         }
-        if (operation.getOutput().size() > 0) {
+        if (operation.getOutput().size() > 0)
+        {
             generateHbaToObjectTransformer(operation, parameters,
                     operationClassFilesDir,
                     operation.getResponseHolderType(),
@@ -403,7 +424,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final File operationClassFilesDir,
             final String holderType,
             final String propertyName)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
 
         parameters.put("propertyName", propertyName);
         generateFile(CIXS_MULE_GENERATOR_NAME,
@@ -427,15 +449,18 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsOperation operation,
             final Map < String, Object > parameters,
             final File operationClassFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
 
-        if (operation.getInput().size() > 0) {
+        if (operation.getInput().size() > 0)
+        {
             generateObjectToHttpResponseTransformer(operation, parameters,
                     operationClassFilesDir,
                     operation.getRequestHolderType(),
             "Request");
         }
-        if (operation.getOutput().size() > 0) {
+        if (operation.getOutput().size() > 0)
+        {
             generateObjectToHttpResponseTransformer(operation, parameters,
                     operationClassFilesDir,
                     operation.getResponseHolderType(),
@@ -458,11 +483,12 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final File operationClassFilesDir,
             final String holderType,
             final String propertyName)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
 
-       parameters.put("propertyName", propertyName);
-       generateFile(CIXS_MULE_GENERATOR_NAME,
-               OPERATION_OBJECT_TO_HTTP_RESPONSE_VLC_TEMPLATE,
+        parameters.put("propertyName", propertyName);
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                OPERATION_OBJECT_TO_HTTP_RESPONSE_VLC_TEMPLATE,
                 "cixsOperation",
                 operation,
                 parameters,
@@ -481,14 +507,15 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentConfFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_BRIDGE_CONFIG_XML_VLC_TEMPLATE,
-                 COMPONENT_MODEL_NAME,
-                 component,
-                 parameters,
-                 componentConfFilesDir,
-                 "mule-bridge-config-" + component.getName() + ".xml");
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentConfFilesDir,
+                "mule-bridge-config-" + component.getName() + ".xml");
     }
 
     /**
@@ -502,7 +529,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentAntFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateAntStartMule(component,
                 parameters,
                 componentAntFilesDir,
@@ -520,14 +548,15 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentConfFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_LOCAL_CONFIG_XML_VLC_TEMPLATE,
-                 COMPONENT_MODEL_NAME,
-                 component,
-                 parameters,
-                 componentConfFilesDir,
-                 "mule-local-config-" + component.getName() + ".xml");
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentConfFilesDir,
+                "mule-local-config-" + component.getName() + ".xml");
     }
 
     /**
@@ -541,7 +570,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentAntFilesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateAntStartMule(component,
                 parameters,
                 componentAntFilesDir,
@@ -559,20 +589,22 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentPropertiesDir)
-    throws CodeGenMakeException {
+    throws CodeGenMakeException
+    {
         generateFile(CIXS_MULE_GENERATOR_NAME,
-                 COMPONENT_LOG4J_PROP_VLC_TEMPLATE,
-                 COMPONENT_MODEL_NAME,
-                 component,
-                 parameters,
-                 componentPropertiesDir,
-                 "log4j" + ".properties");
+                COMPONENT_LOG4J_PROP_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentPropertiesDir,
+                "log4j" + ".properties");
     }
 
     /**
      * @return the Mule component 
      */
-    public final CixsMuleComponent getCixsMuleComponent() {
+    public final CixsMuleComponent getCixsMuleComponent()
+    {
         return (CixsMuleComponent) getCixsService();
     }
 
@@ -580,14 +612,16 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      * @param cixsMuleComponent the Mule component to set
      */
     public final void setCixsMuleComponent(
-            final CixsMuleComponent cixsMuleComponent) {
+            final CixsMuleComponent cixsMuleComponent)
+    {
         setCixsService(cixsMuleComponent);
     }
 
     /**
      * @param cixsMuleComponent the Mule component to set
      */
-    public final void add(final CixsMuleComponent cixsMuleComponent) {
+    public final void add(final CixsMuleComponent cixsMuleComponent)
+    {
         setCixsMuleComponent(cixsMuleComponent);
     }
 
@@ -595,57 +629,68 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      * @param cixsMuleComponent the Mule component to set
      */
     public final void addCixsMuleComponent(
-            final CixsMuleComponent cixsMuleComponent) {
+            final CixsMuleComponent cixsMuleComponent)
+    {
         setCixsMuleComponent(cixsMuleComponent);
     }
 
     /**
      * @return the target mule jar files location
      */
-    public final File getTargetJarDir() {
+    public final File getTargetJarDir()
+    {
         return getModel().getTargetJarDir();
     }
 
     /**
      * @param targetJarDir the target mule jar files location to set
      */
-    public final void setTargetJarDir(final File targetJarDir) {
+    public final void setTargetJarDir(final File targetJarDir)
+    {
         getModel().setTargetJarDir(targetJarDir);
     }
 
     /**
      * @return the target configuration files location
      */
-    public final File getTargetMuleConfigDir() {
+    public final File getTargetMuleConfigDir()
+    {
         return getModel().getTargetMuleConfigDir();
     }
 
     /**
      * @param targetMuleConfigDir the target configuration files location to set
      */
-    public final void setTargetMuleConfigDir(final File targetMuleConfigDir) {
+    public final void setTargetMuleConfigDir(final File targetMuleConfigDir)
+    {
         getModel().setTargetMuleConfigDir(targetMuleConfigDir);
     }
-    
+
     /**
      * @return the model representing all generation parameters
      */
-    public AbstractAntBuildCixsMuleModel getModel() {
+    public final AbstractAntBuildCixsMuleModel getModel()
+    {
         return (AbstractAntBuildCixsMuleModel) super.getModel();
     }
 
     /** {@inheritDoc} */
-    public String getGeneratorName() {
+    public final String getGeneratorName()
+    {
         return CIXS_MULE_GENERATOR_NAME;
     }
-    
+
     /**
      * @return the directory from which this ant script is start
      */
-    public String getGenerateBuildDir() {
-        if (getProject() == null) {
+    public final String getGenerateBuildDir()
+    {
+        if (getProject() == null)
+        {
             return ".";
-        } else {
+        }
+        else
+        {
             return getProject().getBaseDir().getAbsolutePath();
         }
     }

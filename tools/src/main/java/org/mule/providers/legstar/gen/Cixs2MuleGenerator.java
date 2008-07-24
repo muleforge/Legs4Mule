@@ -30,12 +30,14 @@ import com.legstar.codegen.CodeGenUtil;
  * POJO within Mule.
  * 
  */
-public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
+public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator
+{
 
     /**
      * Constructor.
      */
-    public Cixs2MuleGenerator() {
+    public Cixs2MuleGenerator()
+    {
         super(new AntBuildCixs2MuleModel());
     }
     
@@ -43,8 +45,10 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
      * Check that input values are valid.
      * @throws CodeGenMakeException if input is invalid
      */
-    public void checkExtendedInput() throws CodeGenMakeException {
-        try {
+    public final void checkExtendedInput() throws CodeGenMakeException
+    {
+        try
+        {
             CodeGenUtil.checkDirectory(
                     getTargetAntDir(), true, "TargetAntDir");
             CodeGenUtil.checkDirectory(
@@ -57,14 +61,18 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             
             /* Check that we have CICS program names mapped to operations */
             for (CixsOperation operation 
-                    : getCixsMuleComponent().getCixsOperations()) {
+                    : getCixsMuleComponent().getCixsOperations())
+            {
                 String cicsProgramName = operation.getCicsProgramName();
-                if (cicsProgramName == null || cicsProgramName.length() == 0) {
+                if (cicsProgramName == null || cicsProgramName.length() == 0)
+                {
                     throw new CodeGenMakeException(
                             "Operation must specify a CICS program name");
                 }
             }
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e)
+        {
             throw new CodeGenMakeException(e);
         }
     }
@@ -73,8 +81,9 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
      * @param parameters a predefined set of parameters useful for generation
      * @throws CodeGenMakeException if generation fails
      */
-    public void generate(
-            final Map < String, Object > parameters) throws CodeGenMakeException {
+    public final void generate(
+            final Map < String, Object > parameters) throws CodeGenMakeException
+            {
         
         parameters.put("targetJarDir", getTargetJarDir());
         parameters.put("targetMuleConfigDir", getTargetMuleConfigDir());
@@ -105,7 +114,8 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         generateLog4jProperties(
                 getCixsMuleComponent(), parameters, operationPropertiesFilesDir);
         
-        for (CixsOperation operation : getCixsOperations()) {
+        for (CixsOperation operation : getCixsOperations())
+        {
             /* Determine target files locations */
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
@@ -138,7 +148,8 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             final CixsMuleComponent component,
             final CixsOperation operation,
             final Map < String, Object > parameters,
-            final File cobolFilesDir) throws CodeGenMakeException {
+            final File cobolFilesDir) throws CodeGenMakeException
+            {
             generateFile(Cixs2JaxwsGenerator.CIXS_TO_JAXWS_GENERATOR_NAME,
                     Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_CLIENT_VLC_TEMPLATE,
                     Cixs2JaxwsGenerator.SERVICE_MODEL_NAME,
@@ -151,27 +162,25 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
     /**
      * @return the directory where COBOL files will be created
      */
-    public final File getTargetCobolDir() {
-        return getModel().getTargetCobolDir();
+    public final File getTargetCobolDir()
+    {
+        return ((AntBuildCixs2MuleModel) getModel()).getTargetCobolDir();
     }
 
     /**
      * @param targetCobolDir the directory where COBOL files will be created to set
      */
-    public final void setTargetCobolDir(final File targetCobolDir) {
-        getModel().setTargetCobolDir(targetCobolDir);
-    }
-
-    /** {@inheritDoc} */
-    public AntBuildCixs2MuleModel getModel() {
-        return (AntBuildCixs2MuleModel) super.getModel();
+    public final void setTargetCobolDir(final File targetCobolDir)
+    {
+        ((AntBuildCixs2MuleModel) getModel()).setTargetCobolDir(targetCobolDir);
     }
 
     /**
      * Convenience method to get the inner mapped operations.
      * @return the operations list
      */
-    public List < CixsOperation > getCixsOperations() {
+    public final List < CixsOperation > getCixsOperations()
+    {
         return getCixsMuleComponent().getCixsOperations();
     }
     

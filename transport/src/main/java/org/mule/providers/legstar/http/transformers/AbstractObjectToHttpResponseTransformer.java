@@ -26,7 +26,8 @@ import org.mule.umo.UMOMessage;
  * Such responses are targeted at the mainframe which has special requirements
  * for http headers such as content type and content length.
  */
-public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpResponse {
+public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpResponse
+{
 
     /** When channeled over http, the legstar payload must be binary. */
     private static final String LEGSTAR_HTTP_CONTENT_TYPE =
@@ -37,11 +38,12 @@ public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpRes
      * Overriding this method because <code>UMOMessageToHttpResponse</code> does
      * not allow the content length to be set directly.
      * {@inheritDoc} */
-	protected HttpResponse createResponse(
+    public final HttpResponse createResponse(
             final Object src,
             final String encoding,
             final UMOEventContext context)
-            throws IOException, TransformerException {
+    throws IOException, TransformerException
+    {
 
         UMOMessage msg = context.getMessage();
         /* Force the content type and content length */
@@ -49,12 +51,13 @@ public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpRes
                 LEGSTAR_HTTP_CONTENT_TYPE);
 
         HttpResponse response = super.createResponse(src, encoding, context);
-        
+
         /* We make the assumption that the source has already been 
          * transformed into a byte array.
          * TODO consider case where the Mule component raises an exception
          * what should we send to the host?  */
-        if (src != null && src instanceof byte[]) {
+        if (src != null && src instanceof byte[])
+        {
             Header header = new Header(
                     HttpConstants.HEADER_CONTENT_LENGTH,
                     Integer.toString(((byte[]) src).length));

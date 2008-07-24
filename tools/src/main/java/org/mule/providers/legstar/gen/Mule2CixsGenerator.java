@@ -25,12 +25,14 @@ import com.legstar.codegen.CodeGenUtil;
  * but internally the adapter use the LegStar transport to call a 
  * a mainframe program.
  */
-public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
+public class Mule2CixsGenerator extends AbstractCixsMuleGenerator
+{
 
     /**
      * Constructor.
      */
-    public Mule2CixsGenerator() {
+    public Mule2CixsGenerator()
+    {
         super(new AntBuildMule2CixsModel());
     }
     
@@ -38,8 +40,10 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
      * Check that input values are valid.
      * @throws CodeGenMakeException if input is invalid
      */
-    public void checkExtendedInput() throws CodeGenMakeException {
-        try {
+    public final void checkExtendedInput() throws CodeGenMakeException
+    {
+        try
+        {
             /* Check that we are provided with valid locations to
              * generate in.*/
             CodeGenUtil.checkDirectory(
@@ -53,17 +57,21 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
 
             /* Check that we are provided with valid locations to
              * reference.*/
-            if (getTargetBinDir() == null) {
+            if (getTargetBinDir() == null)
+            {
                 throw (new IllegalArgumentException(
                         "TargetBinDir: No directory name was specified"));
             }
-            if (getTargetJarDir() == null) {
+            if (getTargetJarDir() == null)
+            {
                 throw (new IllegalArgumentException(
                         "TargetJarDir: No directory name was specified"));
             }
            
             CodeGenUtil.checkHttpURI(getHostURI());
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e)
+        {
             throw new CodeGenMakeException(e);
         }
     }
@@ -73,8 +81,8 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
      * @param parameters a predefined set of parameters useful for generation
      * @throws CodeGenMakeException if generation fails
      */
-    public void generate(
-            final Map < String, Object > parameters) throws CodeGenMakeException {
+    public final void generate(final Map < String, Object > parameters) throws CodeGenMakeException
+    {
 
         parameters.put("targetJarDir", getTargetJarDir());
         parameters.put("targetMuleConfigDir", getTargetMuleConfigDir());
@@ -107,7 +115,8 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         generateLog4jProperties(
                 getCixsMuleComponent(), parameters, operationPropertiesFilesDir);
         
-        for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
+        for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
+        {
 
             /* Determine target files locations */
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
@@ -127,7 +136,8 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
         generateAntStartMuleBridgeConfigXml(
                 getCixsMuleComponent(), parameters, componentAntFilesDir);
-        for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
+        for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
+        {
             /* Determine target files locations */
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
@@ -141,23 +151,20 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         
     }
     
-    /** {@inheritDoc} */
-    public AntBuildMule2CixsModel getModel() {
-        return (AntBuildMule2CixsModel) super.getModel();
-    }
-
     /**
      * @return the URI that the host exposes to consumers
      */
-    public final String getHostURI() {
-        return getModel().getHostURI();
+    public final String getHostURI()
+    {
+        return ((AntBuildMule2CixsModel) getModel()).getHostURI();
     }
 
     /**
      * @param hostURI the URI that the host exposes to consumers to set
      */
-    public final void setHostURI(final String hostURI) {
-        getModel().setHostURI(hostURI);
+    public final void setHostURI(final String hostURI)
+    {
+        ((AntBuildMule2CixsModel) getModel()).setHostURI(hostURI);
     }
 
 }

@@ -21,11 +21,12 @@ import org.mule.umo.provider.UMOMessageDispatcher;
  */
 
 public class LegstarHttpMessageDispatcherFactory 
-            extends AbstractMessageDispatcherFactory {
+extends AbstractMessageDispatcherFactory
+{
 
     /** {@inheritDoc} */
-    public UMOMessageDispatcher create(
-            final UMOImmutableEndpoint endpoint) throws UMOException {
+    public final UMOMessageDispatcher create(final UMOImmutableEndpoint endpoint) throws UMOException
+    {
         return new LegstarHttpMessageDispatcher(endpoint);
     }
 

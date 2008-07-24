@@ -13,67 +13,64 @@ package org.mule.providers.legstar.http.transformers;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.apache.commons.httpclient.Header;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mule.providers.NullPayload;
-import org.mule.providers.http.HttpConstants;
 import org.mule.providers.http.HttpResponse;
-import org.mule.providers.http.transformers.UMOMessageToHttpResponse;
 import org.mule.providers.legstar.i18n.LegstarMessages;
 import org.mule.umo.transformer.TransformerException;
 import org.mule.umo.UMOEventContext;
-import org.mule.umo.UMOMessage;
 
 import com.legstar.messaging.LegStarMessage;
 
 /**
- * <code>LegStarMessageToByteArray</code> will turn a an architected
- * LegStar message into an http response which payloads is binary.
+ * <code>LegStarMessageToHttpResponse</code> will turn a an architected
+ * LegStar message into an http response which payload is binary.
  */
-public class LegStarMessageToHttpResponse extends UMOMessageToHttpResponse {
+public class LegStarMessageToHttpResponse
+extends AbstractObjectToHttpResponseTransformer
+{
 
     /** logger used by this class.  */
     private final Log logger = LogFactory.getLog(getClass());
-    
-    /** When channeled over http, the legstar payload must be binary. */
-    private static final String LEGSTAR_HTTP_CONTENT_TYPE =
-        "binary/octet-stream";
 
     /**
      * Construct the transformer. Specify source and return types.
      */
-    public LegStarMessageToHttpResponse() {
+    public LegStarMessageToHttpResponse()
+    {
         super();
         registerSourceType(LegStarMessage.class);
         logger.debug("instantiation");
     }
 
     /** {@inheritDoc} */
-	public Object transform(
-	        final Object src,
-	        final String encoding,
-	        final UMOEventContext context) throws TransformerException {
-	    
-	    /* This situation arises if the client starts by an HTTP HEAD method. */
-	    if (src instanceof HttpResponse) {
-	        return src;
-	    }
-	    
-	    /* This situation happens when an exception happened. There is normally
-	     * a 500 http status set by the standard Mule exception mapping 
-	     * mechanism */
-	    if (src instanceof NullPayload) {
+    public final Object transform(final Object src, final String encoding, final UMOEventContext context) throws TransformerException
+            {
+
+        /* This situation arises if the client starts by an HTTP HEAD method. */
+        if (src instanceof HttpResponse)
+        {
+            return src;
+        }
+
+        /* This situation happens when an exception happened. There is normally
+         * a 500 http status set by the standard Mule exception mapping 
+         * mechanism */
+        if (src instanceof NullPayload)
+        {
             return super.transform(null, encoding, context);
-	    }
-	    
-		/* Since the only source type registered is LegStarMessage, it is safe
-		 * to cast the 'src' object directly to that type. */
-	    LegStarMessage requestMessage = (LegStarMessage) src;
-	    
-        try {
+        }
+
+        /* Since the only source type registered is LegStarMessage, it is safe
+         * to cast the 'src' object directly to that type. */
+        LegStarMessage requestMessage = (LegStarMessage) src;
+
+        try
+        {
             int bytesLength = requestMessage.getHostSize();
-            if (bytesLength == 0) {
+            if (bytesLength == 0)
+            {
                 throw new TransformerException(
                         LegstarMessages.invalidHostDataSize(), this);
             }
@@ -81,47 +78,19 @@ public class LegStarMessageToHttpResponse extends UMOMessageToHttpResponse {
             InputStream hostStream = requestMessage.sendToHost();
             int rc;
             int pos = 0;
-            while ((rc = hostStream.read(result, pos, bytesLength - pos)) > 0) {
+            while ((rc = hostStream.read(result, pos, bytesLength - pos)) > 0)
+            {
                 pos += rc;
             }
-            
+
             return super.transform(result, encoding, context);
-        } catch (IOException e) {
+        }
+        catch (IOException e)
+        {
             throw new TransformerException(
                     LegstarMessages.errorFormattingHostData(), this, e);
         }
 
-    }
-	
-    /** 
-     * Overriding this method because <code>UMOMessageToHttpResponse</code> does
-     * not allow the content length to be set directly.
-     * {@inheritDoc} */
-	protected HttpResponse createResponse(
-            final Object src,
-            final String encoding,
-            final UMOEventContext context)
-            throws IOException, TransformerException {
-
-        UMOMessage msg = context.getMessage();
-        /* Force the content type and content length */
-        msg.setStringProperty(HttpConstants.HEADER_CONTENT_TYPE,
-                LEGSTAR_HTTP_CONTENT_TYPE);
-
-        HttpResponse response = super.createResponse(src, encoding, context);
-        
-        /* We make the assumption that the source has already been 
-         * transformed into a byte array.
-         * TODO consider case where the Mule component raises an exception
-         * what should we send to the host?  */
-        if (src != null && src instanceof byte[]) {
-            Header header = new Header(
-                    HttpConstants.HEADER_CONTENT_LENGTH,
-                    Integer.toString(((byte[]) src).length));
-            response.addHeader(header);
-        }
-
-        return response;
-    }
+            }
 
 }

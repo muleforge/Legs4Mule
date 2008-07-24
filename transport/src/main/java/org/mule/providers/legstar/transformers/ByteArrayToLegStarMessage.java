@@ -25,34 +25,43 @@ import com.legstar.messaging.LegStarMessage;
  * <code>ByteArrayToLegStarMessage</code> turn a byte array to an architected
  * LegStarMessage.
  */
-public class ByteArrayToLegStarMessage extends AbstractEventAwareTransformer {
-    
-    
+public class ByteArrayToLegStarMessage extends AbstractEventAwareTransformer
+{
+
+
     /**
      * Construct the transformer. Specify source and return types.
      */
-    public ByteArrayToLegStarMessage() {
+    public ByteArrayToLegStarMessage()
+    {
         registerSourceType(byte[].class);
         setReturnClass(LegStarMessage.class);
     }
 
-	/** {@inheritDoc} */
-    public Object transform(
-	        final Object src,
-	        final String encoding,
-	        final UMOEventContext context) throws TransformerException {
-        
-	    byte[] hostBytes = (byte[]) src;
+    /** {@inheritDoc} */
+    public final Object transform(
+            final Object src,
+            final String encoding,
+            final UMOEventContext context)
+    throws TransformerException
+    {
+
+        byte[] hostBytes = (byte[]) src;
         ByteArrayInputStream hostStream = new ByteArrayInputStream(hostBytes);
 
-        try {
+        try
+        {
             LegStarMessage requestMessage = new LegStarMessage();
             requestMessage.recvFromHost(hostStream);
             return requestMessage;
-        } catch (HeaderPartException e) {
+        }
+        catch (HeaderPartException e)
+        {
             throw new TransformerException(
                     LegstarMessages.invalidLegstarHeader(), this, e);
-        } catch (HostReceiveException e) {
+        }
+        catch (HostReceiveException e)
+        {
             throw new TransformerException(
                     LegstarMessages.errorReceivingHostData(), this, e);
         }

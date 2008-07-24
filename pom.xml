@@ -54,6 +54,7 @@
             <url>dav:https://dav.muleforge.org/legstar-transport/maven</url>
         </site>
     </distributionManagement>
+
     <repositories>
         <repository>
             <id>LegStar distribution</id>
@@ -87,6 +88,7 @@
             <url>http://download.java.net/maven/2</url>
         </repository>
     </repositories>
+
     <build>
         <extensions>
             <extension>
@@ -121,4 +123,24 @@
         <module>tools</module>
     </modules>
   
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <links>
+                        <link>http://java.sun.com/j2ee/1.4/docs/api</link>
+                        <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
+                        <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                    </links>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+
 </project>
