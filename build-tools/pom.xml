@@ -3,7 +3,7 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar-build-tools</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-RC2-SNAPSHOT</version>
+    <version>1.0-RC2</version>
     <name>Legs4Mule Build Tools</name>
     <description>Resources shared by all modules</description>
     <distributionManagement>
