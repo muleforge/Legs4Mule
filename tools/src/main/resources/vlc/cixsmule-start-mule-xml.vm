@@ -21,7 +21,6 @@
             <arg value="-config"/>
             <arg value="${conf.file}"/>
             <classpath>
-                <dirset dir="${basedir}/conf"/>
 #foreach ($muleStartupPathElement in $muleComponent.muleStartupPathElements)
                 <pathelement location="$muleStartupPathElement"/>
 #end
@@ -32,6 +31,7 @@
 #if (${targetPropDir})
                 <dirset dir="${targetPropDir}"/>
 #end
+                <dirset dir="${basedir}/conf"/>
                 <fileset dir="${basedir}" includes="lib/*.jar" />
                 <fileset dir="${basedir}" includes="lib/user/*.jar" />
                 <fileset dir="${basedir}" includes="lib/opt/*.jar" />
