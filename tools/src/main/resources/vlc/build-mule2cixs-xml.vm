@@ -80,13 +80,13 @@
                 </cixsOperation>
 #end
 #if ($antModel.cixsMuleComponent.muleStartupPathElements.size() > 0)
-                <muleStartupClassPath>
+                <muleStartupPathElement>
                     <path>
 #foreach ($muleStartupPathElement in $antModel.cixsMuleComponent.muleStartupPathElements)
                         <pathelement location="${muleStartupPathElement}"/>
 #end
                     </path>
-                </muleStartupClassPath>
+                </muleStartupPathElement>
 #end
             </cixsMuleComponent>
         </mule2cixsgen>

@@ -22,12 +22,8 @@
             <arg value="${conf.file}"/>
             <classpath>
                 <dirset dir="${basedir}/conf"/>
-#if($muleComponent.muleStartupPathElements.size() > 0)
-                <files>
-#foreach ($classPathElement in $muleComponent.muleStartupPathElements)
-                    <include name="$classPathElement"/>
-#end
-                </files>
+#foreach ($muleStartupPathElement in $muleComponent.muleStartupPathElements)
+                <pathelement location="$muleStartupPathElement"/>
 #end
                 <dirset dir="${targetBinDir}"/>
 #if($targetBinDir != $custBinDir)

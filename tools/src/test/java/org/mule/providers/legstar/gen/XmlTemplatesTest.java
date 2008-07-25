@@ -147,7 +147,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
                 "start-mule-bridge-config-" + muleComponent.getName() + ".xml");
 
         assertTrue(resStr.replace("\\", "/").contains("<property name=\"conf.file\" value=\"file:///src/test/gen/conf/mule-bridge-config-lsfileae.xml\"/>"));
-        assertTrue(resStr.replace("\\", "/").contains("<include name=\"c:/some.additional.jar\"/>"));
+        assertTrue(resStr.replace("\\", "/").contains("<pathelement location=\"c:/some.additional.jar\"/>"));
         assertTrue(resStr.contains("<dirset dir=\"target/gen-classes\"/>"));
         assertTrue(resStr.contains("<dirset dir=\"legstar-coxbgen-cases/target/classes\"/>"));
         assertTrue(resStr.replace("\\", "/").contains("<dirset dir=\"src/test/gen/prop\"/>"));

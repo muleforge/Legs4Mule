@@ -26,17 +26,17 @@ import com.legstar.cixs.gen.model.AbstractCixsService;
 public class CixsMuleComponent extends AbstractCixsService
 {
 
-    /** List of additional classpath elements that might be needed to by
+    /** List of additional classpath elements that might be needed by
      * generated Mule startup procedure. */
-    private List < Path > mMuleStartupClassPaths = new ArrayList < Path > ();
+    private List < Path > mMuleStartupPathElements = new ArrayList < Path > ();
     
     /**
      * @param path an additional classpath element that might be needed
      *  by generated Mule startup procedure
      */
-    public final void addMuleStartupClassPath(final Path path)
+    public final void addMuleStartupPathElement(final Path path)
     {
-        mMuleStartupClassPaths.add(path);
+        mMuleStartupPathElements.add(path);
     }
     
     /**
@@ -46,7 +46,7 @@ public class CixsMuleComponent extends AbstractCixsService
     public final List < String > getMuleStartupPathElements()
     {
         List < String > pathElements = new ArrayList < String > ();
-        for (Path path : mMuleStartupClassPaths)
+        for (Path path : mMuleStartupPathElements)
         {
             for (String pathElement : path.list())
             {
@@ -74,7 +74,7 @@ public class CixsMuleComponent extends AbstractCixsService
             PathElement pathElement = path.createPathElement();
             pathElement.setLocation(new File(element));
         }
-        mMuleStartupClassPaths.add(path);
+        mMuleStartupPathElements.add(path);
     }
  
 }
