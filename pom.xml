@@ -187,6 +187,7 @@
                         <link>http://java.sun.com/j2ee/1.4/docs/api</link>
                         <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                        <link>http://www.legsem.com/legstar/apidocs</link>
                     </links>
                 </configuration>
             </plugin>
