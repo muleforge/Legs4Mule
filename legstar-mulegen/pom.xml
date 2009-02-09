@@ -5,11 +5,11 @@
         <artifactId>mule-transport-legstar-pom</artifactId>
         <version>1.0-RC3-SNAPSHOT</version>
     </parent>
-    <artifactId>mule-transport-legstar-tools</artifactId>
+    <artifactId>mule-transport-legstar-mulegen</artifactId>
     <packaging>jar</packaging>
     <version>1.0-RC3-SNAPSHOT</version>
-    <name>Legs4Mule Tools</name>
-    <description>Development time tools needed to generate artefacts for the Mule LegStar transport</description>
+    <name>LegStar for Mule Generator</name>
+    <description>Generates adapters and proxies for inbound and outbound mainframe integration with Mule</description>
 
     <dependencies>
         <dependency>
