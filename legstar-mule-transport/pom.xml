@@ -8,7 +8,7 @@
     <artifactId>legstar-mule-transport</artifactId>
     <packaging>jar</packaging>
     <version>1.0-RC3-SNAPSHOT</version>
-    <name>LegStra for Mule Transport</name>
+    <name>LegStar for Mule Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
 
     <dependencies>
