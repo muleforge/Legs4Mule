@@ -5,83 +5,74 @@
         <artifactId>mule-transport-legstar-pom</artifactId>
         <version>1.0-RC3-SNAPSHOT</version>
     </parent>
-    <artifactId>mule-transport-legstar</artifactId>
+    <artifactId>legstar-mule-transport</artifactId>
     <packaging>jar</packaging>
     <version>1.0-RC3-SNAPSHOT</version>
-    <name>Legs4Mule Transport</name>
+    <name>LegStra for Mule Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
-    <properties>
-        <muleVersion>1.4.4</muleVersion>
-    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-vm</artifactId>
-            <version>${muleVersion}</version>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-tcp</artifactId>
-            <version>${muleVersion}</version>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-http</artifactId>
-            <version>${muleVersion}</version>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-file</artifactId>
-            <version>${muleVersion}</version>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-stream</artifactId>
-            <version>${muleVersion}</version>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-client</artifactId>
-            <version>${muleVersion}</version>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>org.mule</groupId>
             <artifactId>mule-core</artifactId>
-            <version>${muleVersion}</version>
-            <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-messaging</artifactId>
-            <version>1.2.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-messaging-impl</artifactId>
-            <version>1.2.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-engine</artifactId>
-            <version>1.2.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-invoker</artifactId>
-            <version>1.2.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-functional</artifactId>
-            <version>${muleVersion}</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
   
 </project>

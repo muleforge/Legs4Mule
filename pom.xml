@@ -8,6 +8,7 @@
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>1.4.4</muleVersion>
+        <legstarVersion>1.2.0</legstarVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
@@ -202,9 +203,165 @@
         </plugins>
     </reporting>
 
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.5</version>
+            </dependency>
+
+            <!-- There seems to be some version conflict between velocity and
+            commons-configuration. This ensures we have the correct version of commons-lang -->
+            <dependency> 
+                <groupId>commons-lang</groupId> 
+                <artifactId>commons-lang</artifactId> 
+                <version>2.3</version> 
+            </dependency> 
+
+            <dependency>
+                <groupId>ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>1.6.5</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule intra-vm transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-vm</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule TCP transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-tcp</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule HTTP transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-http</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule file transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-file</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule stream transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-stream</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule client -->
+            <dependency>
+                <groupId>org.mule.modules</groupId>
+                <artifactId>mule-module-client</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule core -->
+            <dependency>
+                <groupId>org.mule</groupId>
+                <artifactId>mule-core</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- LegStar Messaging -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-messaging</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Messaging implementation -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-messaging-impl</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar pooling engine -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-engine</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Adapter Runtime -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-invoker</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Service Generator -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixsgen</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Binding Generator -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-coxbgen</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Code Generator -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-codegen</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- Test cases for JAXB binding -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-jaxbgen-cases</artifactId>
+                <version>${legstarVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Test cases for COBOL binding -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-coxbgen-cases</artifactId>
+                <version>${legstarVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Mule test helpers -->    
+            <dependency>
+                <groupId>org.mule.tests</groupId>
+                <artifactId>mule-tests-functional</artifactId>
+                <version>${muleVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
-        <module>transport</module>
-        <module>legstar-mulegen</module>
+        <module>legstar-mule-transport</module>
+        <module>legstar-mule-generator</module>
         <module>build-tools</module>
     </modules>
 
