@@ -20,8 +20,7 @@ import org.mule.umo.provider.UMOConnector;
  * <code>LegstarMessageReceiver</code> delegates all processing
  * to <code>HttpMessageReceiver</code>.
  */
-public class LegstarHttpMessageReceiver extends HttpMessageReceiver
-{
+public class LegstarHttpMessageReceiver extends HttpMessageReceiver {
 
     /**
      * Constructs a message receiver for a component.
@@ -34,8 +33,7 @@ public class LegstarHttpMessageReceiver extends HttpMessageReceiver
             final UMOConnector connector,
             final UMOComponent component,
             final UMOEndpoint endpoint)
-    throws InitialisationException
-    {
+    throws InitialisationException {
         super(connector, component, endpoint);
     }
 

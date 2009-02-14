@@ -8,17 +8,24 @@ import org.mule.umo.UMOMessage;
 
 import junit.framework.TestCase;
 
+/**
+ * Test MuleHostHeaderFactory.
+ *
+ */
 public class MuleHostHeaderFactoryTestCase extends TestCase {
-    
+
+    /**
+     * Test header creation.
+     */
     public void testHeaderCreation() {
-        Map <String, Object> messageProperties = new HashMap <String, Object>();
-        messageProperties.put(MuleHostHeaderFactory.L4M_KEY_HOSTREQUESTID, "lsfileae-client");
-        messageProperties.put(MuleHostHeaderFactory.L4M_KEY_HOSTUSERID, "P390");
-        messageProperties.put(MuleHostHeaderFactory.L4M_KEY_HOSTPASSWORD, "STREAM2");
-        messageProperties.put(MuleHostHeaderFactory.L4M_KEY_HOSTTRACEMODE, new Boolean(true));
-        messageProperties.put(MuleHostHeaderFactory.L4M_KEY_HOSTCHARSET, "IBM01147");
-        messageProperties.put(MuleHostHeaderFactory.L4M_KEY_HOSTENDPOINT, "someMainframe");
-        
+        Map < String, Object > messageProperties = new HashMap < String, Object >();
+        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_REQUEST_ID, "lsfileae-client");
+        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_USERID, "P390");
+        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_PASSWORD, "STREAM2");
+        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_TRACE_MODE, new Boolean(true));
+        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_CHARSET, "IBM01147");
+        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_ENDPOINT, "someMainframe");
+
         UMOMessage umoMessage = new MuleMessage("message", messageProperties);
         MuleHostHeader h = MuleHostHeaderFactory.createHostHeader(umoMessage);
         assertEquals("P390", h.getHostUserID());

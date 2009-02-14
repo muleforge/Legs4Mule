@@ -31,7 +31,7 @@ public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpRes
 
     /** When channeled over http, the legstar payload must be binary. */
     private static final String LEGSTAR_HTTP_CONTENT_TYPE =
-        "binary/octet-stream";
+        "application/octet-stream";
 
 
     /** 
@@ -42,8 +42,7 @@ public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpRes
             final Object src,
             final String encoding,
             final UMOEventContext context)
-    throws IOException, TransformerException
-    {
+    throws IOException, TransformerException {
 
         UMOMessage msg = context.getMessage();
         /* Force the content type and content length */
@@ -56,8 +55,7 @@ public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpRes
          * transformed into a byte array.
          * TODO consider case where the Mule component raises an exception
          * what should we send to the host?  */
-        if (src != null && src instanceof byte[])
-        {
+        if (src != null && src instanceof byte[]) {
             Header header = new Header(
                     HttpConstants.HEADER_CONTENT_LENGTH,
                     Integer.toString(((byte[]) src).length));

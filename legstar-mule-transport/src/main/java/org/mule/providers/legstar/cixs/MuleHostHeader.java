@@ -17,8 +17,7 @@ import com.legstar.messaging.LegStarAddress;
  * Configuration parameters that a client can send as a header element.
  */
 
-public class MuleHostHeader implements Serializable
-{
+public class MuleHostHeader implements Serializable {
 
     /** Unique serial ID. */
     private static final long serialVersionUID = 2175774875242240562L;
@@ -47,10 +46,8 @@ public class MuleHostHeader implements Serializable
      * All defaults from default configuration will apply.
      * @return the new host Address
      */
-    public final LegStarAddress getAddress()
-    {
-        if (mHostEndPoint == null)
-        {
+    public final LegStarAddress getAddress() {
+        if (mHostEndPoint == null) {
             return null;
         }
         LegStarAddress address = new LegStarAddress(mHostEndPoint);
@@ -65,8 +62,7 @@ public class MuleHostHeader implements Serializable
     /** Gets the user ID used for host authentication/impersonation.
      * @return host user ID
      */
-    public final String getHostUserID()
-    {
+    public final String getHostUserID() {
         return mHostUserID;
     }
 
@@ -74,8 +70,7 @@ public class MuleHostHeader implements Serializable
      * Sets the user ID used for host authentication/impersonation.
      * @param userID host user ID to set
      */
-    public final void setHostUserID(final String userID)
-    {
+    public final void setHostUserID(final String userID) {
         this.mHostUserID = userID;
     }
 
@@ -83,8 +78,7 @@ public class MuleHostHeader implements Serializable
      * Gets the password used for authentication.
      * @return host user ID
      */
-    public final String getHostPassword()
-    {
+    public final String getHostPassword() {
         return mHostPassword;
     }
 
@@ -92,8 +86,7 @@ public class MuleHostHeader implements Serializable
      * Sets the password used for authentication.
      * @param password host user ID to set
      */
-    public final void setHostPassword(final String password)
-    {
+    public final void setHostPassword(final String password) {
         this.mHostPassword = password;
     }
 
@@ -101,8 +94,7 @@ public class MuleHostHeader implements Serializable
      * Gets the target host identifier.
      * @return the target host identifier
      */
-    public final String getHostEndPoint()
-    {
+    public final String getHostEndPoint() {
         return mHostEndPoint;
     }
 
@@ -110,8 +102,7 @@ public class MuleHostHeader implements Serializable
      * Sets the target host identifier.
      * @param endPoint target host identifier
      */
-    public final void setHostEndPoint(final String endPoint)
-    {
+    public final void setHostEndPoint(final String endPoint) {
         this.mHostEndPoint = endPoint;
     }
 
@@ -119,8 +110,7 @@ public class MuleHostHeader implements Serializable
      * Gets the target host character set.
      * @return the target host character set
      */
-    public final String getHostCharset()
-    {
+    public final String getHostCharset() {
         return mHostCharset;
     }
 
@@ -128,8 +118,7 @@ public class MuleHostHeader implements Serializable
      * Sets the target host character set.
      * @param charset target host character set
      */
-    public final void setHostCharset(final String charset)
-    {
+    public final void setHostCharset(final String charset) {
         this.mHostCharset = charset;
     }
 
@@ -137,8 +126,7 @@ public class MuleHostHeader implements Serializable
      * Gets the host trace mode.
      * @return the host trace mode
      */
-    public final boolean getHostTraceMode()
-    {
+    public final boolean getHostTraceMode() {
         return mHostTraceMode;
     }
 
@@ -146,8 +134,7 @@ public class MuleHostHeader implements Serializable
      * Sets the host trace mode.
      * @param traceMode the host trace mode
      */
-    public final void setTraceMode(final boolean traceMode)
-    {
+    public final void setTraceMode(final boolean traceMode) {
         this.mHostTraceMode = traceMode;
     }
 
@@ -155,8 +142,7 @@ public class MuleHostHeader implements Serializable
      * Gets the identifier for this request.
      * @return the request identifier
      */
-    public final String getHostRequestID()
-    {
+    public final String getHostRequestID() {
         return mHostRequestID;
     }
 
@@ -164,8 +150,7 @@ public class MuleHostHeader implements Serializable
      * Sets the identifier for this request.
      * @param requestID the identifier for this request
      */
-    public final void setHostRequestID(final String requestID)
-    {
+    public final void setHostRequestID(final String requestID) {
         this.mHostRequestID = requestID;
     }
 

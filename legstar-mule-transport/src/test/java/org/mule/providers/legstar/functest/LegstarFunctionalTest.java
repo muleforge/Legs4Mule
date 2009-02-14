@@ -30,20 +30,22 @@ import junit.framework.TestCase;
  */
 public class LegstarFunctionalTest extends TestCase implements EventCallback, FunctionalTestNotificationListener {
 
+    /** configuration helper. */
     private QuickConfigurationBuilder mBuilder;
 
-    // this is where we create our configuration
-
-    protected void setUp() throws Exception
-    {
+    /**
+     * {@inheritDoc}
+     * This is where we create our configuration.
+     */
+    protected void setUp() throws Exception {
         mBuilder = new QuickConfigurationBuilder();
 
         // we create our MuleManager
         mBuilder.createStartedManager(true, null);
 
         // we create a "SINGLE" endpoint and set the address to legstar:http://localhost:8083
-        UMOEndpoint legstarSingle = mBuilder.createEndpoint("legstar:http://localhost:8083","SingleEndpoint", true);
-        
+        UMOEndpoint legstarSingle = mBuilder.createEndpoint("legstar:http://localhost:8083", "SingleEndpoint", true);
+
         // we create a FunctionalTestComponent and call it myComponent
         FunctionalTestComponent myComponent = new FunctionalTestComponent();
 
@@ -51,25 +53,28 @@ public class LegstarFunctionalTest extends TestCase implements EventCallback, Fu
         myComponent.setEventCallback(this);
 
         // we register our component instance.
-        mBuilder.registerComponentInstance(myComponent,"SINGLE",legstarSingle.getEndpointURI());
+        mBuilder.registerComponentInstance(myComponent, "SINGLE", legstarSingle.getEndpointURI());
 
         // we register our listener which we called "SINGLE"
-        mBuilder.getManager().registerListener(this,"SINGLE");
+        mBuilder.getManager().registerListener(this, "SINGLE");
     }
 
-    @Override
-    public void eventReceived(UMOEventContext context, Object component)
-            throws Exception {
+    /** {@inheritDoc} */
+    public void eventReceived(final UMOEventContext context, final Object component)
+    throws Exception {
         FunctionalTestComponent fc = (FunctionalTestComponent) component;
         fc.setReturnMessage("Customized Return Message");
     }
 
-    @Override
-    public void onNotification(UMOServerNotification notification)
-    {
+    /** {@inheritDoc} */
+    public void onNotification(final UMOServerNotification notification) {
         assertTrue(notification.getAction() == FunctionalTestNotification.EVENT_RECEIVED);
     }
 
+    /**
+     * Use a MuleClient to send a message on the legstar endpoint.
+     * @throws Exception if fails
+     */
     public void testSingleComponent() throws Exception {
         MuleClient client = new MuleClient();
 
@@ -78,9 +83,9 @@ public class LegstarFunctionalTest extends TestCase implements EventCallback, Fu
         assertNotNull(result);
         assertEquals("Customized Return Message", result.getPayloadAsString());
     }
-    
-    protected void tearDown() throws Exception
-    {
+
+    /** {@inheritDoc} */
+    protected void tearDown() throws Exception {
         mBuilder.disposeCurrent();
     }
 

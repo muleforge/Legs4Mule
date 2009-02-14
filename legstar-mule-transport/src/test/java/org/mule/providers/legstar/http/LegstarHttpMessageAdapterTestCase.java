@@ -10,24 +10,23 @@
 
 package org.mule.providers.legstar.http;
 
-import org.mule.providers.legstar.http.LegstarHttpMessageAdapter;
 import org.mule.tck.providers.AbstractMessageAdapterTestCase;
 import org.mule.umo.provider.UMOMessageAdapter;
 import org.mule.umo.MessagingException;
 
-public class LegstarHttpMessageAdapterTestCase extends AbstractMessageAdapterTestCase
-{
+/**
+ * Test the LegstarHttpMessageAdapter class.
+ * For general guidelines on writing transports see http://mule.mulesource.org/display/MULE/Writing+Transports
+ */
+public class LegstarHttpMessageAdapterTestCase extends AbstractMessageAdapterTestCase {
 
-    /* For general guidelines on writing transports see
-       http://mule.mulesource.org/display/MULE/Writing+Transports */
-
-    public Object getValidMessage() throws Exception
-    {
+    /** {@inheritDoc} */
+    public Object getValidMessage() throws Exception {
         return new String("mok message").getBytes();
     }
 
-    public UMOMessageAdapter createAdapter(Object payload) throws MessagingException
-    {
+    /** {@inheritDoc} */
+    public UMOMessageAdapter createAdapter(final Object payload) throws MessagingException {
         return new LegstarHttpMessageAdapter(payload);
     }
 

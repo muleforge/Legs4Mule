@@ -10,9 +10,6 @@
 
 package org.mule.providers.legstar.http.transformers;
 
-import java.io.IOException;
-import java.io.InputStream;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mule.providers.NullPayload;
@@ -21,6 +18,7 @@ import org.mule.providers.legstar.i18n.LegstarMessages;
 import org.mule.umo.transformer.TransformerException;
 import org.mule.umo.UMOEventContext;
 
+import com.legstar.messaging.HostMessageFormatException;
 import com.legstar.messaging.LegStarMessage;
 
 /**
@@ -28,8 +26,7 @@ import com.legstar.messaging.LegStarMessage;
  * LegStar message into an http response which payload is binary.
  */
 public class LegStarMessageToHttpResponse
-extends AbstractObjectToHttpResponseTransformer
-{
+extends AbstractObjectToHttpResponseTransformer {
 
     /** logger used by this class.  */
     private final Log logger = LogFactory.getLog(getClass());
@@ -37,28 +34,27 @@ extends AbstractObjectToHttpResponseTransformer
     /**
      * Construct the transformer. Specify source and return types.
      */
-    public LegStarMessageToHttpResponse()
-    {
+    public LegStarMessageToHttpResponse() {
         super();
         registerSourceType(LegStarMessage.class);
         logger.debug("instantiation");
     }
 
     /** {@inheritDoc} */
-    public final Object transform(final Object src, final String encoding, final UMOEventContext context) throws TransformerException
-            {
+    public final Object transform(
+            final Object src,
+            final String encoding,
+            final UMOEventContext context) throws TransformerException {
 
         /* This situation arises if the client starts by an HTTP HEAD method. */
-        if (src instanceof HttpResponse)
-        {
+        if (src instanceof HttpResponse) {
             return src;
         }
 
         /* This situation happens when an exception happened. There is normally
          * a 500 http status set by the standard Mule exception mapping 
          * mechanism */
-        if (src instanceof NullPayload)
-        {
+        if (src instanceof NullPayload) {
             return super.transform(null, encoding, context);
         }
 
@@ -66,31 +62,20 @@ extends AbstractObjectToHttpResponseTransformer
          * to cast the 'src' object directly to that type. */
         LegStarMessage requestMessage = (LegStarMessage) src;
 
-        try
-        {
+        try {
+
             int bytesLength = requestMessage.getHostSize();
-            if (bytesLength == 0)
-            {
+            if (bytesLength == 0) {
                 throw new TransformerException(
                         LegstarMessages.invalidHostDataSize(), this);
             }
-            byte[] result = new byte[bytesLength];
-            InputStream hostStream = requestMessage.sendToHost();
-            int rc;
-            int pos = 0;
-            while ((rc = hostStream.read(result, pos, bytesLength - pos)) > 0)
-            {
-                pos += rc;
-            }
+            return super.transform(requestMessage.toByteArray(), encoding, context);
 
-            return super.transform(result, encoding, context);
-        }
-        catch (IOException e)
-        {
+        } catch (HostMessageFormatException e) {
             throw new TransformerException(
                     LegstarMessages.errorFormattingHostData(), this, e);
         }
 
-            }
+    }
 
 }

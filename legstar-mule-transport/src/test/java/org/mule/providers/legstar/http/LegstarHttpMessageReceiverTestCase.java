@@ -12,7 +12,6 @@ package org.mule.providers.legstar.http;
 
 import com.mockobjects.dynamic.Mock;
 import org.mule.impl.endpoint.MuleEndpoint;
-import org.mule.providers.legstar.http.LegstarHttpMessageReceiver;
 import org.mule.tck.providers.AbstractMessageReceiverTestCase;
 import org.mule.umo.UMOComponent;
 import org.mule.umo.UMODescriptor;
@@ -20,16 +19,17 @@ import org.mule.umo.endpoint.UMOEndpoint;
 import org.mule.umo.provider.UMOMessageReceiver;
 
 
-public class LegstarHttpMessageReceiverTestCase extends AbstractMessageReceiverTestCase
-{
+/**
+ * Test the LegstarHttpMessageReceiver class.
+ * For general guidelines on writing transports see http://mule.mulesource.org/display/MULE/Writing+Transports
+ */
+public class LegstarHttpMessageReceiverTestCase extends AbstractMessageReceiverTestCase {
 
     /** Legstar listening port. */
     private static final int LEGSTAR_PORT = 11958;
-    /* For general guidelines on writing transports see
-       http://mule.mulesource.org/display/MULE/Writing+Transports */
 
-    public UMOMessageReceiver getMessageReceiver() throws Exception
-    {
+    /** {@inheritDoc} */
+    public UMOMessageReceiver getMessageReceiver() throws Exception {
         Mock mockComponent = new Mock(UMOComponent.class);
         Mock mockDescriptor = new Mock(UMODescriptor.class);
         mockComponent.expectAndReturn("getDescriptor", mockDescriptor.proxy());
@@ -37,9 +37,9 @@ public class LegstarHttpMessageReceiverTestCase extends AbstractMessageReceiverT
         return new LegstarHttpMessageReceiver(endpoint.getConnector(), (UMOComponent) mockComponent.proxy(), endpoint);
     }
 
-    public UMOEndpoint getEndpoint() throws Exception
-    {
-    	return new MuleEndpoint("legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT), true);
+    /** {@inheritDoc} */
+    public UMOEndpoint getEndpoint() throws Exception {
+        return new MuleEndpoint("legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT), true);
     }
 
 }

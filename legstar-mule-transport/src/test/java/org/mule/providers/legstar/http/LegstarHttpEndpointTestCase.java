@@ -15,14 +15,19 @@ import org.mule.tck.AbstractMuleTestCase;
 import org.mule.umo.endpoint.UMOEndpointURI;
 
 
-public class LegstarHttpEndpointTestCase extends AbstractMuleTestCase
-{
+/**
+ * Test LegStar Endpoints.
+ * For general guidelines on writing transports see http://mule.mulesource.org/display/MULE/Writing+Transports
+ *
+ */
+public class LegstarHttpEndpointTestCase extends AbstractMuleTestCase {
 
-    /* For general guidelines on writing transports see
-       http://mule.mulesource.org/display/MULE/Writing+Transports */
-
-    public void testValidEndpointURI() throws Exception
-    {
+ 
+    /**
+     * Check that LegStar endpoints are valid Mule endpoints.
+     * @throws Exception if test fails
+     */
+    public void testValidEndpointURI() throws Exception  {
         UMOEndpointURI url = new MuleEndpointURI("legstar:http://localhost:7856");
         assertEquals("http", url.getScheme());
         assertEquals("legstar", url.getSchemeMetaInfo());

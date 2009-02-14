@@ -11,19 +11,25 @@
 package org.mule.providers.legstar.http;
 
 import org.mule.impl.endpoint.MuleEndpointURI;
-import org.mule.providers.legstar.http.LegstarHttpConnector;
 import org.mule.providers.service.TransportFactory;
 import org.mule.tck.AbstractMuleTestCase;
 import org.mule.umo.endpoint.UMOEndpoint;
 
 
-public class LegstarHttpConnectorFactoryTestCase extends AbstractMuleTestCase
-{
+/**
+ * Test the LegstarHttpConnectorFactory class.
+ *
+ */
+public class LegstarHttpConnectorFactoryTestCase extends AbstractMuleTestCase {
+
     /** Legstar listening port. */
     private static final int LEGSTAR_PORT = 8083;
 
-    public void testCreateFromFactory() throws Exception
-    {
+    /**
+     * Check that connector can be created.
+     * @throws Exception if fails
+     */
+    public void testCreateFromFactory() throws Exception {
         MuleEndpointURI url = new MuleEndpointURI(getEndpointURI());
         UMOEndpoint endpoint = TransportFactory.createEndpoint(url, UMOEndpoint.ENDPOINT_TYPE_RECEIVER);
         assertNotNull(endpoint);
@@ -31,10 +37,12 @@ public class LegstarHttpConnectorFactoryTestCase extends AbstractMuleTestCase
         assertTrue(endpoint.getConnector() instanceof LegstarHttpConnector);
         assertEquals("http://localhost:8083", endpoint.getEndpointURI().getAddress());
     }
-    
-    public String getEndpointURI() 
-    {
-    	return "legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT);
+
+    /**
+     * @return a legstar scheme URI.
+     */
+    public String getEndpointURI() {
+        return "legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT);
     }
 
 }

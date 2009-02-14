@@ -17,8 +17,7 @@ import org.mule.umo.MessagingException;
  * <code>LegstarMessageAdapter</code> delegates processing to
  * <code>HttpMessageAdapter</code>.
  */
-public class LegstarHttpMessageAdapter extends HttpMessageAdapter
-{
+public class LegstarHttpMessageAdapter extends HttpMessageAdapter {
 
     /** Serial ID.   */
     private static final long serialVersionUID = 5737156381082603182L;

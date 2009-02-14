@@ -15,8 +15,7 @@ import org.mule.config.i18n.MessageFactory;
 /**
  * Indirect references to messages from a bundle.
  */
-public class LegstarMessages extends MessageFactory
-{
+public class LegstarMessages extends MessageFactory {
 
     /** Bundle is found under org.mule.i18n legstar-messages.properties. */
     private static final String BUNDLE_PATH = getBundlePath("legstar");
@@ -27,8 +26,7 @@ public class LegstarMessages extends MessageFactory
     /**
      * @return invalid legstar header in incoming message.
      */
-    public static Message invalidLegstarHeader()
-    {
+    public static Message invalidLegstarHeader() {
         return createMessage(BUNDLE_PATH, MSG_NUM_1);
     }
 
@@ -38,8 +36,7 @@ public class LegstarMessages extends MessageFactory
    /**
      * @return something went wrong while receiving the host data.
      */
-    public static Message errorReceivingHostData()
-    {
+    public static Message errorReceivingHostData() {
         return createMessage(BUNDLE_PATH, MSG_NUM_2);
     }
 
@@ -51,8 +48,7 @@ public class LegstarMessages extends MessageFactory
      * @return host data size must at least be large enough to hold
      * a header. It cannot be zero.
      */
-    public static Message invalidHostDataSize()
-    {
+    public static Message invalidHostDataSize() {
         return createMessage(BUNDLE_PATH, MSG_NUM_3);
     }
 
@@ -62,8 +58,7 @@ public class LegstarMessages extends MessageFactory
     /**
      * @return was not able to create a host message.
      */
-    public static Message errorFormattingHostData()
-    {
+    public static Message errorFormattingHostData() {
         return createMessage(BUNDLE_PATH, MSG_NUM_4);
     }
 
@@ -74,8 +69,7 @@ public class LegstarMessages extends MessageFactory
      * @param propertyName name of missing property
      * @return could not find an endpoint property.
      */
-    public static Message missingEndpointProperty(final String propertyName)
-    {
+    public static Message missingEndpointProperty(final String propertyName) {
         return createMessage(BUNDLE_PATH, MSG_NUM_5, propertyName);
     }
 
@@ -86,8 +80,7 @@ public class LegstarMessages extends MessageFactory
      * @return was not able to initialize a transformer. Probably a setup 
      * issue like missing endpoint properties.
      */
-    public static Message transformerInitializationFailure()
-    {
+    public static Message transformerInitializationFailure() {
         return createMessage(BUNDLE_PATH, MSG_NUM_6);
     }
 
@@ -99,8 +92,7 @@ public class LegstarMessages extends MessageFactory
      *  instantiate
      * @return instantiation of binding class failed.
      */
-    public static Message coxbInstantiationError(final String coxbClassName)
-    {
+    public static Message coxbInstantiationError(final String coxbClassName) {
         return createMessage(BUNDLE_PATH, MSG_NUM_7, coxbClassName);
     }
 
@@ -111,8 +103,7 @@ public class LegstarMessages extends MessageFactory
      * @param programPropFileName name of the program properties file
      * @return the file content is invalid.
      */
-    public static Message invalidProgramPropertyFile(final String programPropFileName)
-    {
+    public static Message invalidProgramPropertyFile(final String programPropFileName) {
         return createMessage(BUNDLE_PATH, MSG_NUM_8, programPropFileName);
     }
 
@@ -123,8 +114,7 @@ public class LegstarMessages extends MessageFactory
      * @return failed to unmarshal data from the host. The binding is 
      * probably incorrect (does not match the cobol layout).
      */
-    public static Message unmarshalFailure()
-    {
+    public static Message unmarshalFailure() {
         return createMessage(BUNDLE_PATH, MSG_NUM_9);
     }
 
@@ -134,8 +124,7 @@ public class LegstarMessages extends MessageFactory
     /**
      * @return the binding type does not match the jaxb data type.
      */
-    public static Message bindingTypeMismatch()
-    {
+    public static Message bindingTypeMismatch() {
         return createMessage(BUNDLE_PATH, MSG_NUM_10);
     }
 
@@ -146,8 +135,7 @@ public class LegstarMessages extends MessageFactory
      * @param jaxbClassName the jaxb class name
      * @return failed to load the jaxb class (classpath issue).
      */
-    public static Message jaxbClassLoadFailure(final String jaxbClassName)
-    {
+    public static Message jaxbClassLoadFailure(final String jaxbClassName) {
         return createMessage(BUNDLE_PATH, MSG_NUM_11, jaxbClassName);
     }
 
@@ -158,9 +146,48 @@ public class LegstarMessages extends MessageFactory
      * @param coxbClassName the binding class name
      * @return failed to calculate the host byte size for this binding.
      */
-    public static Message hostByteSizeCalcFailure(final String coxbClassName)
-    {
+    public static Message hostByteSizeCalcFailure(final String coxbClassName) {
         return createMessage(BUNDLE_PATH, MSG_NUM_12, coxbClassName);
     }
 
+    /** Unsupported encoding.*/
+    private static final int MSG_NUM_13 = 13;
+    
+    /**
+     * @param encoding the host character set
+     * @return Unsupported encoding.
+     */
+    public static Message encodingFailure(final String encoding) {
+        return createMessage(BUNDLE_PATH, MSG_NUM_13, encoding);
+    }
+
+    /** LegStar message format is invalid.*/
+    private static final int MSG_NUM_14 = 14;
+    
+    /**
+     * @return LegStar message format is invalid.
+     */
+    public static Message hostMessageFormatFailure() {
+        return createMessage(BUNDLE_PATH, MSG_NUM_14);
+    }
+
+    /** Unable to transform data.*/
+    private static final int MSG_NUM_15 = 15;
+    
+    /**
+     * @return Unable to transform data.
+     */
+    public static Message hostTransformFailure() {
+        return createMessage(BUNDLE_PATH, MSG_NUM_15);
+    }
+
+    /** Transformer does not support multi part payloads.*/
+    private static final int MSG_NUM_16 = 16;
+    
+    /**
+     * @return Transformer does not support multi part payloads.
+     */
+    public static Message noMultiPartSupportFailure() {
+        return createMessage(BUNDLE_PATH, MSG_NUM_16);
+    }
 }

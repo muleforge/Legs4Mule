@@ -12,8 +12,7 @@ package org.mule.providers.legstar.cixs;
 /**
  * Exception related to a Mule-LegStar error.
  */
-public class MuleCixsException extends Exception
-{
+public class MuleCixsException extends Exception {
 
     /** Unique serial ID. */
     private static final long serialVersionUID = 2330171403837091360L;
@@ -22,8 +21,7 @@ public class MuleCixsException extends Exception
      * Construct an exception from an error message.
      * @param message error message text
      */
-    public MuleCixsException(final String message)
-    {
+    public MuleCixsException(final String message) {
         super(message);
     }
 
@@ -31,8 +29,7 @@ public class MuleCixsException extends Exception
      * Construct an exception from an exception.
      * @param e the root exception
      */
-    public MuleCixsException(final Exception e)
-    {
+    public MuleCixsException(final Exception e) {
         super(e);
     }
 

@@ -28,8 +28,7 @@ import com.legstar.host.server.EngineStartupException;
  * and will result in all LegStar connections to be pooled. 
  *
  */
-public class LegStarPoolAgent implements UMOAgent
-{
+public class LegStarPoolAgent implements UMOAgent {
 
     /** Describes the Agent. */
     private static final String DESCRIPTION =
@@ -51,76 +50,61 @@ public class LegStarPoolAgent implements UMOAgent
     private static final Log LOG = LogFactory.getLog(LegStarPoolAgent.class);
 
     /** {@inheritDoc} */
-    public final String getDescription()
-    {
+    public final String getDescription() {
         return DESCRIPTION;
     }
 
     /** {@inheritDoc} */
-    public final String getName()
-    {
+    public final String getName() {
         return mName;
     }
 
     /** {@inheritDoc} */
-    public final void registered()
-    {
+    public final void registered() {
         LOG.info("registered");
     }
 
     /** {@inheritDoc} */
-    public final void setName(final String name)
-    {
+    public final void setName(final String name) {
         mName = name;
     }
 
     /** {@inheritDoc} */
-    public final void unregistered()
-    {
+    public final void unregistered() {
         LOG.info("unregistered");
     }
 
     /** {@inheritDoc} */
-    public final void start() throws UMOException
-    {
+    public final void start() throws UMOException {
         LOG.info("Pool engine started");
     }
 
     /** {@inheritDoc} */
-    public final void stop() throws UMOException
-    {
+    public final void stop() throws UMOException {
         LOG.info("Pool engine stopped");
-        if (mServerHandler != null)
-        {
+        if (mServerHandler != null) {
             mServerHandler.stop();
         }
     }
 
     /** {@inheritDoc} */
-    public final void dispose()
-    {
+    public final void dispose() {
         mServerHandler = null;
         LOG.info("Pool engine destroyed");
     }
 
     /** {@inheritDoc} */
-    public final void initialise() throws InitialisationException
-    {
+    public final void initialise() throws InitialisationException {
         LOG.info("Initializing with " + CONFIG_FILE_NAME
                 + " configuration file.");
 
-        try
-        {
+        try {
             mServerHandler = new EngineHandler(loadConfigFile(CONFIG_FILE_NAME));
             mServerHandler.init();
-        }
-        catch (ConfigurationException e)
-        {
+        } catch (ConfigurationException e) {
             LOG.error("Failed to initialize.", e);
             throw new InitialisationException(e, this);
-        }
-        catch (EngineStartupException e)
-        {
+        } catch (EngineStartupException e) {
             LOG.error("Failed to start engine.", e);
             throw new InitialisationException(e, this);
         }
@@ -134,8 +118,7 @@ public class LegStarPoolAgent implements UMOAgent
      * @return the configuration retrieved
      * @throws ConfigurationException if configuration cannot be retrieved
      */
-    private HierarchicalConfiguration loadConfigFile(final String configFileName) throws ConfigurationException
-    {
+    private HierarchicalConfiguration loadConfigFile(final String configFileName) throws ConfigurationException {
         LOG.debug("Attempting to load " + configFileName);
         DefaultConfigurationBuilder dcb = new DefaultConfigurationBuilder();
         dcb.setFileName(configFileName);
