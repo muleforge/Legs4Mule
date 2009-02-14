@@ -10,15 +10,16 @@
 package org.mule.providers.legstar.gen;
 
 import java.io.File;
-import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.mule.providers.legstar.model.AntBuildCixs2MuleModel;
-import org.mule.providers.legstar.model.CixsMuleComponent;
+import org.mule.providers.legstar.model.UmoComponentParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;
-import com.legstar.cixs.jaxws.gen.Cixs2JaxwsGenerator;
 import com.legstar.cixs.jaxws.gen.StructuresGenerator;
+import com.legstar.cixs.jaxws.model.CobolHttpClientType;
+import com.legstar.cixs.jaxws.model.HttpTransportParameters;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
 
@@ -30,14 +31,22 @@ import com.legstar.codegen.CodeGenUtil;
  * POJO within Mule.
  * 
  */
-public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator
-{
+public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
+
+    /**
+     * This generator produces an adapter.
+     */
+    private static final String GENERATION_TARGET = "proxy";
+
+    /** Default pattern for server PATH. Must be kept in sync with
+     * various velocity templates. */
+    public static final String DEFAULT_SERVER_PATH_TEMPLATE =
+        "/legstar/services/${service.name}/";
 
     /**
      * Constructor.
      */
-    public Cixs2MuleGenerator()
-    {
+    public Cixs2MuleGenerator() {
         super(new AntBuildCixs2MuleModel());
     }
     
@@ -45,77 +54,54 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator
      * Check that input values are valid.
      * @throws CodeGenMakeException if input is invalid
      */
-    public final void checkExtendedInput() throws CodeGenMakeException
-    {
-        try
-        {
-            CodeGenUtil.checkDirectory(
-                    getTargetAntDir(), true, "TargetAntDir");
-            CodeGenUtil.checkDirectory(
-                    getTargetMuleConfigDir(), true, "TargetMuleConfigDir");
-            CodeGenUtil.checkDirectory(
-                    getTargetPropDir(), true, "TargetPropDir");
+    public final void checkExtendedExtendedInput() throws CodeGenMakeException {
+        try {
+            /* We need a target location for generated sample COBOL client */
             CodeGenUtil.checkDirectory(
                     getTargetCobolDir(), true, "TargetCobolDir");
-            CodeGenUtil.checkHttpURI(getCixsMuleComponent().getServiceURI());
             
-            /* Check that we have CICS program names mapped to operations */
-            for (CixsOperation operation 
-                    : getCixsMuleComponent().getCixsOperations())
-            {
-                String cicsProgramName = operation.getCicsProgramName();
-                if (cicsProgramName == null || cicsProgramName.length() == 0)
-                {
-                    throw new CodeGenMakeException(
-                            "Operation must specify a CICS program name");
-                }
+            /* Check parameters needed depending on target type */
+            getUmoComponentTargetParameters().check();
+
+            /* Check that we have a URI to expose to mainframe programs */
+            /* Set a sensible path using the service name. */
+            if (getHttpTransportParameters().getPath() == null
+                    || getHttpTransportParameters().getPath().length() == 0) {
+                getHttpTransportParameters().setPath(getDefaultServicePath());
             }
-        }
-        catch (IllegalArgumentException e)
-        {
+            getHttpTransportParameters().check();
+            
+            /* Check that there is exactly one operation.
+             * TODO: Add support for multiple operations.  */
+            if (getCixsMuleComponent().getCixsOperations().size() != 1) {
+                throw new CodeGenMakeException(
+                "One, and only one, operation per service supported");
+            }
+        } catch (IllegalArgumentException e) {
             throw new CodeGenMakeException(e);
         }
     }
+
     /**
-     * Create all artifacts for Mule server.
+     * Create all artifacts for Mule proxy service.
      * @param parameters a predefined set of parameters useful for generation
      * @throws CodeGenMakeException if generation fails
      */
-    public final void generate(
-            final Map < String, Object > parameters) throws CodeGenMakeException
-            {
+    public final void generateExtended(
+            final Map < String, Object > parameters) throws CodeGenMakeException {
         
-        parameters.put("targetJarDir", getTargetJarDir());
-        parameters.put("targetMuleConfigDir", getTargetMuleConfigDir());
-        parameters.put("serviceURI", getCixsMuleComponent().getServiceURI());
-        parameters.put("hostCharset", getHostCharset());
-        parameters.put("structHelper", new StructuresGenerator());
-        parameters.put("generateBaseDir", getGenerateBuildDir());
 
         /* Determine target files locations */
-        File componentAntFilesDir = getTargetAntDir();
-        CodeGenUtil.checkDirectory(componentAntFilesDir, true);
         File componentConfFilesDir = getTargetMuleConfigDir();
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        File componentCobolCicsClientDir = getTargetCobolDir();
-        CodeGenUtil.checkDirectory(componentCobolCicsClientDir, true);
-        File operationPropertiesFilesDir = getTargetPropDir();
-        CodeGenUtil.checkDirectory(operationPropertiesFilesDir, true);
-        
-        /* Produce artifacts for standalone component */
-        generateAntBuildJar(
-                getCixsMuleComponent(), parameters, componentAntFilesDir);
         
         /* Produce artifacts for local component  */
-        generateLocalConfigXml(
+        generateProxyConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
-        generateAntStartMuleLocalConfigXml(
-                getCixsMuleComponent(), parameters, componentAntFilesDir);
-        generateLog4jProperties(
-                getCixsMuleComponent(), parameters, operationPropertiesFilesDir);
         
-        for (CixsOperation operation : getCixsOperations())
-        {
+        for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
+
+            parameters.put("cixsOperation", operation);
+
             /* Determine target files locations */
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
@@ -127,61 +113,135 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator
             generateObjectToHttpResponseTransformers(
                     operation, parameters, operationClassFilesDir);
 
-            parameters.put("cixsOperation", operation);
-            generateCobolCicsClient(
+            generateCobolSampleHttpClient(
                     getCixsMuleComponent(), operation, parameters,
-                    componentCobolCicsClientDir);
+                    getTargetCobolDir(),
+                    getSampleCobolHttpClientTypeInternal());
             
         }
         
     }
     
+    /** {@inheritDoc}*/
+    public void addExtendedParameters(final Map < String, Object > parameters) {
+ 
+        parameters.put("generationTarget", GENERATION_TARGET);
+        /* This is needed to generated COBOL structures. */
+        parameters.put("structHelper", new StructuresGenerator());
+
+        getAntModel().getHttpTransportParameters().add(parameters);
+        getAntModel().getUmoComponentTargetParameters().add(parameters);
+
+    }
+
     /**
-     * Create a COBOl CICS Client program to use for testing.
-     * @param component the Mule component description
-     * @param operation the operation for which a program is to be generated
-     * @param parameters the set of parameters to pass to template engine
-     * @param cobolFilesDir location where COBOL code should be generated
-     * @throws CodeGenMakeException if generation fails
+     * @return a good default path that the host could use to reach
+     *  the generated service proxy
      */
-    protected static void generateCobolCicsClient(
-            final CixsMuleComponent component,
-            final CixsOperation operation,
-            final Map < String, Object > parameters,
-            final File cobolFilesDir) throws CodeGenMakeException
-            {
-            generateFile(Cixs2JaxwsGenerator.CIXS_TO_JAXWS_GENERATOR_NAME,
-                    Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_CLIENT_VLC_TEMPLATE,
-                    Cixs2JaxwsGenerator.SERVICE_MODEL_NAME,
-                    component,
-                    parameters,
-                    cobolFilesDir,
-                    operation.getCicsProgramName() + ".cbl");
+    public final String getDefaultServicePath() {
+        
+        return DEFAULT_SERVER_PATH_TEMPLATE.replace(
+                "${service.name}", getCixsMuleComponent().getName());
+    }
+ 
+    /**
+     * @return the set of HTTP transport parameters
+     */
+    public HttpTransportParameters getHttpTransportParameters() {
+        return getAntModel().getHttpTransportParameters();
+    }
+
+    /**
+     * @param httpTransportParameters the set of HTTP transport parameters
+     */
+    public void setHttpTransportParameters(
+            final HttpTransportParameters httpTransportParameters) {
+        getAntModel().setHttpTransportParameters(httpTransportParameters);
+    }
+
+    /**
+     * @param httpTransportParameters the set of HTTP transport parameters
+     */
+    public void addHttpTransportParameters(
+            final HttpTransportParameters httpTransportParameters) {
+        getAntModel().setHttpTransportParameters(httpTransportParameters);
+    }
+
+    /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @return the Http Cobol Client Type in use.
+     */
+    protected CobolHttpClientType getSampleCobolHttpClientTypeInternal() {
+        return getAntModel().getSampleCobolHttpClientType();
+    }
+
+    /**
+     * @return the Http Cobol Client Type in use.
+     */
+    public String getSampleCobolHttpClientType() {
+        return getSampleCobolHttpClientTypeInternal().toString();
+    }
+
+    /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @param sampleCobolHttpClientType the Http Cobol Client Type in use.
+     */
+    private void setSampleCobolHttpClientTypeInternal(
+            final CobolHttpClientType sampleCobolHttpClientType) {
+        getAntModel().setSampleCobolHttpClientType(sampleCobolHttpClientType);
+    }
+
+    /**
+     * @param sampleCobolHttpClientType the Http Cobol Client Type in use.
+     */
+    public void setSampleCobolHttpClientType(final String sampleCobolHttpClientType) {
+        CobolHttpClientType value = CobolHttpClientType.valueOf(
+                    sampleCobolHttpClientType.toUpperCase(Locale.getDefault()));
+        setSampleCobolHttpClientTypeInternal(value);
     }
 
     /**
      * @return the directory where COBOL files will be created
      */
-    public final File getTargetCobolDir()
-    {
-        return ((AntBuildCixs2MuleModel) getModel()).getTargetCobolDir();
+    public final File getTargetCobolDir() {
+        return ((AntBuildCixs2MuleModel) getAntModel()).getTargetCobolDir();
     }
 
     /**
      * @param targetCobolDir the directory where COBOL files will be created to set
      */
-    public final void setTargetCobolDir(final File targetCobolDir)
-    {
-        ((AntBuildCixs2MuleModel) getModel()).setTargetCobolDir(targetCobolDir);
+    public final void setTargetCobolDir(final File targetCobolDir) {
+        ((AntBuildCixs2MuleModel) getAntModel()).setTargetCobolDir(targetCobolDir);
     }
 
     /**
-     * Convenience method to get the inner mapped operations.
-     * @return the operations list
+     * @return the set of parameters needed to invoke an UMO Component
      */
-    public final List < CixsOperation > getCixsOperations()
-    {
-        return getCixsMuleComponent().getCixsOperations();
+    public UmoComponentParameters getUmoComponentTargetParameters() {
+        return getAntModel().getUmoComponentTargetParameters();
+    }
+
+    /**
+     * @param umoComponentTargetParameters the set of parameters needed to invoke an UMO Component to set
+     */
+    public void setUmoComponentTargetParameters(
+            final UmoComponentParameters umoComponentTargetParameters) {
+        getAntModel().setUmoComponentTargetParameters(umoComponentTargetParameters);
+    }
+
+    /**
+     * @param umoComponentTargetParameters the set of parameters needed to invoke an UMO Component to set
+     */
+    public void addUmoComponentTargetParameters(
+            final UmoComponentParameters umoComponentTargetParameters) {
+        getAntModel().setUmoComponentTargetParameters(umoComponentTargetParameters);
+    }
+
+    /** {@inheritDoc}  */
+    public final AntBuildCixs2MuleModel getAntModel() {
+        return (AntBuildCixs2MuleModel) super.getAntModel();
     }
     
 }

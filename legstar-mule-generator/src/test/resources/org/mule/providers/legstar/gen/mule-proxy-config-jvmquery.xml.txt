@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<!--  This Mule configuration adapts a Mule local component so that it is
+      consumable from a legacy application.
+      It uses generated Legs4Mule transformers.
+ -->
+<mule-configuration id="mule-legstar-proxy-jvmquery-config" version="1.0">
+
+    <description>Mule configuration file for jvmquery local Legs4Mule component</description>
+    <mule-environment-properties enableMessageEvents="true"/>
+    
+    <!-- Legs4Mule connector will be listening for requests from the legacy system -->
+    <connector name="LegstarHttpConnector" className="org.mule.providers.legstar.http.LegstarHttpConnector">
+        <properties>
+            <property name="port" value="8083"/>
+        </properties>
+    </connector>    
+    
+    <transformers>
+        <transformer name="HostByteArrayToJvmQueryRequest" className="org.mule.providers.legstar.test.jvmquery.HostByteArrayToJvmQueryRequest"/>
+        <transformer name="JvmQueryRequestToHttpResponse" className="org.mule.providers.legstar.test.jvmquery.JvmQueryRequestToHttpResponse"/>
+        <transformer name="HostByteArrayToJvmQueryReply" className="org.mule.providers.legstar.test.jvmquery.HostByteArrayToJvmQueryReply"/>
+        <transformer name="JvmQueryReplyToHttpResponse" className="org.mule.providers.legstar.test.jvmquery.JvmQueryReplyToHttpResponse"/>
+    </transformers>
+
+    <model name="jvmqueryModel">
+
+        <!-- UMO to be consumed by mainframe programs -->
+        <mule-descriptor name="queryJvmLocalUMO"
+            implementation="com.legstar.xsdc.test.cases.jvmquery.JVMQuery">
+            <inbound-router>
+                <endpoint address="legstar:http://megamouss:8083/legstar/services/jvmquery/"
+                    transformers="HostByteArrayToJvmQueryRequest"
+                    responseTransformers="JvmQueryReplyToHttpResponse"
+                    synchronous="true">
+                    <properties>
+                         <property name="hostCharset" value="IBM01140"/>
+                    </properties>
+              </endpoint>
+            </inbound-router>
+        </mule-descriptor>
+
+    </model>
+</mule-configuration>

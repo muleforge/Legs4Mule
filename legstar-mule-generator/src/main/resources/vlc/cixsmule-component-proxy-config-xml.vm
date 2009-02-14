@@ -41,7 +41,7 @@
       consumable from a legacy application.
       It uses generated Legs4Mule transformers.
  -->
-<mule-configuration id="mule-legstar-local-${muleComponent.name}-config" version="1.0">
+<mule-configuration id="mule-legstar-proxy-${muleComponent.name}-config" version="1.0">
 
     <description>Mule configuration file for ${muleComponent.name} local Legs4Mule component</description>
     <mule-environment-properties enableMessageEvents="true"/>
@@ -49,7 +49,7 @@
     <!-- Legs4Mule connector will be listening for requests from the legacy system -->
     <connector name="LegstarHttpConnector" className="org.mule.providers.legstar.http.LegstarHttpConnector">
         <properties>
-            <property name="port" value="8083"/>
+            <property name="port" value="${httpPort}"/>
         </properties>
     </connector>    
     
@@ -64,9 +64,9 @@
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
         <!-- UMO to be consumed by mainframe programs -->
         <mule-descriptor name="${cixsOperation.name}LocalUMO"
-            implementation="${muleComponent.implementationClassName}">
+            implementation="${umoComponentImplementationName}">
             <inbound-router>
-                <endpoint address="legstar:${serviceURI}"
+                <endpoint address="legstar:${httpURL}"
                     transformers="HostByteArrayTo${cixsOperation.requestHolderType}"
                     responseTransformers="${cixsOperation.responseHolderType}ToHttpResponse"
                     synchronous="true">

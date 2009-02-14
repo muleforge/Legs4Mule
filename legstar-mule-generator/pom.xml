@@ -4,6 +4,7 @@
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
         <version>1.0-RC3-SNAPSHOT</version>
+        <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mule-generator</artifactId>
     <packaging>jar</packaging>
@@ -19,8 +20,23 @@
         </dependency>
 
         <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>ant</groupId>
             <artifactId>ant</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant-launcher</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-cixsgen-model</artifactId>
         </dependency>
 
         <dependency>
@@ -46,6 +62,11 @@
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-coxbgen-cases</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-cixsgen-model-cases</artifactId>
         </dependency>
 
     </dependencies>

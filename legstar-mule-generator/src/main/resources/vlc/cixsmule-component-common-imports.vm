@@ -56,4 +56,5 @@ import ${cixsOperation.packageName}.*;
 #end
 ##
 
+import org.mule.providers.legstar.cixs.MuleCixsException;
 import org.mule.providers.legstar.cixs.MuleHostHeader;

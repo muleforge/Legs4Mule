@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Generate Mule artifacts to unable a local Mule component to be accessed
+     for a mainframe program.
+     Artifacts can be used to to expose a Mule component for Mainframe consumption.
+     Prerequisite: Cobol binding classes should have been generated
+     using LegStar Coxbgen prior to using this script.
+     Refer to http://www.legsem.com/legstar for info on generating binding classes.
+  -->
+<project basedir=".." default="signalSuccess" name="generate-cixs2mule">
+
+    <!-- ===========================================================  -->
+    <!-- Setup environment
+    -->
+    <target name="init">
+
+        <property environment="env"/>
+        <property name="mule.home" value="${env.MULE_HOME}"/>
+        <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
+
+        <!-- Classpath setting -->
+        <path id="classpath">
+            <pathelement location="../legstar-mulegen-jvmquery/target/classes"/>
+            <pathelement location="../legstar-mulegen-jvmquery/target/classes"/>
+            <pathelement location="../legstar-mule-generator/target/classes"/>
+            <fileset dir="${legstar.home}" includes="lib/*.jar" />
+            <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
+        </path>
+
+        <!-- Mule component Generator ant task -->
+        <taskdef name="cixs2mulegen"
+          classname="org.mule.providers.legstar.gen.Cixs2MuleGenerator"
+          classpathref="classpath" 
+        /> 
+
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- This step creates all the artifacts for a Mule component.    -->
+  
+    <target name="generateCixs2Mule" depends="init">
+    
+        <cixs2mulegen targetSrcDir="../legstar-mulegen-jvmquery/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-jvmquery/src/main/resources"
+            targetPropDir="../legstar-mulegen-jvmquery/src/main/resources"
+            targetAntDir="../legstar-mulegen-jvmquery/ant"
+            targetJarDir="${mule.home}/lib/user"
+            targetBinDir="../legstar-mulegen-jvmquery/target/classes"
+            targetCobolDir="../legstar-mulegen-jvmquery/cobol"
+            jaxbBinDir="../legstar-mulegen-jvmquery/target/classes"
+            coxbBinDir="../legstar-mulegen-jvmquery/target/classes"
+            custBinDir="../legstar-mule-generator/target/classes"
+            hostCharset="IBM01147"
+          >
+            <cixsMuleComponent
+                implementationClassName="JvmqueryImpl"
+                name="jvmquery"
+                packageName="org.mule.providers.legstar.test.jvmquery"
+            >
+                <cixsOperation name="queryJvm"
+                    cicsProgramName="JVMQUERY"
+                    >
+                    <input
+                        jaxbType="JvmQueryRequest"
+                        jaxbPackageName="com.legstar.test.coxb.jvmquery"
+                    />
+                    <output
+                        jaxbType="JvmQueryReply"
+                        jaxbPackageName="com.legstar.test.coxb.jvmquery"
+                    />
+                </cixsOperation>
+            </cixsMuleComponent>
+
+            <!-- Target UMO Component parameters -->
+            <umoComponentTargetParameters
+                implementationName="com.legstar.xsdc.test.cases.jvmquery.JVMQuery"
+            />
+            <!-- HTTP transport parameters -->
+            <httpTransportParameters
+                scheme="http"
+                host="localhost"
+                port="8083"
+                path="/legstar/services/jvmquery"
+            />
+
+        </cixs2mulegen>
+    
+    </target>
+ 
+    <!-- ===========================================================  -->
+    <!-- Delete the probe file to signal success
+    -->
+    <target name="signalSuccess" depends="generateCixs2Mule">
+        <delete file="${antModel.probeFile}" quiet="true"/>
+    </target>
+    
+</project>

@@ -9,92 +9,108 @@
  ******************************************************************************/
 package org.mule.providers.legstar.model;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.mule.providers.legstar.gen.TestCases;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.ProjectHelper;
+import org.mule.providers.legstar.gen.AbstractTestTemplate;
+import org.mule.providers.legstar.gen.Samples;
 
+import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
 import com.legstar.codegen.CodeGenUtil;
 
-import junit.framework.TestCase;
+/**
+ * Proxy Generator ant tests.
+ * <p/>
+ * Tests the velocity templates used to produce ant scripts which in
+ * turn generate artifacts. These templates are usually used by IDEs,
+ * they are not needed for a batch usage of the generators.
+ *
+ */
+public class AntBuildCixs2MuleModelTest extends AbstractTestTemplate {
 
-public class AntBuildCixs2MuleModelTest extends TestCase {
+    /** Model expected by template. */
+    AntBuildCixs2MuleModel mAntModel;
+    
+    /** {@inheritDoc}*/
+    public void setUp() {
+        super.setUp();
+        mAntModel = new AntBuildCixs2MuleModel();
+ 
+    }
 
-	/** Logger. */
-	private static final Log LOG = LogFactory.getLog(AntBuildCixs2MuleModelTest.class);
-
-	/** Code will be generated here. */
-	private static final String GEN_SRC_DIR = "src/test/gen/ant";
-	
-	
-	public void setUp() {
-	       CodeGenUtil.checkDirectory(GEN_SRC_DIR, true);
-	}
-
-	public void testCix2MuleBuild() throws Exception {
-
-		AntBuildCixs2MuleModel antModel = new AntBuildCixs2MuleModel();
-        antModel.setProductLocation("/Users/Fady/sandbox/legstar-1.2.0");
-        antModel.setMulegenProductLocation("/Users/Fady/sandbox/mulegen-1.2.0");
-        antModel.setProbeFile(new File("probe.file.tmp"));
-
-        CixsMuleComponent cixsMuleComponent = TestCases.getJvmQueryMuleComponent();
+    /**
+     * Proxy case for an POJO Target over HTTP.
+     * @throws Exception if generation fails
+     */
+    public void testJvmqueryGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        initCixsMuleComponent(muleComponent);
         
-        antModel.setCixsMuleComponent(cixsMuleComponent);
-        antModel.setCoxbBinDir(new File("src/test/gen/target/classes"));
-        antModel.setCustBinDir(new File("src/test/gen/target/classes"));
-        antModel.setJaxbBinDir(new File("src/test/gen/target/classes"));
-        antModel.setMuleHome("${env.MULE_HOME}");
-        antModel.setTargetAntDir(new File("src/test/gen/ant"));
-        antModel.setTargetBinDir(new File("src/test/gen/target/classes"));
-        antModel.setTargetCobolDir(new File("src/test/gen/target/cobol"));
-        antModel.setTargetJarDir(new File("src/test/gen/jars"));
-        antModel.setTargetMuleConfigDir(new File("src/test/gen/conf"));
-        antModel.setTargetPropDir(new File("src/test/gen/properties"));
-        antModel.setTargetSrcDir(new File("src/test/gen/java"));
-        antModel.setHostCharset("IBM01147");
+        processAnt();
+    }
 
-		antModel.generateBuild(CodeGenUtil.getFile(GEN_SRC_DIR, "test.txt"));
-		
-		BufferedReader in = new BufferedReader(new FileReader(GEN_SRC_DIR + "/test.txt"));
-		String resStr = "";
-		String str = in.readLine();
-		while (str != null) {
-			LOG.debug(str);
-			resStr += str;
-			str = in.readLine();
-		}
-		in.close();
-		assertTrue(resStr.contains("<project basedir=\"/Users/Fady/sandbox/legstar-1.2.0\" default=\"signalSuccess\" name=\"generate-cixs2mule\">"));
-        assertTrue(resStr.contains("<fileset dir=\"/Users/Fady/sandbox/mulegen-1.2.0\" includes=\"lib/*.jar\" />"));
-		assertTrue(resStr.contains("<fileset dir=\"${env.MULE_HOME}\" includes=\"lib/mule/*.jar\" />"));
-		assertTrue(resStr.contains("<taskdef name=\"cixs2mulegen\""));
-		assertTrue(resStr.contains("classname=\"org.mule.providers.legstar.gen.Cixs2MuleGenerator\""));
-		assertTrue(resStr.replace('\\', '/').contains("<cixs2mulegen targetSrcDir=\"src/test/gen/java\""));
-		assertTrue(resStr.replace('\\', '/').contains("targetMuleConfigDir=\"src/test/gen/conf\""));
-        assertTrue(resStr.replace('\\', '/').contains("targetPropDir=\"src/test/gen/properties\""));
-        assertTrue(resStr.replace('\\', '/').contains("targetAntDir=\"src/test/gen/ant\""));
-        assertTrue(resStr.replace('\\', '/').contains("targetJarDir=\"src/test/gen/jars\""));
-        assertTrue(resStr.replace('\\', '/').contains("targetBinDir=\"src/test/gen/target/classes\""));
-        assertTrue(resStr.replace('\\', '/').contains("targetCobolDir=\"src/test/gen/target/cobol\""));
-        assertTrue(resStr.replace('\\', '/').contains("jaxbBinDir=\"src/test/gen/target/classes\""));
-        assertTrue(resStr.replace('\\', '/').contains("coxbBinDir=\"src/test/gen/target/classes\""));
-        assertTrue(resStr.replace('\\', '/').contains("custBinDir=\"src/test/gen/target/classes\""));
-        assertTrue(resStr.contains("serviceURI=\"http://megamouss:8083\""));
-        assertTrue(resStr.contains("hostCharset=\"IBM01147\""));
+    /**
+     * Generate the ant script, check it and run it.
+     * @throws Exception if something goes wrong
+     */
+    private void processAnt() throws Exception {
+        AbstractCixsGenerator.generateFile("Test generator",
+                "vlc/build-cixs2mule-xml.vm",
+                "antModel",
+                mAntModel,
+                getParameters(),
+                mAntModel.getTargetAntDir(),
+                "generate.xml");
 
-		assertTrue(resStr.contains("implementationClassName=\"com.legstar.xsdc.test.cases.jvmquery.JVMQuery\""));
-        assertTrue(resStr.contains("packageName=\"org.mule.providers.legstar.test.jvmquery\""));
-		assertTrue(resStr.contains("name=\"jvmquery\""));
-		assertTrue(resStr.contains("<cixsOperation name=\"jvmquery\""));
-        assertTrue(resStr.contains("cicsProgramName=\"JVMQUERY\""));
-		assertTrue(resStr.contains("jaxbType=\"JvmQueryRequestType\""));
-		assertTrue(resStr.contains("jaxbPackageName=\"com.legstar.test.coxb.jvmquery\""));
-        assertTrue(resStr.contains("jaxbType=\"JvmQueryReplyType\""));
-        assertTrue(resStr.contains("jaxbPackageName=\"com.legstar.test.coxb.jvmquery\""));
-	}
-	
+        compare(mAntModel.getTargetAntDir(), "generate.xml",
+                mAntModel.getCixsMuleComponent().getInterfaceClassName());
+        runAnt(mAntModel.getTargetAntDir(), "generate.xml");
+    }
+    
+    /**
+     * Submit execution of an ant script.
+     * @param antFilesDir where the ant script is
+     * @param scriptName the ant script name
+     */
+    private void runAnt(final File antFilesDir, final String scriptName) {
+        Project project = new Project();
+        project.init();
+        ProjectHelper.getProjectHelper().parse(project, new File(antFilesDir, scriptName));
+        project.executeTarget(project.getDefaultTarget());
+    }
+
+    /**
+     * Common initialization. Segregate output so that various tests
+     * do not overwrite each other.
+     * @param muleComponent the service
+     */
+    private void initCixsMuleComponent(final CixsMuleComponent muleComponent) {
+        mAntModel.setProductLocation("..");
+        mAntModel.setHostCharset("IBM01147");
+        mAntModel.setCixsMuleComponent(muleComponent);
+        File targetDir = new File("../legstar-mulegen-" + muleComponent.getName());
+        mAntModel.setJaxbBinDir(new File(targetDir, "target/classes"));
+        CodeGenUtil.checkDirectory(mAntModel.getJaxbBinDir(), true);
+        mAntModel.setTargetSrcDir(new File(targetDir, "src/main/java"));
+        mAntModel.setTargetBinDir(new File(targetDir, "target/classes"));
+        mAntModel.setTargetPropDir(new File(targetDir, "src/main/resources"));
+        mAntModel.setTargetMuleConfigDir(new File(targetDir, "src/main/resources"));
+        mAntModel.setTargetJarDir(new File("${mule.home}/lib/user"));
+        mAntModel.setTargetAntDir(new File(targetDir, "ant"));
+        mAntModel.setTargetCobolDir(new File(targetDir, "cobol"));
+        
+        mAntModel.getHttpTransportParameters().setHost("localhost");
+        mAntModel.getHttpTransportParameters().setPort(8083);
+        mAntModel.getHttpTransportParameters().setPath("/legstar/services/" + muleComponent.getName());
+
+        mAntModel.getUmoComponentTargetParameters().setImplementationName(
+                "com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
+        
+        /* This is a dirty trick. This component does not need custom libraries so we
+         * use the placeholder to get this generator classes to supersede the ones
+         * that come from the LEGSTAR_HOME location. */
+        mAntModel.setCustBinDir(new File("../legstar-mule-generator/target/classes"));
+    }
 }

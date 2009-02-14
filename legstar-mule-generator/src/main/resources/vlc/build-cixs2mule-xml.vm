@@ -14,16 +14,24 @@
     -->
     <target name="init">
 
+        <property environment="env"/>
+#if(${antModel.muleHome})
+        <property name="mule.home" value="${antModel.muleHome}"/>
+#else
+        <property name="mule.home" value="${env.MULE_HOME}"/>
+#end
+        <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
+
         <!-- Classpath setting -->
         <path id="classpath">
             <pathelement location="${antModel.jaxbBinDir}"/>
             <pathelement location="${antModel.coxbBinDir}"/>
             <pathelement location="${antModel.custBinDir}"/>
-            <fileset dir="${basedir}" includes="lib/*.jar" />
+            <fileset dir="${legstar.home}" includes="lib/*.jar" />
 #if(${antModel.mulegenProductLocation})
             <fileset dir="${antModel.mulegenProductLocation}" includes="lib/*.jar" />
 #end
-            <fileset dir="${antModel.muleHome}" includes="lib/mule/*.jar" />
+            <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
 
         <!-- Mule component Generator ant task -->
@@ -55,7 +63,6 @@
                 implementationClassName="${antModel.cixsMuleComponent.implementationClassName}"
                 name="${antModel.cixsMuleComponent.name}"
                 packageName="${antModel.cixsMuleComponent.packageName}"
-                serviceURI="${antModel.cixsMuleComponent.serviceURI}"
             >
 #foreach ($cixsOperation in $antModel.cixsMuleComponent.cixsOperations)
                 <cixsOperation name="${cixsOperation.name}"
@@ -85,6 +92,19 @@
                 </muleStartupPathElement>
 #end
             </cixsMuleComponent>
+
+            <!-- Target UMO Component parameters -->
+            <umoComponentTargetParameters
+                implementationName="${antModel.umoComponentTargetParameters.implementationName}"
+            />
+            <!-- HTTP transport parameters -->
+            <httpTransportParameters
+                scheme="${antModel.httpTransportParameters.scheme}"
+                host="${antModel.httpTransportParameters.host}"
+                port="${antModel.httpTransportParameters.port}"
+                path="${antModel.httpTransportParameters.path}"
+            />
+
         </cixs2mulegen>
     
     </target>

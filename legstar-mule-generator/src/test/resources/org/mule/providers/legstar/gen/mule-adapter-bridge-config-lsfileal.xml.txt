@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<!--  This Mule configuration implements an adapter for a legacy function.
+      It uses the bridge component as well as generated Legs4Mule transformers.
+ -->
+<mule-configuration id="mule-legstar-adapter-bridge-lsfileal-config" version="1.0">
+
+    <description>Mule configuration file for lsfileal bridge Legs4Mule component</description>
+    <mule-environment-properties enableMessageEvents="true"/>
+    <transformers>
+        <transformer name="ByteArrayToObject" className="org.mule.transformers.simple.ByteArrayToObject"/>
+        <transformer name="HostByteArrayToRequestParms" className="org.mule.providers.legstar.test.lsfileal.HostByteArrayToRequestParms"/>
+        <transformer name="RequestParmsToHostByteArray" className="org.mule.providers.legstar.test.lsfileal.RequestParmsToHostByteArray"/>
+        <transformer name="HostByteArrayToReplyData" className="org.mule.providers.legstar.test.lsfileal.HostByteArrayToReplyData"/>
+        <transformer name="ReplyDataToHostByteArray" className="org.mule.providers.legstar.test.lsfileal.ReplyDataToHostByteArray"/>
+    </transformers>
+
+    <model name="lsfilealModel">
+
+        <mule-descriptor name="lsfilealBridgeUMO"
+            implementation="org.mule.components.simple.BridgeComponent">
+            <inbound-router>
+                <endpoint address="tcp://localhost:3213"
+                  transformers="ByteArrayToObject"
+                  responseTransformers="HostByteArrayToReplyData"
+                  remoteSync="true"/>
+            </inbound-router>
+            <outbound-router>
+                <router className="org.mule.routing.outbound.OutboundPassThroughRouter">
+                    <!-- TODO Change to your host ip address and port. Must be a valid LegStar destination. -->
+                    <endpoint address="legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN"
+                              transformers="RequestParmsToHostByteArray" >
+                        <properties>
+                            <property name="hostCharset" value="IBM01140"/>
+                            <property name="hostTraceMode" value="true"/>
+                            <property name="programPropFileName" value="lsfileal.properties"/>
+                        </properties>
+                    </endpoint>
+                </router>
+            </outbound-router>
+        </mule-descriptor>
+
+    </model>
+</mule-configuration>

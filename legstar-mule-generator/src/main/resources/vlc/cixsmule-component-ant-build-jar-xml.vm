@@ -67,11 +67,13 @@
             <include name="**/${muleComponent.name}/**/*.class"/>
          </fileset>
 #end
+#if(${generationTarget.equalsIgnoreCase("adapter")})
 #if (${targetPropDir})
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
          <fileset dir="${targetPropDir}">
             <include name="${cixsOperation.name}.properties"/>
          </fileset>
+#end
 #end
 #end
       </jar>

@@ -13,16 +13,24 @@
     -->
     <target name="init">
 
+        <property environment="env"/>
+#if(${antModel.muleHome})
+        <property name="mule.home" value="${antModel.muleHome}"/>
+#else
+        <property name="mule.home" value="${env.MULE_HOME}"/>
+#end
+        <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
+
         <!-- Classpath setting -->
         <path id="classpath">
             <pathelement location="${antModel.jaxbBinDir}"/>
             <pathelement location="${antModel.coxbBinDir}"/>
             <pathelement location="${antModel.custBinDir}"/>
-            <fileset dir="${basedir}" includes="lib/*.jar" />
+            <fileset dir="${legstar.home}" includes="lib/*.jar" />
 #if(${antModel.mulegenProductLocation})
             <fileset dir="${antModel.mulegenProductLocation}" includes="lib/*.jar" />
 #end
-            <fileset dir="${antModel.muleHome}" includes="lib/mule/*.jar" />
+            <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
 
         <!-- Mule component Generator ant task -->
@@ -92,25 +100,11 @@
         </mule2cixsgen>
     
     </target>
- 
-    <!-- ===========================================================  -->
-    <!-- Compile the generated artifacts
-    -->
-    <target name="compileMule2Cixs" depends="generateMule2Cixs">
-        <mkdir dir="${antModel.targetBinDir}"/>
-        <javac srcdir="${antModel.targetSrcDir}"
-               includes="**/*.java"
-               destdir="${antModel.targetBinDir}"
-               classpathref="classpath"
-               fork="yes"
-        />
-    </target>
-    
   
     <!-- ===========================================================  -->
     <!-- Delete the probe file to signal success
     -->
-    <target name="signalSuccess" depends="compileMule2Cixs">
+    <target name="signalSuccess" depends="generateMule2Cixs">
         <delete file="${antModel.probeFile}" quiet="true"/>
     </target>
     

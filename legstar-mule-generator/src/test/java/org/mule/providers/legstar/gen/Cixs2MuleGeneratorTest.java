@@ -21,33 +21,40 @@ import com.legstar.codegen.CodeGenUtil;
  */
 public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
 
+    /** Generator instance. */
     private Cixs2MuleGenerator mGenerator;
 
-    /** The host character set. */
-    public static final String HOSTCHARSET = "IBM01140";
-    
+    /** @{inheritDoc}*/
     public void setUp() {
+        emptyDir(GEN_DIR);
         mGenerator = new Cixs2MuleGenerator();
         mGenerator.init();
-        mGenerator.setTargetSrcDir(GEN_SRC_DIR);
-        mGenerator.setTargetJarDir(new File("${env.MULE_HOME}/lib/user"));
-        mGenerator.setJaxbBinDir(new File("target/classes"));
-        mGenerator.setCoxbBinDir(new File("target/classes"));
-        mGenerator.setTargetBinDir(new File("target/gen-classes"));
-        mGenerator.setCustBinDir(new File("legstar-coxbgen-cases//target/classes"));
-        mGenerator.setTargetCobolDir(GEN_COBOL_DIR);
-        mGenerator.setHostCharset(HOSTCHARSET);
-        mGenerator.setTargetPropDir(GEN_PROP_DIR);
     }
 
-    private void initCixsMuleComponent(CixsMuleComponent muleComponent) {
+    /**
+     * Common initialization. Segregate output so that various tests
+     * do not overwrite each other.
+     * @param muleComponent the service
+     */
+    private void initCixsMuleComponent(final CixsMuleComponent muleComponent) {
         mGenerator.setCixsMuleComponent(muleComponent);
-        mGenerator.setTargetAntDir(
-                new File(GEN_ANT_DIR, muleComponent.getName()));
-        mGenerator.setTargetPropDir(
-                new File(GEN_PROP_DIR, muleComponent.getName()));
-        mGenerator.setTargetMuleConfigDir(
-                new File(GEN_CONF_DIR, muleComponent.getName()));
+        mGenerator.setTargetAntDir(GEN_ANT_DIR);
+        mGenerator.setTargetPropDir(GEN_PROP_DIR);
+        mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
+        mGenerator.setTargetSrcDir(GEN_SRC_DIR);
+        mGenerator.setTargetJarDir(GEN_JAR_DIR);
+        mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
+        mGenerator.setCoxbBinDir(COXB_BIN_DIR);
+        mGenerator.setTargetBinDir(GEN_BIN_DIR);
+        mGenerator.setCustBinDir(CUST_BIN_DIR);
+        mGenerator.setTargetCobolDir(GEN_COBOL_DIR);
+        mGenerator.setHostCharset(HOSTCHARSET);
+        
+        mGenerator.getHttpTransportParameters().setHost("megamouss");
+        mGenerator.getHttpTransportParameters().setPort(8083);
+
+        mGenerator.getUmoComponentTargetParameters().setImplementationName(
+                "com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
     }
 
     /**
@@ -57,14 +64,16 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         Cixs2MuleGenerator generator = new Cixs2MuleGenerator();
         try {
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-            		" JaxbBinDir: No directory name was specified",
+            assertEquals("java.lang.IllegalArgumentException:"
+                    + " JaxbBinDir: No directory name was specified",
                     e.getCause().getMessage());
         }
         try {
             generator.setJaxbBinDir(new File("target/classes"));
             generator.execute();
+            fail();
         } catch (Exception e) {
             assertEquals("You must specify a service description",
                     e.getCause().getMessage());
@@ -73,6 +82,7 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         try {
             generator.setCixsMuleComponent(muleComponent);
             generator.execute();
+            fail();
         } catch (Exception e) {
             assertEquals("You must provide a service name",
                     e.getCause().getMessage());
@@ -80,44 +90,101 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         try {
             muleComponent.setName("muleComponentName");
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-            		" TargetAntDir: No directory name was specified",
-                    e.getCause().getMessage());
+            assertEquals("TargetSrcDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetSrcDir(GEN_SRC_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("TargetAntDir: No directory name was specified",
+                    e.getMessage());
         }
         try {
             generator.setTargetAntDir(GEN_ANT_DIR);
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-            		" TargetMuleConfigDir: No directory name was specified",
-                    e.getCause().getMessage());
+            assertEquals("TargetMuleConfigDir: No directory name was specified",
+                    e.getMessage());
         }
         try {
             generator.setTargetMuleConfigDir(GEN_CONF_DIR);
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-            		" TargetPropDir: No directory name was specified",
+            assertEquals("TargetBinDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetBinDir(GEN_BIN_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("TargetJarDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetJarDir(GEN_JAR_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("No operation was specified",
                     e.getCause().getMessage());
         }
         try {
-            generator.setTargetPropDir(GEN_PROP_DIR);
+            generator.getCixsMuleComponent().addCixsOperation(
+                    Samples.getJvmQueryMuleComponent().getCixsOperations().get(0));
+            generator.getCixsMuleComponent().getCixsOperations().get(0).setCicsProgramName("");
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-                    " TargetCobolDir: No directory name was specified",
+            assertEquals("Operation must specify a CICS program name",
+                    e.getCause().getMessage());
+        }
+        try {
+            generator.getCixsMuleComponent().getCixsOperations().get(0).setCicsProgramName("PROGRAM");
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("java.lang.IllegalArgumentException:"
+                    + " TargetCobolDir: No directory name was specified",
                     e.getCause().getMessage());
         }
         try {
             generator.setTargetCobolDir(GEN_COBOL_DIR);
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("You must specify a valid URI",
+            assertEquals("Missing target UMO component implementation",
                     e.getCause().getMessage());
         }
         try {
-            muleComponent.setServiceURI("http://server.com");
+            generator.getUmoComponentTargetParameters().setImplementationName(
+                    "com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
+            generator.getHttpTransportParameters().setHost(null);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("You must specify an HTTP host",
+                    e.getCause().getMessage());
+        }
+        try {
+            generator.getHttpTransportParameters().setHost("server.com");
+            generator.getHttpTransportParameters().setPath(null);
+            generator.execute();
+            assertEquals("/legstar/services/muleComponentName/", generator.getHttpTransportParameters().getPath());
+            generator.getHttpTransportParameters().setPath("doesnotstartwithslash");
+            generator.execute();
+        } catch (Exception e) {
+            assertEquals("The HTTP path must start with the / character",
+                    e.getCause().getMessage());
+        }
+        try {
+            generator.getHttpTransportParameters().setPath("/a");
             generator.execute();
         } catch (Exception e) {
             fail(e.getMessage());
@@ -126,65 +193,63 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
     }
 
     /**
-     * Check generation for operation with identical input and output structures.
+     * Check generation for a POJO.
      * @throws Exception if generation fails
      */
-    public final void testLsfileaeGenerateClasses() throws Exception {
-        CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
+    public final void testJvmQueryGenerateClasses() throws Exception {
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         initCixsMuleComponent(muleComponent);
         mGenerator.execute();
-        checkLocalResults(muleComponent);
+        checkResults(muleComponent);
     }
 
-    private void checkLocalResults(CixsMuleComponent muleComponent)
-    throws Exception{
+    /**
+     * Check that all expected artifacts are generated.
+     * @param muleComponent the service model
+     * @throws Exception if check fails
+     */
+    private void checkResults(final CixsMuleComponent muleComponent) throws Exception {
 
-        String resStr = getSource(mGenerator.getTargetAntDir(), "build.xml");
-        assertTrue(resStr.replace('\\', '/').contains(
-                "<property name=\"jarFile\" value=\"${env.MULE_HOME}/lib/user/mule-legstar-" + muleComponent.getName() + ".jar\"/>"));
+        compare(mGenerator.getTargetAntDir(),
+                "build.xml", muleComponent.getInterfaceClassName());
+        compare(mGenerator.getTargetMuleConfigDir(),
+                "mule-proxy-config-" + muleComponent.getName() + ".xml");
 
-        resStr = getSource(mGenerator.getTargetMuleConfigDir(),
-                "mule-local-config-" + muleComponent.getName() + ".xml");
-        assertTrue(resStr.contains(
-                "<mule-configuration id=\"mule-legstar-local-" + muleComponent.getName() + "-config\" version=\"1.0\">"));
-
-        resStr = getSource(mGenerator.getTargetAntDir(),
-                "start-mule-local-config-" + muleComponent.getName() + ".xml");
-        assertTrue(resStr.replace("\\", "/").contains(
-                "<property name=\"conf.file\" value=\"file:///src/test/gen/conf/" +
-                muleComponent.getName() +
-                "/mule-local-config-" +
-                muleComponent.getName() +
-                ".xml\"/>"));
-
-        resStr = getSource(mGenerator.getTargetPropDir(),
-                "log4j" + ".properties");
-        assertTrue(resStr.contains(
-                "log4j.logger.org.mule=INFO"));
-        
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     mGenerator.getTargetSrcDir(), operation.getPackageName(), true);
 
-            resStr = getSource(operationClassFilesDir, 
-                    "HostByteArrayTo" + operation.getRequestHolderType() + ".java");
-            assertTrue(resStr.contains(
-                    "public class HostByteArrayTo" + operation.getRequestHolderType() + " extends AbstractLegStarTransformer {"));
+            compare(operationClassFilesDir,
+                    "HostByteArrayTo" + operation.getRequestHolderType() + ".java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    operation.getRequestHolderType() + "ToHostByteArray.java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    operation.getRequestHolderType() + "ToHttpResponse.java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    "HostByteArrayTo" + operation.getResponseHolderType() + ".java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    operation.getResponseHolderType() + "ToHostByteArray.java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    operation.getResponseHolderType() + "ToHttpResponse.java",
+                    muleComponent.getInterfaceClassName());
 
-            resStr = getSource(operationClassFilesDir, 
-                    operation.getResponseHolderType() + "ToHttpResponse.java");
-            assertTrue(resStr.contains(
-                    "public class " + operation.getRequestHolderType() + "ToHttpResponse"));
-            assertTrue(resStr.contains(
-                    "extends AbstractObjectToHttpResponseTransformer {"));
 
-            resStr = getSource(GEN_COBOL_DIR, 
+            String expectedCobolRes = getSource(
+                    "/org/mule/providers/legstar/gen/" + operation.getCicsProgramName()
+                    + ".cbl.txt");
+
+            String res = getSource(GEN_COBOL_DIR, 
                     operation.getCicsProgramName() + ".cbl");
-            assertTrue(resStr.contains(
-                    "PROGRAM-ID. " + operation.getCicsProgramName() + "."));
-            assertTrue(resStr.contains(
-                    "10 COM-NUMBER PIC 9(6)."));
-       }
+            /* The substring(1060) is necessary because the template is coming from
+             * core legstar and still has a variable part containing the date and
+             * time of generation. 1060 will get us beyond the cobol header.*/
+            assertEquals(expectedCobolRes.substring(1060), res.substring(1060));
+        }
 
     }
 }

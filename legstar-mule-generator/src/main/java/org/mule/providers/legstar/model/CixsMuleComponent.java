@@ -23,19 +23,17 @@ import com.legstar.cixs.gen.model.AbstractCixsService;
 /**
  * Describes a Mule-LegStar Component with Mainframe access capabilities.
  */
-public class CixsMuleComponent extends AbstractCixsService
-{
+public class CixsMuleComponent extends AbstractCixsService {
 
     /** List of additional classpath elements that might be needed by
      * generated Mule startup procedure. */
-    private List < Path > mMuleStartupPathElements = new ArrayList < Path > ();
+    private List < Path > mMuleStartupPathElements = new ArrayList < Path >();
     
     /**
      * @param path an additional classpath element that might be needed
      *  by generated Mule startup procedure
      */
-    public final void addMuleStartupPathElement(final Path path)
-    {
+    public final void addMuleStartupPathElement(final Path path) {
         mMuleStartupPathElements.add(path);
     }
     
@@ -43,13 +41,10 @@ public class CixsMuleComponent extends AbstractCixsService
      * @return the list of additional classpath elements that might be needed
      *  by generated Mule startup procedure
      */
-    public final List < String > getMuleStartupPathElements()
-    {
-        List < String > pathElements = new ArrayList < String > ();
-        for (Path path : mMuleStartupPathElements)
-        {
-            for (String pathElement : path.list())
-            {
+    public final List < String > getMuleStartupPathElements() {
+        List < String > pathElements = new ArrayList < String >();
+        for (Path path : mMuleStartupPathElements) {
+            for (String pathElement : path.list()) {
                 pathElements.add(pathElement);
             }
         }
@@ -61,16 +56,13 @@ public class CixsMuleComponent extends AbstractCixsService
      * path elements ant style.
      * @param pathElements a list of files to add on classpath
      */
-    public final void setMuleStartupPathElements(final List < String > pathElements)
-    {
-        if (pathElements.size() == 0)
-        {
+    public final void setMuleStartupPathElements(final List < String > pathElements) {
+        if (pathElements.size() == 0) {
             return;
         }
         Project antProject = new Project();
         Path path = new Path(antProject);
-        for (String element : pathElements)
-        {
+        for (String element : pathElements) {
             PathElement pathElement = path.createPathElement();
             pathElement.setLocation(new File(element));
         }

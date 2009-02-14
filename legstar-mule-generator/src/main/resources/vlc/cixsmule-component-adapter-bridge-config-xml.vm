@@ -40,7 +40,7 @@
 <!--  This Mule configuration implements an adapter for a legacy function.
       It uses the bridge component as well as generated Legs4Mule transformers.
  -->
-<mule-configuration id="mule-legstar-bridge-${muleComponent.name}-config" version="1.0">
+<mule-configuration id="mule-legstar-adapter-bridge-${muleComponent.name}-config" version="1.0">
 
     <description>Mule configuration file for ${muleComponent.name} bridge Legs4Mule component</description>
     <mule-environment-properties enableMessageEvents="true"/>
@@ -65,10 +65,11 @@
             <outbound-router>
                 <router className="org.mule.routing.outbound.OutboundPassThroughRouter">
                     <!-- TODO Change to your host ip address and port. Must be a valid LegStar destination. -->
-                    <endpoint address="legstar:${hostURI}"
+                    <endpoint address="${hostURI}"
                               transformers="${cixsOperation.requestHolderType}ToHostByteArray" >
                         <properties>
                             <property name="hostCharset" value="${hostCharset}"/>
+                            <property name="hostTraceMode" value="true"/>
                             <property name="programPropFileName" value="${cixsOperation.name}.properties"/>
                         </properties>
                     </endpoint>

@@ -10,6 +10,9 @@
 package org.mule.providers.legstar.gen;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import org.mule.providers.legstar.model.CixsMuleComponent;
 
@@ -21,21 +24,38 @@ import com.legstar.codegen.CodeGenUtil;
  */
 public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
 
+    /** Generator instance. */
     private Mule2CixsGenerator mGenerator;
- 
-    /** The host character set. */
-    public static final String HOSTCHARSET = "IBM01140";
 
+    /** @{inheritDoc}*/
     public void setUp() {
+        emptyDir(GEN_DIR);
         mGenerator = new Mule2CixsGenerator();
         mGenerator.init();
+    }
+
+    /**
+     * Common initialization. Segregate output so that various tests
+     * do not overwrite each other.
+     * @param muleComponent the service
+     */
+    private void initCixsMuleComponent(final CixsMuleComponent muleComponent) {
+        mGenerator.setCixsMuleComponent(muleComponent);
+        mGenerator.setTargetAntDir(GEN_ANT_DIR);
+        mGenerator.setTargetPropDir(GEN_PROP_DIR);
+        mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
         mGenerator.setTargetSrcDir(GEN_SRC_DIR);
         mGenerator.setTargetPropDir(GEN_PROP_DIR);
         mGenerator.setTargetJarDir(GEN_JAR_DIR);
         mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
         mGenerator.setTargetBinDir(GEN_BIN_DIR);
         mGenerator.setHostCharset(HOSTCHARSET);
-        mGenerator.setHostURI("http://192.168.0.110:4081");
+        mGenerator.setHostURI(LEGSTAR_HOST_URI);
+
+        /* We want to share expected results with XmlTemplatesTest */
+        List < String > pathElements = new ArrayList < String >();
+        pathElements.add("c:/some.additional.jar");
+        muleComponent.setMuleStartupPathElements(pathElements);
     }
 
     /**
@@ -45,15 +65,17 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         Mule2CixsGenerator generator = new Mule2CixsGenerator();
         try {
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-                    " JaxbBinDir: No directory name was specified",
+            assertEquals("java.lang.IllegalArgumentException:"
+                    + " JaxbBinDir: No directory name was specified",
                     e.getCause().getMessage());
         }
         CixsMuleComponent muleComponent = new CixsMuleComponent();
         try {
             generator.setJaxbBinDir(new File("target/classes"));
             generator.execute();
+            fail();
         } catch (Exception e) {
             assertEquals("You must specify a service description",
                     e.getCause().getMessage());
@@ -61,6 +83,7 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         try {
             generator.setCixsMuleComponent(muleComponent);
             generator.execute();
+            fail();
         } catch (Exception e) {
             assertEquals("You must provide a service name",
                     e.getCause().getMessage());
@@ -68,53 +91,67 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         try {
             muleComponent.setName("muleComponentName");
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-            		" TargetSrcDir: No directory name was specified",
-                    e.getCause().getMessage());
+            assertEquals("TargetSrcDir: No directory name was specified",
+                    e.getMessage());
         }
         try {
             generator.setTargetSrcDir(GEN_SRC_DIR);
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-                    " TargetAntDir: No directory name was specified",
+            assertEquals("TargetAntDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetAntDir(GEN_ANT_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("TargetMuleConfigDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetMuleConfigDir(GEN_CONF_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("TargetBinDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetBinDir(GEN_BIN_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("TargetJarDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetJarDir(GEN_JAR_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("No operation was specified",
                     e.getCause().getMessage());
         }
         try {
-            generator.setTargetSrcDir(GEN_SRC_DIR);
+            generator.getCixsMuleComponent().addCixsOperation(
+                    Samples.getLsfileaeMuleComponent().getCixsOperations().get(0));
             generator.execute();
+            fail();
         } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:" +
-                    " TargetAntDir: No directory name was specified",
+            assertEquals("java.lang.IllegalArgumentException:"
+                    + " TargetPropDir: No directory name was specified",
                     e.getCause().getMessage());
         }
-
-    }
-
-    private void initCixsMuleComponent(CixsMuleComponent muleComponent) {
-        mGenerator.setCixsMuleComponent(muleComponent);
-        mGenerator.setTargetAntDir(
-                new File(GEN_ANT_DIR, muleComponent.getName()));
-        mGenerator.setTargetPropDir(
-                new File(GEN_PROP_DIR, muleComponent.getName()));
-        mGenerator.setTargetMuleConfigDir(
-                new File(GEN_CONF_DIR, muleComponent.getName()));
-    }
-
-    /**
-     * Check generation when no operations are specified.
-     * @throws Exception if generation fails
-     */
-    public final void testGenerateClassesNoOperations() throws Exception {
-        CixsMuleComponent muleComponent = new CixsMuleComponent();
-        muleComponent.setName("muleComponentName");
-        muleComponent.setInterfaceClassName("MuleComponent");
-        muleComponent.setImplementationClassName("MuleComponentImpl");
-        initCixsMuleComponent(muleComponent);
-        mGenerator.execute();
-        String resStr = getSource(GEN_SRC_DIR, "MuleComponent.java");
-        assertTrue(resStr.contains("public interface MuleComponent {"));
+        try {
+            generator.setTargetPropDir(GEN_PROP_DIR);
+            generator.execute();
+        } catch (Exception e) {
+            fail(e.getMessage());
+        }
 
     }
 
@@ -123,23 +160,21 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
      * @throws Exception if generation fails
      */
     public final void testLsfileaeGenerateClasses() throws Exception {
-        CixsMuleComponent muleComponent = TestCases.getLsfileaeMuleComponent();
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         initCixsMuleComponent(muleComponent);
         mGenerator.execute();
-        checkStandaloneResults(muleComponent);
-        checkBridgeResults(muleComponent);
+        checkResults(muleComponent);
     }
 
     /**
      * Check generation for operation with different input and output structures.
      * @throws Exception if generation fails
      */
-    public final void testgetLsfilealGenerateClasses() throws Exception {
-        CixsMuleComponent muleComponent = TestCases.getLsfilealMuleComponent();
+    public final void testLsfilealGenerateClasses() throws Exception {
+        CixsMuleComponent muleComponent = Samples.getLsfilealMuleComponent();
         initCixsMuleComponent(muleComponent);
         mGenerator.execute();
-        checkStandaloneResults(muleComponent);
-        checkBridgeResults(muleComponent);
+        checkResults(muleComponent);
     }
 
     /**
@@ -147,138 +182,79 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
      * @throws Exception if generation fails
      */
     public final void testLsfileacGenerateClasses() throws Exception {
-        CixsMuleComponent muleComponent = TestCases.getLsfileacMuleComponent();
+        CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         initCixsMuleComponent(muleComponent);
         mGenerator.execute();
-        checkStandaloneResults(muleComponent);
-        checkBridgeResults(muleComponent);
+        checkResults(muleComponent);
     }
+
 
     /**
      * Check generation for multiple operations components.
      * @throws Exception if generation fails
      */
     public final void testLsfileaxGenerateClasses() throws Exception {
-        CixsMuleComponent muleComponent = TestCases.getLsfileaxMuleComponent();
-
-        File componentClassFilesLocation = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        CixsMuleComponent muleComponent = Samples.getLsfileaxMuleComponent();
         initCixsMuleComponent(muleComponent);
         mGenerator.execute();
-
-        String resStr = getSource(componentClassFilesLocation, 
-                muleComponent.getInterfaceClassName() + ".java");
-        assertTrue(resStr.contains(
-        "public interface Lsfileax {"));
-
-        resStr = getSource(componentClassFilesLocation, 
-                muleComponent.getCixsOperations().get(0).getFaultType() + ".java");
-        assertTrue(resStr.contains(
-        "public class LsfileaeException extends Exception {"));
-
-        resStr = getSource(componentClassFilesLocation, 
-                muleComponent.getCixsOperations().get(1).getFaultType() + ".java");
-        assertTrue(resStr.contains(
-        "public class LsfileacException extends Exception {"));
-
-        resStr = getSource(componentClassFilesLocation, 
-                muleComponent.getImplementationClassName() + ".java");
-        assertTrue(resStr.contains(
-        "public class LsfileaxImpl implements Lsfileax, Callable {"));
-
+        checkResults(muleComponent);
     }
 
-    private void checkStandaloneResults(CixsMuleComponent muleComponent)
-    throws Exception{
-
+    /**
+     * Check that all expected artifacts are generated.
+     * @param muleComponent the service model
+     */
+    private void checkResults(final CixsMuleComponent muleComponent) {
+        
         File componentClassFilesDir = CodeGenUtil.classFilesLocation(
                 mGenerator.getTargetSrcDir(), muleComponent.getPackageName(), true);
-
-        String resStr = getSource(componentClassFilesDir, 
-                muleComponent.getInterfaceClassName() + ".java");
-        assertTrue(resStr.contains(
-                "public interface " + muleComponent.getInterfaceClassName() + " {"));
-
-        resStr = getSource(componentClassFilesDir, 
-                muleComponent.getCixsOperations().get(0).getFaultType() + ".java");
-        assertTrue(resStr.contains(
-                "public class " + muleComponent.getInterfaceClassName() + "Exception extends Exception {"));
-
-        resStr = getSource(componentClassFilesDir, 
-                muleComponent.getImplementationClassName() + ".java");
-        assertTrue(resStr.contains(
-                "public class " + muleComponent.getInterfaceClassName() + "Impl implements " + muleComponent.getInterfaceClassName() + ", Callable {"));
-
-        resStr = getSource(mGenerator.getTargetAntDir(), "build.xml");
-        assertTrue(resStr.replace('\\', '/').contains(
-                "<property name=\"jarFile\" value=\"${env.MULE_HOME}/lib/user/mule-legstar-" + muleComponent.getName() + ".jar\"/>"));
-
-        resStr = getSource(mGenerator.getTargetMuleConfigDir(),
-                "mule-standalone-config-" + muleComponent.getName() + ".xml");
-        assertTrue(resStr.contains(
-                "<mule-descriptor name=\"" + muleComponent.getName() + "UMO\" implementation=\"org.mule.providers.legstar.test." + muleComponent.getName() + "." + muleComponent.getInterfaceClassName() + "Impl\">"));
-
-        resStr = getSource(mGenerator.getTargetAntDir(),
-                "start-mule-standalone-config-" + muleComponent.getName() + ".xml");
-        assertTrue(resStr.replace("\\", "/").contains(
-                "<property name=\"conf.file\" value=\"file:///src/test/gen/conf/" +
-                muleComponent.getName() +
-                "/mule-standalone-config-" +
-                muleComponent.getName() +
-                ".xml\"/>"));
-
-        resStr = getSource(mGenerator.getTargetPropDir(),
-                muleComponent.getCixsOperations().get(0).getCicsProgramName().toLowerCase() + ".properties");
-        assertTrue(resStr.contains(
-                "CICSProgramName=" + muleComponent.getCixsOperations().get(0).getCicsProgramName() + ""));
-
-        resStr = getSource(mGenerator.getTargetPropDir(),
-                "log4j" + ".properties");
-        assertTrue(resStr.contains(
-                "log4j.logger.org.mule=INFO"));
-    }
-
-    private void checkBridgeResults(CixsMuleComponent muleComponent)
-    throws Exception{
-
-        String resStr = getSource(mGenerator.getTargetMuleConfigDir(),
-                "mule-bridge-config-" + muleComponent.getName() + ".xml");
-        assertTrue(resStr.contains(
-                "<mule-configuration id=\"mule-legstar-bridge-" + muleComponent.getName() + "-config\" version=\"1.0\">"));
         
-        resStr = getSource(mGenerator.getTargetAntDir(),
-                "start-mule-bridge-config-" + muleComponent.getName() + ".xml");
-        assertTrue(resStr.replace("\\", "/").contains(
-                "<property name=\"conf.file\" value=\"file:///src/test/gen/conf/" +
-                muleComponent.getName() +
-                "/mule-bridge-config-" +
-                muleComponent.getName() +
-                ".xml\"/>"));
-
-       for (CixsOperation operation : muleComponent.getCixsOperations()) {
+        compare(mGenerator.getTargetAntDir(),
+                "build.xml", muleComponent.getInterfaceClassName());
+        compare(componentClassFilesDir,
+                muleComponent.getInterfaceClassName() + "Callable.java");
+        compare(mGenerator.getTargetMuleConfigDir(),
+                "mule-adapter-standalone-config-" + muleComponent.getName() + ".xml");
+        compare(mGenerator.getTargetMuleConfigDir(),
+                "mule-adapter-bridge-config-" + muleComponent.getName() + ".xml");
+        
+        for (CixsOperation operation : muleComponent.getCixsOperations()) {
+            
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
-                    mGenerator.getTargetSrcDir(), operation.getPackageName(), true);
+                    mGenerator.getTargetSrcDir(), operation.getPackageName(), false);
+            
+            if (operation.getCicsChannel() != null
+                    && operation.getCicsChannel().length() > 0) {
+                compare(operationClassFilesDir,
+                        operation.getRequestHolderType() + ".java",
+                        muleComponent.getInterfaceClassName());
+                compare(operationClassFilesDir,
+                        operation.getResponseHolderType() + ".java",
+                        muleComponent.getInterfaceClassName());
+            }
 
-            resStr = getSource(operationClassFilesDir, 
-                    "HostByteArrayTo" + operation.getRequestHolderType() + ".java");
-            assertTrue(resStr.contains(
-                    "public class HostByteArrayTo" + operation.getRequestHolderType() + " extends AbstractLegStarTransformer {"));
+            compare(mGenerator.getTargetPropDir(),
+                    operation.getCicsProgramName().toLowerCase(
+                            Locale.getDefault()) + ".properties",
+                    muleComponent.getInterfaceClassName());
 
-            resStr = getSource(operationClassFilesDir, 
-                    "HostByteArrayTo" + operation.getResponseHolderType() + ".java");
-            assertTrue(resStr.contains(
-                    "public class HostByteArrayTo" + operation.getResponseHolderType() + " extends AbstractLegStarTransformer {"));
+            compare(operationClassFilesDir,
+                    operation.getClassName() + "ProgramInvoker.java",
+                    muleComponent.getInterfaceClassName());
 
-            resStr = getSource(operationClassFilesDir,
-                    operation.getRequestHolderType() + "ToHostByteArray.java");
-            assertTrue(resStr.contains(
-                    "public class " + operation.getRequestHolderType() + "ToHostByteArray extends AbstractLegStarTransformer {"));
-
-            resStr = getSource(operationClassFilesDir, 
-                    operation.getResponseHolderType() + "ToHostByteArray.java");
-            assertTrue(resStr.contains(
-                    "public class " + operation.getResponseHolderType() + "ToHostByteArray extends AbstractLegStarTransformer {"));
+            compare(operationClassFilesDir,
+                    "HostByteArrayTo" + operation.getRequestHolderType() + ".java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    operation.getRequestHolderType() + "ToHostByteArray.java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    "HostByteArrayTo" + operation.getResponseHolderType() + ".java",
+                    muleComponent.getInterfaceClassName());
+            compare(operationClassFilesDir,
+                    operation.getResponseHolderType() + "ToHostByteArray.java",
+                    muleComponent.getInterfaceClassName());
         }
-
     }
+
 }

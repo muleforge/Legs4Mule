@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mule-configuration PUBLIC "-//MuleSource //DTD mule-configuration XML V1.0//EN"
+                                "http://mule.mulesource.org/dtds/mule-configuration.dtd">
+
+<!--  This Mule configuration is for a generated standalone UMO component.
+      Standalone components are adapters for legacy functions. They are regular UMO components
+      from a Mule perspective but, internally, use LegStar to call the function fonction.
+      Standalone components do not use the Legs4Mule transport -->
+
+<mule-configuration id="mule-legstar-adapter-standalone-lsfileal-config" version="1.0">
+
+    <description>Mule configuration file for lsfileal standalone LegStar component</description>
+
+    <!-- Uncomment to get host connections pooling. 
+         You will need legstar-engine-config.xml and legstar-pooling-config.xml
+         in your classpath in addition to legstar-invoker-config.xml.
+         Make sure your hostEndPoint element in legstar-invoker-config.xml
+         has hostAccessStrategy set to pooled. 
+    <agents>
+        <agent name="LegStarPoolAgent" className="org.mule.providers.legstar.cixs.LegStarPoolAgent"/>
+    </agents>
+    -->
+
+    <transformers>
+        <transformer name="ByteArrayToObject" className="org.mule.transformers.simple.ByteArrayToObject"/>
+    </transformers>
+        
+    <model name="lsfilealModel">
+        <mule-descriptor name="lsfilealUMO" implementation="org.mule.providers.legstar.test.lsfileal.LsfilealCallable">
+            <inbound-router>
+                <endpoint address="tcp://localhost:3213/lsfileal"
+                    transformers="ByteArrayToObject"
+                    synchronous="true"/>
+            </inbound-router>
+        </mule-descriptor>
+    </model>
+    
+</mule-configuration>
