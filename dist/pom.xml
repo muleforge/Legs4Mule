@@ -3,16 +3,20 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.mule.transports</groupId>
-    <version>1.0-RC2</version>
+    <parent>
+        <groupId>org.mule.transport</groupId>
+        <artifactId>mule-transport-legstar-pom</artifactId>
+        <version>1.0-RC3-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>mule-transport-legstar-dist</artifactId>
+    <version>1.0-RC3-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
     <properties>
         <muleVersion>1.4.4</muleVersion>
         <primaryArtifactId>mule-transport-legstar</primaryArtifactId>
     </properties>
-    <artifactId>mule-transport-legstar-dist</artifactId>
-    <!-- This should be "pom" not "jar" but if it is set to "pom", the list of dependencies gets ignored
-        by the assembly plugin. -->
-    <packaging>jar</packaging>
     <name>Legs4Mule Distribution</name>
     <description>Distribution project for the Mule LegStar transport and tools</description>
     <repositories>
