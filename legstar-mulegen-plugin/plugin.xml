@@ -40,7 +40,7 @@
     <extension
         point="org.eclipse.ui.preferencePages">
         <page
-            category="com.legstar.eclipse.plugin.cixscom"
+            category="com.legstar.eclipse.plugin"
             class="com.legstar.eclipse.plugin.mulegen.preferences.MuleCixsPreferencePage"
             id="com.legstar.eclipse.plugin.mule"
             name="%mulegen_preference_page_title"/>

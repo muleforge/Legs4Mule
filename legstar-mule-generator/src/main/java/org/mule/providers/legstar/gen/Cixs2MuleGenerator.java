@@ -38,11 +38,6 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
      */
     private static final String GENERATION_TARGET = "proxy";
 
-    /** Default pattern for server PATH. Must be kept in sync with
-     * various velocity templates. */
-    public static final String DEFAULT_SERVER_PATH_TEMPLATE =
-        "/legstar/services/${service.name}/";
-
     /**
      * Constructor.
      */
@@ -140,7 +135,7 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
      */
     public final String getDefaultServicePath() {
         
-        return DEFAULT_SERVER_PATH_TEMPLATE.replace(
+        return AntBuildCixs2MuleModel.DEFAULT_SERVER_PATH_TEMPLATE.replace(
                 "${service.name}", getCixsMuleComponent().getName());
     }
  

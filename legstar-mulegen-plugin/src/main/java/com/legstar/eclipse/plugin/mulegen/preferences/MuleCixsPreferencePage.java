@@ -70,7 +70,7 @@ implements IWorkbenchPreferencePage {
 
         addField(new StringFieldEditor(
                 PreferenceConstants.HOST_URI,
-                Messages.preference_mainframe_uri_label + ':',
+                Messages.preference_adapter_mainframe_uri_label + ':',
                 getFieldEditorParent()));
 
         addField(new StringFieldEditor(
@@ -79,8 +79,18 @@ implements IWorkbenchPreferencePage {
                 getFieldEditorParent()));
 
         addField(new StringFieldEditor(
-                PreferenceConstants.SERVICE_URI,
-                Messages.preference_proxy_uri_label + ':',
+                PreferenceConstants.PROXY_DEFAULT_HTTP_HOST,
+                Messages.preference_proxy_http_host_label + ':',
+                getFieldEditorParent()));
+
+        addField(new StringFieldEditor(
+                PreferenceConstants.PROXY_DEFAULT_HTTP_PORT,
+                Messages.preference_proxy_http_port_label + ':',
+                getFieldEditorParent()));
+
+        addField(new StringFieldEditor(
+                PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE,
+                Messages.preference_proxy_http_path_template_label + ':',
                 getFieldEditorParent()));
     }
 

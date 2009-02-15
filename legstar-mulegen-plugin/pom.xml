@@ -157,12 +157,12 @@
                             <artifactItems>
                                 <artifactItem>
                                     <groupId>org.mule.transports</groupId>
-                                    <artifactId>mule-transport-legstar</artifactId>
+                                    <artifactId>legstar-mule-transport</artifactId>
                                     <version>${legstarMuleVersion}</version>
                                 </artifactItem>
                                 <artifactItem>
                                     <groupId>org.mule.transports</groupId>
-                                    <artifactId>mule-transport-legstar-tools</artifactId>
+                                    <artifactId>legstar-mule-generator</artifactId>
                                     <version>${legstarMuleVersion}</version>
                                 </artifactItem>
                                 <artifactItem>

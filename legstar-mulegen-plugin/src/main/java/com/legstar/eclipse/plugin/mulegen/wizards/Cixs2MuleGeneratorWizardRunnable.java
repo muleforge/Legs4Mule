@@ -64,10 +64,10 @@ extends AbstractCixsMuleGeneratorWizardRunnable {
             (Cixs2MuleGeneratorWizardPage) cixsGenWizardPage;
         setModel(page, genModel);
         genModel.setMuleHome(page.getMuleHome());
-        genModel.getCixsMuleComponent().setImplementationClassName(
-                page.getMuleUMOImplementation());
-        /** FIXME*/
-        //genModel.getCixsMuleComponent().setServiceURI(page.getServiceURI());
+        genModel.getUmoComponentTargetParameters().setImplementationName(
+                page.getUmoComponentTargetGroup().getImplementationName());
+        genModel.setHttpTransportParameters(
+                page.getCixsProxyDeployHttpGroup().getHttpTransportParameters());
         genModel.setTargetCobolDir(new File(page.getTargetCobolDir()));
         genModel.setTargetJarDir(new File(page.getTargetJarDir()));
         genModel.setTargetMuleConfigDir(

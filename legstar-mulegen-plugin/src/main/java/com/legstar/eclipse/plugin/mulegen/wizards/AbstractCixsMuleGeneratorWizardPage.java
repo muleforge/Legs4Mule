@@ -68,11 +68,6 @@ extends AbstractCixsGeneratorWizardPage {
         mTargetMuleConfigDirText = createDirectoryFieldEditor(container,
                 "targetMuleConfigDir",
                 Messages.target_mule_config_location_label + ':');
-        mTargetMuleConfigDirText.addModifyListener(new ModifyListener() {
-            public void modifyText(final ModifyEvent e) {
-                dialogChanged();
-            }
-        });
     }
 
     /** {@inheritDoc} */
@@ -84,11 +79,6 @@ extends AbstractCixsGeneratorWizardPage {
         mTargetJarDirText = createTextField(container, getStore(),
                 "targetJarDir",
                 Messages.target_mule_jar_location_label + ':');
-        mTargetJarDirText.addModifyListener(new ModifyListener() {
-            public void modifyText(final ModifyEvent e) {
-                dialogChanged();
-            }
-        });
     }
 
     /** {@inheritDoc} */
@@ -103,6 +93,20 @@ extends AbstractCixsGeneratorWizardPage {
     }
 
     /** {@inheritDoc} */
+    public void createExtendedListeners() {
+        mTargetMuleConfigDirText.addModifyListener(new ModifyListener() {
+            public void modifyText(final ModifyEvent e) {
+                dialogChanged();
+            }
+        });
+        mTargetJarDirText.addModifyListener(new ModifyListener() {
+            public void modifyText(final ModifyEvent e) {
+                dialogChanged();
+            }
+        });
+    }
+
+    /** {@inheritDoc} */
     public boolean validateExtendedWidgets() {
         if (!checkDirectory(getTargetMuleConfigDir(),
                 Messages.invalid_mule_config_location_msg)) {
@@ -111,6 +115,10 @@ extends AbstractCixsGeneratorWizardPage {
         /* Project is valid. Make sure the project is ready for
          * generated sources compilation. */
         return setupProject();
+    }
+
+    /** {@inheritDoc} */
+    public void storeExtendedProjectPreferences() {
     }
 
     /**

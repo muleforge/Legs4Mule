@@ -27,9 +27,17 @@ public final class PreferenceConstants {
     public static final String COBOL_SAMPLE_FOLDER =
         "com.legstar.eclipse.plugin.mulegen.CixsCobolFolder";
 
-    /** Service URI exposed by Mule to Mainframe clients. */
-    public static final String SERVICE_URI =
-        "com.legstar.eclipse.plugin.mulegen.CixsServiceURI";
+    /** HTTP Host exposed by Mule to Mainframe clients. */
+    public static final String PROXY_DEFAULT_HTTP_HOST =
+        "com.legstar.eclipse.plugin.mulegen.proxy.DefaultHttpHost";
+
+    /** Port on which HTTP listens to mainframe clients. */
+    public static final String PROXY_DEFAULT_HTTP_PORT =
+        "com.legstar.eclipse.plugin.mulegen.proxy.DefaultHttpPort";
+
+    /** Prefix for path on which HTTP listens to mainframe clients. */
+    public static final String PROXY_HTTP_PATH_TEMPLATE =
+        "com.legstar.eclipse.plugin.mulegen.proxy.HttpPath";
 
     /** Mainframe URI exposed to Mule clients. */
     public static final String HOST_URI =
@@ -39,6 +47,34 @@ public final class PreferenceConstants {
     public static final String TARGET_MULE_CONFIG_FOLDER =
         "com.legstar.eclipse.plugin.mulegen.CixsConfigFolder";
 
+    /** Last UMO component implementation name used for a proxy. */
+    public static final String PROXY_LAST_UMO_COMPONENT_IMPLEMENTATION_NAME =
+        "com.legstar.eclipse.plugin.mulegen.proxy.LastUmoComponentName";
+
+    /** Last HTTP Host exposed to Mainframe clients. */
+    public static final String PROXY_LAST_HTTP_HOST =
+        "com.legstar.eclipse.plugin.mulegen.proxy.LastHttpHost";
+
+    /** Last Port on which HTTP listens to mainframe clients. */
+    public static final String PROXY_LAST_HTTP_PORT =
+        "com.legstar.eclipse.plugin.mulegen.proxy.LastHttpPort";
+
+    /** Last for path on which HTTP listens to mainframe clients. */
+    public static final String PROXY_LAST_HTTP_PATH =
+        "com.legstar.eclipse.plugin.mulegen.proxy.LastHttpPath";
+
+    /** Last selection status of the dfhwbcli group. */
+    public static final String PROXY_LAST_DFHWBCLI_BUTTON_SELECTION =
+        "com.legstar.eclipse.plugin.mulegen.proxy.LastDfhwbcliButtonSelection";
+    
+    /** Last selection status of the webapi group. */
+    public static final String PROXY_LAST_WEBAPI_BUTTON_SELECTION =
+        "com.legstar.eclipse.plugin.mulegen.proxy.LastWebapiButtonSelection";
+    
+    /** Last selection status of the legstar group. */
+    public static final String PROXY_LAST_LEGSTAR_BUTTON_SELECTION =
+        "com.legstar.eclipse.plugin.mulegen.proxy.LastLegstarButtonSelection";
+    
     /** Utility class. */
     private PreferenceConstants() {
         

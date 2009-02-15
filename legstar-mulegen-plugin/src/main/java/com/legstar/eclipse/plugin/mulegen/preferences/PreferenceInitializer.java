@@ -12,7 +12,9 @@ package com.legstar.eclipse.plugin.mulegen.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.mule.providers.legstar.model.AntBuildCixs2MuleModel;
 
+import com.legstar.codegen.CodeGenUtil;
 import com.legstar.eclipse.plugin.mulegen.Activator;
 
 /**
@@ -33,14 +35,18 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(PreferenceConstants.MULE_USER_JAR_FOLDER,
                 getDefaultMuleLocation() + "/lib/user");
 
-        store.setDefault(PreferenceConstants.TARGET_MULE_CONFIG_FOLDER,
-        "conf");
-        store.setDefault(PreferenceConstants.COBOL_SAMPLE_FOLDER,
-        "cobol");
-        store.setDefault(PreferenceConstants.SERVICE_URI,
-        "http://localhost:8083");
+        store.setDefault(PreferenceConstants.TARGET_MULE_CONFIG_FOLDER, "conf");
+        store.setDefault(PreferenceConstants.COBOL_SAMPLE_FOLDER, "cobol");
+
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_HTTP_HOST,
+                CodeGenUtil.getLocalIPAddress());
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_HTTP_PORT,
+                AntBuildCixs2MuleModel.DEFAULT_HTTP_PORT);
+        store.setDefault(PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE,
+                AntBuildCixs2MuleModel.DEFAULT_SERVER_PATH_TEMPLATE);
+
         store.setDefault(PreferenceConstants.HOST_URI,
-        "http://mainframe:4081");
+        "http://mainframe:4081/CICS/CWBA/LSWEBBIN");
     }
 
     /**

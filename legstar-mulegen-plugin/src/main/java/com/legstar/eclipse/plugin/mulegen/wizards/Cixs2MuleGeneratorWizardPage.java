@@ -12,29 +12,17 @@ package com.legstar.eclipse.plugin.mulegen.wizards;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jdt.core.IType;
-import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.core.search.SearchEngine;
-import org.eclipse.jdt.ui.IJavaElementSearchConstants;
-import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.window.Window;
-import org.eclipse.osgi.util.NLS;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.SelectionDialog;
 
-import com.legstar.codegen.CodeGenMakeException;
-import com.legstar.codegen.CodeGenUtil;
-import com.legstar.eclipse.plugin.common.wizards.AbstractWizard;
 import com.legstar.eclipse.plugin.mulegen.Messages;
 import com.legstar.eclipse.plugin.mulegen.Activator;
 import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
@@ -49,14 +37,20 @@ extends AbstractCixsMuleGeneratorWizardPage {
     /** Page name. */
     private static final String PAGE_NAME = "Cixs2MuleGeneratorWizardPage";
 
-    /** Mule component name. */
-    private Text mMuleUMOImplementationText = null;
-
     /** Where generated COBOL source reside. */
     private Text mTargetCobolDirText = null;
 
-    /** The UMO URI exposed to mainframe programs. */
-    private Text mServiceURIText = null;
+    /** Keeps a reference on the deployment group container. */
+    private Composite mDeploymentGroup = null;
+
+    /** Settings for target selection group. */
+    private Group mTargetGroup = null;
+
+    /** The UMO component target controls group. */
+    private CixsProxyUmoComponentTargetGroup mUmoComponentTargetGroup;
+
+    /** HTTP Proxy client parameters. */
+    private Cixs2MuleProxyDeployHttpGroup mCixsProxyDeployHttpGroup;
 
     /**
      * Construct the page.
@@ -74,44 +68,18 @@ extends AbstractCixsMuleGeneratorWizardPage {
 
     /** {@inheritDoc} */
     protected void addCixsGroup(final Composite container) {
-        Group group = createGroup(container, Messages.umo_group_label, 3);
 
-        createLabel(group, Messages.umo_class_name_label + ':');
-        mMuleUMOImplementationText = createText(group);
-        mMuleUMOImplementationText.addModifyListener(new ModifyListener() {
-            public void modifyText(final ModifyEvent e) {
-                dialogChanged();
-            }
-        });
-        Button browseButton = createButton(group,
-                com.legstar.eclipse.plugin.common.Messages.browse_button_label);
-        browseButton.addSelectionListener(new SelectionAdapter() {
-            public void widgetSelected(final SelectionEvent e) {
-                try {
-                    SelectionDialog dialog = JavaUI.createTypeDialog(
-                            getShell(),
-                            PlatformUI.getWorkbench().getProgressService(),
-                            SearchEngine.createWorkspaceScope(),
-                            IJavaElementSearchConstants.CONSIDER_CLASSES,
-                            false);
-                    if (Window.OK == dialog.open()) {
-                        Object[] results = dialog.getResult();
-                        if (results != null && results.length > 0) {
-                            setMuleUMOImplementation(((IType) results[0])
-                                    .getFullyQualifiedName());
-                        }
-                    }
-                } catch (JavaModelException e1) {
-                    AbstractWizard.errorDialog(getShell(),
-                            Messages.class_selection_error_dialog_title,
-                            Activator.PLUGIN_ID,
-                            Messages.class_selection_error_short_msg,
-                            NLS.bind(Messages.class_selection_error_long_msg,
-                                    e1.getMessage()));
-                    AbstractWizard.logCoreException(e1, Activator.PLUGIN_ID);
-                }
-            }
-        });
+        mTargetGroup = createGroup(container, Messages.target_selection_group_label, 3);
+        createLabel(mTargetGroup, Messages.target_selection_label + ':');
+        Composite composite = new Composite(mTargetGroup, SWT.NULL);
+        composite.setLayout(new RowLayout());
+
+        mUmoComponentTargetGroup = new CixsProxyUmoComponentTargetGroup(this);
+
+        mUmoComponentTargetGroup.createButton(composite);
+
+        mUmoComponentTargetGroup.createControls(mTargetGroup);
+
         super.addCixsGroup(container);
     }
 
@@ -121,36 +89,22 @@ extends AbstractCixsMuleGeneratorWizardPage {
         mTargetCobolDirText = createDirectoryFieldEditor(container,
                 "targetCobolDir",
                 Messages.cobol_target_location_label + ':');
-        mTargetCobolDirText.addModifyListener(new ModifyListener() {
-            public void modifyText(final ModifyEvent e) {
-                dialogChanged();
-            }
-        });
     }
 
     /** {@inheritDoc} */
     public void addWidgetsToDeploymentGroup(final Composite container) {
         super.addWidgetsToDeploymentGroup(container);
-        createLabel(container,
-                Messages.proxy_uri_label + ':');
-        mServiceURIText = createText(container); 
-        mServiceURIText.addModifyListener(new ModifyListener() {
-            public void modifyText(final ModifyEvent e) {
-                dialogChanged();
-            }
-        });
-    }
+        mDeploymentGroup = container;
 
-    /** {@inheritDoc} */
-    public void createExtendedListeners() {
-        // TODO Auto-generated method stub
-        
-    }
+        createLabel(container, Messages.sample_configuration_transport_label + ":");
+        Composite composite = new Composite(container, SWT.NULL);
+        composite.setLayout(new RowLayout());
 
-    /** {@inheritDoc} */
-    public void storeExtendedProjectPreferences() {
-        // TODO Auto-generated method stub
-        
+        mCixsProxyDeployHttpGroup = new Cixs2MuleProxyDeployHttpGroup(this);
+
+        mCixsProxyDeployHttpGroup.createButton(composite);
+ 
+        mCixsProxyDeployHttpGroup.createControls(container);
     }
 
     /** {@inheritDoc} */
@@ -161,25 +115,46 @@ extends AbstractCixsMuleGeneratorWizardPage {
         setTargetCobolDir(getDefaultTargetDir(store,
                 PreferenceConstants.COBOL_SAMPLE_FOLDER));
 
-        setServiceURI(store.getString(
-                PreferenceConstants.SERVICE_URI));
+        getUmoComponentTargetGroup().initControls();
+        getUmoComponentTargetGroup().getButton().setSelection(true);
+
+        getCixsProxyDeployHttpGroup().initControls();
+        getCixsProxyDeployHttpGroup().getButton().setSelection(true);
+    }
+
+    /** {@inheritDoc} */
+    public void createExtendedListeners() {
+        super.createExtendedListeners();
+        mTargetCobolDirText.addModifyListener(new ModifyListener() {
+            public void modifyText(final ModifyEvent e) {
+                dialogChanged();
+            }
+        });
+
+        getUmoComponentTargetGroup().createListeners();
+        getCixsProxyDeployHttpGroup().createListeners();
     }
 
     /** {@inheritDoc} */
     public boolean validateExtendedWidgets() {
+
+        getUmoComponentTargetGroup().setVisibility();
+        getCixsProxyDeployHttpGroup().setVisibility();
+
+        getShell().layout(new Control[] {mTargetGroup, mDeploymentGroup});
+
         if (!super.validateExtendedWidgets()) {
             return false;
         }
-        if (getMuleUMOImplementation().length() == 0) {
-            updateStatus(Messages.invalid_umo_class_name_msg);
+
+        if (!getUmoComponentTargetGroup().validateControls()) {
             return false;
         }
-        try {
-            CodeGenUtil.checkHttpURI(getServiceURI());
-        } catch (CodeGenMakeException e) {
-            updateStatus(Messages.invalid_proxy_uri_msg);
+        
+        if(!getCixsProxyDeployHttpGroup().validateControls()) {
             return false;
         }
+
         if (!checkDirectory(getTargetCobolDir(),
                 Messages.invalid_cobol_target_location_msg)) {
             return false;
@@ -188,19 +163,12 @@ extends AbstractCixsMuleGeneratorWizardPage {
         return true;
     }
 
-    /**
-     * @return the Mule UMO implementation class name
-     */
-    public final String getMuleUMOImplementation() {
-        return mMuleUMOImplementationText.getText();
-    }
-
-    /**
-     * @param muleUMOImplementation the mule UMO implementation to set
-     */
-    public final void setMuleUMOImplementation(
-            final String muleUMOImplementation) {
-        mMuleUMOImplementationText.setText(muleUMOImplementation);
+    /** {@inheritDoc} */
+    public void storeExtendedProjectPreferences() {
+        super.storeExtendedProjectPreferences();
+        
+        getUmoComponentTargetGroup().storeProjectPreferences();
+        getCixsProxyDeployHttpGroup().storeProjectPreferences();
     }
 
     /**
@@ -218,17 +186,17 @@ extends AbstractCixsMuleGeneratorWizardPage {
     }
 
     /**
-     * @param serviceURI URI exposed to mainframe programs
+     * @return the UMO component target controls group
      */
-    public void setServiceURI(final String serviceURI) {
-        mServiceURIText.setText(serviceURI);
+    public CixsProxyUmoComponentTargetGroup getUmoComponentTargetGroup() {
+        return mUmoComponentTargetGroup;
     }
 
     /**
-     * @return URI exposed to mainframe programs
+     * @return the HTTP Proxy client parameters
      */
-    public String getServiceURI() {
-        return mServiceURIText.getText();
+    public Cixs2MuleProxyDeployHttpGroup getCixsProxyDeployHttpGroup() {
+        return mCixsProxyDeployHttpGroup;
     }
 
 }

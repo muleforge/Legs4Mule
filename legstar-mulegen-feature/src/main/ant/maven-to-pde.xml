@@ -20,7 +20,7 @@
                 <filter token="LEGSTAR-MULE-VERSION" value="${legstarMuleVersion}"/>
                 <filter token="LEGSTAR-VERSION" value="${legstarVersion}"/>
                 <filter token="LEGSTAR-PLUGIN-VERSION" value="${legstarPluginVersion}"/>
-                <filter token="MULE-VERSION" value="${MuleVersion}"/>
+                <filter token="MULE-VERSION" value="${muleVersion}"/>
             </filterset>
             <globmapper from="*.template" to="*"/>
         </copy>

@@ -32,11 +32,18 @@ public class Messages extends NLS {
     /** Mule configurations folder preference label.*/
     public static String preference_mule_config_folder_label;
     /** Mainframe legstar listening URI label.*/
-    public static String preference_mainframe_uri_label;
+    public static String preference_adapter_mainframe_uri_label;
     /** Cobol samples folder preference label.*/
     public static String preference_cobol_folder_label;
-    /** Proxy URI preference label.*/
-    public static String preference_proxy_uri_label;
+ 
+    /** Proxy http scheme template preference label.*/
+    public static String preference_proxy_http_scheme_label;
+    /** Proxy http host template preference label.*/
+    public static String preference_proxy_http_host_label;
+    /** Proxy http port template preference label.*/
+    public static String preference_proxy_http_port_label;
+    /** Proxy http path template preference label.*/
+    public static String preference_proxy_http_path_template_label;
 
     /** The name filter to which this wizard is associated.*/
     public static String filename_filter;
@@ -64,9 +71,9 @@ public class Messages extends NLS {
     /** Cixs to mule generator description.*/
     public static String cixs_to_mule_wizard_page_description;
     /** Umo group label.*/
-    public static String umo_group_label;
+    public static String target_umo_component_group_label;
     /** Umo class name label.*/
-    public static String umo_class_name_label;
+    public static String target_umo_component_implementation_name_label;
     /** Class selection dialog title.*/
     public static String class_selection_error_dialog_title;
     /** Class selection short error message.*/
@@ -77,8 +84,8 @@ public class Messages extends NLS {
     public static String cobol_target_location_label;
     /** URI exposed to mainframe label.*/
     public static String proxy_uri_label;
-    /** Invalid UMO class name message.*/
-    public static String invalid_umo_class_name_msg;
+    /** Invalid UMO implementation name message.*/
+    public static String invalid_target_umo_component_implementation_name_msg;
     /** Invalid proxy URI message.*/
     public static String invalid_proxy_uri_msg;
     /** Invalid cobol samples location message.*/
@@ -95,6 +102,14 @@ public class Messages extends NLS {
 
     /** Unable to setup classpath for the target java project. */
     public static String classpath_setup_failure_msg;
+
+    /** Target selection group label. */
+    public static String target_selection_group_label;
+    /** Target selection label. */
+    public static String target_selection_label;
+
+    /** Sample configuration transport.*/
+    public static String sample_configuration_transport_label;
 
     static {
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);
