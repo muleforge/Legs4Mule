@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.mule.transports</groupId>
+        <artifactId>mule-transport-legstar-pom</artifactId>
+        <version>1.0-RC3-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <version>1.0-RC3-SNAPSHOT</version>
+    <artifactId>legstar-mulegen-plugin</artifactId>
+    <packaging>jar</packaging>
+    <name>LegStar Mule Service Generator Eclipse plugin</name>
+    <description>Mule Service Generator Eclipse plugin.</description>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
+
+    <dependencies>
+    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-cixsgen-model</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-codegen</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-common-plugin</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-cixscom-plugin</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+         <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>legstar-mule-generator</artifactId>
+        </dependency>
+
+        <!-- Eclipse dependencies. -->
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>org.eclipse.equinox.preferences</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.equinox</groupId>
+            <artifactId>org.eclipse.equinox.common</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>org.eclipse.core.runtime</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>org.eclipse.core.jobs</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.core</groupId>
+            <artifactId>org.eclipse.core.resources</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.osgi</groupId>
+            <artifactId>org.eclipse.osgi</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>org.eclipse.jdt.core</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jdt</groupId>
+            <artifactId>org.eclipse.jdt.ui</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.ui</groupId>
+            <artifactId>org.eclipse.ui.workbench</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.jface</groupId>
+            <artifactId>org.eclipse.jface</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.eclipse.swt</groupId>
+            <artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
+            <scope>compile</scope>
+        </dependency>
+    
+    </dependencies>
+
+    <build>
+
+        <plugins>
+        
+            <!-- See distribution.xml for an explanation on the reasons for the
+                 unusual distribution options here.  -->
+            <plugin>
+                <!-- Update MANIFEST.MF and build.properties with the Maven versions -->
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>maven-to-pde</id>
+                        <phase>generate-resources</phase>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="${basedir}/src/main/ant/maven-to-pde.xml">
+                                    <property name="legstarVersion" value="${legstarVersion}" />
+                                    <property name="muleVersion" value="${muleVersion}" />
+                                    <property name="legstarMuleVersion" value="${legstarMuleVersion}" />
+                                </ant>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+          
+            <!-- Copy all runtime dependencies to the lib folder -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>lib</outputDirectory>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.mule.transports</groupId>
+                                    <artifactId>mule-transport-legstar</artifactId>
+                                    <version>${legstarMuleVersion}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.mule.transports</groupId>
+                                    <artifactId>mule-transport-legstar-tools</artifactId>
+                                    <version>${legstarMuleVersion}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.mule</groupId>
+                                    <artifactId>mule-core</artifactId>
+                                    <version>${muleVersion}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.mule.transports</groupId>
+                                    <artifactId>mule-transport-http</artifactId>
+                                    <version>${muleVersion}</version>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.legsem.legstar</groupId>
+                                    <artifactId>legstar-common-plugin</artifactId>
+                                    <version>${legstarVersion}</version>
+                                </artifactItem>
+                          </artifactItems>
+                       </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    
+    </build>
+    
+</project>

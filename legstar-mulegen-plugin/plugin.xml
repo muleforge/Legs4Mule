@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+    <extension
+            point="org.eclipse.ui.popupMenus">
+        <objectContribution
+                id="com.legstar.eclipse.plugin.mulegen.contribution1"
+                nameFilter="%filename_filter"
+                objectClass="org.eclipse.core.resources.IFile">
+            <menu
+                id="com.legstar.eclipse.plugin.cixscom.menu1"
+                label="%popup_menu_label"
+                path="additions">
+                <groupMarker name="slot1"/>
+                <groupMarker name="slot2"/>
+            </menu>
+            <action
+                class="com.legstar.eclipse.plugin.mulegen.popup.actions.Mule2CixsGeneratorAction"
+                enablesFor="1"
+                icon="%mule_to_cixs_generator_icon"
+                id="com.legstar.eclipse.plugin.mulegen.Mule2CixsGeneratorAction"
+                label="%mule_to_cixs_action_label"
+                menubarPath="com.legstar.eclipse.plugin.cixscom.menu1/slot1"/>
+            <action
+                class="com.legstar.eclipse.plugin.mulegen.popup.actions.Cixs2MuleGeneratorAction"
+                enablesFor="1"
+                icon="%cixs_to_mule_generator_icon"
+                id="com.legstar.eclipse.plugin.mulegen.Cixs2MuleGeneratorAction"
+                label="%cixs_to_mule_action_label"
+                menubarPath="com.legstar.eclipse.plugin.cixscom.menu1/slot2"/>
+        </objectContribution>
+    </extension>
+
+    <extension point="org.eclipse.jdt.core.classpathContainerInitializer">
+        <classpathContainerInitializer
+            id="com.legstar.eclipse.mule.LIBRARY"
+            class="com.legstar.eclipse.plugin.mulegen.ClasspathInitializer"/>
+    </extension>
+
+    <extension
+        point="org.eclipse.ui.preferencePages">
+        <page
+            category="com.legstar.eclipse.plugin.cixscom"
+            class="com.legstar.eclipse.plugin.mulegen.preferences.MuleCixsPreferencePage"
+            id="com.legstar.eclipse.plugin.mule"
+            name="%mulegen_preference_page_title"/>
+    </extension>
+
+    <extension
+        point="org.eclipse.core.runtime.preferences">
+        <initializer
+            class="com.legstar.eclipse.plugin.mulegen.preferences.PreferenceInitializer">
+        </initializer>
+    </extension>
+
+    <extension
+        point="org.eclipse.ui.startup">
+    </extension>
+</plugin>

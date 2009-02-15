@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Legstar Mule Plug-in
+Bundle-SymbolicName: com.legstar.eclipse.plugin.mulegen;singleton:=true
+Bundle-Version: @LEGSTAR-MULE-PLUGIN-VERSION@
+Bundle-Activator: com.legstar.eclipse.plugin.mulegen.Activator
+Bundle-Localization: src/main/resources/com/legstar/eclipse/plugin/mulegen/messages
+Bundle-Vendor: LegSem
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.jdt.core,
+ com.legstar.eclipse.plugin.common,
+ com.legstar.eclipse.plugin.cixscom,
+ org.eclipse.jdt.ui,
+ org.apache.ant
+Eclipse-LazyStart: true
+Eclipse-RegisterBuddy:  com.legstar.eclipse.plugin.common
+Bundle-ClassPath: .,
+ lib/mule-transport-legstar-tools-@LEGSTAR-MULE-VERSION@.jar,
+ lib/mule-transport-legstar-@LEGSTAR-MULE-VERSION@.jar,
+ lib/mule-core-@MULE-VERSION@.jar,
+ lib/mule-transport-http-@MULE-VERSION@.jar,
+ lib/legstar-common-plugin-@LEGSTAR-PLUGIN-VERSION@.jar

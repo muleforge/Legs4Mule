@@ -1,0 +1,28 @@
+<!-- =================================================================================
+     This script creates a PDE compatible version from a Maven version.
+     This is primarily useful from SNAPSHOTS because PDE does not like the dash
+     in n.n.n-SNAPSHOT.
+ -->
+<project basedir="../../.." name="prepare-pde-version">
+
+    <taskdef resource="net/sf/antcontrib/antcontrib.properties"/> 
+
+    <target name="preparePdeVersion"> 
+
+        <propertyregex 
+            property="legstarMulePluginVersion" 
+            input="${legstarMuleVersion}" 
+            regexp="(\d|\.)-(.*)" 
+            replace="\1\.0\.\2"
+            defaultValue="${legstarMuleVersion}"
+        /> 
+        <propertyregex 
+            property="legstarPluginVersion" 
+            input="${legstarVersion}" 
+            regexp="(\d|\.)-(.*)" 
+            replace="\1\.\2"
+            defaultValue="${legstarVersion}"
+        /> 
+    </target> 
+
+</project>

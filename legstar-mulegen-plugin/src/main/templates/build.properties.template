@@ -1,0 +1,13 @@
+source.. = src/main/java/,\
+               src/main/resources/
+output.. = target/classes/
+bin.includes = plugin.xml,\
+               META-INF/,\
+               .,\
+               lib/mule-transport-legstar-tools-@LEGSTAR-MULE-VERSION@.jar,\
+               src/main/resources/com/legstar/eclipse/plugin/mulegen/messages.properties,\
+               icons/,\
+               lib/mule-transport-legstar-@LEGSTAR-MULE-VERSION@.jar,\
+               lib/mule-core-@MULE-VERSION@.jar,\
+               lib/mule-transport-http-@MULE-VERSION@.jar
+bin.excludes = icons/.svn/
