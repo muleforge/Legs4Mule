@@ -27,8 +27,8 @@
       *---------------------------------------------------------------*
       *  Constants                                                    *
       *---------------------------------------------------------------*
-       77  W00-SERVICE-URI               PIC X(48) VALUE
-           'http://megamouss:8083/legstar/services/jvmquery/'.
+       77  W00-SERVICE-URI               PIC X(47) VALUE
+           'http://megamouss:8083/legstar/services/jvmquery'.
 
       *---------------------------------------------------------------*
       *  CICS API parameters                                          *

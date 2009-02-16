@@ -32,7 +32,7 @@
         <mule-descriptor name="queryJvmLocalUMO"
             implementation="com.legstar.xsdc.test.cases.jvmquery.JVMQuery">
             <inbound-router>
-                <endpoint address="legstar:http://megamouss:8083/legstar/services/jvmquery/"
+                <endpoint address="legstar:http://megamouss:8083/legstar/services/jvmquery"
                     transformers="HostByteArrayToJvmQueryRequest"
                     responseTransformers="JvmQueryReplyToHttpResponse"
                     synchronous="true">

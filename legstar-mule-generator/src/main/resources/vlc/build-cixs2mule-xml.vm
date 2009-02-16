@@ -59,9 +59,7 @@
             custBinDir="${antModel.custBinDir}"
             hostCharset="${antModel.hostCharset}"
           >
-            <cixsMuleComponent
-                implementationClassName="${antModel.cixsMuleComponent.implementationClassName}"
-                name="${antModel.cixsMuleComponent.name}"
+            <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
                 packageName="${antModel.cixsMuleComponent.packageName}"
             >
 #foreach ($cixsOperation in $antModel.cixsMuleComponent.cixsOperations)

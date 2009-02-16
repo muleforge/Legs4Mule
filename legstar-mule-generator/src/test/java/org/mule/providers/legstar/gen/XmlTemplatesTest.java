@@ -96,7 +96,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
         httpTransportParameters.setHost("megamouss");
         httpTransportParameters.setPort(8083);
-        httpTransportParameters.setPath("/legstar/services/jvmquery/");
+        httpTransportParameters.setPath("/legstar/services/jvmquery");
         httpTransportParameters.add(getParameters());
         getParameters().put("hostCharset", "IBM01140");
         

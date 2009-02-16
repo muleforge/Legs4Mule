@@ -1,0 +1,55 @@
+<!-- =================================================================================
+     This script generates an XML schema from a cobol source file. Since this
+     script uses JNI and native libraries, you want to make sure that the
+     distribution bin directory is on the system path.
+ -->
+<project basedir=".." default="generateXMLSchema" name="generate-xml-schema">
+
+    <!-- ===========================================================  -->
+    <!-- Setup environment
+    -->
+    <target name="init">
+    
+        <property environment="env"/>
+        <!-- LegStar location -->
+        <property name="legstar.home" value="${env.LEGSTAR_HOME}" />
+        <!-- COBOL source name prefix  -->
+        <property name="cobol.name" value="lsfileae" />
+        <!-- Path to the cobol source file   -->
+        <property name="cobol.path" value="${basedir}/cobol/${cobol.name}.cbl" />
+        <!-- Target XML schema file name   -->
+        <property name="xsd.filename" value="${cobol.name}.xsd" />
+        <!-- Target directory for generated XML schema file   -->
+        <property name="xsd.dir" value="${basedir}/schema" />
+        <!-- Target namespace for XML schema   -->
+        <property name="jaxb.namespace" value="http://legstar.com/test/coxb/${cobol.name}" />
+        <!-- Target package for generated jaxb classes   -->
+        <property name="jaxb.package" value="com.legstar.test.coxb.${cobol.name}" />
+      
+        <!-- Schema generator ant task  -->
+        <taskdef name="schemagen" classname="com.legstar.schemagen.COXBSchemaGenerator">
+            <classpath>
+                <pathelement location="${basedir}"/>
+                <fileset dir="${legstar.home}" includes="lib/*.jar"/>
+            </classpath>
+        </taskdef> 
+    
+        <!-- Make sure we have a schema directory -->
+        <mkdir dir="${xsd.dir}"/>
+    
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- Generate XML schema
+    -->
+    <target name="generateXMLSchema" depends="init">
+        <echo message="Generating XML schema for ${cobol.path}" />
+        <schemagen sourceCobolFilePath="${cobol.path}"
+            targetDir="${xsd.dir}"
+            targetXsdFileName="${xsd.filename}"
+            namespace="${jaxb.namespace}"
+            jaxbPackageName="${jaxb.package}"/>
+        <echo message="XML Schema successfully generated ${xsd.dir}/${xsd.filename}" />
+    </target>
+  
+</project>

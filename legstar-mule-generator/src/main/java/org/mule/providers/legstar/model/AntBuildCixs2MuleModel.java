@@ -42,7 +42,7 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
     /** Default pattern for server PATH. Must be kept in sync with
      * various velocity templates. */
     public static final String DEFAULT_SERVER_PATH_TEMPLATE =
-        "/legstar/services/${service.name}/";
+        "/legstar/services/${service.name}";
 
     /** The type of Http sample Cobol client to generate. */
     private CobolHttpClientType mSampleCobolHttpClientType = CobolHttpClientType.DFHWBCLI;

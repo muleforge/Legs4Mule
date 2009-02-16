@@ -176,7 +176,7 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
             generator.getHttpTransportParameters().setHost("server.com");
             generator.getHttpTransportParameters().setPath(null);
             generator.execute();
-            assertEquals("/legstar/services/muleComponentName/", generator.getHttpTransportParameters().getPath());
+            assertEquals("/legstar/services/muleComponentName", generator.getHttpTransportParameters().getPath());
             generator.getHttpTransportParameters().setPath("doesnotstartwithslash");
             generator.execute();
         } catch (Exception e) {

@@ -13,9 +13,6 @@ package org.mule.providers.legstar.test.jvmquery;
 
 import org.mule.tck.FunctionalTestCase;
 
-import com.legstar.test.client.ProxyClientHttp;
-
-
 
 /**
  * Test the generated ESB.
@@ -24,7 +21,7 @@ import com.legstar.test.client.ProxyClientHttp;
 public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
 
     /** Target ESB URL.*/
-    public static final String JVMQUERY_PROXY_URL = "http://localhost:8083/legstar/services/jvmquery";
+    public static final String JVMQUERY_PROXY_URL = "http://${host}:8083/legstar/services/jvmquery";
 
     /** Raw mainframe request. */
     public static final String MAINFRAME_REQUEST_DATA =

@@ -52,9 +52,7 @@
             custBinDir="../legstar-mule-generator/target/classes"
             hostCharset="IBM01147"
           >
-            <cixsMuleComponent
-                implementationClassName="JvmqueryImpl"
-                name="jvmquery"
+            <cixsMuleComponent name="jvmquery"
                 packageName="org.mule.providers.legstar.test.jvmquery"
             >
                 <cixsOperation name="queryJvm"
