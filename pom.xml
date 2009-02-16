@@ -566,6 +566,7 @@
         <module>legstar-mulegen-lsfileae</module>
         <module>legstar-mulegen-plugin</module>
         <module>legstar-mulegen-feature</module>
+        <module>legstar-mulegen-site</module>
     </modules>
 
 </project>
