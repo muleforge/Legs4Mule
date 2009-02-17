@@ -141,14 +141,17 @@
                 </executions>
             </plugin>
           
-            <!-- Copy all runtime dependencies to the lib folder -->
+            <!-- Copy all runtime dependencies to the lib folder
+                 Pushed to install phase. This is not needed at
+                 release time and typically the dependents would not
+                 be installed yet so that would fail. -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>copy-dependencies</id>
-                        <phase>generate-resources</phase>
+                        <phase>install</phase>
                         <goals>
                             <goal>copy</goal>
                         </goals>
