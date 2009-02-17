@@ -11,6 +11,7 @@
     <version>1.0-RC3-SNAPSHOT</version>
     <name>LegStar for Mule Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
     <dependencies>
 

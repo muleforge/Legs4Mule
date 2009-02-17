@@ -11,6 +11,7 @@
     <packaging>pom</packaging>
     <name>LegStar Mule Service Generator Eclipse feature</name>
     <description>Mule Service Generator Eclipse feature.</description>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
     <build>
 

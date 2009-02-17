@@ -11,6 +11,7 @@
     <version>1.0-RC3-SNAPSHOT</version>
     <name>Sample Proxy for POJO JVMQuery</name>
     <description>Sample Proxy for POJO JVMQuery</description>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
     <dependencies>
 
