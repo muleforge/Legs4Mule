@@ -1,0 +1,60 @@
+h1. QuickStart ESB adapter for a CICS program.
+
+h2. QuickStart description
+
+The purpose of this quickstart document is to quickly build a functioning sample integrating Mule with a backend IBM CICS system.
+
+Once deployed, the generated ESB component will act as an adapter for the sample CICS COBOL program LSFILEAE. ESB clients can then consume the ESB component without any knowledge of the actual legacy backend system:
+
+!Legs4Mule-quickstart-adapter.png!
+
+h2. Installation
+
+Follow instructions in:[InstallationInstructions]
+
+The installed CICS modules include the LSFILEAE COBOL sample program that we will be using for this quickstart.
+
+We will be using HTTP connectivity to CICS for this quickstart (Alternatively, you can use Sockets or Websphere MQ).
+ 
+h2. Generate a Mule component adapter for a mainframe program
+
+These steps will guide you through the process of generating an ESB adapter using ant scripts. There is an alternative method, using Eclipse plugins, that will be described later.
+
+First step is to generate an XML schema from the source of the target COBOL program LSFILEAE.
+
+Go to folder samples/mule/quickstarts/legstar_adapter.
+
+From the ant folder, run command *ant -f build-cob2xs.xml*. This should create a schema folder with a generated XML schema lsfileae.xsd.
+
+If you open lsfileae.xsd you will notice that each COBOL data structure in the LSFILEAE COBOL source has been mapped to an XML Schema type.
+
+Next step turns the XML schema types into Java annotated classes. This is achieved with 2 ant scripts:
+
+ * From the ant folder, run command *ant -f build-jaxb.xml*. As a result, the src folder contains generated JAXB classes. These were derived from the sample XML Schema in the schema folder. Sources are also compiled, with binaries stored under build.
+
+ * From the ant folder, run command *ant -f build-coxb.xml*. This should create binding classes which can be used as an alternative to the JAXB classes to achieve high performances.
+
+The last step generates the lsfileaeBridgeUMO Mule component.
+
+From the ant folder run command *ant -f build-mule2cixs.xml*. 
+
+Under src/com/legstar/test/cixs/mule/lsfileae you will find the generated LsfileaeCallable.java source of the actual Mule component.
+
+Under legstar_adapter, Mule configuration samples are generated:
+
+ * mule-adapter-bridge-config-lsfileae.xml
+
+ Is the Mule configuration file. Notice that generated transformers are referenced. These transformers turn mainframe data to java objects.Access to mainframe uses the Mule Legstar transport which is based on HTTP.
+
+ * mule-adapter-standalone-config-lsfileae.xml
+ 
+ Is an alternative to the previous configuration that you can use with the associated legstar-invoker-config.xml, if you need Socket or WebSphere MQ access to the mainframe.
+
+The ant folder contains the build.xml generated ant script which bundles the mule-legstar-lsfileae.jar file and deploys the generated component to your Mule installation (Defined by the MULE_HOME environment variable).
+
+h2. Running the ESB component adapter
+
+The src/org/mule/providers/legstar/test/lsfileae folder contains a LsfileaeBridgeTest.java program that you can use to invoke the newly deployed component.
+
+LsfileaeBridgeTest is a JUnit test using the Mule unit test framework so you don't need to actually deploy the component in order to run the test.
+

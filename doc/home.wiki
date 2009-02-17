@@ -1,0 +1,39 @@
+h1. LegStar for Mule
+
+h2. Overview
+
+Legs4Mule is a Mule transport for IBM mainframes, based on the [LegStar open-source mainframe integration|http://www.legsem.com/legstar] project.
+
+Legs4Mule has design time features that generates artifacts for Mule. These artifacts can be deployed as Mule UMOs of 2 types:
+
+* Mainframe Adapters gives access to a remote mainframe program from any ESB client
+
+* Mainframe proxies give mainframe programs access to ESB UMO components
+
+h2. Benefits
+
+* End-to-end open-source mainframe integration solution
+* Bi-directional, mainframe acts as server for Mule clients or as client for Mule UMOs
+* Binary wire protocol between Mule and the mainframe, reduces overhead
+* Flexible COBOL binding framework based on Java binding (JAXB)
+
+h2. Status
+
+Legs4Mule 1.0-RC3 is available for download from [here|http://dist.muleforge.org/legstar-transport/].
+
+Version 1.0-RC3 has been tested with Mule 1.4.4.
+
+The project is seeking contributors.
+
+h3. Documentation
+
+[Installation instructions|InstallationInstructions]
+
+[Quickstart for mainframe adapter using ant|MuleLegStarAdapterQuickStartAnt]
+
+[Quickstart for mainframe proxy using ant|MuleLegStarProxyQuickStartAnt]
+
+[Quickstart for mainframe adapter using Eclipse|MuleLegStarAdapterQuickStartEclipse]
+
+[Quickstart for mainframe proxy using Eclipse|MuleLegStarProxyQuickStartEclipse]
+
