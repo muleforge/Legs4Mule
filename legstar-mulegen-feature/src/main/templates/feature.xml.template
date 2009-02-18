@@ -416,7 +416,7 @@ END OF TERMS AND CONDITIONS
    </license>
 
    <url>
-      <update label="LegStar" url="http://www.mulesource.org/display/LEGSTAR/eclipse/update"/>
+      <update label="LegStar" url="http://dist.muleforge.org/legstar-transport/eclipse/update"/>
    </url>
 
    <requires>

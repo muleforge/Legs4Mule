@@ -9,7 +9,7 @@
     <properties>
         <muleVersion>1.4.4</muleVersion>
         <legstarVersion>1.2.3</legstarVersion>
-        <legstarMuleVersion>1.0-RC3</legstarMuleVersion>
+        <legstarMuleVersion>1.0-RC4-SNAPSHOT</legstarMuleVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
@@ -644,7 +644,9 @@
         <module>legstar-mulegen-plugin</module>
         <module>legstar-mulegen-feature</module>
         <module>legstar-mulegen-site</module>
+<!-- Does not work on MuleForge
         <module>dist</module>
+-->
     </modules>
 
 </project>
