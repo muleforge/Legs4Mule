@@ -10,10 +10,11 @@
  ******************************************************************************/
 package org.mule.providers.legstar.http;
 
-import org.mule.impl.endpoint.MuleEndpointURI;
-import org.mule.providers.service.TransportFactory;
+import org.mule.api.endpoint.EndpointURI;
+import org.mule.api.transport.Connector;
+import org.mule.transport.service.TransportFactory;
 import org.mule.tck.AbstractMuleTestCase;
-import org.mule.umo.endpoint.UMOEndpoint;
+import org.mule.endpoint.MuleEndpointURI;
 
 
 /**
@@ -30,12 +31,11 @@ public class LegstarHttpConnectorFactoryTestCase extends AbstractMuleTestCase {
      * @throws Exception if fails
      */
     public void testCreateFromFactory() throws Exception {
-        MuleEndpointURI url = new MuleEndpointURI(getEndpointURI());
-        UMOEndpoint endpoint = TransportFactory.createEndpoint(url, UMOEndpoint.ENDPOINT_TYPE_RECEIVER);
-        assertNotNull(endpoint);
-        assertNotNull(endpoint.getConnector());
-        assertTrue(endpoint.getConnector() instanceof LegstarHttpConnector);
-        assertEquals("http://localhost:8083", endpoint.getEndpointURI().getAddress());
+        EndpointURI url = new MuleEndpointURI(getEndpointURI());
+        Connector connector = TransportFactory.createConnector(url, null);
+        assertNotNull(connector);
+        assertTrue(connector instanceof LegstarHttpConnector);
+        assertEquals("legstar", connector.getProtocol());
     }
 
     /**

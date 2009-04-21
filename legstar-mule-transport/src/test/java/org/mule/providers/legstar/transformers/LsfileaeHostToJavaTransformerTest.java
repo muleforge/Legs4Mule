@@ -11,13 +11,12 @@
 package org.mule.providers.legstar.transformers;
 
 
-import org.mule.tck.AbstractTransformerTestCase;
-import org.mule.umo.transformer.UMOTransformer;
+import org.mule.transformer.AbstractTransformerTestCase;
+import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
 import com.legstar.test.coxb.LsfileaeCases;
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
-import com.legstar.test.coxb.lsfileae.bind.DfhcommareaTransformers;
 
 /**
  * Test AbstractHostToJavaTransformer class.
@@ -25,24 +24,8 @@ import com.legstar.test.coxb.lsfileae.bind.DfhcommareaTransformers;
  */
 public class LsfileaeHostToJavaTransformerTest extends AbstractTransformerTestCase {
 
-    /**
-     * A simplistic implementation of the abstract class being tested.
-     *
-     */
-    public static class LsfileaeHostToJavaTransformer extends AbstractHostToJavaEsbTransformer {
-
-        /**
-         * Pass binding transformers for lsfileae single part Dfhcommarea.
-         */
-        public LsfileaeHostToJavaTransformer() {
-            super(new DfhcommareaTransformers());
-            setReturnClass(Dfhcommarea.class);
-        }
-
-    }
-
     /** {@inheritDoc} */
-    public UMOTransformer getTransformer() throws Exception {
+    public Transformer getTransformer() throws Exception {
         return new LsfileaeHostToJavaTransformer();
     }
 
@@ -52,7 +35,7 @@ public class LsfileaeHostToJavaTransformerTest extends AbstractTransformerTestCa
     }
 
     /** {@inheritDoc} */
-    public UMOTransformer getRoundTripTransformer() throws Exception {
+    public Transformer getRoundTripTransformer() throws Exception {
         return null;
     }
 

@@ -11,13 +11,13 @@
 package org.mule.providers.legstar.http;
 
 import org.apache.commons.httpclient.HttpMethod;
-import org.mule.providers.http.HttpClientMessageDispatcher;
-import org.mule.providers.http.HttpConstants;
+import org.mule.transport.http.HttpClientMessageDispatcher;
+import org.mule.transport.http.HttpConstants;
 import org.mule.providers.legstar.transformers.AbstractHostEsbTransformer;
-import org.mule.umo.UMOEvent;
-import org.mule.umo.UMOMessage;
-import org.mule.umo.endpoint.UMOImmutableEndpoint;
-import org.mule.umo.transformer.TransformerException;
+import org.mule.api.MuleEvent;
+import org.mule.api.MuleMessage;
+import org.mule.api.endpoint.OutboundEndpoint;
+import org.mule.api.transformer.TransformerException;
 
 /**
  * <code>LegstarMessageDispatcher</code> delegates most of its behavior
@@ -29,7 +29,7 @@ public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
      * Constructor for a given endpoint.
      * @param endpoint the Mule endpoint
      */
-    public LegstarHttpMessageDispatcher(final UMOImmutableEndpoint endpoint) {
+    public LegstarHttpMessageDispatcher(final OutboundEndpoint endpoint) {
         super(endpoint);
     }
 
@@ -38,7 +38,7 @@ public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
      * this is an execution request and therefore LegStar messaging is needed.
      * {@inheritDoc}
      *  */
-    protected UMOMessage doSend(final UMOEvent event) throws Exception {
+    protected MuleMessage doSend(final MuleEvent event) throws Exception {
         event.getMessage().setBooleanProperty(
                 AbstractHostEsbTransformer.IS_LEGSTAR_MESSAGING, true);
         return super.doSend(event);
@@ -49,19 +49,12 @@ public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
      * http headers that we need.
      * {@inheritDoc}
      *  */
-    public final HttpMethod getMethod(final UMOEvent event) throws TransformerException {
+    public final HttpMethod getMethod(final MuleEvent event) throws TransformerException {
         HttpMethod method = super.getMethod(event);
 
         /* Force the content type expected by the Mainframe */
         method.addRequestHeader(HttpConstants.HEADER_CONTENT_TYPE,
         "application/octet-stream");
-
-        /* TODO these parameters should actually be obtained from an
-         * equivalent to legstar-invoker-config using some host endpoint*/
-        Boolean hostTraceMode = Boolean.valueOf(event.getMessage().getBooleanProperty(
-                AbstractHostEsbTransformer.HOST_TRACE_MODE_PROPERTY, false));
-        method.addRequestHeader("CICSTraceMode", hostTraceMode.toString());
-
 
         return method;
     }

@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.mule.providers.legstar.http;
 
-import org.mule.tck.providers.AbstractMessageAdapterTestCase;
-import org.mule.umo.provider.UMOMessageAdapter;
-import org.mule.umo.MessagingException;
+import org.mule.transport.AbstractMessageAdapterTestCase;
+import org.mule.api.transport.MessageAdapter;
+import org.mule.api.MessagingException;
 
 /**
  * Test the LegstarHttpMessageAdapter class.
@@ -26,7 +26,7 @@ public class LegstarHttpMessageAdapterTestCase extends AbstractMessageAdapterTes
     }
 
     /** {@inheritDoc} */
-    public UMOMessageAdapter createAdapter(final Object payload) throws MessagingException {
+    public MessageAdapter createAdapter(final Object payload) throws MessagingException {
         return new LegstarHttpMessageAdapter(payload);
     }
 

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.mule.providers.legstar.http;
 
-import org.mule.providers.http.HttpMessageReceiver;
-import org.mule.umo.UMOComponent;
-import org.mule.umo.endpoint.UMOEndpoint;
-import org.mule.umo.lifecycle.InitialisationException;
-import org.mule.umo.provider.UMOConnector;
+import org.mule.transport.http.HttpMessageReceiver;
+import org.mule.api.endpoint.InboundEndpoint;
+import org.mule.api.lifecycle.CreateException;
+import org.mule.api.service.Service;
+import org.mule.api.transport.Connector;
 
 /**
  * <code>LegstarMessageReceiver</code> delegates all processing
@@ -25,16 +25,15 @@ public class LegstarHttpMessageReceiver extends HttpMessageReceiver {
     /**
      * Constructs a message receiver for a component.
      * @param connector the Mule connector
-     * @param component the Mule component 
+     * @param service the Mule service 
      * @param endpoint the Mule endpoint
-     * @throws InitialisationException if construction fails
+     * @throws CreateException if construction fails
      */
     public LegstarHttpMessageReceiver(
-            final UMOConnector connector,
-            final UMOComponent component,
-            final UMOEndpoint endpoint)
-    throws InitialisationException {
-        super(connector, component, endpoint);
+            final Connector connector,
+            final Service service,
+            final InboundEndpoint endpoint) throws CreateException {
+        super(connector, service, endpoint);
     }
 
 }

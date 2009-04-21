@@ -10,16 +10,17 @@
  ******************************************************************************/
 package org.mule.providers.legstar.transformers;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mule.providers.legstar.i18n.LegstarMessages;
-import org.mule.umo.UMOEventContext;
-import org.mule.umo.UMOMessage;
-import org.mule.umo.transformer.TransformerException;
+import org.mule.api.MuleMessage;
+import org.mule.api.transformer.TransformerException;
 
 import com.legstar.coxb.transform.AbstractTransformers;
 import com.legstar.coxb.transform.HostTransformException;
@@ -37,7 +38,7 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
 
     /** Logger. */
     private static final Log LOG = LogFactory.getLog(AbstractHostToJavaEsbTransformer.class);
-
+    
     /**
      * Constructor for single part transformers.
      * <p/>
@@ -50,6 +51,7 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
             final AbstractTransformers bindingTransformers) {
         super(bindingTransformers);
         registerSourceType(byte[].class);
+        registerSourceType(InputStream.class);
     }
 
     /**
@@ -57,6 +59,8 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
      * <p/>
      * Host to Java transformers expect byte array sources corresponding to
      * mainframe raw data.
+     * Alternatively, input can be an input stream where the content is assumed
+     * to be a byte stream.
      * Inheriting classes will set the return class.
      * @param bindingTransformersMap map of transformer sets, one for each part type.
      */
@@ -64,6 +68,7 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
             final Map < String, AbstractTransformers > bindingTransformersMap) {
         super(bindingTransformersMap);
         registerSourceType(byte[].class);
+        registerSourceType(InputStream.class);
     }
 
     /**
@@ -74,17 +79,22 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
      * a LegStarMessage reply.
      */
     public Object transform(
-            final Object src,
-            final String encoding,
-            final UMOEventContext context) throws TransformerException {
-        UMOMessage esbMessage = context.getMessage();
+            final MuleMessage esbMessage,
+            final String encoding) throws TransformerException {
         if (LOG.isDebugEnabled()) {
             LOG.debug("ESB Message before processing:");
             LOG.debug(esbMessage);
         }
+        
+        /* Don't transform a message content if an exception is reported */
+        if (esbMessage.getExceptionPayload() != null) {
+            throw new TransformerException(
+                    getLegstarMessages().hostTransformFailure(),
+                    this, esbMessage.getExceptionPayload().getException());
+        }
         try {
             
-            byte[] hostData = getRawHostContent(src);
+            byte[] hostData = getRawHostContent(esbMessage.getPayload());
             
             if (LegStarMessage.isLegStarMessage(hostData)) {
                 setLegStarMessaging(esbMessage, true);
@@ -98,16 +108,16 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
 
         } catch (UnsupportedEncodingException e) {
             throw new TransformerException(
-                    LegstarMessages.encodingFailure(getHostCharset(esbMessage)), this, e);
+                    getLegstarMessages().encodingFailure(getHostCharset(esbMessage)), this, e);
         } catch (HostMessageFormatException e) {
             throw new TransformerException(
-                    LegstarMessages.hostMessageFormatFailure(), this, e);
+                    getLegstarMessages().hostMessageFormatFailure(), this, e);
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    LegstarMessages.hostTransformFailure(), this, e);
+                    getLegstarMessages().hostTransformFailure(), this, e);
         } catch (HeaderPartException e) {
             throw new TransformerException(
-                    LegstarMessages.hostTransformFailure(), this, e);
+                    getLegstarMessages().hostTransformFailure(), this, e);
         }
 
     }
@@ -141,7 +151,7 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
             return createHolder(transformedParts);
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    LegstarMessages.hostTransformFailure(), this, e);
+                    getLegstarMessages().hostTransformFailure(), this, e);
         }
 
     }
@@ -159,7 +169,7 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
     public Object createHolder(
             final Map < String, Object > transformedParts) throws TransformerException {
         throw new TransformerException(
-                LegstarMessages.noMultiPartSupportFailure(), this);
+                getLegstarMessages().noMultiPartSupportFailure(), this);
     }
 
     /**
@@ -172,10 +182,33 @@ public abstract class AbstractHostToJavaEsbTransformer extends AbstractHostEsbTr
         if (src == null) {
             throw new HostTransformException("Request content is null");
         }
-        if (!(src instanceof byte[])) {
-            throw new HostTransformException("Request content is not a byte array");
+        if ((src instanceof byte[])) {
+            return (byte[]) src;
         }
-        return (byte[]) src;
+        if ((src instanceof InputStream)) {
+            InputStream inputStream = (InputStream) src;
+            try {
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                int iRead = 0;
+                byte[] baChunk = new byte[4096];
+                while ((iRead = inputStream.read(baChunk)) > 0) {
+                    baos.write(baChunk, 0, iRead);
+                }
+                return baos.toByteArray();
+            } catch (IOException e) {
+                throw new HostTransformException(e);
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        throw new HostTransformException(e);
+                    }
+                }
+            }
+        }
+        throw new HostTransformException(
+                "Request content is not a byte array or an input stream");
     }
 
 }

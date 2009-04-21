@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.mule.providers.legstar.http;
 
-import org.mule.impl.endpoint.MuleEndpointURI;
+import org.mule.endpoint.MuleEndpointURI;
 import org.mule.tck.AbstractMuleTestCase;
-import org.mule.umo.endpoint.UMOEndpointURI;
+import org.mule.api.endpoint.EndpointURI;
 
 
 /**
@@ -28,14 +28,15 @@ public class LegstarHttpEndpointTestCase extends AbstractMuleTestCase {
      * @throws Exception if test fails
      */
     public void testValidEndpointURI() throws Exception  {
-        UMOEndpointURI url = new MuleEndpointURI("legstar:http://localhost:7856");
-        assertEquals("http", url.getScheme());
-        assertEquals("legstar", url.getSchemeMetaInfo());
-        assertEquals("http://localhost:7856", url.getAddress());
-        assertEquals(7856, url.getPort());
-        assertEquals("localhost", url.getHost());
-        assertEquals("http://localhost:7856", url.getAddress());
-        assertEquals(0, url.getParams().size());
+        EndpointURI endpointUri = new MuleEndpointURI("legstar:http://localhost:7856");
+        endpointUri.initialise();
+        assertEquals("http", endpointUri.getScheme());
+        assertEquals("legstar", endpointUri.getSchemeMetaInfo());
+        assertEquals("http://localhost:7856", endpointUri.getAddress());
+        assertEquals(7856, endpointUri.getPort());
+        assertEquals("localhost", endpointUri.getHost());
+        assertEquals("http://localhost:7856", endpointUri.getAddress());
+        assertEquals(0, endpointUri.getParams().size());
     }
 
 }

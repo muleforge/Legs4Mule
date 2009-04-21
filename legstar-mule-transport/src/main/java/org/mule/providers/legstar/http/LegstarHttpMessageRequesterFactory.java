@@ -10,23 +10,23 @@
  ******************************************************************************/
 package org.mule.providers.legstar.http;
 
-import org.mule.transport.AbstractMessageDispatcherFactory;
+import org.mule.transport.AbstractMessageRequesterFactory;
 import org.mule.api.MuleException;
-import org.mule.api.endpoint.OutboundEndpoint;
-import org.mule.api.transport.MessageDispatcher;
+import org.mule.api.endpoint.InboundEndpoint;
+import org.mule.api.transport.MessageRequester;
 
 /**
- * <code>LegstarMessageDispatcherFactory</code> returns instances
- * of <code>LegstarMessageDispatcher</code>.
+ * <code>LegstarHttpMessageRequesterFactory</code> returns instances
+ * of <code>LegstarMessageRequester</code>.
  */
 
-public class LegstarHttpMessageDispatcherFactory 
-extends AbstractMessageDispatcherFactory {
+public class LegstarHttpMessageRequesterFactory 
+extends AbstractMessageRequesterFactory {
 
     /** {@inheritDoc} */
-    public final MessageDispatcher create(final OutboundEndpoint endpoint) throws MuleException
-    {
-        return new LegstarHttpMessageDispatcher(endpoint);
+    public MessageRequester create(final InboundEndpoint endpoint)
+            throws MuleException {
+        return new LegstarHttpMessageRequester(endpoint);
     }
 
 }

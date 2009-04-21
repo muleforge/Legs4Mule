@@ -12,13 +12,14 @@ package org.mule.providers.legstar.http.transformers;
 
 import java.io.IOException;
 
-import org.apache.commons.httpclient.Header;
-import org.mule.providers.http.HttpConstants;
-import org.mule.providers.http.HttpResponse;
-import org.mule.providers.http.transformers.UMOMessageToHttpResponse;
-import org.mule.umo.transformer.TransformerException;
-import org.mule.umo.UMOEventContext;
-import org.mule.umo.UMOMessage;
+import org.mule.providers.legstar.i18n.LegstarMessages;
+import org.mule.providers.legstar.transformers.AbstractJavaToHostEsbTransformer;
+import org.mule.transport.NullPayload;
+import org.mule.transport.http.HttpConstants;
+import org.mule.transport.http.HttpResponse;
+import org.mule.transport.http.transformers.MuleMessageToHttpResponse;
+import org.mule.api.transformer.TransformerException;
+import org.mule.api.MuleMessage;
 
 /**
  * <code>AbstractObjectToHttpResponseTransformer</code> contains methods that
@@ -26,43 +27,76 @@ import org.mule.umo.UMOMessage;
  * Such responses are targeted at the mainframe which has special requirements
  * for http headers such as content type and content length.
  */
-public class AbstractObjectToHttpResponseTransformer extends UMOMessageToHttpResponse
+public abstract class AbstractObjectToHttpResponseTransformer extends MuleMessageToHttpResponse
 {
 
     /** When channeled over http, the legstar payload must be binary. */
     private static final String LEGSTAR_HTTP_CONTENT_TYPE =
         "application/octet-stream";
 
+    /** Message labels. */
+    private LegstarMessages mLegstarMessages = new LegstarMessages();;
+
 
     /** 
-     * Overriding this method because <code>UMOMessageToHttpResponse</code> does
-     * not allow the content length to be set directly.
-     * {@inheritDoc} */
+     * Overriding this method because <code>MuleMessageToHttpResponse</code> does
+     * not allow the content type to be set directly.
+     * {@inheritDoc}
+     *  */
+    @Override
     public final HttpResponse createResponse(
             final Object src,
             final String encoding,
-            final UMOEventContext context)
+            final MuleMessage msg)
     throws IOException, TransformerException {
 
-        UMOMessage msg = context.getMessage();
         /* Force the content type and content length */
         msg.setStringProperty(HttpConstants.HEADER_CONTENT_TYPE,
                 LEGSTAR_HTTP_CONTENT_TYPE);
 
-        HttpResponse response = super.createResponse(src, encoding, context);
-
-        /* We make the assumption that the source has already been 
-         * transformed into a byte array.
-         * TODO consider case where the Mule component raises an exception
-         * what should we send to the host?  */
-        if (src != null && src instanceof byte[]) {
-            Header header = new Header(
-                    HttpConstants.HEADER_CONTENT_LENGTH,
-                    Integer.toString(((byte[]) src).length));
-            response.addHeader(header);
-        }
+        HttpResponse response = super.createResponse(src, encoding, msg);
 
         return response;
     }
 
+    /**
+     * @return Message labels
+     */
+    public LegstarMessages getLegstarMessages() {
+        return mLegstarMessages;
+    }
+
+    /** {@inheritDoc} */
+    public Object transform(
+            final MuleMessage muleMessage,
+            final String encoding) throws TransformerException {
+
+        Object src = muleMessage.getPayload();
+        
+        /* This situation arises if the client starts by an HTTP HEAD method. */
+        if (src instanceof HttpResponse) {
+            return src;
+        }
+        
+        /* This situation happens when an exception happened. There is normally
+        * a 500 http status set by the standard Mule exception mapping 
+        * mechanism */
+        if (src instanceof NullPayload) {
+            return super.transform(muleMessage, encoding);
+        }
+
+        /* Use existing transformer to get a host byte array */
+        AbstractJavaToHostEsbTransformer xformer =
+            getJavaToHostEsbTransformer();
+        byte[] hostBytes = (byte[]) xformer.transform(src);
+        muleMessage.setPayload(hostBytes);
+        
+        /* Delegate to parent the encapsulation in an http body */
+        return super.transform(muleMessage, encoding);
+    }
+    
+    /**
+     * @return an instance of a java to host byte array transformer
+     */
+    public abstract AbstractJavaToHostEsbTransformer getJavaToHostEsbTransformer();
 }

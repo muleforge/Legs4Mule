@@ -10,84 +10,53 @@
  ******************************************************************************/
 package org.mule.providers.legstar.functest;
 
-import org.mule.config.builders.QuickConfigurationBuilder;
-import org.mule.extras.client.MuleClient;
-import org.mule.tck.functional.EventCallback;
+import org.mule.api.MuleMessage;
+import org.mule.module.client.MuleClient;
+import org.mule.tck.FunctionalTestCase;
 import org.mule.tck.functional.FunctionalTestComponent;
-import org.mule.tck.functional.FunctionalTestNotification;
-import org.mule.tck.functional.FunctionalTestNotificationListener;
-import org.mule.umo.UMOEventContext;
-import org.mule.umo.UMOMessage;
-import org.mule.umo.endpoint.UMOEndpoint;
-import org.mule.umo.manager.UMOServerNotification;
+import org.mule.transport.http.HttpConstants;
 
-import junit.framework.TestCase;
+import com.legstar.coxb.host.HostData;
+import com.legstar.test.coxb.LsfileaeCases;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * This functional test does not actually test any of the transformers since
- * they are meant to be generated. For this reason this does mostly check that
- * the legstar properties are complete.
+ * Test a roundtrip on the legstar http transport.
  *
  */
-public class LegstarFunctionalTest extends TestCase implements EventCallback, FunctionalTestNotificationListener {
-
-    /** configuration helper. */
-    private QuickConfigurationBuilder mBuilder;
-
+public class LegstarFunctionalTest extends FunctionalTestCase {
+    
     /**
-     * {@inheritDoc}
-     * This is where we create our configuration.
+     * Increase the timeout to allow enough time for debugging.
      */
-    protected void setUp() throws Exception {
-        mBuilder = new QuickConfigurationBuilder();
-
-        // we create our MuleManager
-        mBuilder.createStartedManager(true, null);
-
-        // we create a "SINGLE" endpoint and set the address to legstar:http://localhost:8083
-        UMOEndpoint legstarSingle = mBuilder.createEndpoint("legstar:http://localhost:8083", "SingleEndpoint", true);
-
-        // we create a FunctionalTestComponent and call it myComponent
-        FunctionalTestComponent myComponent = new FunctionalTestComponent();
-
-        // we set out Event Callback on our test class
-        myComponent.setEventCallback(this);
-
-        // we register our component instance.
-        mBuilder.registerComponentInstance(myComponent, "SINGLE", legstarSingle.getEndpointURI());
-
-        // we register our listener which we called "SINGLE"
-        mBuilder.getManager().registerListener(this, "SINGLE");
+    public LegstarFunctionalTest() {
+        super();
+        System.setProperty(PROPERTY_MULE_TEST_TIMEOUT, "600");
     }
-
-    /** {@inheritDoc} */
-    public void eventReceived(final UMOEventContext context, final Object component)
-    throws Exception {
-        FunctionalTestComponent fc = (FunctionalTestComponent) component;
-        fc.setReturnMessage("Customized Return Message");
-    }
-
-    /** {@inheritDoc} */
-    public void onNotification(final UMOServerNotification notification) {
-        assertTrue(notification.getAction() == FunctionalTestNotification.EVENT_RECEIVED);
+    
+    /** {@inheritDoc}*/
+    protected String getConfigResources() {
+        return "legstar-functional-test.xml";
     }
 
     /**
-     * Use a MuleClient to send a message on the legstar endpoint.
-     * @throws Exception if fails
+     * Perform round trip.
+     * @throws Exception if test fails
      */
-    public void testSingleComponent() throws Exception {
+    public void testSend() throws Exception {        
+        FunctionalTestComponent testComponent =
+            (FunctionalTestComponent) getComponent("testComponent");
+        assertNotNull(testComponent);
+
+        /* Simulate a call coming from a mainframe */
         MuleClient client = new MuleClient();
-
-        // we send a message on the endpoint we created, i.e. legstar:http://localhost:8083
-        UMOMessage result = client.send("legstar:http://localhost:8083", "hello", null);
-        assertNotNull(result);
-        assertEquals("Customized Return Message", result.getPayloadAsString());
+        Map < String, String > props = new HashMap < String, String >();
+        props.put(HttpConstants.HEADER_CONTENT_TYPE, "application/octet-stream");
+        MuleMessage result = client.send("clientEndpoint",
+                HostData.toByteArray(LsfileaeCases.getHostBytesHexReply100()), props);
+        assertEquals(LsfileaeCases.getHostBytesHexReply100(),
+                HostData.toHexString(result.getPayloadAsBytes()));
     }
-
-    /** {@inheritDoc} */
-    protected void tearDown() throws Exception {
-        mBuilder.disposeCurrent();
-    }
-
 }

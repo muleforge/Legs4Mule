@@ -52,26 +52,10 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     }
 
     /**
-     * mule-adapter-standalone-config.xml creates the mule standalone config.
+     * Creates the mule adapter http config.
      * @throws Exception if generation fails
      */
-    public void testAdapterStandaloneConfigXml() throws Exception {
-
-        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-
-        File componentConfFilesDir = new File(GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateAdapterStandaloneConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-        compare(componentConfFilesDir,
-                "mule-adapter-standalone-config-" + muleComponent.getName() + ".xml");
-    }
-
-    /**
-     * mule-bridge-config.xml creates the mule bridge config.
-     * @throws Exception if generation fails
-     */
-    public void testAdapterBridgeConfigXml() throws Exception {
+    public void testAdapterHttpConfigXml() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         getParameters().put("hostCharset", "IBM01140");
@@ -80,18 +64,18 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         File componentConfFilesDir = new File(
                 GEN_CONF_DIR, muleComponent.getName());
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateAdapterBridgeConfigXml(
+        AbstractCixsMuleGenerator.generateAdapterHttpConfigXml(
                 muleComponent, getParameters(), componentConfFilesDir);
 
         compare(componentConfFilesDir,
-                "mule-adapter-bridge-config-" + muleComponent.getName() + ".xml");
+                "mule-adapter-http-config-" + muleComponent.getName() + ".xml");
     }
 
     /**
-     * mule-proxy-config.xml creates the mule local config.
+     * Creates the mule proxy http config.
      * @throws Exception if generation fails
      */
-    public void testProxyConfigXml() throws Exception {
+    public void testProxyHttpConfigXml() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
@@ -107,10 +91,10 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
         File componentConfFilesDir = new File(GEN_CONF_DIR, muleComponent.getName());
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateProxyConfigXml(
+        AbstractCixsMuleGenerator.generateProxyHttpConfigXml(
                 muleComponent, getParameters(), componentConfFilesDir);
         compare(componentConfFilesDir,
-                "mule-proxy-config-" + muleComponent.getName() + ".xml");
+                "mule-proxy-http-config-" + muleComponent.getName() + ".xml");
     }
 
 }

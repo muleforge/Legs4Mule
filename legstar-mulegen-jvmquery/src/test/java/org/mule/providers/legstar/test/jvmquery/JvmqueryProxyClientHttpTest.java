@@ -13,6 +13,8 @@ package org.mule.providers.legstar.test.jvmquery;
 
 import org.mule.tck.FunctionalTestCase;
 
+import com.legstar.test.client.ProxyClientHttp;
+
 
 /**
  * Test the generated ESB.

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.mule.providers.legstar.cixs;
 
-import org.mule.umo.UMOMessage;
+import org.mule.api.MuleMessage;
 
 /**
  * Utility class for generated Mule-LegStar host headers. This allows
@@ -48,7 +48,7 @@ public final class MuleHostHeaderFactory {
      * @param umoMessage the Mule message
      * @return the new host header
      */
-    public static MuleHostHeader createHostHeader(final UMOMessage umoMessage) {
+    public static MuleHostHeader createHostHeader(final MuleMessage umoMessage) {
         MuleHostHeader hostHeader = new MuleHostHeader();
         hostHeader.setHostEndPoint(
                 (String) umoMessage.getProperty(LEGSTAR_HOST_ENDPOINT));

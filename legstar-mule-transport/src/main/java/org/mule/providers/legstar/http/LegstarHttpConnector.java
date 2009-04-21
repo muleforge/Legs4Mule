@@ -16,9 +16,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mule.providers.http.HttpConnector;
-import org.mule.umo.lifecycle.InitialisationException;
-import org.mule.umo.provider.UMOMessageReceiver;
+import org.mule.transport.http.HttpConnector;
+import org.mule.api.lifecycle.InitialisationException;
+import org.mule.api.transport.MessageReceiver;
 
 /**
  * <code>LegstarConnector</code> is essentially and <code>HttpConnector</code>
@@ -29,6 +29,9 @@ import org.mule.umo.provider.UMOMessageReceiver;
  * support any other transports than HTTP.
  */
 public class LegstarHttpConnector extends HttpConnector {
+    
+    /** Protocol supported.*/
+    public static final String PROTOCOL = "legstar";
 
     /**
      * No-Args constructor.
@@ -67,23 +70,23 @@ public class LegstarHttpConnector extends HttpConnector {
 
     /** {@inheritDoc} */
     public final String getProtocol() {
-        return "legstar";
+        return PROTOCOL;
     }
 
     /** 
-     * Because UMOMessageReceiver getTargetReceiver does a lookup with
+     * Because MessageReceiver getTargetReceiver does a lookup with
      * a key like legstar://localhost:8083 instead of http://localhost:8083
      * we override the standard method.
      * {@inheritDoc}
      *  */
-    public final UMOMessageReceiver lookupReceiver(final String key) {
+    public final MessageReceiver lookupReceiver(final String key) {
         if (key != null) {
-            UMOMessageReceiver receiver = (UMOMessageReceiver) receivers.get(key);
+            MessageReceiver receiver = (MessageReceiver) receivers.get(key);
             if (receiver == null) {
-                receiver = (UMOMessageReceiver) receivers.get(
+                receiver = (MessageReceiver) receivers.get(
                         key.replace(getProtocol() + ':', "http:"));
                 if (receiver == null) {
-                    receiver = (UMOMessageReceiver) receivers.get(
+                    receiver = (MessageReceiver) receivers.get(
                             key.replace(getProtocol() + ':', "https:"));
                 }
             }

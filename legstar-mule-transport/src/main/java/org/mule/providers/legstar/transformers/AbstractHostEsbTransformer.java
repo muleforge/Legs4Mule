@@ -12,8 +12,9 @@ package org.mule.providers.legstar.transformers;
 
 import java.util.Map;
 
-import org.mule.transformers.AbstractEventAwareTransformer;
-import org.mule.umo.UMOMessage;
+import org.mule.providers.legstar.i18n.LegstarMessages;
+import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.api.MuleMessage;
 
 import com.legstar.coxb.host.HostContext;
 import com.legstar.coxb.transform.AbstractTransformers;
@@ -33,7 +34,7 @@ import com.legstar.coxb.transform.AbstractTransformers;
  * Esb messages, in and out, are assumed to hold content at the default
  * body location.
  */
-public abstract class AbstractHostEsbTransformer extends AbstractEventAwareTransformer {
+public abstract class AbstractHostEsbTransformer extends AbstractMessageAwareTransformer {
 
     /** Name of property holding the mainframe character set. */
     public static final String HOST_CHARSET_PROPERTY = "hostCharset";
@@ -47,7 +48,10 @@ public abstract class AbstractHostEsbTransformer extends AbstractEventAwareTrans
     /** A boolean property indicating that peer expects host data to be wrapped as a LegStarMessage. */
     public static final String IS_LEGSTAR_MESSAGING = "isLegStarMessaging";
     
-    /**
+    /** Message labels. */
+    private LegstarMessages mLegstarMessages = new LegstarMessages();
+
+   /**
      * Single part transformers are associated with a set of binding transformers
      * which are responsible to marshaling/unmarshaling the data payload.
      */
@@ -59,7 +63,7 @@ public abstract class AbstractHostEsbTransformer extends AbstractEventAwareTrans
      * Each binding transformers set is identified by a unique name.
      */
     private Map < String, AbstractTransformers > mBindingTransformersMap;
-
+    
     /**
      * Constructor for single part transformers.
      * @param bindingTransformers a set of transformers for the part type.
@@ -98,7 +102,7 @@ public abstract class AbstractHostEsbTransformer extends AbstractEventAwareTrans
      * @param esbMessage the ESB message containing host data
      * @return true if there is proof that upstream action requested LegStarMessage wrapping
      */
-    public static boolean isLegStarMessaging(final UMOMessage esbMessage) {
+    public static boolean isLegStarMessaging(final MuleMessage esbMessage) {
         return esbMessage.getBooleanProperty(IS_LEGSTAR_MESSAGING, false);
     }
     
@@ -109,7 +113,7 @@ public abstract class AbstractHostEsbTransformer extends AbstractEventAwareTrans
      * @param isLegStarMessaging whether to mark with true or false
      */
     public static void setLegStarMessaging(
-            final UMOMessage esbMessage, final boolean isLegStarMessaging) {
+            final MuleMessage esbMessage, final boolean isLegStarMessaging) {
         esbMessage.setBooleanProperty(
                 IS_LEGSTAR_MESSAGING, Boolean.valueOf(isLegStarMessaging));
     }
@@ -120,7 +124,7 @@ public abstract class AbstractHostEsbTransformer extends AbstractEventAwareTrans
      * @return the Target Mainframe character set from the
      * message properties or the configured one
      */
-    public final String getHostCharset(final UMOMessage message) {
+    public final String getHostCharset(final MuleMessage message) {
         return message.getStringProperty(
                 HOST_CHARSET_PROPERTY, getHostCharset());
     }
@@ -140,6 +144,13 @@ public abstract class AbstractHostEsbTransformer extends AbstractEventAwareTrans
      */
     public final void setHostCharset(final String hostCharset) {
         mHostCharset = hostCharset;
+    }
+
+    /**
+     * @return Message labels
+     */
+    public LegstarMessages getLegstarMessages() {
+        return mLegstarMessages;
     }
 
 }

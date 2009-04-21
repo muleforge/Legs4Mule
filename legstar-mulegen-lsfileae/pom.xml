@@ -95,10 +95,10 @@
             <artifactId>mule-transport-http</artifactId>
         </dependency>
 
-        <!-- LegStar Standard HTTP transport -->    
+        <!-- LegStar Mock transport -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-chttprt</artifactId>
+            <artifactId>legstar-cmockrt</artifactId>
             <scope>test</scope>
         </dependency>
 

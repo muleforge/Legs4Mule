@@ -12,11 +12,12 @@ package org.mule.providers.legstar.transformers;
 
 import java.util.HashMap;
 
-import org.mule.impl.RequestContext;
-import org.mule.tck.AbstractTransformerTestCase;
-import org.mule.umo.UMOEvent;
-import org.mule.umo.transformer.TransformerException;
-import org.mule.umo.transformer.UMOTransformer;
+import org.mule.DefaultMuleMessage;
+import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractTransformerTestCase;
+import org.mule.api.MuleMessage;
+import org.mule.api.transformer.TransformerException;
+import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
 import com.legstar.coxb.transform.AbstractTransformers;
@@ -33,6 +34,10 @@ import com.legstar.test.coxb.lsfileac.bind.ReplyStatusTransformers;
  */
 public class LsfileacJavaToLegStarMessageTransformerTest extends AbstractTransformerTestCase {
 
+    
+    /** This makes sure there is a single instance of test data. */
+    private static final Object TEST_DATA = createTestData();
+    
     /**
      * A simplistic implementation of the abstract class being tested.
      *
@@ -64,19 +69,7 @@ public class LsfileacJavaToLegStarMessageTransformerTest extends AbstractTransfo
     }
 
     /** {@inheritDoc} */
-    protected void doSetUp() throws Exception {
-        /* Override to set message properties */
-        UMOEvent event = getTestEvent("test");
-        event.getMessage().setBooleanProperty(
-                AbstractHostEsbTransformer.IS_LEGSTAR_MESSAGING, true);
-        event.getMessage().setStringProperty(
-                AbstractJavaToHostEsbTransformer.PROGRAM_PROP_FILE_NAME,
-                "lsfileac.properties");
-        RequestContext.setEvent(event);
-    }
-
-    /** {@inheritDoc} */
-    public UMOTransformer getTransformer() throws Exception {
+    public AbstractMessageAwareTransformer getTransformer() throws Exception {
         return new LsfileacJavaToHostTransformer();
     }
 
@@ -87,12 +80,17 @@ public class LsfileacJavaToLegStarMessageTransformerTest extends AbstractTransfo
     }
 
     /** {@inheritDoc} */
-    public UMOTransformer getRoundTripTransformer() throws Exception {
+    public Transformer getRoundTripTransformer() throws Exception {
         return null;
     }
 
     /** {@inheritDoc} */
     public Object getTestData() {
+        return TEST_DATA;
+    }
+
+    /** {@inheritDoc} */
+    public static Object createTestData() {
         LsfileacHolder holder = new LsfileacHolder();
         try {
             holder.setReplyData(new ReplyDataTransformers().toJava(
@@ -103,6 +101,28 @@ public class LsfileacJavaToLegStarMessageTransformerTest extends AbstractTransfo
             fail(e.getMessage());
         }
         return holder;
+    }
+
+    /**
+     *  {@inheritDoc}
+     * We override this method in order to set the message property that
+     * commands legstar messaging and program properties.
+     *      */
+    public void testTransform() throws Exception  {
+        MuleMessage muleMessage = new DefaultMuleMessage(getTestData());
+        muleMessage.setBooleanProperty(
+                AbstractHostEsbTransformer.IS_LEGSTAR_MESSAGING, true);
+        muleMessage.setStringProperty(
+                AbstractJavaToHostEsbTransformer.PROGRAM_PROP_FILE_NAME,
+                "lsfileac.properties");
+        
+        Object result = this.getTransformer().transform(muleMessage, "");
+        assertNotNull(result);
+
+        Object expectedResult = this.getResultData();
+        assertNotNull(expectedResult);
+
+        assertTrue(this.compareResults(expectedResult, result));
     }
 
     /**

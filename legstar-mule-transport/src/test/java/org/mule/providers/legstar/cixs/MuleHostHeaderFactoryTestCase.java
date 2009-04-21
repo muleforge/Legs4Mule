@@ -13,8 +13,8 @@ package org.mule.providers.legstar.cixs;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mule.impl.MuleMessage;
-import org.mule.umo.UMOMessage;
+import org.mule.DefaultMuleMessage;
+import org.mule.api.MuleMessage;
 
 import junit.framework.TestCase;
 
@@ -36,8 +36,8 @@ public class MuleHostHeaderFactoryTestCase extends TestCase {
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_CHARSET, "IBM01147");
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_ENDPOINT, "someMainframe");
 
-        UMOMessage umoMessage = new MuleMessage("message", messageProperties);
-        MuleHostHeader h = MuleHostHeaderFactory.createHostHeader(umoMessage);
+        MuleMessage esbMessage = new DefaultMuleMessage("message", messageProperties);
+        MuleHostHeader h = MuleHostHeaderFactory.createHostHeader(esbMessage);
         assertEquals("P390", h.getHostUserID());
         assertEquals("STREAM2", h.getHostPassword());
         assertEquals("lsfileae-client", h.getHostRequestID());

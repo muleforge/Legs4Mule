@@ -207,40 +207,19 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
      */
     private void checkResults(final CixsMuleComponent muleComponent) {
         
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                mGenerator.getTargetSrcDir(), muleComponent.getPackageName(), true);
-        
         compare(mGenerator.getTargetAntDir(),
                 "build.xml", muleComponent.getInterfaceClassName());
-        compare(componentClassFilesDir,
-                muleComponent.getInterfaceClassName() + "Callable.java");
         compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-adapter-standalone-config-" + muleComponent.getName() + ".xml");
-        compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-adapter-bridge-config-" + muleComponent.getName() + ".xml");
+                "mule-adapter-http-config-" + muleComponent.getName() + ".xml");
         
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     mGenerator.getTargetSrcDir(), operation.getPackageName(), false);
             
-            if (operation.getCicsChannel() != null
-                    && operation.getCicsChannel().length() > 0) {
-                compare(operationClassFilesDir,
-                        operation.getRequestHolderType() + ".java",
-                        muleComponent.getInterfaceClassName());
-                compare(operationClassFilesDir,
-                        operation.getResponseHolderType() + ".java",
-                        muleComponent.getInterfaceClassName());
-            }
-
             compare(mGenerator.getTargetPropDir(),
                     operation.getCicsProgramName().toLowerCase(
                             Locale.getDefault()) + ".properties",
-                    muleComponent.getInterfaceClassName());
-
-            compare(operationClassFilesDir,
-                    operation.getClassName() + "ProgramInvoker.java",
                     muleComponent.getInterfaceClassName());
 
             compare(operationClassFilesDir,

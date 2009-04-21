@@ -18,6 +18,7 @@ import org.mule.providers.legstar.model.AntBuildCixs2MuleModel;
 import org.mule.providers.legstar.model.UmoComponentParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;
+import com.legstar.cixs.jaxws.gen.Cixs2JaxwsGenerator;
 import com.legstar.cixs.jaxws.gen.StructuresGenerator;
 import com.legstar.cixs.jaxws.model.CobolHttpClientType;
 import com.legstar.cixs.jaxws.model.HttpTransportParameters;
@@ -91,7 +92,7 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         File componentConfFilesDir = getTargetMuleConfigDir();
         
         /* Produce artifacts for local component  */
-        generateProxyConfigXml(
+        generateProxyHttpConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
         
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
@@ -109,11 +110,11 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             generateObjectToHttpResponseTransformers(
                     operation, parameters, operationClassFilesDir);
 
-            generateCobolSampleHttpClient(
+            Cixs2JaxwsGenerator.generateCobolCicsClient(
                     getCixsMuleComponent(), operation, parameters,
                     getTargetCobolDir(),
                     getSampleCobolHttpClientTypeInternal());
-            
+                    
         }
         
     }

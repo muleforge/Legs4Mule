@@ -13,9 +13,9 @@ package org.mule.providers.legstar.transformers;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mule.tck.AbstractTransformerTestCase;
-import org.mule.umo.transformer.TransformerException;
-import org.mule.umo.transformer.UMOTransformer;
+import org.mule.transformer.AbstractTransformerTestCase;
+import org.mule.api.transformer.TransformerException;
+import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
 import com.legstar.coxb.transform.AbstractTransformers;
@@ -133,7 +133,7 @@ public class LsfileacLegStarMessageToJavaTransformerTest extends AbstractTransfo
     }
 
     /** {@inheritDoc} */
-    public UMOTransformer getTransformer() throws Exception {
+    public Transformer getTransformer() throws Exception {
         return new LsfileacHostToJavaTransformer();
     }
 
@@ -146,7 +146,7 @@ public class LsfileacLegStarMessageToJavaTransformerTest extends AbstractTransfo
     }
 
     /** {@inheritDoc} */
-    public UMOTransformer getRoundTripTransformer() throws Exception {
+    public Transformer getRoundTripTransformer() throws Exception {
         return null;
     }
 

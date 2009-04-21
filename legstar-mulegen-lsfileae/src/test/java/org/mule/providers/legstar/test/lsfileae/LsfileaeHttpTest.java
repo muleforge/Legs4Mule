@@ -15,23 +15,24 @@ import java.io.ObjectInputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mule.extras.client.MuleClient;
+import org.mule.module.client.MuleClient;
 import org.mule.providers.legstar.cixs.MuleHostHeaderFactory;
 import org.mule.tck.FunctionalTestCase;
-import org.mule.umo.UMOMessage;
+import org.mule.transport.NullPayload;
+import org.mule.api.MuleMessage;
 
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
 import com.legstar.test.coxb.lsfileae.ObjectFactory;
 
 /**
- * Test the adapter for LSFILEAE in a standalone configuration (using legstar regular transports).
+ * Test the adapter for LSFILEAE in a bridge configuration (using legstar-mule HTTP transport).
  * This test requires access to an actual mainframe running FILEA sample.
  */
-public class LsfileaeStandaloneTest extends FunctionalTestCase {
+public class LsfileaeHttpTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-adapter-standalone-config-lsfileae.xml";
+        return "mule-adapter-http-config-lsfileae.xml";
     }
     
     /**
@@ -46,13 +47,14 @@ public class LsfileaeStandaloneTest extends FunctionalTestCase {
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_PASSWORD, "MYPASS");
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_TRACE_MODE, new Boolean(true));
         MuleClient client = new MuleClient();
-        UMOMessage message = client.send(
-                "tcp://localhost:3213/lsfileae",
+        MuleMessage message = client.send(
+                "tcp://localhost:3213",
                 getJavaObjectRequest100(),
                 messageProperties);
         assertNotNull(message);
-        assertNull(message.getExceptionPayload());
         assertFalse(message.getPayload() == null);
+        assertFalse(message.getExceptionPayload() != null);
+        assertFalse(message.getPayload() instanceof NullPayload);
         assertTrue(message.getPayload() instanceof byte[]);
         ObjectInputStream in = new ObjectInputStream(
                 new ByteArrayInputStream((byte[]) message.getPayload()));

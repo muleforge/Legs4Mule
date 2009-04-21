@@ -10,9 +10,12 @@
  ******************************************************************************/
 package org.mule.providers.legstar.cixs;
 
-import org.mule.umo.UMOException;
-import org.mule.umo.lifecycle.InitialisationException;
-import org.mule.umo.manager.UMOAgent;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.mule.api.MuleException;
+import org.mule.api.lifecycle.InitialisationException;
+import org.mule.api.agent.Agent;
 import org.apache.commons.logging.Log; 
 import org.apache.commons.logging.LogFactory; 
 import org.apache.commons.configuration.CombinedConfiguration;
@@ -29,7 +32,7 @@ import com.legstar.host.server.EngineStartupException;
  * and will result in all LegStar connections to be pooled. 
  *
  */
-public class LegStarPoolAgent implements UMOAgent {
+public class LegStarPoolAgent implements Agent {
 
     /** Describes the Agent. */
     private static final String DESCRIPTION =
@@ -76,12 +79,12 @@ public class LegStarPoolAgent implements UMOAgent {
     }
 
     /** {@inheritDoc} */
-    public final void start() throws UMOException {
+    public final void start() throws MuleException {
         LOG.info("Pool engine started");
     }
 
     /** {@inheritDoc} */
-    public final void stop() throws UMOException {
+    public final void stop() throws MuleException {
         LOG.info("Pool engine stopped");
         if (mServerHandler != null) {
             mServerHandler.stop();
@@ -130,6 +133,11 @@ public class LegStarPoolAgent implements UMOAgent {
         LOG.debug("Load success for " + configFileName);
         return config; 
 
+    }
+
+    /** {@inheritDoc} */
+    public List < Class < ? extends Agent > > getDependentAgents() {
+        return new ArrayList < Class < ? extends Agent > >();
     }
 
 }

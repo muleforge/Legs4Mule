@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.mule.providers.legstar.transformers;
 
-import org.mule.tck.AbstractTransformerTestCase;
-import org.mule.umo.transformer.UMOTransformer;
+import org.mule.transformer.AbstractTransformerTestCase;
+import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
 import com.legstar.test.coxb.LsfileaeCases;
@@ -51,7 +51,7 @@ public class LsfileaeLegStarMessageToJavaTransformerTest extends AbstractTransfo
     }
 
     /** {@inheritDoc} */
-    public UMOTransformer getTransformer() throws Exception {
+    public Transformer getTransformer() throws Exception {
         return new LsfileaeHostToJavaTransformer();
     }
 
@@ -61,7 +61,7 @@ public class LsfileaeLegStarMessageToJavaTransformerTest extends AbstractTransfo
     }
 
     /** {@inheritDoc} */
-    public UMOTransformer getRoundTripTransformer() throws Exception {
+    public Transformer getRoundTripTransformer() throws Exception {
         return null;
     }
 

@@ -7,8 +7,8 @@
     <name>LegStar for Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
-        <muleVersion>1.4.4</muleVersion>
-        <legstarVersion>1.2.3</legstarVersion>
+        <muleVersion>2.2.1</muleVersion>
+        <legstarVersion>1.2.4</legstarVersion>
         <legstarMuleVersion>1.0-RC4-SNAPSHOT</legstarMuleVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
@@ -97,6 +97,18 @@
         <repository>
             <id>download.java.net</id>
             <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>muleforge-repo</id>
+            <name>MuleForge Repository</name>
+            <url>http://repository.muleforge.org</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>codehaus-repo</id>
+            <name>Codehaus Repository</name>
+            <url>http://dist.codehaus.org/mule/dependencies/maven2</url>
+            <layout>default</layout>
         </repository>
     </repositories>
 
@@ -436,6 +448,13 @@
                 <version>${legstarVersion}</version>
             </dependency>
 
+            <!-- LegStar Binding runtime -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-coxbrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
             <!-- LegStar pooling engine -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
@@ -539,12 +558,38 @@
                 <scope>test</scope>
             </dependency>
 
+            <!-- LegStar Mock transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cmockrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
             <!-- Mule test helpers -->    
             <dependency>
                 <groupId>org.mule.tests</groupId>
                 <artifactId>mule-tests-functional</artifactId>
                 <version>${muleVersion}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>mockobjects</groupId>
+                <artifactId>mockobjects-core</artifactId>
+                <version>0.09</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Spring framework -->    
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>2.5.6</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>commons-logging</artifactId>
+                        <groupId>commons-logging</groupId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!-- Eclipse dependencies. -->

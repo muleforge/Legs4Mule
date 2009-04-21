@@ -214,7 +214,7 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         compare(mGenerator.getTargetAntDir(),
                 "build.xml", muleComponent.getInterfaceClassName());
         compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-proxy-config-" + muleComponent.getName() + ".xml");
+                "mule-proxy-http-config-" + muleComponent.getName() + ".xml");
 
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(

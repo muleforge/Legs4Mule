@@ -15,10 +15,8 @@ import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mule.providers.legstar.i18n.LegstarMessages;
-import org.mule.umo.UMOEventContext;
-import org.mule.umo.UMOMessage;
-import org.mule.umo.transformer.TransformerException;
+import org.mule.api.MuleMessage;
+import org.mule.api.transformer.TransformerException;
 
 import com.legstar.coxb.transform.AbstractTransformers;
 import com.legstar.coxb.transform.HostTransformException;
@@ -84,32 +82,38 @@ public abstract class AbstractJavaToHostEsbTransformer extends AbstractHostEsbTr
      * properties are collected from a string in the incoming esb message properties.
      *  */
     public Object transform(
-            final Object src,
-            final String encoding,
-            final UMOEventContext context) throws TransformerException {
+            final MuleMessage esbMessage,
+            final String encoding) throws TransformerException {
 
-        UMOMessage esbMessage = context.getMessage();
         if (LOG.isDebugEnabled()) {
             LOG.debug("ESB Message before processing:");
             LOG.debug(esbMessage);
         }
         try {
 
+            /* Get the target program attributes if any. */
+            String programPropFileName = esbMessage.getStringProperty(
+                    PROGRAM_PROP_FILE_NAME, null);
+
+            /* Single part messages come with binding transformers */
             if (getBindingTransformers() != null) {
                 byte[] hostData = getBindingTransformers().toHost(
-                        src, getHostCharset(esbMessage));
-                if (isLegStarMessaging(esbMessage)) {
-                    LegStarMessage legStarMessage = createLegStarMessage(esbMessage);
+                        esbMessage.getPayload(), getHostCharset(esbMessage));
+
+                /* If we are passed target program attributes wrap in a legstar message */
+                if (programPropFileName != null && programPropFileName.length() > 0) {
+                    LegStarMessage legStarMessage = createLegStarMessage(programPropFileName);
                     legStarMessage.addDataPart(new CommareaPart(hostData));
                     return legStarMessage.toByteArray();
                 } else {
                     return hostData;
                 }
             } else {
-                LegStarMessage legStarMessage = createLegStarMessage(esbMessage);
+                /* Multi-part messages are always wrapped in a legstar message */
+                LegStarMessage legStarMessage = createLegStarMessage(programPropFileName);
                 for (Entry < String, AbstractTransformers > entry
                         : getBindingTransformersMap().entrySet()) {
-                    Object valueObject = getObjectFromHolder(src, entry.getKey());
+                    Object valueObject = getObjectFromHolder(esbMessage.getPayload(), entry.getKey());
                     legStarMessage.addDataPart(new ContainerPart(entry.getKey(),
                             entry.getValue().toHost(
                                     valueObject, getHostCharset(esbMessage))));
@@ -119,25 +123,12 @@ public abstract class AbstractJavaToHostEsbTransformer extends AbstractHostEsbTr
 
         } catch (HostMessageFormatException e) {
             throw new TransformerException(
-                    LegstarMessages.hostMessageFormatFailure(), this, e);
+                    getLegstarMessages().hostMessageFormatFailure(), this, e);
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    LegstarMessages.hostTransformFailure(), this, e);
+                    getLegstarMessages().hostTransformFailure(), this, e);
         }
 
-    }
-
-    /**
-     * Produce an empty architected LegStar message (with no data parts).
-     * @param esbMessage the esb message
-     * @return a LegStar message with no data parts
-     * @throws TransformerException if message cannot be built
-     */
-    public LegStarMessage createLegStarMessage(
-            final UMOMessage esbMessage) throws TransformerException {
-        String programPropFileName = esbMessage.getStringProperty(
-                PROGRAM_PROP_FILE_NAME, null);
-        return createLegStarMessage(programPropFileName);
     }
 
     /**
@@ -161,10 +152,10 @@ public abstract class AbstractJavaToHostEsbTransformer extends AbstractHostEsbTr
             return legStarMessage;
         } catch (CicsProgramException e) {
             throw new TransformerException(
-                    LegstarMessages.hostTransformFailure(), this, e);
+                    getLegstarMessages().hostTransformFailure(), this, e);
         } catch (HeaderPartException e) {
             throw new TransformerException(
-                    LegstarMessages.hostTransformFailure(), this, e);
+                    getLegstarMessages().hostTransformFailure(), this, e);
         }
     }
 
@@ -182,7 +173,7 @@ public abstract class AbstractJavaToHostEsbTransformer extends AbstractHostEsbTr
             final Object holderObject,
             final String partID) throws TransformerException {
         throw new TransformerException(
-                LegstarMessages.noMultiPartSupportFailure(), this);
+                getLegstarMessages().noMultiPartSupportFailure(), this);
     }
 
 }

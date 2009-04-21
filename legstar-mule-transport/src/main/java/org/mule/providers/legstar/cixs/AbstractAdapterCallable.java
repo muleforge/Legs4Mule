@@ -17,8 +17,8 @@ import javax.naming.NamingException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.mule.umo.UMOEventContext;
-import org.mule.umo.lifecycle.Callable;
+import org.mule.api.MuleEventContext;
+import org.mule.api.lifecycle.Callable;
 
 /**
  * Abstract class shields generated actions from Mule.
@@ -64,7 +64,7 @@ public abstract class AbstractAdapterCallable implements Callable {
     }
  
     /** {@inheritDoc} */
-    public Object onCall(final UMOEventContext eventContext) throws Exception {
+    public Object onCall(final MuleEventContext eventContext) throws Exception {
         if (LOG.isDebugEnabled()) {
             LOG.debug("onCall request for " + getActionAdapterName()
                     + " Message before:" + eventContext.getMessage());
@@ -72,7 +72,7 @@ public abstract class AbstractAdapterCallable implements Callable {
 
         MuleHostHeader hostHeader =
             MuleHostHeaderFactory.createHostHeader(eventContext.getMessage());
-        Object requestContent = eventContext.getTransformedMessage();
+        Object requestContent = eventContext.getMessage();
         Object response = call(requestContent, hostHeader);
 
         if (LOG.isDebugEnabled()) {

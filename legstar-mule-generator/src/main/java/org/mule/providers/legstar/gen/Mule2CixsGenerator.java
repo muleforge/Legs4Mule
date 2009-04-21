@@ -63,17 +63,9 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
             final Map < String, Object > parameters) throws CodeGenMakeException {
 
         /* Determine target files locations */
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                getTargetSrcDir(), getCixsMuleComponent().getPackageName(), true);
         File componentConfFilesDir = getTargetMuleConfigDir();
         File operationPropertiesFilesDir = getTargetPropDir();
 
-
-        /* Produce artifacts for standalone component */
-        generateAdapterCallableInvoker(
-                getCixsMuleComponent(), parameters, componentClassFilesDir);
-        generateAdapterStandaloneConfigXml(
-                getCixsMuleComponent(), parameters, componentConfFilesDir);
 
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
         {
@@ -82,17 +74,15 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
 
-            generateHolders(
+            Jaxws2CixsGenerator.generateHolders(
                     operation, parameters, operationClassFilesDir);
             Jaxws2CixsGenerator.generateProgramProperties(
                     operation, parameters, operationPropertiesFilesDir);
-            generateProgramInvoker(
-                    operation, parameters, operationClassFilesDir);
 
         }
 
         /* Produce artifacts for bridge component  */
-        generateAdapterBridgeConfigXml(
+        generateAdapterHttpConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
 
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())

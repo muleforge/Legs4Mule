@@ -18,8 +18,6 @@ import org.mule.providers.legstar.model.AbstractAntBuildCixsMuleModel;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
 import com.legstar.cixs.gen.model.CixsOperation;
-import com.legstar.cixs.jaxws.gen.Cixs2JaxwsGenerator;
-import com.legstar.cixs.jaxws.model.CobolHttpClientType;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
 
@@ -32,29 +30,17 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String CIXS_MULE_GENERATOR_NAME =
         "LegStar Mule Component generator";
 
-    /** Velocity template for callable invoker implementation. */
-    public static final String COMPONENT_CALLABLE_INVOKER_VLC_TEMPLATE =
-        "vlc/cixsmule-component-callable-invoker.vm";
-
     /** Velocity template for ant build jar. */
     public static final String COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE =
         "vlc/cixsmule-component-ant-build-jar-xml.vm";
 
-    /** Velocity template for standalone mule configuration xml. */
-    public static final String COMPONENT_ADAPTER_STANDALONE_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-adapter-standalone-config-xml.vm";
-
-    /** Velocity template for bridge mule configuration xml. */
-    public static final String COMPONENT_ADAPTER_BRIDGE_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-adapter-bridge-config-xml.vm";
+    /** Velocity template for adapter-http mule configuration xml. */
+    public static final String COMPONENT_ADAPTER_HTTP_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-adapter-http-config-xml.vm";
 
     /** Velocity template for local mule configuration xml. */
-    public static final String COMPONENT_PROXY_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-proxy-config-xml.vm";
-
-    /** Velocity template for holder. */
-    public static final String OPERATION_HOLDER_VLC_TEMPLATE =
-        "vlc/cixsmule-operation-holder.vm";
+    public static final String COMPONENT_PROXY_HTTP_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-proxy-http-config-xml.vm";
 
     /** Velocity template for object to host byte array transformer. */
     public static final String OPERATION_OBJECT_TO_HBA_VLC_TEMPLATE =
@@ -68,10 +54,6 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String OPERATION_OBJECT_TO_HTTP_RESPONSE_VLC_TEMPLATE =
         "vlc/cixsmule-operation-object-to-http-response-transformer.vm";
 
-    /** Velocity template for program invoker class. */
-    public static final String OPERATION_PROGRAM_INVOKER_VLC_TEMPLATE =
-        "vlc/cixsmule-operation-program-invoker.vm";
-
     /** The service model name is it appears in templates. */
     public static final String COMPONENT_MODEL_NAME = "muleComponent";
 
@@ -81,67 +63,6 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      */
     public AbstractCixsMuleGenerator(final AbstractAntBuildCixsMuleModel model) {
         super(model);
-    }
-
-    /**
-     * Create the Mule callable invoker class file.
-     * @param component the Mule component description
-     * @param parameters miscellaneous help parameters
-     * @param componentClassFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     */
-    public static void generateAdapterCallableInvoker(
-            final CixsMuleComponent component,
-            final Map < String, Object > parameters,
-            final File componentClassFilesDir)
-    throws CodeGenMakeException {
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_CALLABLE_INVOKER_VLC_TEMPLATE,
-                COMPONENT_MODEL_NAME,
-                component,
-                parameters,
-                componentClassFilesDir,
-                component.getInterfaceClassName() + "Callable.java");
-    }
-
-    /**
-     * Create a holder classes for channel/containers.
-     * @param operation the cixs operation
-     * @param parameters miscellaneous help parameters
-     * @param operationClassFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     */
-    public static void generateHolders(
-            final CixsOperation operation,
-            final Map < String, Object > parameters,
-            final File operationClassFilesDir)
-    throws CodeGenMakeException {
-
-        if (operation.getCicsChannel() == null
-                || operation.getCicsChannel().length() == 0) {
-            return;
-        }
-
-        if (operation.getInput().size() > 0) {
-            parameters.put("propertyName", "Request");
-            generateFile(CIXS_MULE_GENERATOR_NAME,
-                    OPERATION_HOLDER_VLC_TEMPLATE,
-                    "cixsOperation",
-                    operation,
-                    parameters,
-                    operationClassFilesDir,
-                    operation.getRequestHolderType() + ".java");
-        }
-        if (operation.getOutput().size() > 0) {
-            parameters.put("propertyName", "Response");
-            generateFile(CIXS_MULE_GENERATOR_NAME,
-                    OPERATION_HOLDER_VLC_TEMPLATE,
-                    "cixsOperation",
-                    operation,
-                    parameters,
-                    operationClassFilesDir,
-                    operation.getResponseHolderType() + ".java");
-        }
     }
 
     /**
@@ -163,27 +84,6 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                 parameters,
                 componentAntFilesDir,
         "build.xml");
-    }
-
-    /**
-     * Create the Mule adapter stand alone configuration XML file.
-     * @param component the Mule component description
-     * @param parameters miscellaneous help parameters
-     * @param componentConfFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     */
-    public static void generateAdapterStandaloneConfigXml(
-            final CixsMuleComponent component,
-            final Map < String, Object > parameters,
-            final File componentConfFilesDir)
-    throws CodeGenMakeException {
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_ADAPTER_STANDALONE_CONFIG_XML_VLC_TEMPLATE,
-                COMPONENT_MODEL_NAME,
-                component,
-                parameters,
-                componentConfFilesDir,
-                "mule-adapter-standalone-config-" + component.getName() + ".xml");
     }
 
     /**
@@ -352,102 +252,45 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * Create the Mule adapter bridge configuration XML file.
+     * Create the Mule adapter over http configuration XML file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentConfFilesDir where to store the generated file
      * @throws CodeGenMakeException if generation fails
      */
-    public static void generateAdapterBridgeConfigXml(
+    public static void generateAdapterHttpConfigXml(
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentConfFilesDir)
     throws CodeGenMakeException {
         generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_ADAPTER_BRIDGE_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_ADAPTER_HTTP_CONFIG_XML_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
                 component,
                 parameters,
                 componentConfFilesDir,
-                "mule-adapter-bridge-config-" + component.getName() + ".xml");
+                "mule-adapter-http-config-" + component.getName() + ".xml");
     }
 
     /**
-     * Create the Mule proxy configuration XML file.
+     * Create the Mule proxy over http configuration XML file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentConfFilesDir where to store the generated file
      * @throws CodeGenMakeException if generation fails
      */
-    public static void generateProxyConfigXml(
+    public static void generateProxyHttpConfigXml(
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentConfFilesDir)
     throws CodeGenMakeException {
         generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_PROXY_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_PROXY_HTTP_CONFIG_XML_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
                 component,
                 parameters,
                 componentConfFilesDir,
-                "mule-proxy-config-" + component.getName() + ".xml");
-    }
-
-    /**
-     * Create a COBOl CICS HTTP Client program to use for testing.
-     * @param component the Mule service description
-     * @param operation the operation for which a program is to be generated
-     * @param parameters the set of parameters to pass to template engine
-     * @param cobolFilesDir location where COBOL code should be generated
-     * @param cobolHttpClientType the type of cobol http client to generate
-     * @throws CodeGenMakeException if generation fails
-     */
-    protected static void generateCobolSampleHttpClient(
-            final CixsMuleComponent component,
-            final CixsOperation operation,
-            final Map < String, Object > parameters,
-            final File cobolFilesDir,
-            final CobolHttpClientType cobolHttpClientType) throws CodeGenMakeException {
-        String template;
-        switch(cobolHttpClientType) {
-        case DFHWBCLI:
-            template = Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_DFHWBCLI_CLIENT_VLC_TEMPLATE;
-            break;
-        case WEBAPI:
-            template = Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_WEBAPI_CLIENT_VLC_TEMPLATE;
-            break;
-        default:
-            template = Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_LSHTTAPI_CLIENT_VLC_TEMPLATE;
-        }
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                template,
-                COMPONENT_MODEL_NAME,
-                component,
-                parameters,
-                cobolFilesDir,
-                operation.getCicsProgramName() + ".cbl");
-    }
-
-    /**
-     * Create a program invoker class.
-     * @param operation the cixs operation
-     * @param parameters miscellaneous help parameters
-     * @param operationClassFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     * TODO merge with LegStar when it is ready
-     */
-    public static void generateProgramInvoker(
-            final CixsOperation operation,
-            final Map < String, Object > parameters,
-            final File operationClassFilesDir)
-    throws CodeGenMakeException {
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                OPERATION_PROGRAM_INVOKER_VLC_TEMPLATE,
-                "cixsOperation",
-                operation,
-                parameters,
-                operationClassFilesDir,
-                operation.getClassName() + "ProgramInvoker.java");
+                "mule-proxy-http-config-" + component.getName() + ".xml");
     }
 
     /**
