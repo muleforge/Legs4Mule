@@ -75,6 +75,33 @@ public final class PreferenceConstants {
     public static final String PROXY_LAST_LEGSTAR_BUTTON_SELECTION =
         "com.legstar.eclipse.plugin.mulegen.proxy.LastLegstarButtonSelection";
     
+    /* --------------------------------------------------------------------- */
+    /* Adapter to Mainframe HTTP transport preferences.                      */
+    /* --------------------------------------------------------------------- */
+    /** HTTP Host exposed by mainframe to adapter. */
+    public static final String ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.DefaultHttpHost";
+
+    /** HTTP Port on which mainframe listens to adapter. */
+    public static final String ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.DefaultHttpPort";
+
+    /** HTTP path on which mainframe listens to adapter. */
+    public static final String ADAPTER_TO_MAINFRAME_HTTP_PATH =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.HttpPath";
+
+    /** Last HTTP Host exposed to JBoss ESB clients. */
+    public static final String ADAPTER_TO_MAINFRAME_LAST_HTTP_HOST =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastHttpHost";
+
+    /** Last Port on which HTTP listens to JBoss ESB clients. */
+    public static final String ADAPTER_TO_MAINFRAME_LAST_HTTP_PORT =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastHttpPort";
+
+    /** Last for path on which HTTP listens to JBoss ESB clients. */
+    public static final String ADAPTER_TO_MAINFRAME_LAST_HTTP_PATH =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastHttpPath";
+
     /** Utility class. */
     private PreferenceConstants() {
         

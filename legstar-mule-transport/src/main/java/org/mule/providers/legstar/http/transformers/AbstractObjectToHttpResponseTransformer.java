@@ -13,13 +13,15 @@ package org.mule.providers.legstar.http.transformers;
 import java.io.IOException;
 
 import org.mule.providers.legstar.i18n.LegstarMessages;
-import org.mule.providers.legstar.transformers.AbstractJavaToHostEsbTransformer;
+import org.mule.providers.legstar.transformers.AbstractHostMuleTransformer;
 import org.mule.transport.NullPayload;
 import org.mule.transport.http.HttpConstants;
 import org.mule.transport.http.HttpResponse;
 import org.mule.transport.http.transformers.MuleMessageToHttpResponse;
 import org.mule.api.transformer.TransformerException;
 import org.mule.api.MuleMessage;
+
+import com.legstar.coxb.transform.HostTransformException;
 
 /**
  * <code>AbstractObjectToHttpResponseTransformer</code> contains methods that
@@ -71,32 +73,38 @@ public abstract class AbstractObjectToHttpResponseTransformer extends MuleMessag
             final MuleMessage muleMessage,
             final String encoding) throws TransformerException {
 
-        Object src = muleMessage.getPayload();
-        
-        /* This situation arises if the client starts by an HTTP HEAD method. */
-        if (src instanceof HttpResponse) {
-            return src;
-        }
-        
-        /* This situation happens when an exception happened. There is normally
-        * a 500 http status set by the standard Mule exception mapping 
-        * mechanism */
-        if (src instanceof NullPayload) {
-            return super.transform(muleMessage, encoding);
-        }
+        try {
+            Object src = muleMessage.getPayload();
+            
+            /* This situation arises if the client starts by an HTTP HEAD method. */
+            if (src instanceof HttpResponse) {
+                return src;
+            }
+            
+            /* This situation happens when an exception happened. There is normally
+            * a 500 http status set by the standard Mule exception mapping 
+            * mechanism */
+            if (src instanceof NullPayload) {
+                return super.transform(muleMessage, encoding);
+            }
 
-        /* Use existing transformer to get a host byte array */
-        AbstractJavaToHostEsbTransformer xformer =
-            getJavaToHostEsbTransformer();
-        byte[] hostBytes = (byte[]) xformer.transform(src);
-        muleMessage.setPayload(hostBytes);
-        
-        /* Delegate to parent the encapsulation in an http body */
-        return super.transform(muleMessage, encoding);
+            /* Use existing transformer to get a host byte array */
+            AbstractHostMuleTransformer transformer = getJavaToHostMuleTransformer();
+            byte[] hostBytes = (byte[]) transformer.transform(muleMessage, encoding);
+            muleMessage.setPayload(hostBytes);
+            
+            /* Delegate to parent the encapsulation in an http body */
+            return super.transform(muleMessage, encoding);
+        } catch (HostTransformException e) {
+            throw new TransformerException(
+                    getLegstarMessages().hostTransformFailure(), this, e);
+        }
     }
     
     /**
-     * @return an instance of a java to host byte array transformer
+     * @return an instance of a transformer
+     * @throws HostTransformException if transformer cannot be obtained
      */
-    public abstract AbstractJavaToHostEsbTransformer getJavaToHostEsbTransformer();
+    public abstract AbstractHostMuleTransformer getJavaToHostMuleTransformer(
+            ) throws HostTransformException;
 }

@@ -49,6 +49,10 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         try {
             CodeGenUtil.checkDirectory(
                     getTargetPropDir(), true, "TargetPropDir");
+
+            /* Check that we have a URI to expose to mainframe programs */
+            getHttpTransportParameters().check();
+
         } catch (IllegalArgumentException e) {
             throw new CodeGenMakeException(e);
         }
@@ -88,36 +92,24 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
         {
             /* Determine target files locations */
-            File operationClassFilesDir = CodeGenUtil.classFilesLocation(
-                    getTargetSrcDir(), operation.getPackageName(), true);
+            File transformersDir = CodeGenUtil.classFilesLocation(
+                    getTargetSrcDir(),
+                    operation.getPackageName(),
+                    true);
 
-            generateHbaToObjectTransformers(
-                    operation, parameters, operationClassFilesDir);
-            generateObjectToHbaTransformers(
-                    operation, parameters, operationClassFilesDir);
+            generateHostToJavaTransformers(
+                    operation, parameters, transformersDir);
+            generateJavaToHostTransformers(
+                    operation, parameters, transformersDir);
 
         }
 
     }
 
-    /**
-     * @return the URI that the host exposes to consumers
-     */
-    public final String getHostURI() {
-        return ((AntBuildMule2CixsModel) getAntModel()).getHostURI();
-    }
-
-    /**
-     * @param hostURI the URI that the host exposes to consumers to set
-     */
-    public final void setHostURI(final String hostURI) {
-        ((AntBuildMule2CixsModel) getAntModel()).setHostURI(hostURI);
-    }
-
     /** {@inheritDoc} */
     public void addExtendedParameters(final Map < String, Object > parameters) {
         parameters.put("generationTarget", GENERATION_TARGET);
-        parameters.put("hostURI", getHostURI());
+        getAntModel().getHttpTransportParameters().add(parameters);
     }
 
 }

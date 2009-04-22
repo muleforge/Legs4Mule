@@ -47,8 +47,6 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         initCixsMuleComponent(muleComponent);
         
-        mAntModel.setHostURI("legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN");
-
         processAnt();
     }
 
@@ -66,7 +64,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
                 "generate.xml");
 
         compare(mAntModel.getTargetAntDir(), "generate.xml",
-                mAntModel.getCixsMuleComponent().getInterfaceClassName());
+                mAntModel.getCixsMuleComponent().getName());
         runAnt(mAntModel.getTargetAntDir(), "generate.xml");
     }
     

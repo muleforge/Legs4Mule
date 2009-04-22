@@ -25,14 +25,14 @@
 
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
 #set($operationPackageName = ${cixsOperation.packageName})
-#set($requestTransformer = "HostByteArrayTo${cixsOperation.requestHolderType}")
+#set($requestTransformer = "HostTo${cixsOperation.requestHolderType}MuleTransformer")
 #set($responseTransformer = "${cixsOperation.responseHolderType}ToHttpResponse")
 #set($qualRequestTransformer = ${helper.getQualClassName($operationPackageName, $requestTransformer)})
 #set($qualResponseTransformer = ${helper.getQualClassName($operationPackageName, $responseTransformer)})
         <service name="${cixsOperation.name}ProxyService">
             <inbound>
                 <legstar-http:inbound-endpoint
-                        address="${httpURL}"
+                        address="legstar:${httpURL}"
                         synchronous="true" 
                         hostCharset="${hostCharset}">
                     <transformers>

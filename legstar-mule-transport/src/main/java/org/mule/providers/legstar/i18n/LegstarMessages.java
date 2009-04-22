@@ -191,4 +191,14 @@ public class LegstarMessages extends MessageFactory {
     public Message noMultiPartSupportFailure() {
         return createMessage(BUNDLE_PATH, MSG_NUM_16);
     }
+
+    /** Mule message payload is not an XML source.*/
+    private static final int MSG_NUM_17 = 17;
+    
+    /**
+     * @return Mule message payload is not an XML source.
+     */
+    public Message payloadNotXmlSource() {
+        return createMessage(BUNDLE_PATH, MSG_NUM_17);
+    }
 }

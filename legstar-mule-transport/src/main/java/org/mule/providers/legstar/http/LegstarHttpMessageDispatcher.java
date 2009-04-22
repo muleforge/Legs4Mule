@@ -13,7 +13,7 @@ package org.mule.providers.legstar.http;
 import org.apache.commons.httpclient.HttpMethod;
 import org.mule.transport.http.HttpClientMessageDispatcher;
 import org.mule.transport.http.HttpConstants;
-import org.mule.providers.legstar.transformers.AbstractHostEsbTransformer;
+import org.mule.providers.legstar.transformers.AbstractHostJavaMuleTransformer;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.OutboundEndpoint;
@@ -40,7 +40,7 @@ public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
      *  */
     protected MuleMessage doSend(final MuleEvent event) throws Exception {
         event.getMessage().setBooleanProperty(
-                AbstractHostEsbTransformer.IS_LEGSTAR_MESSAGING, true);
+                AbstractHostJavaMuleTransformer.IS_LEGSTAR_MESSAGING, true);
         return super.doSend(event);
     }
 

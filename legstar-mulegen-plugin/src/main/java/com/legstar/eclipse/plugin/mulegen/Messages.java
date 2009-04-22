@@ -111,6 +111,33 @@ public class Messages extends NLS {
     /** Sample configuration transport.*/
     public static String sample_configuration_transport_label;
 
+    /** Adapter to mainframe transport label.*/
+    public static String adapter_to_host_transport_label;
+
+    /** Settings for target mainframe HTTP group label.*/
+    public static String adapter_to_host_http_transport_group_label;
+    /** Host address on which mainframe listens to HTTP clients label.*/
+    public static String adapter_to_host_http_host_label;
+    /** Port on which mainframe listens to HTTP clients label.*/
+    public static String adapter_to_host_http_port_label;
+    /** Path on which mainframe listens to HTTP clients label.*/
+    public static String adapter_to_host_http_path_label;
+    /** User id for basic authentication.*/
+    public static String adapter_to_host_http_userid_label;
+    /** Password for basic authentication.*/
+    public static String adapter_to_host_http_password_label;
+
+    /** Invalid port number.*/
+    public static String invalid_http_port_number_msg;
+    /** Invalid host.*/
+    public static String invalid_http_host_msg;
+    /** Invalid path.*/
+    public static String invalid_http_path_msg;
+
+    
+    /** Choice of sample Cobol Http client label.*/
+    public static String sample_cobol_http_client_type_label;
+
     static {
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);
     }

@@ -50,7 +50,7 @@ extends AbstractCixsMuleGeneratorWizardPage {
     private CixsProxyUmoComponentTargetGroup mUmoComponentTargetGroup;
 
     /** HTTP Proxy client parameters. */
-    private Cixs2MuleProxyDeployHttpGroup mCixsProxyDeployHttpGroup;
+    private CixsHostToProxyHttpGroup mCixsHostToProxyHttpGroup;
 
     /**
      * Construct the page.
@@ -100,11 +100,11 @@ extends AbstractCixsMuleGeneratorWizardPage {
         Composite composite = new Composite(container, SWT.NULL);
         composite.setLayout(new RowLayout());
 
-        mCixsProxyDeployHttpGroup = new Cixs2MuleProxyDeployHttpGroup(this);
+        mCixsHostToProxyHttpGroup = new CixsHostToProxyHttpGroup(this);
 
-        mCixsProxyDeployHttpGroup.createButton(composite);
+        mCixsHostToProxyHttpGroup.createButton(composite);
  
-        mCixsProxyDeployHttpGroup.createControls(container);
+        mCixsHostToProxyHttpGroup.createControls(container);
     }
 
     /** {@inheritDoc} */
@@ -118,8 +118,8 @@ extends AbstractCixsMuleGeneratorWizardPage {
         getUmoComponentTargetGroup().initControls();
         getUmoComponentTargetGroup().getButton().setSelection(true);
 
-        getCixsProxyDeployHttpGroup().initControls();
-        getCixsProxyDeployHttpGroup().getButton().setSelection(true);
+        getCixsHostToProxyHttpGroup().initControls();
+        getCixsHostToProxyHttpGroup().getButton().setSelection(true);
     }
 
     /** {@inheritDoc} */
@@ -132,14 +132,14 @@ extends AbstractCixsMuleGeneratorWizardPage {
         });
 
         getUmoComponentTargetGroup().createListeners();
-        getCixsProxyDeployHttpGroup().createListeners();
+        getCixsHostToProxyHttpGroup().createListeners();
     }
 
     /** {@inheritDoc} */
     public boolean validateExtendedWidgets() {
 
         getUmoComponentTargetGroup().setVisibility();
-        getCixsProxyDeployHttpGroup().setVisibility();
+        getCixsHostToProxyHttpGroup().setVisibility();
 
         getShell().layout(new Control[] {mTargetGroup, mDeploymentGroup});
 
@@ -151,7 +151,7 @@ extends AbstractCixsMuleGeneratorWizardPage {
             return false;
         }
         
-        if(!getCixsProxyDeployHttpGroup().validateControls()) {
+        if(!getCixsHostToProxyHttpGroup().validateControls()) {
             return false;
         }
 
@@ -168,7 +168,7 @@ extends AbstractCixsMuleGeneratorWizardPage {
         super.storeExtendedProjectPreferences();
         
         getUmoComponentTargetGroup().storeProjectPreferences();
-        getCixsProxyDeployHttpGroup().storeProjectPreferences();
+        getCixsHostToProxyHttpGroup().storeProjectPreferences();
     }
 
     /**
@@ -195,8 +195,8 @@ extends AbstractCixsMuleGeneratorWizardPage {
     /**
      * @return the HTTP Proxy client parameters
      */
-    public Cixs2MuleProxyDeployHttpGroup getCixsProxyDeployHttpGroup() {
-        return mCixsProxyDeployHttpGroup;
+    public CixsHostToProxyHttpGroup getCixsHostToProxyHttpGroup() {
+        return mCixsHostToProxyHttpGroup;
     }
 
 }

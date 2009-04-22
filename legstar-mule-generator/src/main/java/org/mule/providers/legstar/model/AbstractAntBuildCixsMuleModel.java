@@ -13,6 +13,7 @@ package org.mule.providers.legstar.model;
 import java.io.File;
 
 import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
+import com.legstar.cixs.jaxws.model.HttpTransportParameters;
 
 /**
  * Holds the set of parameters needed to generate an ant script file.
@@ -35,6 +36,9 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /** The target location for mule jar files. */
     private File mTargetJarDir;
     
+    /** Set of parameters needed for HTTP transport. */
+    private HttpTransportParameters mHttpTransportParameters = new HttpTransportParameters();
+
     /**
      * Construct the model with a generator name and velocity template.
      * @param generatorName to designate the generator
@@ -122,6 +126,21 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     public final void setMulegenProductLocation(
             final String mulegenProductLocation) {
         mMulegenProductLocation = mulegenProductLocation;
+    }
+
+    /**
+     * @return set of parameters needed for HTTP transport
+     */
+    public HttpTransportParameters getHttpTransportParameters() {
+        return mHttpTransportParameters;
+    }
+
+    /**
+     * @param httpTransportParameters set of parameters needed for HTTP transport
+     */
+    public void setHttpTransportParameters(
+            final HttpTransportParameters httpTransportParameters) {
+        mHttpTransportParameters = httpTransportParameters;
     }
 
 }

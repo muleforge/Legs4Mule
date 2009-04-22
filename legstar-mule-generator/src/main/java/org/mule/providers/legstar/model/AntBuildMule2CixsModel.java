@@ -26,30 +26,22 @@ public class AntBuildMule2CixsModel extends AbstractAntBuildCixsMuleModel {
     public static final String MULE2CIXS_VELOCITY_MACRO_NAME =
         "vlc/build-mule2cixs-xml.vm";
     
-    /** The URI that the host exposes to consumers using the legstar scheme in
-     * a bridge configuration (using the legstar-mule http transport). */
-    private String mHostURI;
+    /** The default host on which the HTTP server listens. */
+    public static final String ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST = "mainframe";
+
+    /** The default port number on which the HTTP server listens. */
+    public static final int ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT = 4081;
+
+    /** Default pattern for server PATH. */
+    public static final String ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH =
+        "/CICS/CWBA/LSWEBBIN";
 
     /** Construct the model. */
     public AntBuildMule2CixsModel() {
         super(MULE2CIXS_GENERATOR_NAME, MULE2CIXS_VELOCITY_MACRO_NAME);
+        getHttpTransportParameters().setHost(ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
+        getHttpTransportParameters().setPort(ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
+        getHttpTransportParameters().setPath(ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
     }
 
-    /**
-     * The URI that the host exposes to consumers using the legstar scheme in
-     * a bridge configuration (using the legstar-mule http transport).
-     * @return the URI that the host exposes to consumers
-     */
-    public final String getHostURI() {
-       return mHostURI;
-    }
-
-    /**
-     * The URI that the host exposes to consumers using the legstar scheme in
-     * a bridge configuration (using the legstar-mule http transport).
-     * @param hostURI the URI that the host exposes to consumers to set
-     */
-    public final void setHostURI(final String hostURI) {
-        mHostURI = hostURI;
-    }
 }

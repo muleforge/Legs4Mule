@@ -78,7 +78,7 @@ public class LsfileaeJavaToLegStarMessageTransformerTest extends AbstractTransfo
     public void testTransform() throws Exception  {
         MuleMessage muleMessage = new DefaultMuleMessage(getTestData());
         muleMessage.setStringProperty(
-                AbstractJavaToHostEsbTransformer.PROGRAM_PROP_FILE_NAME,
+                AbstractJavaToHostMuleTransformer.PROGRAM_PROP_FILE_NAME,
                 "lsfileae.properties");
         
         Object result = this.getTransformer().transform(muleMessage, "");

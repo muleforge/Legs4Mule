@@ -21,7 +21,6 @@ import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.jaxws.gen.Cixs2JaxwsGenerator;
 import com.legstar.cixs.jaxws.gen.StructuresGenerator;
 import com.legstar.cixs.jaxws.model.CobolHttpClientType;
-import com.legstar.cixs.jaxws.model.HttpTransportParameters;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
 
@@ -103,9 +102,9 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
             
-            generateHbaToObjectTransformers(
+            generateHostToJavaTransformers(
                     operation, parameters, operationClassFilesDir);
-            generateObjectToHbaTransformers(
+            generateJavaToHostTransformers(
                     operation, parameters, operationClassFilesDir);
             generateObjectToHttpResponseTransformers(
                     operation, parameters, operationClassFilesDir);
@@ -141,29 +140,6 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
                 "${service.name}", getCixsMuleComponent().getName());
     }
  
-    /**
-     * @return the set of HTTP transport parameters
-     */
-    public HttpTransportParameters getHttpTransportParameters() {
-        return getAntModel().getHttpTransportParameters();
-    }
-
-    /**
-     * @param httpTransportParameters the set of HTTP transport parameters
-     */
-    public void setHttpTransportParameters(
-            final HttpTransportParameters httpTransportParameters) {
-        getAntModel().setHttpTransportParameters(httpTransportParameters);
-    }
-
-    /**
-     * @param httpTransportParameters the set of HTTP transport parameters
-     */
-    public void addHttpTransportParameters(
-            final HttpTransportParameters httpTransportParameters) {
-        getAntModel().setHttpTransportParameters(httpTransportParameters);
-    }
-
     /**
      * When ant 1.7.0 will become widespread, we will be able to expose
      * this method directly (support for enum JDK 1.5).

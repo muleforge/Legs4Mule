@@ -12,6 +12,7 @@ package org.mule.providers.legstar.gen;
 
 import java.io.File;
 
+import org.mule.providers.legstar.model.AntBuildMule2CixsModel;
 import org.mule.providers.legstar.model.CixsMuleComponent;
 import org.mule.providers.legstar.model.UmoComponentParameters;
 
@@ -48,7 +49,8 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         CodeGenUtil.checkDirectory(componentAntFilesDir, true);
         Mule2CixsGenerator.generateAntBuildJar(
                 muleComponent, getParameters(), componentAntFilesDir);
-        compare(componentAntFilesDir, "build.xml", muleComponent.getInterfaceClassName());
+        compare(componentAntFilesDir, "build.xml",
+                muleComponent.getName());
     }
 
     /**
@@ -59,7 +61,11 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         getParameters().put("hostCharset", "IBM01140");
-        getParameters().put("hostURI", LEGSTAR_HOST_URI);
+        HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
+        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
+        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
+        httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
+        httpTransportParameters.add(getParameters());
 
         File componentConfFilesDir = new File(
                 GEN_CONF_DIR, muleComponent.getName());
@@ -68,7 +74,8 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
                 muleComponent, getParameters(), componentConfFilesDir);
 
         compare(componentConfFilesDir,
-                "mule-adapter-http-config-" + muleComponent.getName() + ".xml");
+                "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
     }
 
     /**
@@ -94,7 +101,8 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         AbstractCixsMuleGenerator.generateProxyHttpConfigXml(
                 muleComponent, getParameters(), componentConfFilesDir);
         compare(componentConfFilesDir,
-                "mule-proxy-http-config-" + muleComponent.getName() + ".xml");
+                "mule-proxy-http-config-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
     }
 
 }

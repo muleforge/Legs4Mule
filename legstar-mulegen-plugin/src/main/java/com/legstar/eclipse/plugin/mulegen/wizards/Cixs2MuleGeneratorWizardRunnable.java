@@ -67,7 +67,7 @@ extends AbstractCixsMuleGeneratorWizardRunnable {
         genModel.getUmoComponentTargetParameters().setImplementationName(
                 page.getUmoComponentTargetGroup().getImplementationName());
         genModel.setHttpTransportParameters(
-                page.getCixsProxyDeployHttpGroup().getHttpTransportParameters());
+                page.getCixsHostToProxyHttpGroup().getHttpTransportParameters());
         genModel.setTargetCobolDir(new File(page.getTargetCobolDir()));
         genModel.setTargetJarDir(new File(page.getTargetJarDir()));
         genModel.setTargetMuleConfigDir(

@@ -13,7 +13,6 @@ package org.mule.providers.legstar.model;
 import java.io.File;
 
 import com.legstar.cixs.jaxws.model.CobolHttpClientType;
-import com.legstar.cixs.jaxws.model.HttpTransportParameters;
 
 /**
  * This is a model for Cixs to Mule component generation. The generated 
@@ -34,9 +33,6 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
     /** The target directory where COBOL files will be created. */
     private File mTargetCobolDir;
     
-    /** Set of parameters needed for HTTP transport. */
-    private HttpTransportParameters mHttpTransportParameters;
-
     /** The default port number on which the HTTP server listens. */
     public static final int DEFAULT_HTTP_PORT = 8083;
 
@@ -56,8 +52,7 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
      */
     public AntBuildCixs2MuleModel() {
         super(CIXS2MULE_GENERATOR_NAME, CIXS2MULE_VELOCITY_MACRO_NAME);
-        mHttpTransportParameters = new HttpTransportParameters();
-        mHttpTransportParameters.setPort(DEFAULT_HTTP_PORT);
+        getHttpTransportParameters().setPort(DEFAULT_HTTP_PORT);
         mUmoComponentTargetParameters = new UmoComponentParameters();
     }
 
@@ -88,21 +83,6 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
     public void setSampleCobolHttpClientType(
             final CobolHttpClientType sampleCobolHttpClientType) {
         mSampleCobolHttpClientType = sampleCobolHttpClientType;
-    }
-
-    /**
-     * @return set of parameters needed for HTTP transport
-     */
-    public HttpTransportParameters getHttpTransportParameters() {
-        return mHttpTransportParameters;
-    }
-
-    /**
-     * @param httpTransportParameters set of parameters needed for HTTP transport
-     */
-    public void setHttpTransportParameters(
-            final HttpTransportParameters httpTransportParameters) {
-        mHttpTransportParameters = httpTransportParameters;
     }
 
     /**

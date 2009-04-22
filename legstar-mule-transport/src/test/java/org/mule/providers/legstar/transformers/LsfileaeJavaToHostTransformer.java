@@ -7,7 +7,7 @@ import com.legstar.test.coxb.lsfileae.bind.DfhcommareaTransformers;
  * A sample java to host transformer.
  *
  */
-public class LsfileaeJavaToHostTransformer extends AbstractJavaToHostEsbTransformer {
+public class LsfileaeJavaToHostTransformer extends AbstractJavaToHostMuleTransformer {
 
     /**
      * Pass binding for lsfileae single part Dfhcommarea.

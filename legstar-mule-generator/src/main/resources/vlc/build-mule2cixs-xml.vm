@@ -55,7 +55,6 @@
             jaxbBinDir="${antModel.jaxbBinDir}"
             coxbBinDir="${antModel.coxbBinDir}"
             custBinDir="${antModel.custBinDir}"
-            hostURI="${antModel.hostURI}"
             hostCharset="${antModel.hostCharset}"
           >
             <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
@@ -97,6 +96,14 @@
                 </muleStartupPathElement>
 #end
             </cixsMuleComponent>
+
+            <!-- HTTP transport parameters -->
+            <httpTransportParameters
+                scheme="${antModel.httpTransportParameters.scheme}"
+                host="${antModel.httpTransportParameters.host}"
+                port="${antModel.httpTransportParameters.port}"
+                path="${antModel.httpTransportParameters.path}"
+            />
         </mule2cixsgen>
     
     </target>

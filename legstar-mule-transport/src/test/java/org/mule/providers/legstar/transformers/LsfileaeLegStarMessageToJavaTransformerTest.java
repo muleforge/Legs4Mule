@@ -38,7 +38,7 @@ public class LsfileaeLegStarMessageToJavaTransformerTest extends AbstractTransfo
      * A simplistic implementation of the abstract class being tested.
      *
      */
-    public static class LsfileaeHostToJavaTransformer extends AbstractHostToJavaEsbTransformer {
+    public static class LsfileaeHostToJavaTransformer extends AbstractHostToJavaMuleTransformer {
 
         /**
          * Pass binding transformers for lsfileae single part Dfhcommarea.

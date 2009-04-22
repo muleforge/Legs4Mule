@@ -12,18 +12,12 @@ package com.legstar.eclipse.plugin.mulegen.wizards;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
-import com.legstar.codegen.CodeGenMakeException;
-import com.legstar.codegen.CodeGenUtil;
-import com.legstar.eclipse.plugin.mulegen.Activator;
 import com.legstar.eclipse.plugin.mulegen.Messages;
-import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 
 /**
  * This page collects parameters needed for Mule to Cixs artifacts generation.
@@ -35,8 +29,8 @@ extends AbstractCixsMuleGeneratorWizardPage {
     /** Page name. */
     private static final String PAGE_NAME = "Mule2CixsGeneratorWizardPage";
 
-    /** The Mainframe URI exposed to Mule clients. */
-    private Text mHostURIText = null;
+    /** HTTP adapter to mainframe transport parameters. */
+    private CixsAdapterToHostHttpGroup mCixsAdapterToHostHttpGroup;
 
     /**
      * Construct the page.
@@ -55,61 +49,54 @@ extends AbstractCixsMuleGeneratorWizardPage {
     public void addWidgetsToDeploymentGroup(final Composite container) {
         super.addWidgetsToDeploymentGroup(container);
 
-        createLabel(container, Messages.mainframe_uri_label + ':');
-        mHostURIText = createText(container); 
-        mHostURIText.addModifyListener(new ModifyListener() {
-            public void modifyText(final ModifyEvent e) {
-                dialogChanged();
-            }
-        });
+        createLabel(container, Messages.adapter_to_host_transport_label + ":");
+        Composite composite = new Composite(container, SWT.NULL);
+        composite.setLayout(new RowLayout());
+
+        mCixsAdapterToHostHttpGroup = new CixsAdapterToHostHttpGroup(this);
+        mCixsAdapterToHostHttpGroup.createButton(composite);
+        mCixsAdapterToHostHttpGroup.createControls(container);
     }
 
     /** {@inheritDoc} */
     public void initExtendedWidgets(final IProject project) {
         super.initExtendedWidgets(project);
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-        setHostURI(store.getString(
-                PreferenceConstants.HOST_URI));
+
+        getCixsAdapterToHostHttpGroup().initControls();
+        getCixsAdapterToHostHttpGroup().getButton().setSelection(true);
+    }
+
+    /** {@inheritDoc} */
+    public void createExtendedListeners() {
+        getCixsAdapterToHostHttpGroup().createListeners();
+        
     }
 
     /** {@inheritDoc} */
     public boolean validateExtendedWidgets() {
+        
+        getCixsAdapterToHostHttpGroup().setVisibility();
+
         if (!super.validateExtendedWidgets()) {
             return false;
         }
-        try {
-            CodeGenUtil.checkHttpURI(getHostURI());
-        } catch (CodeGenMakeException e) {
-            updateStatus(Messages.invalid_mainframe_uri_msg);
+        if(!getCixsAdapterToHostHttpGroup().validateControls()) {
             return false;
         }
         return true;
     }
 
-    /**
-     * @param hostURI URI exposed by mainframe for Mule clients
-     */
-    public void setHostURI(final String hostURI) {
-        mHostURIText.setText(hostURI);
-    }
-
-    /**
-     * @return URI exposed to mainframe programs
-     */
-    public String getHostURI() {
-        return mHostURIText.getText();
-    }
-
-    /** {@inheritDoc} */
-    public void createExtendedListeners() {
-        // TODO Auto-generated method stub
-        
-    }
-
     /** {@inheritDoc} */
     public void storeExtendedProjectPreferences() {
-        // TODO Auto-generated method stub
+        getCixsAdapterToHostHttpGroup().storeProjectPreferences();
         
+    }
+
+    /**
+     * @return HTTP adapter to mainframe transport parameters
+     */
+    public CixsAdapterToHostHttpGroup getCixsAdapterToHostHttpGroup() {
+        return mCixsAdapterToHostHttpGroup;
     }
 
 }

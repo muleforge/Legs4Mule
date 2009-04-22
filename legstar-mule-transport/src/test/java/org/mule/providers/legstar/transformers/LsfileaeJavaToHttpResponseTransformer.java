@@ -26,8 +26,7 @@ public class LsfileaeJavaToHttpResponseTransformer
     }
 
     /** {@inheritDoc} */
-    public AbstractJavaToHostEsbTransformer getJavaToHostEsbTransformer() {
-        // TODO Auto-generated method stub
+    public AbstractHostMuleTransformer getJavaToHostMuleTransformer() {
         return new LsfileaeJavaToHostTransformer();
     }
 

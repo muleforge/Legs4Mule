@@ -51,7 +51,8 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
         mGenerator.setTargetBinDir(GEN_BIN_DIR);
         mGenerator.setHostCharset(HOSTCHARSET);
-        mGenerator.setHostURI(LEGSTAR_HOST_URI);
+        mGenerator.getHttpTransportParameters().setHost("mainframe");
+        mGenerator.getHttpTransportParameters().setPort(4081);
 
         /* We want to share expected results with XmlTemplatesTest */
         List < String > pathElements = new ArrayList < String >();
@@ -208,9 +209,10 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     private void checkResults(final CixsMuleComponent muleComponent) {
         
         compare(mGenerator.getTargetAntDir(),
-                "build.xml", muleComponent.getInterfaceClassName());
+                "build.xml", muleComponent.getName());
         compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-adapter-http-config-" + muleComponent.getName() + ".xml");
+                "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
         
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             
@@ -220,20 +222,20 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
             compare(mGenerator.getTargetPropDir(),
                     operation.getCicsProgramName().toLowerCase(
                             Locale.getDefault()) + ".properties",
-                    muleComponent.getInterfaceClassName());
+                    muleComponent.getName());
 
             compare(operationClassFilesDir,
-                    "HostByteArrayTo" + operation.getRequestHolderType() + ".java",
-                    muleComponent.getInterfaceClassName());
+                    "HostTo" + operation.getRequestHolderType() + "MuleTransformer.java",
+                    muleComponent.getName());
             compare(operationClassFilesDir,
-                    operation.getRequestHolderType() + "ToHostByteArray.java",
-                    muleComponent.getInterfaceClassName());
+                    operation.getRequestHolderType() + "ToHostMuleTransformer.java",
+                    muleComponent.getName());
             compare(operationClassFilesDir,
-                    "HostByteArrayTo" + operation.getResponseHolderType() + ".java",
-                    muleComponent.getInterfaceClassName());
+                    "HostTo" + operation.getResponseHolderType() + "MuleTransformer.java",
+                    muleComponent.getName());
             compare(operationClassFilesDir,
-                    operation.getResponseHolderType() + "ToHostByteArray.java",
-                    muleComponent.getInterfaceClassName());
+                    operation.getResponseHolderType() + "ToHostMuleTransformer.java",
+                    muleComponent.getName());
         }
     }
 

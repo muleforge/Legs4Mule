@@ -64,7 +64,8 @@ extends AbstractCixsMuleGeneratorWizardRunnable {
             (Mule2CixsGeneratorWizardPage) cixsGenWizardPage;
         setModel(page, genModel);
         genModel.setMuleHome(page.getMuleHome());
-        genModel.setHostURI(page.getHostURI());
+        genModel.setHttpTransportParameters(
+                page.getCixsAdapterToHostHttpGroup().getHttpTransportParameters());
         genModel.setTargetJarDir(new File(page.getTargetJarDir()));
         genModel.setTargetMuleConfigDir(
                 new File(page.getTargetMuleConfigDir()));

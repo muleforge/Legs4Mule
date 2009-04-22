@@ -28,109 +28,103 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
      * Case LSFILEAE.
      * @throws Exception if something goes wrong
      */
-    public void testLsfileaeToHostByteArray() throws Exception {
+    public void testLsfileaeToHostMuleTransformer() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
-        AbstractCixsMuleGenerator.generateObjectToHbaTransformer(
-                operation, getParameters(), componentClassFilesDir,
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateJavaToHostTransformer(
+                operation, getParameters(), transformersDir,
                 "Dfhcommarea", "Request");
-        compare(componentClassFilesDir,
-                operation.getRequestHolderType() + "ToHostByteArray.java",
-                muleComponent.getInterfaceClassName());
+        compare(transformersDir,
+                operation.getRequestHolderType() + "ToHostMuleTransformer.java",
+                muleComponent.getName());
     }
 
     /**
      * Case LSFILEAC.
      * @throws Exception if something goes wrong
      */
-    public void testLsfileacToHostByteArray() throws Exception {
+    public void testLsfileacToHostMuleTransformer() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
-        AbstractCixsMuleGenerator.generateObjectToHbaTransformer(
-                operation, getParameters(), componentClassFilesDir,
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateJavaToHostTransformer(
+                operation, getParameters(), transformersDir,
                 "LsfileacRequestHolder", "Request");
-        compare(componentClassFilesDir,
-                operation.getRequestHolderType() + "ToHostByteArray.java",
-                muleComponent.getInterfaceClassName());
+        compare(transformersDir,
+                operation.getRequestHolderType() + "ToHostMuleTransformer.java",
+                muleComponent.getName());
     }
 
     /**
      * Case JVMQuery.
      * @throws Exception if something goes wrong
      */
-    public void testJvmQueryToHostByteArray() throws Exception {
+    public void testJvmQueryToHostMuleTransformer() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
-        CodeGenUtil.checkDirectory(componentClassFilesDir, true);
-        AbstractCixsMuleGenerator.generateObjectToHbaTransformer(
-                operation, getParameters(), componentClassFilesDir,
+        File transformersDir = getTransformersDir(muleComponent);
+        CodeGenUtil.checkDirectory(transformersDir, true);
+        AbstractCixsMuleGenerator.generateJavaToHostTransformer(
+                operation, getParameters(), transformersDir,
                 operation.getRequestHolderType(), "Request");
-        compare(componentClassFilesDir,
-                operation.getRequestHolderType() + "ToHostByteArray.java",
-                muleComponent.getInterfaceClassName());
+        compare(transformersDir,
+                operation.getRequestHolderType() + "ToHostMuleTransformer.java",
+                muleComponent.getName());
     }
 
     /**
      * Case LSFILEAE.
      * @throws Exception if something goes wrong
      */
-    public void testHostByteArrayToLsfileae() throws Exception {
+    public void testHostToLsfileaeMuleTransformer() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
-        AbstractCixsMuleGenerator.generateHbaToObjectTransformer(
-                operation, getParameters(), componentClassFilesDir,
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateHostToJavaTransformer(
+                operation, getParameters(), transformersDir,
                 "Dfhcommarea", "Request");
-        compare(componentClassFilesDir,
-                "HostByteArrayTo" + operation.getRequestHolderType() + ".java",
-                muleComponent.getInterfaceClassName());
+        compare(transformersDir,
+                "HostTo" + operation.getRequestHolderType() + "MuleTransformer.java",
+                muleComponent.getName());
     }
 
     /**
      * Case LSFILEAC.
      * @throws Exception if something goes wrong
      */
-    public void testHostByteArrayToLsfileac() throws Exception {
+    public void testHostToLsfileacMuleTransformer() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
-        AbstractCixsMuleGenerator.generateHbaToObjectTransformer(
-                operation, getParameters(), componentClassFilesDir,
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateHostToJavaTransformer(
+                operation, getParameters(), transformersDir,
                 "LsfileacRequestHolder", "Request");
-        compare(componentClassFilesDir,
-                "HostByteArrayTo" + operation.getRequestHolderType() + ".java",
-                muleComponent.getInterfaceClassName());
+        compare(transformersDir,
+                "HostTo" + operation.getRequestHolderType() + "MuleTransformer.java",
+                muleComponent.getName());
     }
 
     /**
      * Case JVMQuery.
      * @throws Exception if something goes wrong
      */
-    public void testHostByteArrayToJvmQuery() throws Exception {
+    public void testHostToJvmQueryMuleTransformer() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
-        AbstractCixsMuleGenerator.generateHbaToObjectTransformer(
-                operation, getParameters(), componentClassFilesDir,
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateHostToJavaTransformer(
+                operation, getParameters(), transformersDir,
                 operation.getRequestHolderType(), "Request");
-        compare(componentClassFilesDir,
-                "HostByteArrayTo" + operation.getRequestHolderType() + ".java",
-                muleComponent.getInterfaceClassName());
+        compare(transformersDir,
+                "HostTo" + operation.getRequestHolderType() + "MuleTransformer.java",
+                muleComponent.getName());
     }
 
     /**
@@ -141,14 +135,13 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        File transformersDir = getTransformersDir(muleComponent);
         AbstractCixsMuleGenerator.generateObjectToHttpResponseTransformer(
-                operation, getParameters(), componentClassFilesDir,
+                operation, getParameters(), transformersDir,
                 "Dfhcommarea", "Request");
-        compare(componentClassFilesDir,
+        compare(transformersDir,
                 operation.getRequestHolderType() + "ToHttpResponse.java",
-                muleComponent.getInterfaceClassName());
+                muleComponent.getName());
     }
 
     /**
@@ -159,14 +152,13 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
 
         CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        File transformersDir = getTransformersDir(muleComponent);
         AbstractCixsMuleGenerator.generateObjectToHttpResponseTransformer(
-                operation, getParameters(), componentClassFilesDir,
+                operation, getParameters(), transformersDir,
                 "LsfileacRequestHolder", "Request");
-        compare(componentClassFilesDir,
+        compare(transformersDir,
                 operation.getRequestHolderType() + "ToHttpResponse.java",
-                muleComponent.getInterfaceClassName());
+                muleComponent.getName());
     }
 
     /**
@@ -177,14 +169,25 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
 
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
-        File componentClassFilesDir = CodeGenUtil.classFilesLocation(
-                GEN_SRC_DIR, muleComponent.getPackageName(), true);
+        File transformersDir = getTransformersDir(muleComponent);
         AbstractCixsMuleGenerator.generateObjectToHttpResponseTransformer(
-                operation, getParameters(), componentClassFilesDir,
+                operation, getParameters(), transformersDir,
                 operation.getRequestHolderType(), "Request");
-        compare(componentClassFilesDir,
+        compare(transformersDir,
                 operation.getRequestHolderType() + "ToHttpResponse.java",
-                muleComponent.getInterfaceClassName());
+                muleComponent.getName());
+    }
+    
+    /**
+     * 
+     * @param muleComponent the mule component
+     * @return the generated transformers class files location
+     */
+    private File getTransformersDir(final CixsMuleComponent muleComponent) {
+        return CodeGenUtil.classFilesLocation(
+                GEN_SRC_DIR,
+                muleComponent.getPackageName(),
+                true);
     }
 
 }

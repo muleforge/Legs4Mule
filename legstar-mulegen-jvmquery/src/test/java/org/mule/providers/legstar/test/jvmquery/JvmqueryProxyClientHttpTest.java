@@ -54,7 +54,7 @@ public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-proxy-config-jvmquery.xml";
+        return "mule-proxy-http-config-jvmquery.xml";
     }
 
     /**

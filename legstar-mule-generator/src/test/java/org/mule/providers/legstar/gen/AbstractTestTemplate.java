@@ -223,10 +223,10 @@ public class AbstractTestTemplate extends TestCase {
             String result = getSource(dir, fileName).replace('\\', '/');
             String reference = "/org/mule/providers/legstar/gen/";
             if (prefix != null && prefix.length() > 0) {
-                reference += prefix;
+                reference += prefix + "/";
             }
             reference += fileName + ".txt";
-            String expectedRes = getSource(reference);
+            String expectedRes = getSource(reference).replace('\\', '/');
             assertEquals(expectedRes, result);
         } catch (IOException e) {
             fail(e.getMessage());

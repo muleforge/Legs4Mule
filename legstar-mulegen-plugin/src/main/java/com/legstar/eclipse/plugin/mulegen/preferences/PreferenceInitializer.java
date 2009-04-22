@@ -45,8 +45,14 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
         store.setDefault(PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE,
                 AntBuildCixs2MuleModel.DEFAULT_SERVER_PATH_TEMPLATE);
 
-        store.setDefault(PreferenceConstants.HOST_URI,
-        "http://mainframe:4081/CICS/CWBA/LSWEBBIN");
+        store.setDefault(PreferenceConstants.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST,
+        "mainframe");
+
+        store.setDefault(PreferenceConstants.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT,
+        "4081");
+
+        store.setDefault(PreferenceConstants.ADAPTER_TO_MAINFRAME_HTTP_PATH,
+        "/CICS/CWBA/LSWEBBIN");
     }
 
     /**

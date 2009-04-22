@@ -212,36 +212,38 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
     private void checkResults(final CixsMuleComponent muleComponent) throws Exception {
 
         compare(mGenerator.getTargetAntDir(),
-                "build.xml", muleComponent.getInterfaceClassName());
+                "build.xml", muleComponent.getName());
         compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-proxy-http-config-" + muleComponent.getName() + ".xml");
+                "mule-proxy-http-config-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
 
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     mGenerator.getTargetSrcDir(), operation.getPackageName(), true);
 
             compare(operationClassFilesDir,
-                    "HostByteArrayTo" + operation.getRequestHolderType() + ".java",
-                    muleComponent.getInterfaceClassName());
+                    "HostTo" + operation.getRequestHolderType() + "MuleTransformer.java",
+                    muleComponent.getName());
             compare(operationClassFilesDir,
-                    operation.getRequestHolderType() + "ToHostByteArray.java",
-                    muleComponent.getInterfaceClassName());
+                    operation.getRequestHolderType() + "ToHostMuleTransformer.java",
+                    muleComponent.getName());
             compare(operationClassFilesDir,
                     operation.getRequestHolderType() + "ToHttpResponse.java",
-                    muleComponent.getInterfaceClassName());
+                    muleComponent.getName());
             compare(operationClassFilesDir,
-                    "HostByteArrayTo" + operation.getResponseHolderType() + ".java",
-                    muleComponent.getInterfaceClassName());
+                    "HostTo" + operation.getResponseHolderType() + "MuleTransformer.java",
+                    muleComponent.getName());
             compare(operationClassFilesDir,
-                    operation.getResponseHolderType() + "ToHostByteArray.java",
-                    muleComponent.getInterfaceClassName());
+                    operation.getResponseHolderType() + "ToHostMuleTransformer.java",
+                    muleComponent.getName());
             compare(operationClassFilesDir,
                     operation.getResponseHolderType() + "ToHttpResponse.java",
-                    muleComponent.getInterfaceClassName());
+                    muleComponent.getName());
 
 
             String expectedCobolRes = getSource(
-                    "/org/mule/providers/legstar/gen/" + operation.getCicsProgramName()
+                    "/org/mule/providers/legstar/gen/" + muleComponent.getName() + '/'
+                    + operation.getCicsProgramName()
                     + ".cbl.txt");
 
             String res = getSource(GEN_COBOL_DIR, 

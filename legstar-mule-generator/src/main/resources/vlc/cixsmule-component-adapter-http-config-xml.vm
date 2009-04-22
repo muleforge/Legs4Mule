@@ -28,8 +28,8 @@
 
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
 #set($operationPackageName = ${cixsOperation.packageName})
-#set($requestTransformer = "${cixsOperation.requestHolderType}ToHostByteArray")
-#set($responseTransformer = "HostByteArrayTo${cixsOperation.responseHolderType}")
+#set($requestTransformer = "${cixsOperation.requestHolderType}ToHostMuleTransformer")
+#set($responseTransformer = "HostTo${cixsOperation.responseHolderType}MuleTransformer")
 #set($qualRequestTransformer = ${helper.getQualClassName($operationPackageName, $requestTransformer)})
 #set($qualResponseTransformer = ${helper.getQualClassName($operationPackageName, $responseTransformer)})
         <service name="${cixsOperation.name}AdapterService">
@@ -43,7 +43,7 @@
             <outbound>
                 <pass-through-router>
                   <legstar-http:outbound-endpoint
-                    address="${hostURI}"
+                    address="legstar:${httpURL}"
                     synchronous="true"
                     hostCharset="${hostCharset}"
                     programPropFileName="${cixsOperation.cicsProgramName.toLowerCase()}.properties"
