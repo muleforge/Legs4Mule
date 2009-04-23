@@ -40,7 +40,7 @@ public abstract class AbstractAdapterCallable implements Callable {
     private String mLegStarConfigFileName;
 
     /** Logger. */
-    private static final Log LOG = LogFactory.getLog(AbstractAdapterCallable.class);
+    private final Log _log = LogFactory.getLog(getClass());
 
     /**
      * Standard constructor.
@@ -58,15 +58,15 @@ public abstract class AbstractAdapterCallable implements Callable {
         } catch (NamingException e) {
             mLegStarConfigFileName = DEFAULT_CONFIG_FILE;
         }
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Initialize AbstractInvokerAction from " + mLegStarConfigFileName);
+        if (_log.isDebugEnabled()) {
+            _log.debug("Initialize AbstractInvokerAction from " + mLegStarConfigFileName);
         }
     }
  
     /** {@inheritDoc} */
     public Object onCall(final MuleEventContext eventContext) throws Exception {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("onCall request for " + getActionAdapterName()
+        if (_log.isDebugEnabled()) {
+            _log.debug("onCall request for " + getActionAdapterName()
                     + " Message before:" + eventContext.getMessage());
         }
 
@@ -75,8 +75,8 @@ public abstract class AbstractAdapterCallable implements Callable {
         Object requestContent = eventContext.getMessage();
         Object response = call(requestContent, hostHeader);
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("onCall request for " + getActionAdapterName()
+        if (_log.isDebugEnabled()) {
+            _log.debug("onCall request for " + getActionAdapterName()
                     + " Message after:" + response);
         }
         return response;

@@ -79,7 +79,7 @@ public class AbstractTestTemplate extends TestCase {
     private Map < String, Object > mParameters;
 
     /** Logger. */
-    private static final Log LOG = LogFactory.getLog(AbstractTestTemplate.class);
+    private final Log _log = LogFactory.getLog(getClass());
 
     /** @{inheritDoc}*/
     public void setUp() {
@@ -110,7 +110,7 @@ public class AbstractTestTemplate extends TestCase {
         String resStr = "";
         String str = in.readLine();
         while (str != null) {
-            LOG.debug(str);
+            _log.debug(str);
             resStr += str;
             str = in.readLine();
         }
@@ -131,7 +131,7 @@ public class AbstractTestTemplate extends TestCase {
             String resStr = "";
             String str = in.readLine();
             while (str != null) {
-                LOG.debug(str);
+                _log.debug(str);
                 resStr += str;
                 str = in.readLine();
             }

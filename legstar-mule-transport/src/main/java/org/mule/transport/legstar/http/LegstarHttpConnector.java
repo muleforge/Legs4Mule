@@ -41,12 +41,12 @@ public class LegstarHttpConnector extends HttpConnector {
     }
 
     /** logger used by this class.   */
-    private final Log logger = LogFactory.getLog(getClass());
+    private final Log _log = LogFactory.getLog(getClass());
 
     /** {@inheritDoc} */
     public final void doInitialise() throws InitialisationException {
         super.doInitialise();
-        logger.debug("doInitialise");
+        _log.debug("doInitialise");
     }
 
     /**

@@ -51,7 +51,7 @@ public class LegStarPoolAgent implements Agent {
     private static final String CONFIG_FILE_NAME = "legstar-engine-config.xml";
 
     /** Logger. */
-    private static final Log LOG = LogFactory.getLog(LegStarPoolAgent.class);
+    private final Log _log = LogFactory.getLog(getClass());
 
     /** {@inheritDoc} */
     public final String getDescription() {
@@ -65,7 +65,7 @@ public class LegStarPoolAgent implements Agent {
 
     /** {@inheritDoc} */
     public final void registered() {
-        LOG.info("registered");
+        _log.info("registered");
     }
 
     /** {@inheritDoc} */
@@ -75,17 +75,17 @@ public class LegStarPoolAgent implements Agent {
 
     /** {@inheritDoc} */
     public final void unregistered() {
-        LOG.info("unregistered");
+        _log.info("unregistered");
     }
 
     /** {@inheritDoc} */
     public final void start() throws MuleException {
-        LOG.info("Pool engine started");
+        _log.info("Pool engine started");
     }
 
     /** {@inheritDoc} */
     public final void stop() throws MuleException {
-        LOG.info("Pool engine stopped");
+        _log.info("Pool engine stopped");
         if (mServerHandler != null) {
             mServerHandler.stop();
         }
@@ -94,22 +94,22 @@ public class LegStarPoolAgent implements Agent {
     /** {@inheritDoc} */
     public final void dispose() {
         mServerHandler = null;
-        LOG.info("Pool engine destroyed");
+        _log.info("Pool engine destroyed");
     }
 
     /** {@inheritDoc} */
     public final void initialise() throws InitialisationException {
-        LOG.info("Initializing with " + CONFIG_FILE_NAME
+        _log.info("Initializing with " + CONFIG_FILE_NAME
                 + " configuration file.");
 
         try {
             mServerHandler = new EngineHandler(loadConfigFile(CONFIG_FILE_NAME));
             mServerHandler.init();
         } catch (ConfigurationException e) {
-            LOG.error("Failed to initialize.", e);
+            _log.error("Failed to initialize.", e);
             throw new InitialisationException(e, this);
         } catch (EngineStartupException e) {
-            LOG.error("Failed to start engine.", e);
+            _log.error("Failed to start engine.", e);
             throw new InitialisationException(e, this);
         }
     }
@@ -123,14 +123,14 @@ public class LegStarPoolAgent implements Agent {
      * @throws ConfigurationException if configuration cannot be retrieved
      */
     private HierarchicalConfiguration loadConfigFile(final String configFileName) throws ConfigurationException {
-        LOG.debug("Attempting to load " + configFileName);
+        _log.debug("Attempting to load " + configFileName);
         DefaultConfigurationBuilder dcb = new DefaultConfigurationBuilder();
         dcb.setFileName(configFileName);
         CombinedConfiguration config = (CombinedConfiguration)
         dcb.getConfiguration(true).getConfiguration(
                 DefaultConfigurationBuilder.ADDITIONAL_NAME);
         config.setExpressionEngine(new XPathExpressionEngine());
-        LOG.debug("Load success for " + configFileName);
+        _log.debug("Load success for " + configFileName);
         return config; 
 
     }

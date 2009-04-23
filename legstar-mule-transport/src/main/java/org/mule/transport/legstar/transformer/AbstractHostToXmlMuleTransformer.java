@@ -57,7 +57,7 @@ import com.legstar.messaging.LegStarMessagePart;
 public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMuleTransformer {
 
     /** Logger. */
-    private static final Log LOG = LogFactory.getLog(AbstractHostToXmlMuleTransformer.class);
+    private final Log _log = LogFactory.getLog(getClass());
 
     /**
      * Constructor for single part transformers.
@@ -103,9 +103,9 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
     public Object transform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("ESB Message before processing:");
-            LOG.debug(esbMessage);
+        if (_log.isDebugEnabled()) {
+            _log.debug("ESB Message before processing:");
+            _log.debug(esbMessage);
         }
 
         /* Don't transform a message content if an exception is reported */

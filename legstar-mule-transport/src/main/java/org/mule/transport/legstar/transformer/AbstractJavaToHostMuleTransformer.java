@@ -29,7 +29,7 @@ import com.legstar.coxb.transform.HostTransformException;
 public abstract class AbstractJavaToHostMuleTransformer extends AbstractHostJavaMuleTransformer {
 
     /** Logger. */
-    private static final Log LOG = LogFactory.getLog(AbstractJavaToHostMuleTransformer.class);
+    private final Log _log = LogFactory.getLog(getClass());
 
     /**
      * Constructor for single part transformers.
@@ -75,9 +75,9 @@ public abstract class AbstractJavaToHostMuleTransformer extends AbstractHostJava
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("ESB Message before processing:");
-            LOG.debug(esbMessage);
+        if (_log.isDebugEnabled()) {
+            _log.debug("ESB Message before processing:");
+            _log.debug(esbMessage);
         }
         try {
 
