@@ -1,5 +1,5 @@
 package org.mule.transport.legstar.test.lsfileae;
-import org.mule.transport.legstar.transformers.AbstractHostToJavaMuleTransformer;
+import org.mule.transport.legstar.transformer.AbstractHostToJavaMuleTransformer;
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
 import com.legstar.test.coxb.lsfileae.bind.DfhcommareaTransformers;
 

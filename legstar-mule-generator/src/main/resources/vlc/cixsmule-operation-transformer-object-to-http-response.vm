@@ -6,8 +6,8 @@
 #parse("vlc/cixsmule-operation-transformer-common.vm")
 #set($transformerType = "${holderType}ToHttpResponse")
 #set($toHbatransformerType = "${holderType}ToHostMuleTransformer")
-import org.mule.transport.legstar.http.transformers.AbstractObjectToHttpResponseTransformer;
-import org.mule.transport.legstar.transformers.AbstractJavaToHostMuleTransformer;
+import org.mule.transport.legstar.http.transformer.AbstractObjectToHttpResponseTransformer;
+import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 import com.legstar.coxb.transform.HostTransformException;
 #if(!$holder)
 import ${javaClassName};

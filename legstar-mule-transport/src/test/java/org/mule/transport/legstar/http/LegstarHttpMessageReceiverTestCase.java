@@ -14,7 +14,7 @@ import com.mockobjects.dynamic.Mock;
 
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.InboundEndpoint;
-import org.mule.transport.legstar.transformers.LsfileaeJavaToHttpResponseTransformer;
+import org.mule.transport.legstar.transformer.LsfileaeJavaToHttpResponseTransformer;
 import org.mule.transport.AbstractMessageReceiverTestCase;
 import org.mule.util.CollectionUtils;
 import org.mule.api.service.Service;

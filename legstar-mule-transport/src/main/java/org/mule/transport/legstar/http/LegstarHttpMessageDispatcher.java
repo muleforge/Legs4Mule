@@ -13,7 +13,7 @@ package org.mule.transport.legstar.http;
 import org.apache.commons.httpclient.HttpMethod;
 import org.mule.transport.http.HttpClientMessageDispatcher;
 import org.mule.transport.http.HttpConstants;
-import org.mule.transport.legstar.transformers.AbstractHostJavaMuleTransformer;
+import org.mule.transport.legstar.transformer.AbstractHostJavaMuleTransformer;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.OutboundEndpoint;

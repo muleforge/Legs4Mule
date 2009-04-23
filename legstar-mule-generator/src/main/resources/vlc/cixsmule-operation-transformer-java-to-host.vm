@@ -5,7 +5,7 @@
 ##/////////////////////////////////////////////////////////////////////
 #parse("vlc/cixsmule-operation-transformer-common.vm")
 #set($transformerType = "${holderType}ToHostMuleTransformer")
-import org.mule.transport.legstar.transformers.AbstractJavaToHostMuleTransformer;
+import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 #if($holder)
 import java.util.HashMap;
 import java.util.Map;

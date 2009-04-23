@@ -1,6 +1,6 @@
 package org.mule.transport.legstar.test.jvmquery;
-import org.mule.transport.legstar.http.transformers.AbstractObjectToHttpResponseTransformer;
-import org.mule.transport.legstar.transformers.AbstractJavaToHostMuleTransformer;
+import org.mule.transport.legstar.http.transformer.AbstractObjectToHttpResponseTransformer;
+import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 import com.legstar.coxb.transform.HostTransformException;
 import com.legstar.xsdc.test.cases.jvmquery.JVMQueryRequest;
 

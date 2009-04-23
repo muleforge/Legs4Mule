@@ -1,5 +1,5 @@
 package org.mule.transport.legstar.test.lsfileac;
-import org.mule.transport.legstar.transformers.AbstractJavaToHostMuleTransformer;
+import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 import java.util.HashMap;
 import java.util.Map;
 import com.legstar.coxb.transform.AbstractTransformers;
