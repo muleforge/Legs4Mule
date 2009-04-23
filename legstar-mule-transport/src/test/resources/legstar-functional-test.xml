@@ -17,10 +17,10 @@
             <inbound>
                 <inbound-endpoint ref="clientEndpoint">
                     <transformers>
-                        <custom-transformer class="org.mule.providers.legstar.transformers.LsfileaeHostToJavaTransformer"/>
+                        <custom-transformer class="org.mule.transport.legstar.transformers.LsfileaeHostToJavaTransformer"/>
                     </transformers>
                     <response-transformers>
-                        <custom-transformer class="org.mule.providers.legstar.transformers.LsfileaeJavaToHttpResponseTransformer"/>
+                        <custom-transformer class="org.mule.transport.legstar.transformers.LsfileaeJavaToHttpResponseTransformer"/>
                     </response-transformers>
                 </inbound-endpoint>
             </inbound>

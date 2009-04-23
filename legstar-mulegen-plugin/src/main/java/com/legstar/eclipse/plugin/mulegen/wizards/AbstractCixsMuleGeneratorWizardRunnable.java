@@ -11,7 +11,7 @@
 package com.legstar.eclipse.plugin.mulegen.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-import org.mule.providers.legstar.model.AbstractAntBuildCixsMuleModel;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel;
 
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardRunnable;

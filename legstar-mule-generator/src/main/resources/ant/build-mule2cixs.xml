@@ -19,7 +19,7 @@
         <!-- Generated Mule component name   -->
         <property name="mule.component" value="MuleLsfileae" />
         <!-- Generated Mule component package name  -->
-        <property name="package.name" value="org.mule.providers.legstar.test.lsfileae"/>
+        <property name="package.name" value="org.mule.transport.legstar.test.lsfileae"/>
         <!-- Generated Mule component method name   -->
         <property name="method.name" value="lsfileae" />
         <!-- Mainframe program name triggered by the previous method   -->
@@ -70,7 +70,7 @@
 
         <!-- Mule component Generator ant task -->
         <taskdef name="mule2cixsgen"
-          classname="org.mule.providers.legstar.gen.Mule2CixsGenerator"
+          classname="org.mule.transport.legstar.gen.Mule2CixsGenerator"
           classpathref="classpath" 
         /> 
 

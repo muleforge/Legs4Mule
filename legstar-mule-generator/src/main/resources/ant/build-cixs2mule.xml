@@ -29,7 +29,7 @@
         <property name="host.charset" value="IBM01140" />
 
         <!-- Generated Java artifacts package name  -->
-        <property name="package.name" value="org.mule.providers.legstar.test.jvmquery"/>
+        <property name="package.name" value="org.mule.transport.legstar.test.jvmquery"/>
         <!-- Generated Sample Mainframe client program name.   -->
         <property name="host.program.name" value="JVMQUERY" />
         <!-- Generated source code target location   -->
@@ -75,7 +75,7 @@
 
         <!-- Mule component Generator ant task -->
         <taskdef name="cixs2mulegen"
-          classname="org.mule.providers.legstar.gen.Cixs2MuleGenerator"
+          classname="org.mule.transport.legstar.gen.Cixs2MuleGenerator"
           classpathref="classpath" 
         /> 
 

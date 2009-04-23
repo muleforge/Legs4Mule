@@ -72,7 +72,7 @@
 
         <!-- Mule service Generator ant task -->
         <taskdef name="cixs2mulegen"
-            classname="org.mule.providers.legstar.gen.Cixs2MuleGenerator"
+            classname="org.mule.transport.legstar.gen.Cixs2MuleGenerator"
             classpathref="classpath" 
         /> 
 

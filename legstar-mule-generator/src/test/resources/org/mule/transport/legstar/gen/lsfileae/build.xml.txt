@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project basedir=".." default="create-jar" name="build-jar">
+   <property environment="env"/>
+   <property name="jarFile" value="${env.MULE_HOME}\lib\user/mule-legstar-lsfileae.jar"/>
+   <target name="clean">
+      <delete file="${jarFile}" includeEmptyDirs="true" quiet="true"/>
+   </target>
+   <target name="create-jar" depends="clean">
+      <jar destfile="${jarFile}">
+         <fileset dir="target\classes">
+            <include name="com/legstar/test/coxb/lsfileae/*.class"/>
+         </fileset>
+         <fileset dir="target\classes">
+            <include name="com/legstar/test/coxb/lsfileae/bind/*.class"/>
+         </fileset>
+         <fileset dir="target\gen-classes">
+            <include name="org/mule/transport/legstar/test/lsfileae/*.class"/>
+         </fileset>
+         <fileset dir="target\classes">
+            <include name="**/lsfileae/**/*.class"/>
+         </fileset>
+         <fileset dir="target\src\gen\prop">
+            <include name="lsfileae.properties"/>
+         </fileset>
+      </jar>
+   </target>
+</project>

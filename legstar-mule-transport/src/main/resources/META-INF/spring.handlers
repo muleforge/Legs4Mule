@@ -1,1 +1,1 @@
-http\://www.mulesource.org/schema/mule/legstar/http/2.2=org.mule.providers.legstar.config.LegStarHttpNamespaceHandler
+http\://www.mulesource.org/schema/mule/legstar/http/2.2=org.mule.transport.legstar.config.LegStarHttpNamespaceHandler

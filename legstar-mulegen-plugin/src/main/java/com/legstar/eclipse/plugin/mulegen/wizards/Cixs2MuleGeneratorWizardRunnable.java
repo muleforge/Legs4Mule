@@ -13,8 +13,8 @@ package com.legstar.eclipse.plugin.mulegen.wizards;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 
-import org.mule.providers.legstar.model.AntBuildCixs2MuleModel;
-import org.mule.providers.legstar.model.CixsMuleComponent;
+import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
+import org.mule.transport.legstar.model.CixsMuleComponent;
 
 import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
 import com.legstar.cixs.gen.model.AbstractCixsService;

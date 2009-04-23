@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.SelectionDialog;
 
-import org.mule.providers.legstar.model.UmoComponentParameters;
+import org.mule.transport.legstar.model.UmoComponentParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsControlsGroup;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 import com.legstar.eclipse.plugin.common.wizards.AbstractWizard;

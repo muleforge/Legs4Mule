@@ -12,7 +12,7 @@ package com.legstar.eclipse.plugin.mulegen.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.mule.providers.legstar.model.AntBuildCixs2MuleModel;
+import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 
 import com.legstar.codegen.CodeGenUtil;
 import com.legstar.eclipse.plugin.mulegen.Activator;
