@@ -13,7 +13,7 @@ package org.mule.transport.legstar.http.transformer;
 import java.io.IOException;
 
 import org.mule.transport.legstar.i18n.LegstarMessages;
-import org.mule.transport.legstar.transformer.AbstractHostMuleTransformer;
+import org.mule.transport.legstar.transformer.IObjectToHostTransformer;
 import org.mule.transport.NullPayload;
 import org.mule.transport.http.HttpConstants;
 import org.mule.transport.http.HttpResponse;
@@ -24,12 +24,12 @@ import org.mule.api.MuleMessage;
 import com.legstar.coxb.transform.HostTransformException;
 
 /**
- * <code>AbstractObjectToHttpResponseTransformer</code> contains methods that
+ * <code>AbstractObjectToHttpResponse</code> contains methods that
  * are common to legstar/mule transformers that produce HTTP responses.
  * Such responses are targeted at the mainframe which has special requirements
  * for http headers such as content type and content length.
  */
-public abstract class AbstractObjectToHttpResponseTransformer extends MuleMessageToHttpResponse
+public abstract class AbstractObjectToHttpResponse extends MuleMessageToHttpResponse
 {
 
     /** When channeled over http, the legstar payload must be binary. */
@@ -89,8 +89,8 @@ public abstract class AbstractObjectToHttpResponseTransformer extends MuleMessag
             }
 
             /* Use existing transformer to get a host byte array */
-            AbstractHostMuleTransformer transformer = getJavaToHostMuleTransformer();
-            byte[] hostBytes = (byte[]) transformer.transform(muleMessage, encoding);
+            IObjectToHostTransformer transformer = getObjectToHostMuleTransformer();
+            byte[] hostBytes = transformer.transform(muleMessage, encoding);
             muleMessage.setPayload(hostBytes);
             
             /* Delegate to parent the encapsulation in an http body */
@@ -105,6 +105,6 @@ public abstract class AbstractObjectToHttpResponseTransformer extends MuleMessag
      * @return an instance of a transformer
      * @throws HostTransformException if transformer cannot be obtained
      */
-    public abstract AbstractHostMuleTransformer getJavaToHostMuleTransformer(
+    public abstract IObjectToHostTransformer getObjectToHostMuleTransformer(
             ) throws HostTransformException;
 }

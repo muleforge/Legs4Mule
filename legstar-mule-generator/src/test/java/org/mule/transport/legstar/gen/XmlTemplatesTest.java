@@ -79,6 +79,31 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     }
 
     /**
+     * Creates the mule adapter http config for XML payloads.
+     * @throws Exception if generation fails
+     */
+    public void testAdapterHttpConfigXmlXml() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        getParameters().put("hostCharset", "IBM01140");
+        HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
+        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
+        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
+        httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
+        httpTransportParameters.add(getParameters());
+
+        File componentConfFilesDir = new File(
+                GEN_CONF_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        AbstractCixsMuleGenerator.generateAdapterHttpConfigXmlXml(
+                muleComponent, getParameters(), componentConfFilesDir);
+
+        compare(componentConfFilesDir,
+                "mule-adapter-http-config-xml-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
+    }
+
+    /**
      * Creates the mule proxy http config.
      * @throws Exception if generation fails
      */

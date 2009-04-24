@@ -5,7 +5,7 @@
 ##/////////////////////////////////////////////////////////////////////
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This Mule configuration implements an adapter service for a mainframe program.
-      Clients of this Mule service are expected to send serialized java objects over TCP.
+      Clients of this Mule service are expected to send XML strings over TCP.
       Transport from Mule service to mainframe is LEGSTAR-HTTP.
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
@@ -23,21 +23,21 @@
 
     <description>Mule configuration file for ${muleComponent.name} adapter service</description>
 
-    <byte-array-to-object-transformer name="ByteArrayToObject"/>
+    <byte-array-to-string-transformer name="ByteArrayToString"/>
 
     <model name="${muleComponent.name}Model">
 
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
 #set($operationPackageName = ${cixsOperation.packageName})
-#set($requestTransformer = "${cixsOperation.requestHolderType}ToHostMuleTransformer")
-#set($responseTransformer = "HostTo${cixsOperation.responseHolderType}MuleTransformer")
+#set($requestTransformer = "${cixsOperation.requestHolderType}XmlToHostMuleTransformer")
+#set($responseTransformer = "HostTo${cixsOperation.responseHolderType}XmlMuleTransformer")
 #set($qualRequestTransformer = ${helper.getQualClassName($operationPackageName, $requestTransformer)})
 #set($qualResponseTransformer = ${helper.getQualClassName($operationPackageName, $responseTransformer)})
         <service name="${cixsOperation.name}AdapterService">
             <inbound>
                 <tcp:inbound-endpoint
                     address="tcp://localhost:3213"
-                    transformer-refs="ByteArrayToObject"
+                    transformer-refs="ByteArrayToString"
                     synchronous="true">
                 </tcp:inbound-endpoint>
             </inbound>

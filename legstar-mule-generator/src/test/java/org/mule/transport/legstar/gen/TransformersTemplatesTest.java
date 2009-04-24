@@ -16,6 +16,8 @@ import java.io.File;
 import org.mule.transport.legstar.model.CixsMuleComponent;
 
 import com.legstar.cixs.gen.model.CixsOperation;
+import com.legstar.cixs.jaxws.gen.Jaxws2CixsGenerator;
+import com.legstar.cixs.jaxws.model.WebServiceParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 
@@ -80,6 +82,58 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
      * Case LSFILEAE.
      * @throws Exception if something goes wrong
      */
+    public void testLsfileaeXmlToHostMuleTransformer() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateXmlToHostTransformer(
+                operation, getParameters(), transformersDir,
+                "Dfhcommarea", "Request");
+        compare(transformersDir,
+                operation.getRequestHolderType() + "XmlToHostMuleTransformer.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case LSFILEAC.
+     * @throws Exception if something goes wrong
+     */
+    public void testLsfileacXmlToHostMuleTransformer() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateXmlToHostTransformer(
+                operation, getParameters(), transformersDir,
+                "LsfileacRequestHolder", "Request");
+        compare(transformersDir,
+                operation.getRequestHolderType() + "XmlToHostMuleTransformer.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case JVMQuery.
+     * @throws Exception if something goes wrong
+     */
+    public void testJvmQueryXmlToHostMuleTransformer() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        CodeGenUtil.checkDirectory(transformersDir, true);
+        AbstractCixsMuleGenerator.generateXmlToHostTransformer(
+                operation, getParameters(), transformersDir,
+                operation.getRequestHolderType(), "Request");
+        compare(transformersDir,
+                operation.getRequestHolderType() + "XmlToHostMuleTransformer.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case LSFILEAE.
+     * @throws Exception if something goes wrong
+     */
     public void testHostToLsfileaeMuleTransformer() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
@@ -131,12 +185,66 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
      * Case LSFILEAE.
      * @throws Exception if something goes wrong
      */
+    public void testHostToLsfileaeXmlMuleTransformer() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateHostToXmlTransformer(
+                operation, getParameters(), transformersDir,
+                "Dfhcommarea", "Request");
+        compare(transformersDir,
+                "HostTo" + operation.getRequestHolderType() + "XmlMuleTransformer.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case LSFILEAC.
+     * @throws Exception if something goes wrong
+     */
+    public void testHostToLsfileacXmlMuleTransformer() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        getParameters().put(WebServiceParameters.WSDL_TARGET_NAMESPACE_PROPERTY,
+                Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
+                + '/' + muleComponent.getName());
+        AbstractCixsMuleGenerator.generateHostToXmlTransformer(
+                operation, getParameters(), transformersDir,
+                "LsfileacRequestHolder", "Request");
+        compare(transformersDir,
+                "HostTo" + operation.getRequestHolderType() + "XmlMuleTransformer.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case JVMQuery.
+     * @throws Exception if something goes wrong
+     */
+    public void testHostToJvmQueryXmlMuleTransformer() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateHostToXmlTransformer(
+                operation, getParameters(), transformersDir,
+                operation.getRequestHolderType(), "Request");
+        compare(transformersDir,
+                "HostTo" + operation.getRequestHolderType() + "XmlMuleTransformer.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case LSFILEAE.
+     * @throws Exception if something goes wrong
+     */
     public void testLsfileaeToHttpResponse() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
         File transformersDir = getTransformersDir(muleComponent);
-        AbstractCixsMuleGenerator.generateObjectToHttpResponseTransformer(
+        AbstractCixsMuleGenerator.generateJavaToHttpResponseTransformer(
                 operation, getParameters(), transformersDir,
                 "Dfhcommarea", "Request");
         compare(transformersDir,
@@ -153,7 +261,7 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
         File transformersDir = getTransformersDir(muleComponent);
-        AbstractCixsMuleGenerator.generateObjectToHttpResponseTransformer(
+        AbstractCixsMuleGenerator.generateJavaToHttpResponseTransformer(
                 operation, getParameters(), transformersDir,
                 "LsfileacRequestHolder", "Request");
         compare(transformersDir,
@@ -170,11 +278,62 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
         File transformersDir = getTransformersDir(muleComponent);
-        AbstractCixsMuleGenerator.generateObjectToHttpResponseTransformer(
+        AbstractCixsMuleGenerator.generateJavaToHttpResponseTransformer(
                 operation, getParameters(), transformersDir,
                 operation.getRequestHolderType(), "Request");
         compare(transformersDir,
                 operation.getRequestHolderType() + "ToHttpResponse.java",
+                muleComponent.getName());
+    }
+    
+    /**
+     * Case LSFILEAE.
+     * @throws Exception if something goes wrong
+     */
+    public void testLsfileaeXmlToHttpResponse() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateXmlToHttpResponseTransformer(
+                operation, getParameters(), transformersDir,
+                "Dfhcommarea", "Request");
+        compare(transformersDir,
+                operation.getRequestHolderType() + "XmlToHttpResponse.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case LSFILEAC.
+     * @throws Exception if something goes wrong
+     */
+    public void testLsfileacXmlToHttpResponse() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateXmlToHttpResponseTransformer(
+                operation, getParameters(), transformersDir,
+                "LsfileacRequestHolder", "Request");
+        compare(transformersDir,
+                operation.getRequestHolderType() + "XmlToHttpResponse.java",
+                muleComponent.getName());
+    }
+
+    /**
+     * Case JvmQuery.
+     * @throws Exception if something goes wrong
+     */
+    public void testJvmQueryXmlToHttpResponse() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        CixsOperation operation = muleComponent.getCixsOperations().get(0);
+        File transformersDir = getTransformersDir(muleComponent);
+        AbstractCixsMuleGenerator.generateXmlToHttpResponseTransformer(
+                operation, getParameters(), transformersDir,
+                operation.getRequestHolderType(), "Request");
+        compare(transformersDir,
+                operation.getRequestHolderType() + "XmlToHttpResponse.java",
                 muleComponent.getName());
     }
     

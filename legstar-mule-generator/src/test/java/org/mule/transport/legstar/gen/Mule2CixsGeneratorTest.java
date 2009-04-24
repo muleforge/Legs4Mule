@@ -213,6 +213,9 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         compare(mGenerator.getTargetMuleConfigDir(),
                 "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
                 muleComponent.getName());
+        compare(mGenerator.getTargetMuleConfigDir(),
+                "mule-adapter-http-config-xml-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
         
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             
@@ -235,6 +238,19 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
                     muleComponent.getName());
             compare(operationClassFilesDir,
                     operation.getResponseHolderType() + "ToHostMuleTransformer.java",
+                    muleComponent.getName());
+
+            compare(operationClassFilesDir,
+                    "HostTo" + operation.getRequestHolderType() + "XmlMuleTransformer.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    operation.getRequestHolderType() + "XmlToHostMuleTransformer.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    "HostTo" + operation.getResponseHolderType() + "XmlMuleTransformer.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    operation.getResponseHolderType() + "XmlToHostMuleTransformer.java",
                     muleComponent.getName());
         }
     }

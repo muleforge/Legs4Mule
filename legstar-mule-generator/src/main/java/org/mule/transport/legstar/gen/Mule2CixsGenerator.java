@@ -17,6 +17,7 @@ import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.jaxws.gen.Jaxws2CixsGenerator;
+import com.legstar.cixs.jaxws.model.WebServiceParameters;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
 
@@ -85,8 +86,10 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
 
         }
 
-        /* Produce artifacts for bridge component  */
+        /* Produce mule configuration smaples  */
         generateAdapterHttpConfigXml(
+                getCixsMuleComponent(), parameters, componentConfFilesDir);
+        generateAdapterHttpConfigXmlXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir);
 
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
@@ -102,6 +105,10 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
             generateJavaToHostTransformers(
                     operation, parameters, transformersDir);
 
+            generateHostToXmlTransformers(
+                    operation, parameters, transformersDir);
+            generateXmlToHostTransformers(
+                    operation, parameters, transformersDir);
         }
 
     }
@@ -110,6 +117,11 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
     public void addExtendedParameters(final Map < String, Object > parameters) {
         parameters.put("generationTarget", GENERATION_TARGET);
         getAntModel().getHttpTransportParameters().add(parameters);
+        /* Some artifacts like holders have XML markup. They need an XML namespace */
+        parameters.put(WebServiceParameters.WSDL_TARGET_NAMESPACE_PROPERTY,
+                Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
+                + '/' + getCixsService().getName());
+        
     }
 
 }

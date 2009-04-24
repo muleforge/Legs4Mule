@@ -106,7 +106,14 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
                     operation, parameters, operationClassFilesDir);
             generateJavaToHostTransformers(
                     operation, parameters, operationClassFilesDir);
-            generateObjectToHttpResponseTransformers(
+            generateJavaToHttpResponseTransformers(
+                    operation, parameters, operationClassFilesDir);
+
+            generateHostToXmlTransformers(
+                    operation, parameters, operationClassFilesDir);
+            generateXmlToHostTransformers(
+                    operation, parameters, operationClassFilesDir);
+            generateXmlToHttpResponseTransformers(
                     operation, parameters, operationClassFilesDir);
 
             Cixs2JaxwsGenerator.generateCobolCicsClient(

@@ -1,11 +1,6 @@
-##/////////////////////////////////////////////////////////////////////
-##Mule Component adapter configuration XML Template.
-##@author Fady
-##@version 0.1
-##/////////////////////////////////////////////////////////////////////
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This Mule configuration implements an adapter service for a mainframe program.
-      Clients of this Mule service are expected to send serialized java objects over TCP.
+      Clients of this Mule service are expected to send XML strings over TCP.
       Transport from Mule service to mainframe is LEGSTAR-HTTP.
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
@@ -21,47 +16,40 @@
          http://www.mulesource.org/schema/mule/legstar/http/2.2 http://www.legsem.com/legstar/xml/mule-legstar-http-1.0.xsd
          http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
 
-    <description>Mule configuration file for ${muleComponent.name} adapter service</description>
+    <description>Mule configuration file for lsfileae adapter service</description>
 
-    <byte-array-to-object-transformer name="ByteArrayToObject"/>
+    <byte-array-to-string-transformer name="ByteArrayToString"/>
 
-    <model name="${muleComponent.name}Model">
+    <model name="lsfileaeModel">
 
-#foreach ($cixsOperation in $muleComponent.cixsOperations)
-#set($operationPackageName = ${cixsOperation.packageName})
-#set($requestTransformer = "${cixsOperation.requestHolderType}ToHostMuleTransformer")
-#set($responseTransformer = "HostTo${cixsOperation.responseHolderType}MuleTransformer")
-#set($qualRequestTransformer = ${helper.getQualClassName($operationPackageName, $requestTransformer)})
-#set($qualResponseTransformer = ${helper.getQualClassName($operationPackageName, $responseTransformer)})
-        <service name="${cixsOperation.name}AdapterService">
+        <service name="lsfileaeAdapterService">
             <inbound>
                 <tcp:inbound-endpoint
                     address="tcp://localhost:3213"
-                    transformer-refs="ByteArrayToObject"
+                    transformer-refs="ByteArrayToString"
                     synchronous="true">
                 </tcp:inbound-endpoint>
             </inbound>
             <outbound>
                 <pass-through-router>
                   <legstar-http:outbound-endpoint
-                    address="legstar:${httpURL}"
+                    address="legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN"
                     synchronous="true"
-                    hostCharset="${hostCharset}"
-                    programPropFileName="${cixsOperation.cicsProgramName.toLowerCase()}.properties"
+                    hostCharset="IBM01140"
+                    programPropFileName="lsfileae.properties"
                     hostTraceMode="false">
                     <transformers>
                         <custom-transformer
-                            class="${qualRequestTransformer}" />
+                            class="org.mule.transport.legstar.test.lsfileae.DfhcommareaXmlToHostMuleTransformer" />
                     </transformers>
                     <response-transformers>
                         <custom-transformer
-                            class="${qualResponseTransformer}" />
+                            class="org.mule.transport.legstar.test.lsfileae.HostToDfhcommareaXmlMuleTransformer" />
                     </response-transformers>
                   </legstar-http:outbound-endpoint>
                 </pass-through-router>
             </outbound>
         </service>
-#end
 
     </model>
 </mule>

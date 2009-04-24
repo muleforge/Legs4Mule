@@ -26,7 +26,8 @@ import com.legstar.coxb.transform.HostTransformException;
  * This ESB transformer converts java object into host data using the regular
  * LegStar binding transformers.
  */
-public abstract class AbstractJavaToHostMuleTransformer extends AbstractHostJavaMuleTransformer {
+public abstract class AbstractJavaToHostMuleTransformer
+extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
 
     /** Logger. */
     private final Log _log = LogFactory.getLog(getClass());
@@ -71,7 +72,7 @@ public abstract class AbstractJavaToHostMuleTransformer extends AbstractHostJava
      * When a formatted LegStar message needs to be produced, the target program
      * properties are collected from a string in the incoming esb message properties.
      *  */
-    public Object transform(
+    public byte[] transform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
 

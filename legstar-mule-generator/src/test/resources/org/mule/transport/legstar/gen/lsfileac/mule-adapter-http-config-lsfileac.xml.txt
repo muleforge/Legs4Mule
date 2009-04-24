@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--  This Mule configuration implements adapter services for mainframe programs.
-      Transport from services to mainframe is HTTP.
+<!--  This Mule configuration implements an adapter service for a mainframe program.
+      Clients of this Mule service are expected to send serialized java objects over TCP.
+      Transport from Mule service to mainframe is LEGSTAR-HTTP.
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -15,7 +16,7 @@
          http://www.mulesource.org/schema/mule/legstar/http/2.2 http://www.legsem.com/legstar/xml/mule-legstar-http-1.0.xsd
          http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
 
-    <description>Mule configuration file for lsfileac adapter services</description>
+    <description>Mule configuration file for lsfileac adapter service</description>
 
     <byte-array-to-object-transformer name="ByteArrayToObject"/>
 

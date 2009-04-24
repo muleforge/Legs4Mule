@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This Mule configuration implements an adapter service for a mainframe program.
-      Clients of this Mule service are expected to send serialized java objects over TCP.
+      Clients of this Mule service are expected to send XML strings over TCP.
       Transport from Mule service to mainframe is LEGSTAR-HTTP.
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
@@ -16,17 +16,17 @@
          http://www.mulesource.org/schema/mule/legstar/http/2.2 http://www.legsem.com/legstar/xml/mule-legstar-http-1.0.xsd
          http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
 
-    <description>Mule configuration file for lsfileal adapter service</description>
+    <description>Mule configuration file for lsfileax adapter service</description>
 
-    <byte-array-to-object-transformer name="ByteArrayToObject"/>
+    <byte-array-to-string-transformer name="ByteArrayToString"/>
 
-    <model name="lsfilealModel">
+    <model name="lsfileaxModel">
 
-        <service name="lsfilealAdapterService">
+        <service name="lsfileaeAdapterService">
             <inbound>
                 <tcp:inbound-endpoint
                     address="tcp://localhost:3213"
-                    transformer-refs="ByteArrayToObject"
+                    transformer-refs="ByteArrayToString"
                     synchronous="true">
                 </tcp:inbound-endpoint>
             </inbound>
@@ -36,15 +36,43 @@
                     address="legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN"
                     synchronous="true"
                     hostCharset="IBM01140"
-                    programPropFileName="lsfileal.properties"
+                    programPropFileName="lsfileae.properties"
                     hostTraceMode="false">
                     <transformers>
                         <custom-transformer
-                            class="org.mule.transport.legstar.test.lsfileal.RequestParmsToHostMuleTransformer" />
+                            class="org.mule.transport.legstar.test.lsfileax.DfhcommareaXmlToHostMuleTransformer" />
                     </transformers>
                     <response-transformers>
                         <custom-transformer
-                            class="org.mule.transport.legstar.test.lsfileal.HostToReplyDataMuleTransformer" />
+                            class="org.mule.transport.legstar.test.lsfileax.HostToDfhcommareaXmlMuleTransformer" />
+                    </response-transformers>
+                  </legstar-http:outbound-endpoint>
+                </pass-through-router>
+            </outbound>
+        </service>
+        <service name="lsfileacAdapterService">
+            <inbound>
+                <tcp:inbound-endpoint
+                    address="tcp://localhost:3213"
+                    transformer-refs="ByteArrayToString"
+                    synchronous="true">
+                </tcp:inbound-endpoint>
+            </inbound>
+            <outbound>
+                <pass-through-router>
+                  <legstar-http:outbound-endpoint
+                    address="legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN"
+                    synchronous="true"
+                    hostCharset="IBM01140"
+                    programPropFileName="lsfileac.properties"
+                    hostTraceMode="false">
+                    <transformers>
+                        <custom-transformer
+                            class="org.mule.transport.legstar.test.lsfileax.LsfileacRequestHolderXmlToHostMuleTransformer" />
+                    </transformers>
+                    <response-transformers>
+                        <custom-transformer
+                            class="org.mule.transport.legstar.test.lsfileax.HostToLsfileacResponseHolderXmlMuleTransformer" />
                     </response-transformers>
                   </legstar-http:outbound-endpoint>
                 </pass-through-router>

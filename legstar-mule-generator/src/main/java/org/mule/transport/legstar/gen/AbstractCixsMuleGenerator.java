@@ -39,6 +39,10 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String COMPONENT_ADAPTER_HTTP_CONFIG_XML_VLC_TEMPLATE =
         "vlc/cixsmule-component-adapter-http-config-xml.vm";
 
+    /** Velocity template for adapter-http-xml mule configuration xml. */
+    public static final String COMPONENT_ADAPTER_HTTP_CONFIG_XML_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-adapter-http-config-xml-xml.vm";
+
     /** Velocity template for local mule configuration xml. */
     public static final String COMPONENT_PROXY_HTTP_CONFIG_XML_VLC_TEMPLATE =
         "vlc/cixsmule-component-proxy-http-config-xml.vm";
@@ -51,9 +55,21 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String OPERATION_HOST_TO_JAVA_VLC_TEMPLATE =
         "vlc/cixsmule-operation-transformer-host-to-java.vm";
 
-    /** Velocity template for object to http response transformer. */
-    public static final String OPERATION_OBJECT_TO_HTTP_RESPONSE_VLC_TEMPLATE =
-        "vlc/cixsmule-operation-transformer-object-to-http-response.vm";
+    /** Velocity template for java to http response transformer. */
+    public static final String OPERATION_JAVA_TO_HTTP_RESPONSE_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-transformer-java-to-http-response.vm";
+
+    /** Velocity template for host byte array to XML transformer. */
+    public static final String OPERATION_HOST_TO_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-transformer-host-to-xml.vm";
+
+    /** Velocity template for XML to host byte array transformer. */
+    public static final String OPERATION_XML_TO_HOST_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-transformer-xml-to-host.vm";
+
+    /** Velocity template for XML to http response transformer. */
+    public static final String OPERATION_XML_TO_HTTP_RESPONSE_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-transformer-xml-to-http-response.vm";
 
     /** The service model name is it appears in templates. */
     public static final String COMPONENT_MODEL_NAME = "muleComponent";
@@ -67,7 +83,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * Create objects to host byte array transformer for both request
+     * Create java to host byte array transformer for both request
      * and response objects.
      * @param operation the cixs operation
      * @param parameters miscellaneous help parameters
@@ -88,6 +104,34 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         }
         if (operation.getOutput().size() > 0) {
             generateJavaToHostTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getResponseHolderType(),
+            "Response");
+        }
+    }
+
+    /**
+     * Create XML to host byte array transformer for both request
+     * and response objects.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param transformersDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateXmlToHostTransformers(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File transformersDir)
+    throws CodeGenMakeException {
+
+        if (operation.getInput().size() > 0) {
+            generateXmlToHostTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getRequestHolderType(),
+            "Request");
+        }
+        if (operation.getOutput().size() > 0) {
+            generateXmlToHostTransformer(operation, parameters,
                     transformersDir,
                     operation.getResponseHolderType(),
             "Response");
@@ -122,7 +166,34 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * Create host byte array to objects transformer for both request
+     * Create an XML to host byte array transformer.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param transformersDir where to store the generated file
+     * @param holderType the Java class name for the holder
+     * @param propertyName either Request or Response
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateXmlToHostTransformer(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File transformersDir,
+            final String holderType,
+            final String propertyName)
+    throws CodeGenMakeException {
+
+        parameters.put("propertyName", propertyName);
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                OPERATION_XML_TO_HOST_VLC_TEMPLATE,
+                "cixsOperation",
+                operation,
+                parameters,
+                transformersDir,
+                holderType + "XmlToHostMuleTransformer.java");
+    }
+
+    /**
+     * Create host byte array to java transformer for both request
      * and response objects.
      * @param operation the cixs operation
      * @param parameters miscellaneous help parameters
@@ -143,6 +214,34 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         }
         if (operation.getOutput().size() > 0) {
             generateHostToJavaTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getResponseHolderType(),
+            "Response");
+        }
+    }
+
+    /**
+     * Create host byte array to XML transformer for both request
+     * and response objects.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param transformersDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateHostToXmlTransformers(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File transformersDir)
+    throws CodeGenMakeException {
+
+        if (operation.getInput().size() > 0) {
+            generateHostToXmlTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getRequestHolderType(),
+            "Request");
+        }
+        if (operation.getOutput().size() > 0) {
+            generateHostToXmlTransformer(operation, parameters,
                     transformersDir,
                     operation.getResponseHolderType(),
             "Response");
@@ -177,35 +276,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * Create objects to http response transformer for both request
-     * and response objects.
-     * @param operation the cixs operation
-     * @param parameters miscellaneous help parameters
-     * @param transformersDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     */
-    public static void generateObjectToHttpResponseTransformers(
-            final CixsOperation operation,
-            final Map < String, Object > parameters,
-            final File transformersDir)
-    throws CodeGenMakeException {
-
-        if (operation.getInput().size() > 0) {
-            generateObjectToHttpResponseTransformer(operation, parameters,
-                    transformersDir,
-                    operation.getRequestHolderType(),
-            "Request");
-        }
-        if (operation.getOutput().size() > 0) {
-            generateObjectToHttpResponseTransformer(operation, parameters,
-                    transformersDir,
-                    operation.getResponseHolderType(),
-            "Response");
-        }
-    }
-
-    /**
-     * Create an object to http response transformer.
+     * Create a host byte array to XML transformer.
      * @param operation the cixs operation
      * @param parameters miscellaneous help parameters
      * @param transformersDir where to store the generated file
@@ -213,7 +284,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      * @param propertyName either Request or Response
      * @throws CodeGenMakeException if generation fails
      */
-    public static void generateObjectToHttpResponseTransformer(
+    public static void generateHostToXmlTransformer(
             final CixsOperation operation,
             final Map < String, Object > parameters,
             final File transformersDir,
@@ -223,12 +294,122 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
 
         parameters.put("propertyName", propertyName);
         generateFile(CIXS_MULE_GENERATOR_NAME,
-                OPERATION_OBJECT_TO_HTTP_RESPONSE_VLC_TEMPLATE,
+                OPERATION_HOST_TO_XML_VLC_TEMPLATE,
+                "cixsOperation",
+                operation,
+                parameters,
+                transformersDir,
+                "HostTo" + holderType + "XmlMuleTransformer.java");
+    }
+
+    /**
+     * Create java to http response transformer for both request
+     * and response objects.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param transformersDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateJavaToHttpResponseTransformers(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File transformersDir)
+    throws CodeGenMakeException {
+
+        if (operation.getInput().size() > 0) {
+            generateJavaToHttpResponseTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getRequestHolderType(),
+            "Request");
+        }
+        if (operation.getOutput().size() > 0) {
+            generateJavaToHttpResponseTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getResponseHolderType(),
+            "Response");
+        }
+    }
+
+    /**
+     * Create XML to http response transformer for both request
+     * and response objects.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param transformersDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateXmlToHttpResponseTransformers(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File transformersDir)
+    throws CodeGenMakeException {
+
+        if (operation.getInput().size() > 0) {
+            generateXmlToHttpResponseTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getRequestHolderType(),
+            "Request");
+        }
+        if (operation.getOutput().size() > 0) {
+            generateXmlToHttpResponseTransformer(operation, parameters,
+                    transformersDir,
+                    operation.getResponseHolderType(),
+            "Response");
+        }
+    }
+
+    /**
+     * Create a java to http response transformer.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param transformersDir where to store the generated file
+     * @param holderType the Java class name for the holder
+     * @param propertyName either Request or Response
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateJavaToHttpResponseTransformer(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File transformersDir,
+            final String holderType,
+            final String propertyName)
+    throws CodeGenMakeException {
+
+        parameters.put("propertyName", propertyName);
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                OPERATION_JAVA_TO_HTTP_RESPONSE_VLC_TEMPLATE,
                 "cixsOperation",
                 operation,
                 parameters,
                 transformersDir,
                 holderType + "ToHttpResponse.java");
+    }
+
+    /**
+     * Create an XML to http response transformer.
+     * @param operation the cixs operation
+     * @param parameters miscellaneous help parameters
+     * @param transformersDir where to store the generated file
+     * @param holderType the Java class name for the holder
+     * @param propertyName either Request or Response
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateXmlToHttpResponseTransformer(
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File transformersDir,
+            final String holderType,
+            final String propertyName)
+    throws CodeGenMakeException {
+
+        parameters.put("propertyName", propertyName);
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                OPERATION_XML_TO_HTTP_RESPONSE_VLC_TEMPLATE,
+                "cixsOperation",
+                operation,
+                parameters,
+                transformersDir,
+                holderType + "XmlToHttpResponse.java");
     }
 
     /**
@@ -250,6 +431,27 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                 parameters,
                 componentConfFilesDir,
                 "mule-adapter-http-config-" + component.getName() + ".xml");
+    }
+
+    /**
+     * Create the Mule adapter over http for XML payloads configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentConfFilesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAdapterHttpConfigXmlXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentConfFilesDir)
+    throws CodeGenMakeException {
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_ADAPTER_HTTP_CONFIG_XML_XML_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentConfFilesDir,
+                "mule-adapter-http-config-xml-" + component.getName() + ".xml");
     }
 
     /**

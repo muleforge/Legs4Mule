@@ -240,6 +240,24 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
                     operation.getResponseHolderType() + "ToHttpResponse.java",
                     muleComponent.getName());
 
+            compare(operationClassFilesDir,
+                    "HostTo" + operation.getRequestHolderType() + "XmlMuleTransformer.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    operation.getRequestHolderType() + "XmlToHostMuleTransformer.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    operation.getRequestHolderType() + "XmlToHttpResponse.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    "HostTo" + operation.getResponseHolderType() + "XmlMuleTransformer.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    operation.getResponseHolderType() + "XmlToHostMuleTransformer.java",
+                    muleComponent.getName());
+            compare(operationClassFilesDir,
+                    operation.getResponseHolderType() + "XmlToHttpResponse.java",
+                    muleComponent.getName());
 
             String expectedCobolRes = getSource(
                     "/org/mule/transport/legstar/gen/" + muleComponent.getName() + '/'
