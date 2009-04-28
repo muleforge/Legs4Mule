@@ -35,7 +35,7 @@ public final class MuleHostHeaderFactory {
     public static final String LEGSTAR_HOST_PASSWORD = "com.legstar.cixs.host.password";
 
     /** Host trace mode property key. */
-    public static final String LEGSTAR_HOST_TRACE_MODE = "com.legstar.cixs.host.tracemode";
+    public static final String LEGSTAR_HOST_TRACE_ON = "com.legstar.cixs.host.tracemode";
 
 
     /** Defeats instanciation since this is a utility class.*/
@@ -59,7 +59,7 @@ public final class MuleHostHeaderFactory {
         hostHeader.setHostPassword(
                 (String) umoMessage.getProperty(LEGSTAR_HOST_PASSWORD));
         hostHeader.setTraceMode(
-                umoMessage.getBooleanProperty(LEGSTAR_HOST_TRACE_MODE, false));
+                umoMessage.getBooleanProperty(LEGSTAR_HOST_TRACE_ON, false));
         hostHeader.setHostRequestID(
                 (String) umoMessage.getProperty(LEGSTAR_HOST_REQUEST_ID));
         return hostHeader;

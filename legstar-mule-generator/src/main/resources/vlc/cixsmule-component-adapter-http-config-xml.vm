@@ -3,61 +3,71 @@
 ##@author Fady
 ##@version 0.1
 ##/////////////////////////////////////////////////////////////////////
+#if($clientPayload == "java")
+#set($clientPayloadComment = "serialized java objects")
+#set($transformerType = "")
+#end
+#if($clientPayload == "xml")
+#set($clientPayloadComment = "XML strings")
+#set($transformerType = "Xml")
+#end
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This Mule configuration implements an adapter service for a mainframe program.
-      Clients of this Mule service are expected to send serialized java objects over TCP.
+      Clients of this Mule service are expected to send ${clientPayloadComment} over TCP.
       Transport from Mule service to mainframe is LEGSTAR-HTTP.
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:spring="http://www.springframework.org/schema/beans"
         xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
-        xmlns:legstar-http="http://www.mulesource.org/schema/mule/legstar/http/2.2"
+        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
         xmlns:test="http://www.mulesource.org/schema/mule/test/2.2"
     xsi:schemaLocation=
         "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
          http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
-         http://www.mulesource.org/schema/mule/legstar/http/2.2 http://www.legsem.com/legstar/xml/mule-legstar-http-1.0.xsd
+         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
          http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
 
     <description>Mule configuration file for ${muleComponent.name} adapter service</description>
 
-    <byte-array-to-object-transformer name="ByteArrayToObject"/>
+#set($I = 0)
+#foreach ($cixsOperation in $muleComponent.cixsOperations)
+    <tcp:endpoint name="${cixsOperation.name}ClientEndpoint" address="tcp://localhost:321$I" synchronous="true" />
+#set($I = $I + 1)
+#end
 
     <model name="${muleComponent.name}Model">
 
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
 #set($operationPackageName = ${cixsOperation.packageName})
-#set($requestTransformer = "${cixsOperation.requestHolderType}ToHostMuleTransformer")
-#set($responseTransformer = "HostTo${cixsOperation.responseHolderType}MuleTransformer")
+#set($requestTransformer = "${cixsOperation.requestHolderType}${transformerType}ToHostMuleTransformer")
+#set($responseTransformer = "HostTo${cixsOperation.responseHolderType}${transformerType}MuleTransformer")
 #set($qualRequestTransformer = ${helper.getQualClassName($operationPackageName, $requestTransformer)})
 #set($qualResponseTransformer = ${helper.getQualClassName($operationPackageName, $responseTransformer)})
         <service name="${cixsOperation.name}AdapterService">
             <inbound>
-                <tcp:inbound-endpoint
-                    address="tcp://localhost:3213"
-                    transformer-refs="ByteArrayToObject"
-                    synchronous="true">
-                </tcp:inbound-endpoint>
+                <inbound-endpoint ref="${cixsOperation.name}ClientEndpoint" >
+                    <transformers>
+                        <byte-array-to-object-transformer />
+                    </transformers>
+                </inbound-endpoint>
             </inbound>
             <outbound>
                 <pass-through-router>
-                  <legstar-http:outbound-endpoint
-                    address="legstar:${httpURL}"
-                    synchronous="true"
-                    hostCharset="${hostCharset}"
-                    programPropFileName="${cixsOperation.cicsProgramName.toLowerCase()}.properties"
-                    hostTraceMode="false">
-                    <transformers>
-                        <custom-transformer
-                            class="${qualRequestTransformer}" />
-                    </transformers>
-                    <response-transformers>
-                        <custom-transformer
-                            class="${qualResponseTransformer}" />
-                    </response-transformers>
-                  </legstar-http:outbound-endpoint>
+                    <legstar:outbound-endpoint
+                            address="legstar:${httpURL}"
+                            synchronous="true" programPropFileName="${cixsOperation.cicsProgramName.toLowerCase()}.properties"
+                            hostCharset="${hostCharset}" >
+                        <transformers>
+                            <legstar:${clientPayload}-to-host-transformer
+                                class="${qualRequestTransformer}" />
+                        </transformers>
+                        <response-transformers>
+                            <legstar:host-to-${clientPayload}-transformer
+                                class="${qualResponseTransformer}" />
+                        </response-transformers>
+                    </legstar:outbound-endpoint>
                 </pass-through-router>
             </outbound>
         </service>

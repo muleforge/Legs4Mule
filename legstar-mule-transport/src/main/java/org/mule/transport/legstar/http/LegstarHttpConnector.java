@@ -24,14 +24,15 @@ import org.mule.api.transport.MessageReceiver;
  * <code>LegstarConnector</code> is essentially and <code>HttpConnector</code>
  * with transformers to handle to special LegStar messaging to wrap
  * mainframe data. The LegStar support for HTTP must be installed on the
- * mainframe (see http://www.legsem.com/legstar/legstar-chttprt).
- * TODO in this form, LegstarConnector does not have the capability to
- * support any other transports than HTTP.
+ * mainframe @see http://www.legsem.com/legstar/legstar-chttprt.
  */
 public class LegstarHttpConnector extends HttpConnector {
     
     /** Protocol supported.*/
     public static final String PROTOCOL = "legstar";
+
+    /** logger used by this class.   */
+    private final Log _log = LogFactory.getLog(getClass());
 
     /**
      * No-Args constructor.
@@ -39,9 +40,6 @@ public class LegstarHttpConnector extends HttpConnector {
     public LegstarHttpConnector() {
         registerProtocols();
     }
-
-    /** logger used by this class.   */
-    private final Log _log = LogFactory.getLog(getClass());
 
     /** {@inheritDoc} */
     public final void doInitialise() throws InitialisationException {

@@ -10,13 +10,12 @@
  ******************************************************************************/
 package org.mule.transport.legstar.transformer;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mule.api.MuleMessage;
@@ -24,11 +23,6 @@ import org.mule.api.transformer.TransformerException;
 
 import com.legstar.coxb.transform.AbstractTransformers;
 import com.legstar.coxb.transform.HostTransformException;
-import com.legstar.messaging.CommareaPart;
-import com.legstar.messaging.HeaderPartException;
-import com.legstar.messaging.HostMessageFormatException;
-import com.legstar.messaging.LegStarMessage;
-import com.legstar.messaging.LegStarMessagePart;
 
 /**
  * This ESB Transformer converts host data into a java object using the regular
@@ -44,6 +38,8 @@ public abstract class AbstractHostToJavaMuleTransformer extends AbstractHostJava
      * <p/>
      * Host to Java transformers expect byte array sources corresponding to
      * mainframe raw data.
+     * Alternatively, source can be an inputStream in which case, it is 
+     * assumed to stream a byte array.
      * Inheriting classes will set the return class.
      * @param bindingTransformers a set of transformers for the part type.
      */
@@ -57,104 +53,90 @@ public abstract class AbstractHostToJavaMuleTransformer extends AbstractHostJava
     /**
      * Constructor for multi-part transformers.
      * <p/>
-     * Host to Java transformers expect byte array sources corresponding to
-     * mainframe raw data.
-     * Alternatively, input can be an input stream where the content is assumed
-     * to be a byte stream.
+     * Host to Java transformers expects a map of byte arrays for multi part
+     * payloads.
      * Inheriting classes will set the return class.
      * @param bindingTransformersMap map of transformer sets, one for each part type.
      */
     public AbstractHostToJavaMuleTransformer(
             final Map < String, AbstractTransformers > bindingTransformersMap) {
         super(bindingTransformersMap);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
+        registerSourceType(Map.class);
     }
 
     /**
      * {@inheritDoc}
-     * Detect if client is using LegStar messaging. If he does,
-     * store that information in the ESB message properties so
-     * that downstream actions know that the caller is expecting
-     * a LegStarMessage reply.
      */
+    @SuppressWarnings("unchecked")
     public Object transform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
         if (_log.isDebugEnabled()) {
-            _log.debug("ESB Message before processing:");
-            _log.debug(esbMessage);
+            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
         }
         
         /* Don't transform a message content if an exception is reported */
         if (esbMessage.getExceptionPayload() != null) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(),
+                    getI18NMessages().hostTransformFailure(),
                     this, esbMessage.getExceptionPayload().getException());
         }
         try {
             
-            byte[] hostData = esbMessage.getPayloadAsBytes();
+            Object src = esbMessage.getPayload();
             
-            if (LegStarMessage.isLegStarMessage(hostData)) {
-                setLegStarMessaging(esbMessage, true);
-                LegStarMessage legStarMessage = new LegStarMessage();
-                legStarMessage.fromByteArray(hostData, 0);
-                return toJava(legStarMessage, getHostCharset(esbMessage));
-            } else {
-                setLegStarMessaging(esbMessage, false);
-                return getBindingTransformers().toJava(hostData, getHostCharset(esbMessage));
-            }
+            if (src instanceof byte[]) {
+                return getBindingTransformers().toJava(
+                        (byte[]) src,
+                        getHostCharset(esbMessage));
 
-        } catch (UnsupportedEncodingException e) {
-            throw new TransformerException(
-                    getLegstarMessages().encodingFailure(getHostCharset(esbMessage)), this, e);
-        } catch (HostMessageFormatException e) {
-            throw new TransformerException(
-                    getLegstarMessages().hostMessageFormatFailure(), this, e);
+            } else if (src instanceof InputStream) {
+                return getBindingTransformers().toJava(
+                        IOUtils.toByteArray((InputStream) src),
+                        getHostCharset(esbMessage));
+
+            } else if (src instanceof Map) {
+                return toJava((Map < String, byte[] >) src,
+                        getHostCharset(esbMessage));
+                
+            } else {
+                return null;
+            }
+            
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
-        } catch (HeaderPartException e) {
-            throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         } catch (Exception e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
 
     }
 
     /**
-     * When the host is sending an architected LegStar message, it can be single
-     * or multi part. This code transforms each part. If there is a single one,
-     * it is immediately returned otherwise, each part is transformed individually
-     * then they are all wrapped in a holder object which is returned.
-     * @param legstarMessage a LegStar message
+     * When the host is sending an multiple parts part, this code transforms each part.
+     * Each part is transformed individually then they are all wrapped in a holder
+     * object which is returned.
+     * @param hostParts a map of byte arrays, one for each part
      * @param hostCharset the host character set
      * @return a java object
      * @throws TransformerException if transformation failed
      */
     public Object toJava(
-            final LegStarMessage legstarMessage,
+            final Map < String, byte[] > hostParts,
             final String hostCharset) throws TransformerException {
 
         try {
             Map < String, Object > transformedParts = new HashMap < String, Object >();
-            for (LegStarMessagePart part : legstarMessage.getDataParts()) {
-                if (part.getPartID().equals(CommareaPart.COMMAREA_PART_ID)) {
-                    return getBindingTransformers().toJava(
-                            part.getContent(), hostCharset);
-                }
-                transformedParts.put(part.getPartID(), 
-                        getBindingTransformersMap().get(part.getPartID()).toJava(
-                                part.getContent(), hostCharset));
-
+            for (Entry < String, byte[] > hostPart : hostParts.entrySet()) {
+                transformedParts.put(hostPart.getKey(), 
+                        getBindingTransformersMap().get(hostPart.getKey()).toJava(
+                                hostPart.getValue(), hostCharset));
             }
             return createHolder(transformedParts);
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
 
     }
@@ -172,46 +154,7 @@ public abstract class AbstractHostToJavaMuleTransformer extends AbstractHostJava
     public Object createHolder(
             final Map < String, Object > transformedParts) throws TransformerException {
         throw new TransformerException(
-                getLegstarMessages().noMultiPartSupportFailure(), this);
-    }
-
-    /**
-     * Sanity check the source.
-     * @param src source object
-     * @return the content if sane
-     * @throws HostTransformException if content is corrupted
-     */
-    public byte[] getRawHostContent(final Object src) throws HostTransformException {
-        if (src == null) {
-            throw new HostTransformException("Request content is null");
-        }
-        if ((src instanceof byte[])) {
-            return (byte[]) src;
-        }
-        if ((src instanceof InputStream)) {
-            InputStream inputStream = (InputStream) src;
-            try {
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                int iRead = 0;
-                byte[] baChunk = new byte[4096];
-                while ((iRead = inputStream.read(baChunk)) > 0) {
-                    baos.write(baChunk, 0, iRead);
-                }
-                return baos.toByteArray();
-            } catch (IOException e) {
-                throw new HostTransformException(e);
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e) {
-                        throw new HostTransformException(e);
-                    }
-                }
-            }
-        }
-        throw new HostTransformException(
-                "Request content is not a byte array or an input stream");
+                getI18NMessages().noMultiPartSupportFailure(), this);
     }
 
 }

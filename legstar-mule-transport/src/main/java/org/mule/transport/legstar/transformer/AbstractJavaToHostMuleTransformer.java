@@ -50,14 +50,14 @@ extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
      * Constructor for multi-part transformers.
      * <p/>
      * Java to Host transformers expect a type object as input and produces a 
-     * byte array corresponding to mainframe raw data.
+     * map of byte arrays corresponding to mainframe raw data parts.
      * Inheriting classes will set the Source type.
      * @param bindingTransformersMap map of transformer sets, one for each part type.
      */
     public AbstractJavaToHostMuleTransformer(
             final Map < String, AbstractTransformers > bindingTransformersMap) {
         super(bindingTransformersMap);
-        setReturnClass(byte[].class);
+        setReturnClass(Map.class);
     }
 
     /**
@@ -65,20 +65,13 @@ extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
      * The nature of the binding transformers passed by inherited class determines
      * if this is a multi part transformer or not.
      * <p/>
-     * Single part transformers can either serialize to raw mainframe data or be
-     * encapsulated in an architected LegStar Message. This is determined by the 
-     * presence of a boolean in the incoming esb message properties.
-     * <p/>
-     * When a formatted LegStar message needs to be produced, the target program
-     * properties are collected from a string in the incoming esb message properties.
      *  */
-    public byte[] transform(
+    public Object transform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
 
         if (_log.isDebugEnabled()) {
-            _log.debug("ESB Message before processing:");
-            _log.debug(esbMessage);
+            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
         }
         try {
 
@@ -86,8 +79,7 @@ extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
             if (getBindingTransformers() != null) {
                 byte[] hostData = getBindingTransformers().toHost(
                         esbMessage.getPayload(), getHostCharset(esbMessage));
-
-                return wrapHostData(hostData, esbMessage);
+                return hostData;
             } else {
                 Map < String, byte[] > hostDataMap = new HashMap < String, byte[] >();
                 for (Entry < String, AbstractTransformers > entry
@@ -97,12 +89,12 @@ extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
                             entry.getValue().toHost(
                                     valueObject, getHostCharset(esbMessage)));
                 }
-                return wrapHostData(hostDataMap, esbMessage);
+                return hostDataMap;
             }
 
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
 
     }
@@ -121,7 +113,7 @@ extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
             final Object holderObject,
             final String partID) throws TransformerException {
         throw new TransformerException(
-                getLegstarMessages().noMultiPartSupportFailure(), this);
+                getI18NMessages().noMultiPartSupportFailure(), this);
     }
 
 }

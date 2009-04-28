@@ -228,16 +228,10 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
                     operation.getRequestHolderType() + "ToHostMuleTransformer.java",
                     muleComponent.getName());
             compare(operationClassFilesDir,
-                    operation.getRequestHolderType() + "ToHttpResponse.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
                     "HostTo" + operation.getResponseHolderType() + "MuleTransformer.java",
                     muleComponent.getName());
             compare(operationClassFilesDir,
                     operation.getResponseHolderType() + "ToHostMuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    operation.getResponseHolderType() + "ToHttpResponse.java",
                     muleComponent.getName());
 
             compare(operationClassFilesDir,
@@ -247,16 +241,10 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
                     operation.getRequestHolderType() + "XmlToHostMuleTransformer.java",
                     muleComponent.getName());
             compare(operationClassFilesDir,
-                    operation.getRequestHolderType() + "XmlToHttpResponse.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
                     "HostTo" + operation.getResponseHolderType() + "XmlMuleTransformer.java",
                     muleComponent.getName());
             compare(operationClassFilesDir,
                     operation.getResponseHolderType() + "XmlToHostMuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    operation.getResponseHolderType() + "XmlToHttpResponse.java",
                     muleComponent.getName());
 
             String expectedCobolRes = getSource(

@@ -8,25 +8,21 @@
  * Contributors:
  *     LegSem - initial API and implementation
  ******************************************************************************/
-package org.mule.transport.legstar.transformer;
+package org.mule.transport.legstar.cixs.transformer;
 
-import org.mule.DefaultMuleMessage;
 import org.mule.transformer.AbstractMessageAwareTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
-import org.mule.api.MuleMessage;
 import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
 import com.legstar.test.coxb.LsfileaeCases;
 
 /**
- * Test AbstractJavaToHostTransformer class.
- * This is the case where the message holds a property 
+ * Test HostToLegstarMuleTransformer class.
  *
  */
-public class LsfileaeJavaToLegStarMessageTransformerTest extends AbstractTransformerTestCase {
+public class SinglepartLegstarToHostMuleTransformerTest extends AbstractTransformerTestCase {
 
-    
     /** A LegStarMessage serialization. */
     private static final String LSFILEAE_MESSAGE_HOST_DATA =
         /*L S O K H E A D                 (Message part ID)*/
@@ -46,18 +42,26 @@ public class LsfileaeJavaToLegStarMessageTransformerTest extends AbstractTransfo
         /* 8 8 9 9 3 3 1 4 1 0 0 4 5 8     0 0 1 0 0 . 3 5 A   V O I R      */
         + "f8f8f9f9f3f3f1f4f1f0f0f4f5f84040f0f0f1f0f04bf3f5c140e5d6c9d9404040";
 
-    
     /** This makes sure there is a single instance of test data. */
-    private static final Object TEST_DATA = LsfileaeCases.getJavaObject();
+    private static byte[] _TestData;
+    
+    /**
+     * Constructor.
+     */
+    public SinglepartLegstarToHostMuleTransformerTest() {
+        super();
+        _TestData = HostData.toByteArray(LsfileaeCases.getHostBytesHex());
+    }
     
     /** {@inheritDoc} */
     public AbstractMessageAwareTransformer getTransformer() throws Exception {
-        return new LsfileaeJavaToHostTransformer();
+        LegstarToHostMuleTransformer transformer = new LegstarToHostMuleTransformer();
+        return transformer;
     }
 
     /** {@inheritDoc} */
     public Object getResultData() {
-        return HostData.toByteArray(LSFILEAE_MESSAGE_HOST_DATA);
+        return _TestData;
     }
 
     /** {@inheritDoc} */
@@ -67,26 +71,7 @@ public class LsfileaeJavaToLegStarMessageTransformerTest extends AbstractTransfo
 
     /** {@inheritDoc} */
     public Object getTestData() {
-        return TEST_DATA;
+        return HostData.toByteArray(LSFILEAE_MESSAGE_HOST_DATA);
     }
 
-    /**
-     *  {@inheritDoc}
-     * We override this method in order to set the message property that
-     * commands legstar messaging.
-     *      */
-    public void testTransform() throws Exception  {
-        MuleMessage muleMessage = new DefaultMuleMessage(getTestData());
-        muleMessage.setStringProperty(
-                AbstractJavaToHostMuleTransformer.PROGRAM_PROP_FILE_NAME,
-                "lsfileae.properties");
-        
-        Object result = this.getTransformer().transform(muleMessage, "");
-        assertNotNull(result);
-
-        Object expectedResult = this.getResultData();
-        assertNotNull(expectedResult);
-        
-        assertTrue(this.compareResults(expectedResult, result));
-    }
 }

@@ -11,10 +11,14 @@
 package org.mule.transport.legstar.transformer;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
+import com.legstar.test.coxb.LsfileacCases;
 
 
 /**
@@ -112,8 +116,12 @@ public class LsfileacHostToXmlTransformerTest extends AbstractTransformerTestCas
 
     /** {@inheritDoc} */
     public Object getTestData() {
-        return HostData.toByteArray(
-                LsfileacHostToJavaTransformerTest.LSFILEAC_MESSAGE_HOST_DATA);
+        Map < String, byte[]> testData = new HashMap < String, byte[]>();
+        testData.put("ReplyData",
+                HostData.toByteArray(LsfileacCases.getHostBytesHexReplyData()));
+        testData.put("ReplyStatus",
+                HostData.toByteArray(LsfileacCases.getHostBytesHexReplyStatus()));
+        return testData;
     }
 
     /** {@inheritDoc} */

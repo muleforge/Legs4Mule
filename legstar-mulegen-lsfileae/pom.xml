@@ -95,11 +95,35 @@
             <artifactId>mule-transport-http</artifactId>
         </dependency>
 
-        <!-- LegStar Mock transport -->    
+        <!-- Mule JMS transport -->
         <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-cmockrt</artifactId>
-            <scope>test</scope>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-jms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>fscontext</artifactId>
+            <version>6.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>providerutil</artifactId>
+            <version>6.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mq</artifactId>
+            <version>6.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mqjms</artifactId>
+            <version>6.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>dhbcore</artifactId>
+            <version>6.0.2</version>
         </dependency>
 
     </dependencies>

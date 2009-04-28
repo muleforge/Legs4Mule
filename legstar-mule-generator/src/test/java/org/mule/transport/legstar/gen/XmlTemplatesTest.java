@@ -57,9 +57,34 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
      * Creates the mule adapter http config.
      * @throws Exception if generation fails
      */
-    public void testAdapterHttpConfigXml() throws Exception {
+    public void testLsfileaeAdapterHttpConfigXml() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        getParameters().put("hostCharset", "IBM01140");
+        HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
+        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
+        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
+        httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
+        httpTransportParameters.add(getParameters());
+
+        File componentConfFilesDir = new File(
+                GEN_CONF_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        AbstractCixsMuleGenerator.generateAdapterHttpConfigXml(
+                muleComponent, getParameters(), componentConfFilesDir);
+
+        compare(componentConfFilesDir,
+                "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
+    }
+
+    /**
+     * Creates the mule adapter http config.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaxAdapterHttpConfigXml() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaxMuleComponent();
         getParameters().put("hostCharset", "IBM01140");
         HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
         httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
@@ -82,7 +107,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
      * Creates the mule adapter http config for XML payloads.
      * @throws Exception if generation fails
      */
-    public void testAdapterHttpConfigXmlXml() throws Exception {
+    public void testLsfileaeAdapterHttpConfigXmlXml() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         getParameters().put("hostCharset", "IBM01140");
@@ -107,7 +132,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
      * Creates the mule proxy http config.
      * @throws Exception if generation fails
      */
-    public void testProxyHttpConfigXml() throws Exception {
+    public void testJvmqueryProxyHttpConfigXml() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         HttpTransportParameters httpTransportParameters = new HttpTransportParameters();

@@ -10,18 +10,18 @@
  ******************************************************************************/
 package org.mule.transport.legstar.test.lsfileae;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.mule.module.client.MuleClient;
-import org.mule.transport.legstar.cixs.MuleHostHeaderFactory;
 import org.mule.tck.FunctionalTestCase;
-import org.mule.transport.NullPayload;
 import org.mule.api.MuleMessage;
 
 /**
- * Test the adapter for LSFILEAE in a bridge configuration (using legstar-mule HTTP transport).
- * This test requires access to an actual mainframe running FILEA sample.
+ * Test the adapter for the LSFILEAE mainframe program.
+ * <p/>
+ * Adapter transport is HTTP. The LegStar mainframe modules for HTTP must
+ * be installed on the mainframe:
+ * {@link http://www.legsem.com/legstar/legstar-distribution-zos/}.
+ * <p/>
+ * Client sends/receive XML.
  */
 public class LsfileaeHttpXmlTest extends FunctionalTestCase {
 
@@ -32,35 +32,21 @@ public class LsfileaeHttpXmlTest extends FunctionalTestCase {
     
     /**
      * Run the target LSFILEAE mainframe program.
+     * Client sends an XML string and receive one as a reply.
      * @throws Exception if test fails
      */
     public void testLsfileae() throws Exception {
-        /* Visually check that the mainframe received these headers */
-        Map < String, Object > messageProperties = new HashMap < String, Object >();
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_REQUEST_ID, "legstar-mule");
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_USERID, "MYUSER");
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_PASSWORD, "MYPASS");
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_TRACE_MODE, new Boolean(true));
         MuleClient client = new MuleClient();
         MuleMessage message = client.send(
-                "tcp://localhost:3213",
+                "lsfileaeClientEndpoint",
                 getXmlRequest100(),
-                messageProperties);
-        assertNotNull(message);
-        assertFalse(message.getExceptionPayload() != null);
-        Object res = message.getPayload();
-        assertFalse(res == null);
-        assertFalse(res instanceof NullPayload);
-        if (res instanceof byte[]) {
-            checkXmlReply100(new String((byte[]) res));
-        } else {
-            fail();
-        }
+                null);
+        checkXmlReply100(new String(message.getPayloadAsBytes()));
         
     }
 
     /**
-     * @return an XML serialization of the object
+     * @return an XML serialization of the request
      */
     public static String getXmlRequest100() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"

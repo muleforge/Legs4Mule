@@ -7,46 +7,44 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:spring="http://www.springframework.org/schema/beans"
         xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
-        xmlns:legstar-http="http://www.mulesource.org/schema/mule/legstar/http/2.2"
+        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
         xmlns:test="http://www.mulesource.org/schema/mule/test/2.2"
     xsi:schemaLocation=
         "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
          http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
          http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
-         http://www.mulesource.org/schema/mule/legstar/http/2.2 http://www.legsem.com/legstar/xml/mule-legstar-http-1.0.xsd
+         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
          http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
 
     <description>Mule configuration file for lsfileal adapter service</description>
 
-    <byte-array-to-string-transformer name="ByteArrayToString"/>
+    <tcp:endpoint name="lsfilealClientEndpoint" address="tcp://localhost:3210" synchronous="true" />
 
     <model name="lsfilealModel">
 
         <service name="lsfilealAdapterService">
             <inbound>
-                <tcp:inbound-endpoint
-                    address="tcp://localhost:3213"
-                    transformer-refs="ByteArrayToString"
-                    synchronous="true">
-                </tcp:inbound-endpoint>
+                <inbound-endpoint ref="lsfilealClientEndpoint" >
+                    <transformers>
+                        <byte-array-to-object-transformer />
+                    </transformers>
+                </inbound-endpoint>
             </inbound>
             <outbound>
                 <pass-through-router>
-                  <legstar-http:outbound-endpoint
-                    address="legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN"
-                    synchronous="true"
-                    hostCharset="IBM01140"
-                    programPropFileName="lsfileal.properties"
-                    hostTraceMode="false">
-                    <transformers>
-                        <custom-transformer
-                            class="org.mule.transport.legstar.test.lsfileal.RequestParmsXmlToHostMuleTransformer" />
-                    </transformers>
-                    <response-transformers>
-                        <custom-transformer
-                            class="org.mule.transport.legstar.test.lsfileal.HostToReplyDataXmlMuleTransformer" />
-                    </response-transformers>
-                  </legstar-http:outbound-endpoint>
+                    <legstar:outbound-endpoint
+                            address="legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN"
+                            synchronous="true" programPropFileName="lsfileal.properties"
+                            hostCharset="IBM01140" >
+                        <transformers>
+                            <legstar:xml-to-host-transformer
+                                class="org.mule.transport.legstar.test.lsfileal.RequestParmsXmlToHostMuleTransformer" />
+                        </transformers>
+                        <response-transformers>
+                            <legstar:host-to-xml-transformer
+                                class="org.mule.transport.legstar.test.lsfileal.HostToReplyDataXmlMuleTransformer" />
+                        </response-transformers>
+                    </legstar:outbound-endpoint>
                 </pass-through-router>
             </outbound>
         </service>

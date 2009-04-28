@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
@@ -30,6 +29,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mule.api.MuleMessage;
@@ -44,11 +44,6 @@ import org.xml.sax.SAXException;
 
 import com.legstar.coxb.transform.AbstractXmlTransformers;
 import com.legstar.coxb.transform.HostTransformException;
-import com.legstar.messaging.CommareaPart;
-import com.legstar.messaging.HeaderPartException;
-import com.legstar.messaging.HostMessageFormatException;
-import com.legstar.messaging.LegStarMessage;
-import com.legstar.messaging.LegStarMessagePart;
 
 /**
  * This ESB Transformer converts host data into XML using the regular
@@ -64,7 +59,9 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
      * <p/>
      * Host to XML transformers expect byte array sources corresponding to
      * mainframe raw data.
-     * The XML is serialized in a String.
+     * Alternatively, source can be an inputStream in which case, it is 
+     * assumed to stream a byte array.
+     * The returned XML is serialized in a String.
      * @param xmlBindingTransformers a set of transformers for the part type.
      */
     public AbstractHostToXmlMuleTransformer(
@@ -78,18 +75,15 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
     /**
      * Constructor for multi-part transformers.
      * <p/>
-     * Host to XML transformers expect byte array sources corresponding to
-     * mainframe raw data.
-     * Alternatively, input can be an input stream where the content is assumed
-     * to be a byte stream.
+     * Host to XML transformers expects a map of byte arrays for multi part
+     * payloads.
      * The XML is serialized in a String.
      * @param xmlBindingTransformersMap map of transformer sets, one for each part type.
      */
     public AbstractHostToXmlMuleTransformer(
             final Map < String, AbstractXmlTransformers > xmlBindingTransformersMap) {
         super(xmlBindingTransformersMap);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
+        registerSourceType(Map.class);
         setReturnClass(String.class);
     }
 
@@ -100,86 +94,76 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
      * that downstream actions know that the caller is expecting
      * a LegStarMessage reply.
      */
+    @SuppressWarnings("unchecked")
     public Object transform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
         if (_log.isDebugEnabled()) {
-            _log.debug("ESB Message before processing:");
-            _log.debug(esbMessage);
+            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
         }
 
         /* Don't transform a message content if an exception is reported */
         if (esbMessage.getExceptionPayload() != null) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(),
+                    getI18NMessages().hostTransformFailure(),
                     this, esbMessage.getExceptionPayload().getException());
         }
         try {
 
-            byte[] hostData = esbMessage.getPayloadAsBytes();
+            Object src = esbMessage.getPayload();
             StringWriter writer = new StringWriter();
-
-            if (LegStarMessage.isLegStarMessage(hostData)) {
-                setLegStarMessaging(esbMessage, true);
-                LegStarMessage legStarMessage = new LegStarMessage();
-                legStarMessage.fromByteArray(hostData, 0);
-                return toXml(legStarMessage, getHostCharset(esbMessage));
-            } else {
-                setLegStarMessaging(esbMessage, false);
-                getXmlBindingTransformers().toXml(hostData, writer, getHostCharset(esbMessage));
+            
+            if (src instanceof byte[]) {
+                getXmlBindingTransformers().toXml((byte[]) src,
+                        writer, getHostCharset(esbMessage));
                 return writer.toString();
-            }
 
-        } catch (UnsupportedEncodingException e) {
-            throw new TransformerException(
-                    getLegstarMessages().encodingFailure(getHostCharset(esbMessage)), this, e);
-        } catch (HostMessageFormatException e) {
-            throw new TransformerException(
-                    getLegstarMessages().hostMessageFormatFailure(), this, e);
+            } else if (src instanceof InputStream) {
+                getXmlBindingTransformers().toXml(
+                        IOUtils.toByteArray((InputStream) src),
+                        writer, getHostCharset(esbMessage));
+
+            } else if (src instanceof Map) {
+                return toXml((Map < String, byte[] >) src,
+                        getHostCharset(esbMessage));
+            }
+            return null;
+
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
-        } catch (HeaderPartException e) {
-            throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         } catch (Exception e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
 
     }
 
     /**
-     * When the host is sending an architected LegStar message, it can be single
-     * or multi part. This code transforms each part. If there is a single one,
-     * it is immediately returned otherwise, each part is transformed individually
-     * then they are all wrapped in a holder XML which is returned.
-     * @param legstarMessage a LegStar message
+     * When the host is sending an multiple parts part, this code transforms each part.
+     * Each part is transformed individually then they are all wrapped in a holder
+     * XML which is returned.
+     * @param hostParts a map of byte arrays, one for each part
      * @param hostCharset the host character set
      * @return a java object
      * @throws TransformerException if transformation failed
      */
     public Object toXml(
-            final LegStarMessage legstarMessage,
+            final Map < String, byte[] > hostParts,
             final String hostCharset) throws TransformerException {
 
         try {
             Map < String, Writer > transformedParts = new HashMap < String, Writer >();
-            for (LegStarMessagePart part : legstarMessage.getDataParts()) {
+            for (Entry < String, byte[] > hostPart : hostParts.entrySet()) {
                 StringWriter writer = new StringWriter();
-                if (part.getPartID().equals(CommareaPart.COMMAREA_PART_ID)) {
-                    getXmlBindingTransformers().toXml(
-                            part.getContent(), writer, hostCharset);
-                    return writer.toString();
-                }
-                getXmlBindingTransformersMap().get(part.getPartID()).toXml(
-                        part.getContent(), writer, hostCharset);
-                transformedParts.put(part.getPartID(), writer);
+                getXmlBindingTransformersMap().get(hostPart.getKey()).toXml(
+                        hostPart.getValue(), writer, hostCharset);
+                transformedParts.put(hostPart.getKey(), writer);
             }
             return createXmlHolder(transformedParts);
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
 
     }
@@ -216,16 +200,16 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
 
         } catch (ParserConfigurationException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         } catch (TransformerException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         } catch (TransformerConfigurationException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         } catch (javax.xml.transform.TransformerException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
     }
 
@@ -257,13 +241,13 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
             }
         } catch (DOMException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         } catch (SAXException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         } catch (IOException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
     }
 
@@ -274,7 +258,7 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
      */
     public QName getHolderQName() throws TransformerException {
         throw new TransformerException(
-                getLegstarMessages().noMultiPartSupportFailure(), this);
+                getI18NMessages().noMultiPartSupportFailure(), this);
 
     }
 

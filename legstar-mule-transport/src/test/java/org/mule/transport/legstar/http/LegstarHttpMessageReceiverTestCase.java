@@ -14,7 +14,7 @@ import com.mockobjects.dynamic.Mock;
 
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.InboundEndpoint;
-import org.mule.transport.legstar.transformer.LsfileaeJavaToHttpResponseTransformer;
+import org.mule.transport.legstar.http.transformer.HostByteArrayToHttpResponse;
 import org.mule.transport.AbstractMessageReceiverTestCase;
 import org.mule.util.CollectionUtils;
 import org.mule.api.service.Service;
@@ -46,7 +46,7 @@ public class LegstarHttpMessageReceiverTestCase extends AbstractMessageReceiverT
                 new URIBuilder("legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT)),
                 muleContext);
         endpointBuilder.setResponseTransformers(CollectionUtils.singletonList(
-                new LsfileaeJavaToHttpResponseTransformer()));
+                new HostByteArrayToHttpResponse()));
         endpoint = muleContext.getRegistry().lookupEndpointFactory().getInboundEndpoint(endpointBuilder);
         return endpoint;
     }

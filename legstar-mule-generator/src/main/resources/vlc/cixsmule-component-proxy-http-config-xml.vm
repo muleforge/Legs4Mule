@@ -5,18 +5,18 @@
 ##/////////////////////////////////////////////////////////////////////
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    This Mule configuration implements a proxy service for mainframe
-    programs. Transport from mainframe to service is HTTP.
+    This Mule configuration implements a proxy service for a mainframe program.
+    Transport from mainframe to service is HTTP.
 -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spring="http://www.springframework.org/schema/beans"
         xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
-        xmlns:legstar-http="http://www.mulesource.org/schema/mule/legstar/http/2.2"
+        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
         xmlns:test="http://www.mulesource.org/schema/mule/test/2.2"
     xsi:schemaLocation="http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
         http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
-        http://www.mulesource.org/schema/mule/legstar/http/2.2 http://www.legsem.com/legstar/xml/mule-legstar-http-1.0.xsd
+        http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
         http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
 
     <description>Mule configuration file for ${muleComponent.name} proxy service</description>
@@ -26,24 +26,23 @@
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
 #set($operationPackageName = ${cixsOperation.packageName})
 #set($requestTransformer = "HostTo${cixsOperation.requestHolderType}MuleTransformer")
-#set($responseTransformer = "${cixsOperation.responseHolderType}ToHttpResponse")
+#set($responseTransformer = "${cixsOperation.responseHolderType}ToHostMuleTransformer")
 #set($qualRequestTransformer = ${helper.getQualClassName($operationPackageName, $requestTransformer)})
 #set($qualResponseTransformer = ${helper.getQualClassName($operationPackageName, $responseTransformer)})
         <service name="${cixsOperation.name}ProxyService">
             <inbound>
-                <legstar-http:inbound-endpoint
+                <legstar:inbound-endpoint
                         address="legstar:${httpURL}"
-                        synchronous="true" 
-                        hostCharset="${hostCharset}">
+                        synchronous="true" hostCharset="${hostCharset}">
                     <transformers>
-                        <custom-transformer
+                        <legstar:host-to-java-transformer
                             class="${qualRequestTransformer}" />
                     </transformers>
                     <response-transformers>
-                        <custom-transformer
+                        <legstar:java-to-host-transformer
                             class="${qualResponseTransformer}" />
                     </response-transformers>
-                </legstar-http:inbound-endpoint>
+                </legstar:inbound-endpoint>
             </inbound>
             <component class="${umoComponentImplementationName}"/>
         </service>

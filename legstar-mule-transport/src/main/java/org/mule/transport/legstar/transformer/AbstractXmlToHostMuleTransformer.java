@@ -45,6 +45,9 @@ import com.legstar.coxb.transform.HostTransformException;
  */
 public abstract class AbstractXmlToHostMuleTransformer
 extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
+    
+    /** When XML is encoded, we assume this encoding. TODO get from Mule.*/
+    private static final String XML_ENCODING = "UTF-8";
 
     /** Logger. */
     private final Log _log = LogFactory.getLog(getClass());
@@ -69,7 +72,7 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
      * Constructor for multi-part transformers.
      * <p/>
      * Xml to Host transformers expect a String or byte[] as input and produces a 
-     * byte array corresponding to mainframe raw data.
+     * a map of byte arrays, one for each mainframe payload part.
      * @param xmlBindingTransformersMap map of transformer sets, one for each part type.
      */
     public AbstractXmlToHostMuleTransformer(
@@ -78,28 +81,20 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
         registerSourceType(String.class);
         registerSourceType(byte[].class);
         registerSourceType(InputStream.class);
-        setReturnClass(byte[].class);
+        setReturnClass(Map.class);
     }
 
     /**
      * {@inheritDoc}
      * The nature of the binding transformers passed by inherited class determines
      * if this is a multi part transformer or not.
-     * <p/>
-     * Single part transformers can either serialize to raw mainframe data or be
-     * encapsulated in an architected LegStar Message. This is determined by the 
-     * presence of a boolean in the incoming esb message properties.
-     * <p/>
-     * When a formatted LegStar message needs to be produced, the target program
-     * properties are collected from a string in the incoming esb message properties.
      *  */
-    public byte[] transform(
+    public Object transform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
 
         if (_log.isDebugEnabled()) {
-            _log.debug("ESB Message before processing:");
-            _log.debug(esbMessage);
+            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
         }
         try {
 
@@ -108,7 +103,7 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
                 byte[] hostData = getXmlBindingTransformers().toHost(
                         getXmlSource(esbMessage.getPayload()),
                         getHostCharset(esbMessage));
-                return wrapHostData(hostData, esbMessage);
+                return hostData;
 
             } else {
                 Document holderDoc = getDocument(esbMessage.getPayload());
@@ -120,12 +115,12 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
                                     getXmlFragmentFromHolder(holderDoc, entry.getKey()),
                                     getHostCharset(esbMessage)));
                 }
-                return wrapHostData(hostDataMap, esbMessage);
+                return hostDataMap;
             }
 
         } catch (HostTransformException e) {
             throw new TransformerException(
-                    getLegstarMessages().hostTransformFailure(), this, e);
+                    getI18NMessages().hostTransformFailure(), this, e);
         }
 
     }
@@ -142,18 +137,18 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
                 return new StreamSource(new StringReader((String) payload));
             } else if (payload instanceof byte[]) {
                 return new StreamSource(new InputStreamReader(
-                        new ByteArrayInputStream((byte[]) payload), "UTF-8"));
+                        new ByteArrayInputStream((byte[]) payload), XML_ENCODING));
 
             } else if (payload instanceof InputStream) {
                 return new StreamSource(new InputStreamReader(
-                        (InputStream) payload, "UTF-8"));
+                        (InputStream) payload, XML_ENCODING));
             } else {
                 throw new TransformerException(
-                        getLegstarMessages().payloadNotXmlSource(), this);
+                        getI18NMessages().payloadNotXmlSource(), this);
             }
         } catch (UnsupportedEncodingException e) {
             throw new TransformerException(
-                    getLegstarMessages().encodingFailure("UTF-8"), this, e);
+                    getI18NMessages().encodingFailure(XML_ENCODING), this, e);
         }
 
     }
@@ -176,7 +171,7 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
                     (InputStream) payload);
         } else {
             throw new TransformerException(
-                    getLegstarMessages().payloadNotXmlSource(), this);
+                    getI18NMessages().payloadNotXmlSource(), this);
         }
 
     }
@@ -194,22 +189,23 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
             return docBuilder.parse(getXmlInputSource(payload));
         } catch (TransformerException e) {
             throw new TransformerException(
-                    getLegstarMessages().payloadNotXmlSource(), this);
+                    getI18NMessages().payloadNotXmlSource(), this);
         } catch (ParserConfigurationException e) {
             throw new TransformerException(
-                    getLegstarMessages().payloadNotXmlSource(), this);
+                    getI18NMessages().payloadNotXmlSource(), this);
         } catch (SAXException e) {
             throw new TransformerException(
-                    getLegstarMessages().payloadNotXmlSource(), this);
+                    getI18NMessages().payloadNotXmlSource(), this);
         } catch (IOException e) {
             throw new TransformerException(
-                    getLegstarMessages().payloadNotXmlSource(), this);
+                    getI18NMessages().payloadNotXmlSource(), this);
         }
     }
 
     /**
      * When a holder XML for multi part payload needs to be turned into
      * host data, we need to associate inner XML nodes with part IDs.
+     * TODO This assumes node local names are identical to part IDs
      * @param holderDoc holder XML document
      * @param partID the part identifier or container name
      * @return a holder object

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.mulesource.org/schema/mule/legstar/2.2"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:mule="http://www.mulesource.org/schema/mule/core/2.2"
+            xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
+            xmlns:schemadoc="http://www.mulesource.org/schema/mule/schemadoc/2.2"
+            targetNamespace="http://www.mulesource.org/schema/mule/legstar/2.2"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.mulesource.org/schema/mule/core/2.2" 
+                schemaLocation="http://www.mulesource.org/schema/mule/core/2.2/mule.xsd" />
+    <xsd:import namespace="http://www.mulesource.org/schema/mule/http/2.2"
+                schemaLocation="http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd"/>
+    <xsd:import namespace = "http://www.mulesource.org/schema/mule/schemadoc/2.2"
+                schemaLocation = "http://www.mulesource.org/schema/mule/schemadoc/2.2/mule-schemadoc.xsd"/>
+
+    <xsd:annotation>
+        <xsd:documentation>
+            LegStar for Mule provides support for COBOL to Java and COBOL to XML Mule Transformers as well
+            as transport capabilities to and from mainframes over HTTP and WebSphere MQ.
+        </xsd:documentation>
+        <xsd:appinfo>
+            <schemadoc:short-name>LEGSTAR</schemadoc:short-name>
+            <schemadoc:page-title>LEGSTAR Transformers and Transport</schemadoc:page-title>
+            <schemadoc:transport-features receiveEvents="true" dispatchEvents="true" responseEvents="true"
+                                          requestEvents="true"
+                                          transactions="false" streaming="true">
+                <schemadoc:inboundMEPs in-out="true" in-optional-out="true"/>
+                <schemadoc:outboundMEPs out-in="true" out-optional-in="true"/>
+            </schemadoc:transport-features>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <!--==============================================================-->
+    <!--   LegStar HTTP elements                                      -->
+    <!--==============================================================-->
+    <xsd:element name="connector" type="legstarHttpConnectorType" substitutionGroup="mule:abstract-connector">
+        <xsd:annotation>
+            <xsd:documentation>
+                This connector provides mainframe HTTP connectivity on top of what is already provided with the Mule [HTTP Transport].
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="legstarHttpConnectorType">
+        <xsd:complexContent>
+            <xsd:extension base="http:httpConnectorType"/>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="inbound-endpoint" type="inboundEndpointType" substitutionGroup="mule:abstract-inbound-endpoint">
+        <xsd:annotation>
+            <xsd:documentation>
+                An inbound LEGSTAR HTTP endpoint exposes a  mainframe service over HTTP.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="inboundEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="http:inboundEndpointType">
+                <xsd:attributeGroup ref="legstarMessagingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="outbound-endpoint" type="outboundEndpointType" substitutionGroup="mule:abstract-outbound-endpoint">
+        <xsd:annotation>
+            <xsd:documentation>
+                The LEGSTAR HTTP outbound endpoint allows Mule to send mainframe requests over HTTP.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="outboundEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="http:outboundEndpointType">
+                <xsd:attributeGroup ref="legstarMessagingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="endpoint" type="globalEndpointType" substitutionGroup="mule:abstract-global-endpoint">
+        <xsd:annotation>
+            <xsd:documentation>
+                Configures a global LEGSTAR HTTP endpoint that can be referenced by services. Services can augment
+                the configuration defined in the global endpoint with local configuration elements.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="globalEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="http:globalEndpointType">
+                <xsd:attributeGroup ref="legstarMessagingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!--==============================================================-->
+    <!--   Generic LegStar messaging protocol elements                -->
+    <!--==============================================================-->
+    <xsd:attributeGroup name="legstarMessagingAttributes">
+        <xsd:attribute name="programPropFileName" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    Properties file name holding the target program attributes.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attribute name="hostTraceOn" type="xsd:boolean">
+            <xsd:annotation>
+                <xsd:documentation>
+                    True if mainframe server is to produce detailed traces.
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+        <xsd:attributeGroup ref="legstarBindingAttributes"/>
+    </xsd:attributeGroup>
+
+    <!--==============================================================-->
+    <!--   Generic LegStar binding elements                           -->
+    <!--==============================================================-->
+    <xsd:attributeGroup name="legstarBindingAttributes">
+        <xsd:attribute name="hostCharset" type="xsd:string">
+            <xsd:annotation>
+                <xsd:documentation>
+                    The mainframe character set (EBCDIC).
+                </xsd:documentation>
+            </xsd:annotation>
+        </xsd:attribute>
+    </xsd:attributeGroup>
+
+    <!--==============================================================-->
+    <!--   Transformer elements                                       -->
+    <!--==============================================================-->
+    <xsd:element name="java-to-host-transformer" type="javaToHostTransformerType"
+                 substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that converts java objects to mainframe byte arrays.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="javaToHostTransformerType">
+        <xsd:complexContent>
+            <xsd:extension base="mule:customTransformerType">
+                <xsd:attributeGroup ref="legstarBindingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="host-to-java-transformer" type="HostToJavaTransformerType"
+                 substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that converts mainframe byte arrays to java objects.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="HostToJavaTransformerType">
+        <xsd:complexContent>
+            <xsd:extension base="mule:customTransformerType">
+                <xsd:attributeGroup ref="legstarBindingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="xml-to-host-transformer" type="xmlToHostTransformerType"
+                 substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that converts XML to mainframe byte arrays.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="xmlToHostTransformerType">
+        <xsd:complexContent>
+            <xsd:extension base="mule:customTransformerType">
+                <xsd:attributeGroup ref="legstarBindingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="host-to-xml-transformer" type="HostToXmlTransformerType"
+                 substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that converts mainframe byte arrays to XML.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="HostToXmlTransformerType">
+        <xsd:complexContent>
+            <xsd:extension base="mule:customTransformerType">
+                <xsd:attributeGroup ref="legstarBindingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="host-to-legstar-transformer" type="hostToLegstarTransformerType"
+                 substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that wraps host data into LegStar formatted messages (as expected
+                by LegStar mainframe modules).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="hostToLegstarTransformerType">
+        <xsd:complexContent>
+            <xsd:extension base="mule:abstractTransformerType">
+                <xsd:attributeGroup ref="legstarMessagingAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="legstar-to-host-transformer" type="legstarToHostTransformerType"
+                 substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that unwraps host data formatted as a LegStar message (as produced
+                by LegStar mainframe modules).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="legstarToHostTransformerType">
+        <xsd:complexContent>
+            <xsd:extension base="mule:abstractTransformerType"/>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="host-byte-array-to-http-response-transformer" type="hostByteArrayToHttpResponseTransformerType"
+                 substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that wraps host data (whether raw or wrapped in a LegStar message) in
+                an HTTP response.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="hostByteArrayToHttpResponseTransformerType">
+        <xsd:complexContent>
+            <xsd:extension base="mule:abstractTransformerType"/>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+</xsd:schema>

@@ -402,6 +402,14 @@
                 <scope>provided</scope>
             </dependency>
 
+            <!-- Mule JMS transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-jms</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
             <!-- Mule file transport -->
             <dependency>
                 <groupId>org.mule.transports</groupId>

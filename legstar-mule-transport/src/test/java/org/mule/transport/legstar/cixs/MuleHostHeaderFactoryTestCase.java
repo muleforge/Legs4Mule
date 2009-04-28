@@ -32,7 +32,7 @@ public class MuleHostHeaderFactoryTestCase extends TestCase {
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_REQUEST_ID, "lsfileae-client");
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_USERID, "P390");
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_PASSWORD, "STREAM2");
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_TRACE_MODE, new Boolean(true));
+        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_TRACE_ON, new Boolean(true));
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_CHARSET, "IBM01147");
         messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_ENDPOINT, "someMainframe");
 
