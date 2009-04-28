@@ -1,0 +1,95 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.mule.transports</groupId>
+        <artifactId>mule-transport-legstar-pom</artifactId>
+        <version>1.0-RC4-SNAPSHOT</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>legstar-mulegen-lsfileal</artifactId>
+    <packaging>jar</packaging>
+    <version>1.0-RC4-SNAPSHOT</version>
+    <name>Sample Adapter for program LSFILEAL</name>
+    <description>Sample Adapter for program LSFILEAL which uses a COMMAREA with different input and output layouts</description>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
+
+    <!-- If a mainframe is available for integration testing, set
+    this property to false in settings.xml, it will take precedence. -->
+    <properties>
+        <no-mainframe-available>true</no-mainframe-available>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.4.2</version>
+                <configuration>
+                    <skipTests>${no-mainframe-available}</skipTests>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <!-- LegStar for Mule transport -->    
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>legstar-mule-transport</artifactId>
+        </dependency>
+
+        <!-- Mule core -->
+        <dependency>
+            <groupId>org.mule</groupId>
+            <artifactId>mule-core</artifactId>
+        </dependency>
+
+        <!-- COBOL binding API -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-coxbapi</artifactId>
+        </dependency>
+
+        <!-- Test cases for COBOL binding -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-coxbgen-cases</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Test cases for JAXB classes -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Mule test helpers -->    
+        <dependency>
+            <groupId>org.mule.tests</groupId>
+            <artifactId>mule-tests-functional</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-client</artifactId>
+        </dependency>
+
+        <!-- Mule TCP transport -->
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-tcp</artifactId>
+        </dependency>
+
+        <!-- Mule HTTP transport -->
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-http</artifactId>
+        </dependency>
+
+
+    </dependencies>
+  
+</project>

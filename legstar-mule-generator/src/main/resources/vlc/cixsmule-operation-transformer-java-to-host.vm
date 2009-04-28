@@ -8,13 +8,13 @@
 import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 #if($holder)
 import java.util.HashMap;
-import java.util.Map;
 import com.legstar.coxb.transform.AbstractTransformers;
 import org.mule.api.transformer.TransformerException;
-#end
+#else
 #foreach($cixsStructure in $cixsStructures)
 #set($javaClassName = ${coxbHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
 import ${javaClassName};
+#end
 #end
 #foreach($cixsStructure in $cixsStructures)
 import ${helper.getQualClassName(${cixsStructure.coxbPackageName}, ${cixsStructure.jaxbType})}Transformers;

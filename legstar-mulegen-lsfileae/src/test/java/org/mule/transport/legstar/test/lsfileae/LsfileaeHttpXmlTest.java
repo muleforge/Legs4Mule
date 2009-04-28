@@ -39,16 +39,16 @@ public class LsfileaeHttpXmlTest extends FunctionalTestCase {
         MuleClient client = new MuleClient();
         MuleMessage message = client.send(
                 "lsfileaeClientEndpoint",
-                getXmlRequest100(),
+                getXmlRequest(),
                 null);
-        checkXmlReply100(new String(message.getPayloadAsBytes()));
+        checkXmlReply(new String(message.getPayloadAsBytes()));
         
     }
 
     /**
      * @return an XML serialization of the request
      */
-    public static String getXmlRequest100() {
+    public static String getXmlRequest() {
         return "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
         + "<Dfhcommarea xmlns=\"http://legstar.com/test/coxb/lsfileae\">"
         + "<ComNumber>100</ComNumber>"
@@ -56,10 +56,10 @@ public class LsfileaeHttpXmlTest extends FunctionalTestCase {
     }
 
     /** 
-     * Check the values returned from LSFILAE after they were transformed to XML.
-     * @param dfhcommareaXml the XML reply
+     * Check the values returned from LSFILEAE after they were transformed to XML.
+     * @param replyXml the XML reply
      */
-    public static void checkXmlReply100(final String dfhcommareaXml) {
+    public static void checkXmlReply(final String replyXml) {
         assertEquals(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>"
                 + "<Dfhcommarea xmlns=\"http://legstar.com/test/coxb/lsfileae\">"
@@ -73,6 +73,6 @@ public class LsfileaeHttpXmlTest extends FunctionalTestCase {
                 + "<ComAmount>$0100.11</ComAmount>"
                 + "<ComComment>*********</ComComment>"
                 + "</Dfhcommarea>",
-                dfhcommareaXml);
+                replyXml);
     }
 }

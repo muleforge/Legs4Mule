@@ -2,6 +2,7 @@ package org.mule.transport.legstar.test.lsfileac;
 import com.legstar.coxb.transform.HostTransformException;
 import org.mule.transport.legstar.transformer.AbstractHostToXmlMuleTransformer;
 import java.util.HashMap;
+import javax.xml.namespace.QName;
 import com.legstar.coxb.transform.AbstractXmlTransformers;
 import org.mule.api.transformer.TransformerException;
 import com.legstar.test.coxb.lsfileac.bind.ReplyDataXmlTransformers;

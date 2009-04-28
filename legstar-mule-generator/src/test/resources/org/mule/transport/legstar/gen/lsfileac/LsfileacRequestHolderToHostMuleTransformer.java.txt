@@ -1,11 +1,8 @@
 package org.mule.transport.legstar.test.lsfileac;
 import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 import java.util.HashMap;
-import java.util.Map;
 import com.legstar.coxb.transform.AbstractTransformers;
 import org.mule.api.transformer.TransformerException;
-import com.legstar.test.coxb.lsfileac.QueryData;
-import com.legstar.test.coxb.lsfileac.QueryLimit;
 import com.legstar.test.coxb.lsfileac.bind.QueryDataTransformers;
 import com.legstar.test.coxb.lsfileac.bind.QueryLimitTransformers;
 

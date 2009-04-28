@@ -39,14 +39,46 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     }
 
     /**
-     * Adapter case for an program over legstar-mule HTTP.
+     * Adapter case for an LSFILEAE program over legstar-mule HTTP.
      * @throws Exception if generation fails
      */
     public void testLsfileaeGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         initCixsMuleComponent(muleComponent);
-        
+        processAnt();
+    }
+
+    /**
+     * Adapter case for an LSFILEAL program over legstar-mule HTTP.
+     * @throws Exception if generation fails
+     */
+    public void testLsfilealGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getLsfilealMuleComponent();
+        initCixsMuleComponent(muleComponent);
+        processAnt();
+    }
+
+    /**
+     * Adapter case for an LSFILEAC program over legstar-mule HTTP.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileacGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
+        initCixsMuleComponent(muleComponent);
+        processAnt();
+    }
+
+    /**
+     * Adapter case for an LSFILEAX program over legstar-mule HTTP.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaxGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getLsfileaxMuleComponent();
+        initCixsMuleComponent(muleComponent);
         processAnt();
     }
 
@@ -98,6 +130,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
         mAntModel.setTargetMuleConfigDir(new File(targetDir, "src/main/resources"));
         mAntModel.setTargetJarDir(new File("${mule.home}/lib/user"));
         mAntModel.setTargetAntDir(new File(targetDir, "ant"));
+        CodeGenUtil.checkDirectory(mAntModel.getTargetAntDir(), true);
         
         /* This is a dirty trick. This component does not need custom libraries so we
          * use the placeholder to get this generator classes to supersede the ones

@@ -45,17 +45,17 @@ public class LsfileaeHttpTest extends FunctionalTestCase {
         MuleClient client = new MuleClient();
         MuleMessage message = client.send(
                 "lsfileaeClientEndpoint",
-                getJavaObjectRequest100(), null);
+                getJavaObjectRequest(), null);
         ObjectInputStream in = new ObjectInputStream(
                 new ByteArrayInputStream((byte[]) message.getPayload()));
-        checkJavaObjectReply100((Dfhcommarea) in.readObject());
+        checkJavaObjectReply((Dfhcommarea) in.readObject());
         
     }
 
     /**
      * @return an instance of a the java request object.
      */
-    public static Dfhcommarea getJavaObjectRequest100() {
+    public static Dfhcommarea getJavaObjectRequest() {
         ObjectFactory of = new ObjectFactory();
         Dfhcommarea dfhcommarea = of.createDfhcommarea();
         dfhcommarea.setComNumber(100L);
@@ -63,10 +63,10 @@ public class LsfileaeHttpTest extends FunctionalTestCase {
     }
 
     /** 
-     * Check the values returned from LSFILAE after they were transformed to Java.
+     * Check the values returned from LSFILEAE after they were transformed to Java.
      * @param dfhcommarea the java data object
      */
-    public static void checkJavaObjectReply100(final Dfhcommarea dfhcommarea) {
+    public static void checkJavaObjectReply(final Dfhcommarea dfhcommarea) {
         assertEquals(100, dfhcommarea.getComNumber());
         assertEquals("$0100.11", dfhcommarea.getComAmount());
         assertEquals("*********", dfhcommarea.getComComment());

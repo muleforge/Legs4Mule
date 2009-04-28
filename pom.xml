@@ -690,10 +690,19 @@
     </dependencyManagement>
 
     <modules>
+
+        <!-- Main modules -->
         <module>legstar-mule-transport</module>
         <module>legstar-mule-generator</module>
+
+        <!-- Integration test modules -->
         <module>legstar-mulegen-jvmquery</module>
+        <module>legstar-mulegen-lsfileac</module>
         <module>legstar-mulegen-lsfileae</module>
+        <module>legstar-mulegen-lsfileal</module>
+        <module>legstar-mulegen-lsfileax</module>
+
+        <!-- Eclipse modules -->
         <module>legstar-mulegen-plugin</module>
         <module>legstar-mulegen-feature</module>
         <module>legstar-mulegen-site</module>

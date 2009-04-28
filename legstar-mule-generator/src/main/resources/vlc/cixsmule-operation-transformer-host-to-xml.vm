@@ -9,6 +9,7 @@ import com.legstar.coxb.transform.HostTransformException;
 import org.mule.transport.legstar.transformer.AbstractHostToXmlMuleTransformer;
 #if($holder)
 import java.util.HashMap;
+import javax.xml.namespace.QName;
 import com.legstar.coxb.transform.AbstractXmlTransformers;
 import org.mule.api.transformer.TransformerException;
 #end
