@@ -10,10 +10,6 @@
  ******************************************************************************/
 package org.mule.transport.legstar.http;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mule.transport.http.HttpConnector;
@@ -28,8 +24,11 @@ import org.mule.api.transport.MessageReceiver;
  */
 public class LegstarHttpConnector extends HttpConnector {
     
-    /** Protocol supported.*/
-    public static final String PROTOCOL = "legstar";
+    /** Protocol internal name. Will not appear in URIs. */
+    public static final String INTERNAL_PROTOCOL = "legstar";
+
+    /** Protocol external name. Will appear in URIs. */
+    public static final String EXTERNAL_PROTOCOL = "legstar:http";
 
     /** logger used by this class.   */
     private final Log _log = LogFactory.getLog(getClass());
@@ -53,22 +52,12 @@ public class LegstarHttpConnector extends HttpConnector {
      * meta info and http is the protocol.
      */
     public final void registerProtocols() {
-        List < String > schemes = new ArrayList < String >();
-        schemes.add("http");
-        schemes.add("https");
-
-        for (Iterator < String > iterator = schemes.iterator(); iterator.hasNext();)
-        {
-            String s = (String) iterator.next();
-            registerSupportedProtocol(s);
-        }
-        registerSupportedProtocolWithoutPrefix("legstar:http");
-        registerSupportedProtocolWithoutPrefix("legstar:https");
+        registerSupportedProtocolWithoutPrefix(EXTERNAL_PROTOCOL);
     }
 
     /** {@inheritDoc} */
     public final String getProtocol() {
-        return PROTOCOL;
+        return INTERNAL_PROTOCOL;
     }
 
     /** 
@@ -83,10 +72,6 @@ public class LegstarHttpConnector extends HttpConnector {
             if (receiver == null) {
                 receiver = (MessageReceiver) receivers.get(
                         key.replace(getProtocol() + ':', "http:"));
-                if (receiver == null) {
-                    receiver = (MessageReceiver) receivers.get(
-                            key.replace(getProtocol() + ':', "https:"));
-                }
             }
             return receiver;
         } else {

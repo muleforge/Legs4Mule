@@ -56,6 +56,7 @@
             coxbBinDir="${antModel.coxbBinDir}"
             custBinDir="${antModel.custBinDir}"
             hostCharset="${antModel.hostCharset}"
+            sampleConfigurationTransport="${antModel.sampleConfigurationTransport}"
           >
             <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
                 packageName="${antModel.cixsMuleComponent.packageName}">
@@ -96,7 +97,7 @@
                 </muleStartupPathElement>
 #end
             </cixsMuleComponent>
-
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("http")})
             <!-- HTTP transport parameters -->
             <httpTransportParameters
                 scheme="${antModel.httpTransportParameters.scheme}"
@@ -104,6 +105,21 @@
                 port="${antModel.httpTransportParameters.port}"
                 path="${antModel.httpTransportParameters.path}"
             />
+#end
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("wmq")})
+            <!-- WMQ transport parameters -->
+            <wmqTransportParameters
+                jndiUrl="${antModel.wmqTransportParameters.jndiUrl}"
+                jndiContextFactory="${antModel.wmqTransportParameters.jndiContextFactory}"
+                connectionFactory="${antModel.wmqTransportParameters.connectionFactory}"
+                zosQueueManager="${antModel.wmqTransportParameters.zosQueueManager}"
+                requestQueue="${antModel.wmqTransportParameters.requestQueue}"
+                replyQueue="${antModel.wmqTransportParameters.replyQueue}"
+#if(${antModel.wmqTransportParameters.errorQueue.length()} > 0)
+                errorQueue="${antModel.wmqTransportParameters.errorQueue}"
+#end
+            />
+#end
         </mule2cixsgen>
     
     </target>

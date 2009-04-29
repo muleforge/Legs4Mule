@@ -12,27 +12,28 @@ package org.mule.transport.legstar.test.lsfileae;
 
 import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.mule.module.client.MuleClient;
-import org.mule.transport.legstar.cixs.MuleHostHeaderFactory;
 import org.mule.tck.FunctionalTestCase;
-import org.mule.transport.NullPayload;
 import org.mule.api.MuleMessage;
 
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
 import com.legstar.test.coxb.lsfileae.ObjectFactory;
 
 /**
- * Test the adapter for LSFILEAE in a bridge configuration (using legstar-mule HTTP transport).
- * This test requires access to an actual mainframe running FILEA sample.
+ * Test the adapter for the LSFILEAE mainframe program.
+ * <p/>
+ * Adapter transport is WMQ with LegStar messaging.
+ * The LegStar mainframe modules for WMQ must be installed on the mainframe:
+ * {@link http://www.legsem.com/legstar/legstar-distribution-zos/}.
+ * <p/>
+ * Client sends/receive serialized java objects.
  */
 public class LsfileaeWmqTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-adapter-wmq-config-lsfileae.xml";
+        return "mule-adapter-wmq-config-lsfileae-wmq.xml";
     }
     
     /**
@@ -40,32 +41,21 @@ public class LsfileaeWmqTest extends FunctionalTestCase {
      * @throws Exception if test fails
      */
     public void testLsfileae() throws Exception {
-        /* Visually check that the mainframe received these headers */
-        Map < String, Object > messageProperties = new HashMap < String, Object >();
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_REQUEST_ID, "legstar-mule");
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_USERID, "MYUSER");
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_PASSWORD, "MYPASS");
-        messageProperties.put(MuleHostHeaderFactory.LEGSTAR_HOST_TRACE_ON, new Boolean(true));
         MuleClient client = new MuleClient();
         MuleMessage message = client.send(
-                "tcp://localhost:3213",
-                getJavaObjectRequest100(),
-                messageProperties);
-        assertNotNull(message);
-        assertFalse(message.getPayload() == null);
-        assertFalse(message.getExceptionPayload() != null);
-        assertFalse(message.getPayload() instanceof NullPayload);
-        assertTrue(message.getPayload() instanceof byte[]);
+                "lsfileaeClientEndpoint",
+                getJavaObjectRequest(),
+                null);
         ObjectInputStream in = new ObjectInputStream(
                 new ByteArrayInputStream((byte[]) message.getPayload()));
-        checkJavaObjectReply100((Dfhcommarea) in.readObject());
+        checkJavaObjectReply((Dfhcommarea) in.readObject());
         
     }
 
     /**
      * @return an instance of a valued java object.
      */
-    public static Dfhcommarea getJavaObjectRequest100() {
+    public static Dfhcommarea getJavaObjectRequest() {
         ObjectFactory of = new ObjectFactory();
         Dfhcommarea dfhcommarea = of.createDfhcommarea();
         dfhcommarea.setComNumber(100L);
@@ -73,10 +63,10 @@ public class LsfileaeWmqTest extends FunctionalTestCase {
     }
 
     /** 
-     * Check the values returned from LSFILAE after they were transformed to Java.
+     * Check the values returned from LSFILEAE after they were transformed to Java.
      * @param dfhcommarea the java data object
      */
-    public static void checkJavaObjectReply100(final Dfhcommarea dfhcommarea) {
+    public static void checkJavaObjectReply(final Dfhcommarea dfhcommarea) {
         assertEquals(100, dfhcommarea.getComNumber());
         assertEquals("$0100.11", dfhcommarea.getComAmount());
         assertEquals("*********", dfhcommarea.getComComment());

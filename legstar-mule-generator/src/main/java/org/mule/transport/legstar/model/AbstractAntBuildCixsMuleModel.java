@@ -36,8 +36,14 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /** The target location for mule jar files. */
     private File mTargetJarDir;
     
+    /** The transports supported by generated service configuration samples. */
+    private SampleConfigurationTransport mSampleConfigurationTransport = SampleConfigurationTransport.HTTP;
+
     /** Set of parameters needed for HTTP transport. */
     private HttpTransportParameters mHttpTransportParameters = new HttpTransportParameters();
+
+    /** Set of parameters needed for Websphere MQ transport. */
+    private WmqTransportParameters mWmqTransportParameters = new WmqTransportParameters();
 
     /**
      * Construct the model with a generator name and velocity template.
@@ -129,6 +135,33 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     }
 
     /**
+     * Sample configurations are generated for one of these transports.
+     * For proxies this is the transport from mainframe to proxy.
+     * For adapters this is the transport from adapter to mainframe.
+     */
+    public enum SampleConfigurationTransport {
+        /** Websphere MQ. */
+        WMQ,
+        /** HTTP. */
+        HTTP
+    }
+    
+    /**
+     * @return the transport used by generated configuration samples.
+     */
+    public SampleConfigurationTransport getSampleConfigurationTransport() {
+        return mSampleConfigurationTransport;
+    }
+
+    /**
+     * @param sampleConfigurationTransport the transport used by generated configuration samples.
+     */
+    public void setSampleConfigurationTransport(
+            final SampleConfigurationTransport sampleConfigurationTransport) {
+        mSampleConfigurationTransport = sampleConfigurationTransport;
+    }
+
+    /**
      * @return set of parameters needed for HTTP transport
      */
     public HttpTransportParameters getHttpTransportParameters() {
@@ -141,6 +174,21 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     public void setHttpTransportParameters(
             final HttpTransportParameters httpTransportParameters) {
         mHttpTransportParameters = httpTransportParameters;
+    }
+
+    /**
+     * @return set of parameters needed for WebSphere MQ transport
+     */
+    public WmqTransportParameters getWmqTransportParameters() {
+        return mWmqTransportParameters;
+    }
+
+    /**
+     * @param wmqTransportParameters set of parameters needed for WebSphere MQ transport
+     */
+    public void setWmqTransportParameters(
+            final WmqTransportParameters wmqTransportParameters) {
+        mWmqTransportParameters = wmqTransportParameters;
     }
 
 }

@@ -15,6 +15,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.mule.transport.legstar.gen.AbstractTestTemplate;
 import org.mule.transport.legstar.gen.Samples;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
 import com.legstar.codegen.CodeGenUtil;
@@ -46,6 +47,31 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         initCixsMuleComponent(muleComponent);
+        processAnt();
+    }
+
+    /**
+     * Adapter case for an LSFILEAE program over legstar-mule WMQ.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeWmqGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        muleComponent.setName(muleComponent.getName() + "-wmq");
+        initCixsMuleComponent(muleComponent);
+
+        mAntModel.setSampleConfigurationTransport(SampleConfigurationTransport.WMQ);
+        mAntModel.getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
+        mAntModel.getWmqTransportParameters().setJndiUrl(
+                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+        mAntModel.getWmqTransportParameters().setJndiContextFactory(
+                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        mAntModel.getWmqTransportParameters().setZosQueueManager("CSQ1");
+        mAntModel.getWmqTransportParameters().setRequestQueue(
+                "CICSA.REQUEST.QUEUE");
+        mAntModel.getWmqTransportParameters().setReplyQueue(
+                "CICSA.REPLY.QUEUE");
+
         processAnt();
     }
 

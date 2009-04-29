@@ -49,6 +49,7 @@
             coxbBinDir="..\legstar-mulegen-lsfileae\target\classes"
             custBinDir="..\legstar-mule-generator\target\classes"
             hostCharset="IBM01147"
+            sampleConfigurationTransport="HTTP"
           >
             <cixsMuleComponent name="lsfileae"
                 packageName="org.mule.transport.legstar.test.lsfileae">
@@ -65,7 +66,6 @@
                     />
                 </cixsOperation>
             </cixsMuleComponent>
-
             <!-- HTTP transport parameters -->
             <httpTransportParameters
                 scheme="http"

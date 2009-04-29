@@ -210,12 +210,22 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         
         compare(mGenerator.getTargetAntDir(),
                 "build.xml", muleComponent.getName());
-        compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
-        compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-adapter-http-config-xml-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
+        if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("http")) {
+            compare(mGenerator.getTargetMuleConfigDir(),
+                    "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
+                    muleComponent.getName());
+            compare(mGenerator.getTargetMuleConfigDir(),
+                    "mule-adapter-http-config-xml-" + muleComponent.getName() + ".xml",
+                    muleComponent.getName());
+        }
+        if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("wmq")) {
+            compare(mGenerator.getTargetMuleConfigDir(),
+                    "mule-adapter-wmq-config-" + muleComponent.getName() + ".xml",
+                    muleComponent.getName());
+            compare(mGenerator.getTargetMuleConfigDir(),
+                    "mule-adapter-wmq-config-xml-" + muleComponent.getName() + ".xml",
+                    muleComponent.getName());
+        }
         
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             

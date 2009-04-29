@@ -51,12 +51,20 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
             CodeGenUtil.checkDirectory(
                     getTargetPropDir(), true, "TargetPropDir");
 
-            /* Check that we have a URI to expose to mainframe programs */
-            getHttpTransportParameters().check();
-
         } catch (IllegalArgumentException e) {
             throw new CodeGenMakeException(e);
         }
+    }
+
+    /** {@inheritDoc} */
+    public void addExtendedParameters(final Map < String, Object > parameters) {
+        parameters.put("generationTarget", GENERATION_TARGET);
+
+        /* Some artifacts like holders have XML markup. They need an XML namespace */
+        parameters.put(WebServiceParameters.WSDL_TARGET_NAMESPACE_PROPERTY,
+                Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
+                + '/' + getCixsService().getName());
+        
     }
 
     /**
@@ -86,12 +94,25 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
 
         }
 
-        /* Produce mule configuration smaples  */
-        generateAdapterHttpConfigXml(
-                getCixsMuleComponent(), parameters, componentConfFilesDir);
-        generateAdapterHttpConfigXmlXml(
-                getCixsMuleComponent(), parameters, componentConfFilesDir);
+        /* Produce mule configuration samples  */
 
+        /* Produce sample configurations  */
+        switch(getSampleConfigurationTransportInternal()) {
+        case HTTP:
+            generateAdapterHttpConfigXml(
+                    getCixsMuleComponent(), parameters, componentConfFilesDir);
+            generateAdapterHttpConfigXmlXml(
+                    getCixsMuleComponent(), parameters, componentConfFilesDir);
+            break;
+        case WMQ:
+            generateAdapterWmqConfigXml(
+                    getCixsMuleComponent(), parameters, componentConfFilesDir);
+            generateAdapterWmqConfigXmlXml(
+                    getCixsMuleComponent(), parameters, componentConfFilesDir);
+            break;
+        default:
+            break;
+        }
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
         {
             /* Determine target files locations */
@@ -113,15 +134,11 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
 
     }
 
-    /** {@inheritDoc} */
-    public void addExtendedParameters(final Map < String, Object > parameters) {
-        parameters.put("generationTarget", GENERATION_TARGET);
-        getAntModel().getHttpTransportParameters().add(parameters);
-        /* Some artifacts like holders have XML markup. They need an XML namespace */
-        parameters.put(WebServiceParameters.WSDL_TARGET_NAMESPACE_PROPERTY,
-                Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
-                + '/' + getCixsService().getName());
-        
+    /**
+     * @return a good default path that the host could use to reach
+     *  the generated service adapter
+     */
+    public final String getDefaultServiceHttpPath() {
+        return AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH;
     }
-
 }

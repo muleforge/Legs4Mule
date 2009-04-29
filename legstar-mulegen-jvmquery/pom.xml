@@ -60,6 +60,34 @@
             <artifactId>mule-transport-http</artifactId>
         </dependency>
 
+        <!-- Mule JMS transport -->
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-jms</artifactId>
+        </dependency>
+
+        <!-- IBM WebSphere MQ client -->
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mqjms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>fscontext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>providerutil</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>dhbcore</artifactId>
+        </dependency>
+
         <!-- LegStar test helpers -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>

@@ -442,6 +442,38 @@
                 <scope>provided</scope>
             </dependency>
 
+            <!-- IBM WebSphere MQ client -->
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>mq</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>mqjms</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>fscontext</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>providerutil</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>dhbcore</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+
             <!-- LegStar Messaging -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
@@ -696,9 +728,11 @@
         <module>legstar-mule-generator</module>
 
         <!-- Integration test modules -->
-        <module>legstar-mulegen-jvmquery</module>
+        <module>legstar-mulegen-jvmquery-http</module>
+        <module>legstar-mulegen-jvmquery-wmq</module>
         <module>legstar-mulegen-lsfileac</module>
         <module>legstar-mulegen-lsfileae</module>
+        <module>legstar-mulegen-lsfileae-wmq</module>
         <module>legstar-mulegen-lsfileal</module>
         <module>legstar-mulegen-lsfileax</module>
 

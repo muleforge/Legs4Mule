@@ -51,6 +51,8 @@
             coxbBinDir="..\legstar-mulegen-jvmquery\target\classes"
             custBinDir="..\legstar-mule-generator\target\classes"
             hostCharset="IBM01147"
+            sampleConfigurationTransport="HTTP"
+            sampleCobolHttpClientType="DFHWBCLI"
           >
             <cixsMuleComponent name="jvmquery"
                 packageName="org.mule.transport.legstar.test.jvmquery"
@@ -80,7 +82,6 @@
                 port="8083"
                 path="/legstar/services/jvmquery"
             />
-
         </cixs2mulegen>
     
     </target>

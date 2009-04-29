@@ -13,6 +13,7 @@ package org.mule.transport.legstar.gen;
 import java.io.File;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
+import org.mule.transport.legstar.model.WmqTransportParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.codegen.CodeGenUtil;
@@ -51,9 +52,6 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         mGenerator.setTargetCobolDir(GEN_COBOL_DIR);
         mGenerator.setHostCharset(HOSTCHARSET);
         
-        mGenerator.getHttpTransportParameters().setHost("megamouss");
-        mGenerator.getHttpTransportParameters().setPort(8083);
-
         mGenerator.getUmoComponentTargetParameters().setImplementationName(
                 "com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
     }
@@ -197,9 +195,38 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
      * Check generation for a POJO.
      * @throws Exception if generation fails
      */
-    public final void testJvmQueryGenerateClasses() throws Exception {
+    public final void testJvmQueryHttp() throws Exception {
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         initCixsMuleComponent(muleComponent);
+        
+        mGenerator.setSampleConfigurationTransport("http");
+        mGenerator.getHttpTransportParameters().setHost("megamouss");
+        mGenerator.getHttpTransportParameters().setPort(8083);
+
+        mGenerator.execute();
+        checkResults(muleComponent);
+    }
+
+    /**
+     * Check generation for a POJO.
+     * @throws Exception if generation fails
+     */
+    public final void testJvmQueryWmq() throws Exception {
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        initCixsMuleComponent(muleComponent);
+
+        mGenerator.setSampleConfigurationTransport("wmq");
+        mGenerator.getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
+        mGenerator.getWmqTransportParameters().setJndiUrl(
+                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+        mGenerator.getWmqTransportParameters().setJndiContextFactory(
+                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        mGenerator.getWmqTransportParameters().setZosQueueManager("CSQ1");
+        mGenerator.getWmqTransportParameters().setRequestQueue(
+                "JVMQUERY.POJO.REQUEST.QUEUE");
+        mGenerator.getWmqTransportParameters().setReplyQueue(
+                "JVMQUERY.POJO.REPLY.QUEUE");
+
         mGenerator.execute();
         checkResults(muleComponent);
     }
@@ -213,9 +240,16 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
 
         compare(mGenerator.getTargetAntDir(),
                 "build.xml", muleComponent.getName());
-        compare(mGenerator.getTargetMuleConfigDir(),
-                "mule-proxy-http-config-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
+        if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("http")) {
+            compare(mGenerator.getTargetMuleConfigDir(),
+                    "mule-proxy-http-config-" + muleComponent.getName() + ".xml",
+                    muleComponent.getName());
+        }
+        if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("wmq")) {
+            compare(mGenerator.getTargetMuleConfigDir(),
+                    "mule-proxy-wmq-config-" + muleComponent.getName() + ".xml",
+                    muleComponent.getName());
+        }
 
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
@@ -247,10 +281,20 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
                     operation.getResponseHolderType() + "XmlToHostMuleTransformer.java",
                     muleComponent.getName());
 
-            String expectedCobolRes = getSource(
-                    "/org/mule/transport/legstar/gen/" + muleComponent.getName() + '/'
-                    + operation.getCicsProgramName()
-                    + ".cbl.txt");
+            String expectedCobolRes = "";
+            if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("http")) {
+                expectedCobolRes = getSource(
+                        "/org/mule/transport/legstar/gen/" + muleComponent.getName() + '/'
+                        + operation.getCicsProgramName()
+                        + "-DFHWBCLI.cbl.txt");
+            }
+            if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("wmq")) {
+                expectedCobolRes = getSource(
+                        "/org/mule/transport/legstar/gen/" + muleComponent.getName() + '/'
+                        + operation.getCicsProgramName()
+                        + "-MQ.cbl.txt");
+            }
+                
 
             String res = getSource(GEN_COBOL_DIR, 
                     operation.getCicsProgramName() + ".cbl");

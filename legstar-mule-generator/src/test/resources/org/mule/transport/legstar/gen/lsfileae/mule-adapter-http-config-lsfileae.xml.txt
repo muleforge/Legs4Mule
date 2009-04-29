@@ -16,7 +16,7 @@
          http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
          http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
 
-    <description>Mule configuration file for lsfileae adapter service</description>
+    <description>Mule configuration for lsfileae adapter service</description>
 
     <tcp:endpoint name="lsfileaeClientEndpoint" address="tcp://localhost:3210" synchronous="true" />
 

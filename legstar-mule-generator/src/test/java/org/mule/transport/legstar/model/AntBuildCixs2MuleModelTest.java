@@ -16,6 +16,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.mule.transport.legstar.gen.AbstractTestTemplate;
 import org.mule.transport.legstar.gen.Samples;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
 import com.legstar.codegen.CodeGenUtil;
@@ -44,11 +45,43 @@ public class AntBuildCixs2MuleModelTest extends AbstractTestTemplate {
      * Proxy case for an POJO Target over HTTP.
      * @throws Exception if generation fails
      */
-    public void testJvmqueryGenerate() throws Exception {
+    public void testJvmqueryHttpGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        muleComponent.setName(muleComponent.getName() + "-http");
         initCixsMuleComponent(muleComponent);
-        
+
+        mAntModel.setSampleConfigurationTransport(SampleConfigurationTransport.HTTP);
+        mAntModel.getHttpTransportParameters().setHost("localhost");
+        mAntModel.getHttpTransportParameters().setPort(8083);
+        mAntModel.getHttpTransportParameters().setPath("/legstar/services/" + muleComponent.getName());
+       
+        processAnt();
+    }
+
+    /**
+     * Proxy case for an POJO Target over WMQ.
+     * @throws Exception if generation fails
+     */
+    public void testJvmqueryWmqGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        muleComponent.setName(muleComponent.getName() + "-wmq");
+        initCixsMuleComponent(muleComponent);
+
+        mAntModel.setSampleConfigurationTransport(SampleConfigurationTransport.WMQ);
+        mAntModel.getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
+        mAntModel.getWmqTransportParameters().setJndiUrl(
+                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+        mAntModel.getWmqTransportParameters().setJndiContextFactory(
+                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        mAntModel.getWmqTransportParameters().setZosQueueManager("CSQ1");
+        mAntModel.getWmqTransportParameters().setRequestQueue(
+                "JVMQUERY.POJO.REQUEST.QUEUE");
+        mAntModel.getWmqTransportParameters().setReplyQueue(
+                "JVMQUERY.POJO.REPLY.QUEUE");
+
+       
         processAnt();
     }
 
@@ -100,12 +133,9 @@ public class AntBuildCixs2MuleModelTest extends AbstractTestTemplate {
         mAntModel.setTargetMuleConfigDir(new File(targetDir, "src/main/resources"));
         mAntModel.setTargetJarDir(new File("${mule.home}/lib/user"));
         mAntModel.setTargetAntDir(new File(targetDir, "ant"));
+        CodeGenUtil.checkDirectory(mAntModel.getTargetAntDir(), true);
         mAntModel.setTargetCobolDir(new File(targetDir, "cobol"));
         
-        mAntModel.getHttpTransportParameters().setHost("localhost");
-        mAntModel.getHttpTransportParameters().setPort(8083);
-        mAntModel.getHttpTransportParameters().setPath("/legstar/services/" + muleComponent.getName());
-
         mAntModel.getUmoComponentTargetParameters().setImplementationName(
                 "com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
         

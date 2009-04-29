@@ -15,6 +15,7 @@ import java.io.File;
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 import org.mule.transport.legstar.model.CixsMuleComponent;
 import org.mule.transport.legstar.model.UmoComponentParameters;
+import org.mule.transport.legstar.model.WmqTransportParameters;
 
 import com.legstar.cixs.jaxws.model.HttpTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
@@ -129,6 +130,62 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     }
 
     /**
+     * Creates the mule adapter wmq config with java payload.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterWmqConfigXml() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
+        wmqTransportParameters.setJndiUrl(
+                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+        wmqTransportParameters.setJndiContextFactory(
+                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        wmqTransportParameters.setConnectionFactory("ConnectionFactory");
+        wmqTransportParameters.setRequestQueue("CICSA.REQUEST.QUEUE");
+        wmqTransportParameters.setReplyQueue("CICSA.REPLY.QUEUE");
+        wmqTransportParameters.add(getParameters());
+
+        File componentConfFilesDir = new File(
+                GEN_CONF_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        AbstractCixsMuleGenerator.generateAdapterWmqConfigXml(
+                muleComponent, getParameters(), componentConfFilesDir);
+
+        compare(componentConfFilesDir,
+                "mule-adapter-wmq-config-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
+    }
+    
+    /**
+     * Creates the mule adapter wmq config with xml payload.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterWmqConfigXmlXml() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
+        wmqTransportParameters.setJndiUrl(
+                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+        wmqTransportParameters.setJndiContextFactory(
+                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        wmqTransportParameters.setConnectionFactory("ConnectionFactory");
+        wmqTransportParameters.setRequestQueue("CICSA.REQUEST.QUEUE");
+        wmqTransportParameters.setReplyQueue("CICSA.REPLY.QUEUE");
+        wmqTransportParameters.add(getParameters());
+
+        File componentConfFilesDir = new File(
+                GEN_CONF_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        AbstractCixsMuleGenerator.generateAdapterWmqConfigXmlXml(
+                muleComponent, getParameters(), componentConfFilesDir);
+
+        compare(componentConfFilesDir,
+                "mule-adapter-wmq-config-xml-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
+    }
+    
+    /**
      * Creates the mule proxy http config.
      * @throws Exception if generation fails
      */
@@ -152,6 +209,36 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
                 muleComponent, getParameters(), componentConfFilesDir);
         compare(componentConfFilesDir,
                 "mule-proxy-http-config-" + muleComponent.getName() + ".xml",
+                muleComponent.getName());
+    }
+
+    /**
+     * Creates the mule proxy wmq config.
+     * @throws Exception if generation fails
+     */
+    public void testJvmqueryProxyWmqConfigXml() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+        WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
+        wmqTransportParameters.setJndiUrl(
+                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+        wmqTransportParameters.setJndiContextFactory(
+                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        wmqTransportParameters.setConnectionFactory("ConnectionFactory");
+        wmqTransportParameters.setRequestQueue("JVMQUERY.POJO.REQUEST.QUEUE");
+        wmqTransportParameters.setReplyQueue("JVMQUERY.POJO.REPLY.QUEUE");
+        wmqTransportParameters.add(getParameters());
+        
+        UmoComponentParameters umoComponentParameters = new UmoComponentParameters();
+        umoComponentParameters.setImplementationName("com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
+        umoComponentParameters.add(getParameters());
+
+        File componentConfFilesDir = new File(GEN_CONF_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        AbstractCixsMuleGenerator.generateProxyWmqConfigXml(
+                muleComponent, getParameters(), componentConfFilesDir);
+        compare(componentConfFilesDir,
+                "mule-proxy-wmq-config-" + muleComponent.getName() + ".xml",
                 muleComponent.getName());
     }
 

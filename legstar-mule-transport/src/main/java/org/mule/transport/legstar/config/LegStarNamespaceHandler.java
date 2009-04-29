@@ -19,7 +19,7 @@ public class LegStarNamespaceHandler extends AbstractMuleNamespaceHandler {
     /** {@inheritDoc} */
     public void init() {
         registerStandardTransportEndpoints(
-                LegstarHttpConnector.PROTOCOL + ":http", URIBuilder.SOCKET_ATTRIBUTES)
+                LegstarHttpConnector.EXTERNAL_PROTOCOL, URIBuilder.SOCKET_ATTRIBUTES)
                 .addAlias("contentType", HttpConstants.HEADER_CONTENT_TYPE);
         
         registerConnectorDefinitionParser(LegstarHttpConnector.class);

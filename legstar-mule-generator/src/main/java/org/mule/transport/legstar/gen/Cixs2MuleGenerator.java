@@ -59,14 +59,6 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             /* Check parameters needed depending on target type */
             getUmoComponentTargetParameters().check();
 
-            /* Check that we have a URI to expose to mainframe programs */
-            /* Set a sensible path using the service name. */
-            if (getHttpTransportParameters().getPath() == null
-                    || getHttpTransportParameters().getPath().length() == 0) {
-                getHttpTransportParameters().setPath(getDefaultServicePath());
-            }
-            getHttpTransportParameters().check();
-            
             /* Check that there is exactly one operation.
              * TODO: Add support for multiple operations.  */
             if (getCixsMuleComponent().getCixsOperations().size() != 1) {
@@ -90,9 +82,19 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         /* Determine target files locations */
         File componentConfFilesDir = getTargetMuleConfigDir();
         
-        /* Produce artifacts for local component  */
-        generateProxyHttpConfigXml(
-                getCixsMuleComponent(), parameters, componentConfFilesDir);
+        /* Produce sample configurations  */
+        switch(getSampleConfigurationTransportInternal()) {
+        case HTTP:
+            generateProxyHttpConfigXml(
+                    getCixsMuleComponent(), parameters, componentConfFilesDir);
+            break;
+        case WMQ:
+            generateProxyWmqConfigXml(
+                    getCixsMuleComponent(), parameters, componentConfFilesDir);
+            break;
+        default:
+            break;
+        }
         
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
 
@@ -117,6 +119,23 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
                     getTargetCobolDir(),
                     getSampleCobolHttpClientTypeInternal());
                     
+            /* Generate sample COBOL clients. */
+            switch(getSampleConfigurationTransportInternal()) {
+            case HTTP:
+                Cixs2JaxwsGenerator.generateCobolCicsClient(
+                        getCixsMuleComponent(), operation, parameters,
+                        getTargetCobolDir(),
+                        getSampleCobolHttpClientTypeInternal());
+                break;
+            case WMQ:
+                /* TODO move to core legstar */
+                generateCobolSampleWmqClient(
+                        getCixsMuleComponent(), operation, parameters,
+                        getTargetCobolDir());
+                break;
+            default:
+                break;
+            }
         }
         
     }
@@ -128,7 +147,6 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         /* This is needed to generated COBOL structures. */
         parameters.put("structHelper", new StructuresGenerator());
 
-        getAntModel().getHttpTransportParameters().add(parameters);
         getAntModel().getUmoComponentTargetParameters().add(parameters);
 
     }
@@ -137,7 +155,7 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
      * @return a good default path that the host could use to reach
      *  the generated service proxy
      */
-    public final String getDefaultServicePath() {
+    public final String getDefaultServiceHttpPath() {
         
         return AntBuildCixs2MuleModel.DEFAULT_SERVER_PATH_TEMPLATE.replace(
                 "${service.name}", getCixsMuleComponent().getName());

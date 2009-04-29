@@ -26,6 +26,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-jms</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.mule.modules</groupId>
             <artifactId>mule-module-client</artifactId>
         </dependency>
@@ -52,17 +57,12 @@
 
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-messaging</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-engine</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-invoker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-messaging</artifactId>
         </dependency>
 
         <dependency>

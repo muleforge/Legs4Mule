@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!--
+        This Mule configuration implements an adapter service for a
+        mainframe program. Clients of this Mule service are expected to
+        send serialized java objects over TCP. Transport from Mule
+        service to mainframe is JMS/WebSphere MQ.
+    -->
+<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spring="http://www.springframework.org/schema/beans"
+    xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2" xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
+    xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
+    xmlns:test="http://www.mulesource.org/schema/mule/test/2.2"
+    xsi:schemaLocation="http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
+         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+         http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
+         http://www.mulesource.org/schema/mule/jms/2.2 http://www.mulesource.org/schema/mule/jms/2.2/mule-jms.xsd
+         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
+         http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd">
+
+    <description>Mule configuration file for lsfileae adapter service</description>
+
+    <jms:connector name="jmsJndiConnector"
+        jndiInitialFactory="com.sun.jndi.fscontext.RefFSContextFactory"
+        jndiProviderUrl="file:///JNDI-Directory"
+        connectionFactoryJndiName="ConnectionFactory"
+        specification="1.1"
+        jndiDestinations="true"
+        forceJndiDestinations="true"
+        disableTemporaryReplyToDestinations="true"
+        numberOfConsumers="1" />
+
+    <tcp:endpoint name="lsfileaeClientEndpoint" address="tcp://localhost:3210" synchronous="true" />
+
+    <jms:endpoint queue="CICSA.REQUEST.QUEUE" name="MainframeRequestEndpoint" />
+    <jms:endpoint queue="CICSA.REPLY.QUEUE" name="MainframeReplyEndpoint" />
+
+    <model name="lsfileaeModel">
+
+        <service name="lsfileaeAdapterService">
+            <inbound>
+                <inbound-endpoint ref="lsfileaeClientEndpoint">
+                    <transformers>
+                        <byte-array-to-object-transformer />
+                    </transformers>
+                </inbound-endpoint>
+            </inbound>
+            <outbound>
+                <pass-through-router>
+                    <outbound-endpoint ref="MainframeRequestEndpoint">
+                        <transformers>
+                            <legstar:java-to-host-transformer
+                                class="org.mule.transport.legstar.test.lsfileae.DfhcommareaToHostMuleTransformer" />
+                            <legstar:host-to-legstar-transformer
+                                programPropFileName="lsfileae.properties" />
+                            <jms:object-to-jmsmessage-transformer />
+                        </transformers>
+                    </outbound-endpoint>
+                    <reply-to ref="MainframeReplyEndpoint" />
+                </pass-through-router>
+            </outbound>
+            <async-reply failOnTimeout="false" timeout="2000">
+                <inbound-endpoint ref="MainframeReplyEndpoint">
+                    <transformers>
+                        <jms:jmsmessage-to-object-transformer />
+                        <legstar:legstar-to-host-transformer />
+                        <legstar:host-to-java-transformer
+                            class="org.mule.transport.legstar.test.lsfileae.HostToDfhcommareaMuleTransformer" />
+                    </transformers>
+                </inbound-endpoint>
+                <custom-async-reply-router
+                    class="org.mule.transport.legstar.wmq.WmqSingleResponseRouter" />
+            </async-reply>
+        </service>
+
+    </model>
+</mule>

@@ -11,10 +11,13 @@
 package org.mule.transport.legstar.gen;
 
 import java.io.File;
+import java.util.Locale;
 import java.util.Map;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel;
+import org.mule.transport.legstar.model.WmqTransportParameters;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
 import com.legstar.cixs.gen.model.CixsOperation;
@@ -39,9 +42,17 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String COMPONENT_ADAPTER_HTTP_CONFIG_XML_VLC_TEMPLATE =
         "vlc/cixsmule-component-adapter-http-config-xml.vm";
 
-    /** Velocity template for local mule configuration xml. */
+    /** Velocity template for adapter-wmq mule configuration xml. */
+    public static final String COMPONENT_ADAPTER_WMQ_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-adapter-wmq-config-xml.vm";
+
+    /** Velocity template for proxy-http mule configuration xml. */
     public static final String COMPONENT_PROXY_HTTP_CONFIG_XML_VLC_TEMPLATE =
         "vlc/cixsmule-component-proxy-http-config-xml.vm";
+
+    /** Velocity template for procy-wmq mule configuration xml. */
+    public static final String COMPONENT_PROXY_WMQ_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-proxy-wmq-config-xml.vm";
 
     /** Velocity template for java to host byte array transformer. */
     public static final String OPERATION_JAVA_TO_HOST_VLC_TEMPLATE =
@@ -58,6 +69,10 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     /** Velocity template for XML to host byte array transformer. */
     public static final String OPERATION_XML_TO_HOST_VLC_TEMPLATE =
         "vlc/cixsmule-operation-transformer-xml-to-host.vm";
+
+    /** Velocity template for COBOL client generation. */
+    public static final String OPERATION_COBOL_CICS_WMQ_CLIENT_VLC_TEMPLATE =
+        "vlc/cixsmule-operation-cobol-cics-wmq-client.vm";
 
     /** The service model name is it appears in templates. */
     public static final String COMPONENT_MODEL_NAME = "muleComponent";
@@ -356,6 +371,71 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
+     * Create the Mule proxy over wmq configuration XML file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentConfFilesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateProxyWmqConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentConfFilesDir)
+    throws CodeGenMakeException {
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_PROXY_WMQ_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentConfFilesDir,
+                "mule-proxy-wmq-config-" + component.getName() + ".xml");
+    }
+
+    /**
+     * Create the Mule adapter configuration file for java payloads over wmq.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentConfFilesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAdapterWmqConfigXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentConfFilesDir)
+    throws CodeGenMakeException {
+        parameters.put("clientPayload", "java");
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_ADAPTER_WMQ_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentConfFilesDir,
+                "mule-adapter-wmq-config-" + component.getName() + ".xml");
+    }
+
+    /**
+     * Create the Mule adapter configuration file for XML payloads over wmq.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param componentConfFilesDir where to store the generated file
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static void generateAdapterWmqConfigXmlXml(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File componentConfFilesDir)
+    throws CodeGenMakeException {
+        parameters.put("clientPayload", "xml");
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_ADAPTER_WMQ_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                componentConfFilesDir,
+                "mule-adapter-wmq-config-xml-" + component.getName() + ".xml");
+    }
+
+    /**
      * Create the Mule Ant Build Jar file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
@@ -374,6 +454,28 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                 parameters,
                 componentAntFilesDir,
         "build.xml");
+    }
+
+    /**
+     * Create a COBOl CICS WMQ Client program to use for testing.
+     * @param service the proxy service description
+     * @param operation the operation for which a program is to be generated
+     * @param parameters the set of parameters to pass to template engine
+     * @param cobolFilesDir location where COBOL code should be generated
+     * @throws CodeGenMakeException if generation fails
+     */
+    protected static void generateCobolSampleWmqClient(
+            final CixsMuleComponent service,
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File cobolFilesDir) throws CodeGenMakeException {
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                OPERATION_COBOL_CICS_WMQ_CLIENT_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                service,
+                parameters,
+                cobolFilesDir,
+                operation.getCicsProgramName() + ".cbl");
     }
 
     /**
@@ -418,10 +520,28 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             }
         }
 
+        /* Check sample transport parameters */
+        if (getSampleConfigurationTransport().equalsIgnoreCase("http")) {
+            if (getHttpTransportParameters().getPath() == null
+                    || getHttpTransportParameters().getPath().length() == 0) {
+                getHttpTransportParameters().setPath(getDefaultServiceHttpPath());
+            }
+            getHttpTransportParameters().check();
+        }
+
+        if (getSampleConfigurationTransport().equalsIgnoreCase("wmq")) {
+            getWmqTransportParameters().check();
+        }
+        
         checkExtendedExtendedInput();
 
     }
 
+    /**
+     * @return a good default HTTPpath
+     */
+    public abstract String getDefaultServiceHttpPath();
+    
     /**
      * Give the inheriting generators a chance to add more controls.
      * @throws CodeGenMakeException if control fails
@@ -466,6 +586,17 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         parameters.put("targetMuleConfigDir", getTargetMuleConfigDir());
         parameters.put("hostCharset", getHostCharset());
 
+        /* Add sample transport related parameters */
+        switch(getSampleConfigurationTransportInternal()) {
+        case HTTP:
+            getAntModel().getHttpTransportParameters().add(parameters);
+            break;
+        case WMQ:
+            getAntModel().getWmqTransportParameters().add(parameters);
+            break;
+        default:
+            break;
+        }
         addExtendedParameters(parameters);
     }
 
@@ -558,6 +689,42 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @return the transport used by generated samples.
+     */
+    protected SampleConfigurationTransport getSampleConfigurationTransportInternal() {
+        return getAntModel().getSampleConfigurationTransport();
+    }
+
+    /**
+     * @return the transport used by generated samples.
+     */
+    public String getSampleConfigurationTransport() {
+        return getSampleConfigurationTransportInternal().toString();
+    }
+
+    /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @param sampleConfigurationTransport the transport used by generated samples.
+     */
+    private void setSampleConfigurationTransportInternal(
+            final SampleConfigurationTransport sampleConfigurationTransport) {
+        getAntModel().setSampleConfigurationTransport(sampleConfigurationTransport);
+    }
+
+    /**
+     * @param sampleConfigurationTransport the transport used by generated samples.
+     */
+    public void setSampleConfigurationTransport(
+            final String sampleConfigurationTransport) {
+        SampleConfigurationTransport value = SampleConfigurationTransport.valueOf(
+                    sampleConfigurationTransport.toUpperCase(Locale.getDefault()));
+        setSampleConfigurationTransportInternal(value);
+    }
+
+    /**
      * @return the set of HTTP transport parameters
      */
     public HttpTransportParameters getHttpTransportParameters() {
@@ -578,6 +745,29 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public void addHttpTransportParameters(
             final HttpTransportParameters httpTransportParameters) {
         setHttpTransportParameters(httpTransportParameters);
+    }
+
+    /**
+     * @return the set of WMQ transport parameters
+     */
+    public WmqTransportParameters getWmqTransportParameters() {
+        return getAntModel().getWmqTransportParameters();
+    }
+
+    /**
+     * @param httpTransportParameters the set of WMQ transport parameters
+     */
+    public void setWmqTransportParameters(
+            final WmqTransportParameters httpTransportParameters) {
+        getAntModel().setWmqTransportParameters(httpTransportParameters);
+    }
+
+    /**
+     * @param httpTransportParameters the set of WMQ transport parameters
+     */
+    public void addWmqTransportParameters(
+            final WmqTransportParameters httpTransportParameters) {
+        getAntModel().setWmqTransportParameters(httpTransportParameters);
     }
 
 }

@@ -1,4 +1,4 @@
-package org.mule.transport.legstar.test.lsfileae;
+package org.mule.transport.legstar.wmq;
 
 import org.mule.api.MuleMessage;
 import org.mule.routing.MuleMessageInfoMapping;
