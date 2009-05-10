@@ -11,6 +11,9 @@
 package org.mule.transport.legstar.test.jvmquery;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.mule.api.MuleMessage;
 import org.mule.module.client.MuleClient;
 import org.mule.tck.FunctionalTestCase;
@@ -52,7 +55,7 @@ public class JvmqueryProxyClientWmqTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-proxy-wmq-config-jvmquery-wmq.xml";
+        return "mule-proxy-config-jvmquery-wmq-wmq.xml";
     }
 
     /**
@@ -66,13 +69,16 @@ public class JvmqueryProxyClientWmqTest extends FunctionalTestCase {
      * Call the esb and check response.
      * @throws Exception if test fails
      */
+    @SuppressWarnings("unchecked")
     public void testRun() throws Exception {
         MuleClient client = new MuleClient();
-        client.dispatch(
+        Map props = new HashMap();
+        props.put("JMSReplyTo", "JVMQUERY.POJO.REPLY.QUEUE");
+
+        MuleMessage message = client.send(
                 "MainframeRequestEndpoint",
                 HostData.toByteArray(MAINFRAME_REQUEST_DATA),
-                null);
-        MuleMessage message = client.request("MainframeReplyEndpoint", 10000);
+                props);
         assertEquals(EXPECTED_MAINFRAME_RESPONSE_DATA.substring(0, 135),
                 HostData.toHexString(message.getPayloadAsBytes()).substring(0, 135));
         

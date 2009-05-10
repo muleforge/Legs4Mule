@@ -13,9 +13,9 @@ package org.mule.transport.legstar.gen;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.codegen.CodeGenUtil;
@@ -210,33 +210,30 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         
         compare(mGenerator.getTargetAntDir(),
                 "build.xml", muleComponent.getName());
-        if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("http")) {
-            compare(mGenerator.getTargetMuleConfigDir(),
-                    "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
-                    muleComponent.getName());
-            compare(mGenerator.getTargetMuleConfigDir(),
-                    "mule-adapter-http-config-xml-" + muleComponent.getName() + ".xml",
-                    muleComponent.getName());
-        }
-        if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("wmq")) {
-            compare(mGenerator.getTargetMuleConfigDir(),
-                    "mule-adapter-wmq-config-" + muleComponent.getName() + ".xml",
-                    muleComponent.getName());
-            compare(mGenerator.getTargetMuleConfigDir(),
-                    "mule-adapter-wmq-config-xml-" + muleComponent.getName() + ".xml",
-                    muleComponent.getName());
-        }
+        
+        String congFileName = AbstractCixsMuleGenerator.getAdapterConfigurationFileName(
+                muleComponent.getName(),
+                mGenerator.getSampleConfigurationTransportInternal(),
+                SampleConfigurationPayloadType.JAVA,
+                mGenerator.getSampleConfigurationHostMessagingTypeInternal());
+        compare(mGenerator.getTargetMuleConfigDir(),
+                congFileName,
+                muleComponent.getName());
+        
+        congFileName = AbstractCixsMuleGenerator.getAdapterConfigurationFileName(
+                muleComponent.getName(),
+                mGenerator.getSampleConfigurationTransportInternal(),
+                SampleConfigurationPayloadType.XML,
+                mGenerator.getSampleConfigurationHostMessagingTypeInternal());
+        compare(mGenerator.getTargetMuleConfigDir(),
+                congFileName,
+                muleComponent.getName());
         
         for (CixsOperation operation : muleComponent.getCixsOperations()) {
             
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     mGenerator.getTargetSrcDir(), operation.getPackageName(), false);
             
-            compare(mGenerator.getTargetPropDir(),
-                    operation.getCicsProgramName().toLowerCase(
-                            Locale.getDefault()) + ".properties",
-                    muleComponent.getName());
-
             compare(operationClassFilesDir,
                     "HostTo" + operation.getRequestHolderType() + "MuleTransformer.java",
                     muleComponent.getName());

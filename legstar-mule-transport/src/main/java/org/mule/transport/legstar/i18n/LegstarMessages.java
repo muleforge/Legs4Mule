@@ -201,4 +201,26 @@ public class LegstarMessages extends MessageFactory {
     public Message payloadNotXmlSource() {
         return createMessage(BUNDLE_PATH, MSG_NUM_17);
     }
+
+    /** MQCIH header format is not none.*/
+    private static final int MSG_NUM_18 = 18;
+    
+    /**
+     * @param format MQCIH format returned
+     * @return MQCIH header format is not none.
+     */
+    public Message mqcihFormatNotNone(final String format) {
+        return createMessage(BUNDLE_PATH, MSG_NUM_18);
+    }
+
+    /** MQCIH non zero completion code.*/
+    private static final int MSG_NUM_19 = 19;
+    
+    /**
+     * @param compcode completion code
+     * @return MQCIH non zero completion code.
+     */
+    public Message mqcihNonZeroCompCode(final int compcode) {
+        return createMessage(BUNDLE_PATH, MSG_NUM_19);
+    }
 }

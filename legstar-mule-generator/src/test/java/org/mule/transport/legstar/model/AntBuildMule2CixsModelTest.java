@@ -15,6 +15,7 @@ import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 import org.mule.transport.legstar.gen.AbstractTestTemplate;
 import org.mule.transport.legstar.gen.Samples;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
@@ -60,7 +61,11 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
         muleComponent.setName(muleComponent.getName() + "-wmq");
         initCixsMuleComponent(muleComponent);
 
-        mAntModel.setSampleConfigurationTransport(SampleConfigurationTransport.WMQ);
+        mAntModel.setSampleConfigurationTransport(
+                SampleConfigurationTransport.WMQ);
+        mAntModel.setSampleConfigurationHostMessagingType(
+                SampleConfigurationHostMessagingType.MQCIH);
+
         mAntModel.getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
         mAntModel.getWmqTransportParameters().setJndiUrl(
                 WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
@@ -68,9 +73,9 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
                 WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
         mAntModel.getWmqTransportParameters().setZosQueueManager("CSQ1");
         mAntModel.getWmqTransportParameters().setRequestQueue(
-                "CICSA.REQUEST.QUEUE");
+                "CICS01.BRIDGE.REQUEST.QUEUE");
         mAntModel.getWmqTransportParameters().setReplyQueue(
-                "CICSA.REPLY.QUEUE");
+                "CICS01.BRIDGE.REPLY.QUEUE");
 
         processAnt();
     }

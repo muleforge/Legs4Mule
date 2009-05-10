@@ -57,12 +57,12 @@
 
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-invoker</artifactId>
+            <artifactId>legstar-messaging</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-messaging</artifactId>
+            <artifactId>legstar-cmqrt</artifactId>
         </dependency>
 
         <dependency>

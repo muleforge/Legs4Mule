@@ -10,9 +10,13 @@
  ******************************************************************************/
 package org.mule.transport.legstar.transformer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.mule.transport.legstar.i18n.LegstarMessages;
 import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.util.ClassUtils;
 import org.mule.api.MuleMessage;
+import org.mule.api.transformer.TransformerException;
 
 import com.legstar.coxb.host.HostContext;
 
@@ -31,6 +35,49 @@ public abstract class AbstractHostMuleTransformer extends AbstractMessageAwareTr
     /** Message labels. */
     private final LegstarMessages mI18NMessages = new LegstarMessages();
 
+    /** Logger. */
+    private final Log _log = LogFactory.getLog(getClass());
+
+    /**
+     * {@inheritDoc}
+     */
+    public Object transform(
+            final MuleMessage esbMessage,
+            final String encoding) throws TransformerException {
+
+        if (_log.isDebugEnabled()) {
+            _log.debug("Transform for message id: "
+                    + esbMessage.getUniqueId()
+                    + " source object is: "
+                    + ClassUtils.getSimpleName(esbMessage.getPayload().getClass()));
+        }
+        /* Don't transform a message content if an exception is reported */
+        if (esbMessage.getExceptionPayload() != null) {
+            throw new TransformerException(
+                    getI18NMessages().hostTransformFailure(),
+                    this, esbMessage.getExceptionPayload().getException());
+        }
+        
+        Object result = hostTransform(esbMessage, encoding);
+
+        if (_log.isDebugEnabled()) {
+            _log.debug("Resulting object is " + ClassUtils.getSimpleName(result.getClass()));
+        }
+        return result;
+    }
+    
+    
+    /**
+     * Specialized classes perform the actual transformation.
+     * @param esbMessage the Mule message
+     * @param encoding the payload encoding
+     * @return the transformed payload
+     * @throws TransformerException if transform fails
+     */
+    public abstract Object hostTransform(
+            final MuleMessage esbMessage,
+            final String encoding) throws TransformerException;
+    
     /**
      * Gives a chance for a message to carry the mainframe character set.
      * @param message the esb message

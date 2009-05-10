@@ -22,8 +22,9 @@ import org.mule.RequestContext;
 import org.mule.transformer.AbstractMessageAwareTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.http.HttpResponse;
-import org.mule.transport.legstar.cixs.transformer.HostToLegstarMuleTransformer;
-import org.mule.transport.legstar.cixs.transformer.HostToMultipartLegstarMuleTransformerTest;
+import org.mule.transport.legstar.cixs.transformer.HostToLegstarExecRequestMuleTransformer;
+import org.mule.transport.legstar.cixs.transformer.HostToMultipartLegstarExecRequestMuleTransformerTest;
+import org.mule.transport.legstar.config.HostProgram;
 import org.mule.api.MuleEvent;
 import org.mule.api.transformer.Transformer;
 import org.mule.api.transformer.TransformerException;
@@ -58,8 +59,8 @@ public class MultipartHostByteArrayToHttpResponseTest extends AbstractTransforme
             testData.put("ReplyStatus",
                     HostData.toByteArray(LsfileacCases.getHostBytesHexReplyStatus()));
  
-            HostToLegstarMuleTransformer transformer = new HostToLegstarMuleTransformer();
-            transformer.setProgramPropFileName("lsfileac.properties");
+            HostToLegstarExecRequestMuleTransformer transformer = new HostToLegstarExecRequestMuleTransformer();
+            transformer.setHostProgram(new HostProgram("lsfileac.properties"));
             
             return transformer.transform(testData);
         } catch (TransformerException e) {
@@ -79,7 +80,7 @@ public class MultipartHostByteArrayToHttpResponseTest extends AbstractTransforme
                     final MuleEvent event,
                     final OutputStream out) throws IOException {
                 out.write(HostData.toByteArray(
-                        HostToMultipartLegstarMuleTransformerTest.LSFILEAC_MESSAGE_HOST_DATA));
+                        HostToMultipartLegstarExecRequestMuleTransformerTest.LSFILEAC_MESSAGE_HOST_DATA));
             }
 
         };

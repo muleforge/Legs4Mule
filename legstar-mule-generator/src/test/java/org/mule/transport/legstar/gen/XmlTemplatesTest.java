@@ -16,6 +16,9 @@ import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 import org.mule.transport.legstar.model.CixsMuleComponent;
 import org.mule.transport.legstar.model.UmoComponentParameters;
 import org.mule.transport.legstar.model.WmqTransportParameters;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.jaxws.model.HttpTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
@@ -55,87 +58,95 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     }
 
     /**
-     * Creates the mule adapter http config.
+     * Creates a mule adapter config generation.
+     * @param muleComponent the component under test
+     * @param transport HTTP or WMQ
+     * @param payload XML or JAVA
+     * @param messaging the type of messaging expected by the mainframe
      * @throws Exception if generation fails
      */
-    public void testLsfileaeAdapterHttpConfigXml() throws Exception {
+    private void testAdapterConfigXml(
+            final CixsMuleComponent muleComponent,
+            final SampleConfigurationTransport transport,
+            final SampleConfigurationPayloadType payload,
+            final SampleConfigurationHostMessagingType messaging) throws Exception {
 
-        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         getParameters().put("hostCharset", "IBM01140");
+        switch (transport) {
+        case HTTP:
+            addAdapterHttpParameters();
+            break;
+        case WMQ:
+            addAdapterWmqParameters();
+            break;
+        default:
+            break;
+        }
+
+        File componentConfFilesDir = new File(
+                GEN_CONF_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        String fileName = AbstractCixsMuleGenerator.generateAdapterConfigXml(
+                muleComponent, getParameters(), componentConfFilesDir,
+                transport,
+                payload,
+                messaging);
+
+        compare(componentConfFilesDir, fileName, muleComponent.getName());
+    }
+
+    /**
+     * Creates a mule proxy config generation.
+     * @param muleComponent the component under test
+     * @param transport HTTP or WMQ
+     * @throws Exception if generation fails
+     */
+    private void testProxyConfigXml(
+            final CixsMuleComponent muleComponent,
+            final SampleConfigurationTransport transport) throws Exception {
+
+        getParameters().put("hostCharset", "IBM01140");
+
+        UmoComponentParameters umoComponentParameters = new UmoComponentParameters();
+        umoComponentParameters.setImplementationName("com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
+        umoComponentParameters.add(getParameters());
+
+        switch (transport) {
+        case HTTP:
+            addProxyHttpParameters();
+            break;
+        case WMQ:
+            addProxyWmqParameters();
+            break;
+        default:
+            break;
+        }
+
+        File componentConfFilesDir = new File(
+                GEN_CONF_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
+        String fileName = AbstractCixsMuleGenerator.generateProxyConfigXml(
+                muleComponent, getParameters(), componentConfFilesDir,
+                transport);
+
+        compare(componentConfFilesDir, fileName, muleComponent.getName());
+    }
+
+    /**
+     * Adapter HTTP parameter set.
+     */
+    private void addAdapterHttpParameters() {
         HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
         httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
         httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
         httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
         httpTransportParameters.add(getParameters());
-
-        File componentConfFilesDir = new File(
-                GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateAdapterHttpConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-
-        compare(componentConfFilesDir,
-                "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
     }
 
     /**
-     * Creates the mule adapter http config.
-     * @throws Exception if generation fails
+     * Adapter WMQ parameter set.
      */
-    public void testLsfileaxAdapterHttpConfigXml() throws Exception {
-
-        CixsMuleComponent muleComponent = Samples.getLsfileaxMuleComponent();
-        getParameters().put("hostCharset", "IBM01140");
-        HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
-        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
-        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
-        httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
-        httpTransportParameters.add(getParameters());
-
-        File componentConfFilesDir = new File(
-                GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateAdapterHttpConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-
-        compare(componentConfFilesDir,
-                "mule-adapter-http-config-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
-    }
-
-    /**
-     * Creates the mule adapter http config for XML payloads.
-     * @throws Exception if generation fails
-     */
-    public void testLsfileaeAdapterHttpConfigXmlXml() throws Exception {
-
-        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        getParameters().put("hostCharset", "IBM01140");
-        HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
-        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
-        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
-        httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
-        httpTransportParameters.add(getParameters());
-
-        File componentConfFilesDir = new File(
-                GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateAdapterHttpConfigXmlXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-
-        compare(componentConfFilesDir,
-                "mule-adapter-http-config-xml-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
-    }
-
-    /**
-     * Creates the mule adapter wmq config with java payload.
-     * @throws Exception if generation fails
-     */
-    public void testLsfileaeAdapterWmqConfigXml() throws Exception {
-
-        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+    private void addAdapterWmqParameters() {
         WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
         wmqTransportParameters.setJndiUrl(
                 WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
@@ -145,80 +156,23 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         wmqTransportParameters.setRequestQueue("CICSA.REQUEST.QUEUE");
         wmqTransportParameters.setReplyQueue("CICSA.REPLY.QUEUE");
         wmqTransportParameters.add(getParameters());
-
-        File componentConfFilesDir = new File(
-                GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateAdapterWmqConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-
-        compare(componentConfFilesDir,
-                "mule-adapter-wmq-config-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
     }
-    
+
     /**
-     * Creates the mule adapter wmq config with xml payload.
-     * @throws Exception if generation fails
+     * Proxy HTTP parameter set.
      */
-    public void testLsfileaeAdapterWmqConfigXmlXml() throws Exception {
-
-        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
-        wmqTransportParameters.setJndiUrl(
-                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
-        wmqTransportParameters.setJndiContextFactory(
-                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
-        wmqTransportParameters.setConnectionFactory("ConnectionFactory");
-        wmqTransportParameters.setRequestQueue("CICSA.REQUEST.QUEUE");
-        wmqTransportParameters.setReplyQueue("CICSA.REPLY.QUEUE");
-        wmqTransportParameters.add(getParameters());
-
-        File componentConfFilesDir = new File(
-                GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateAdapterWmqConfigXmlXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-
-        compare(componentConfFilesDir,
-                "mule-adapter-wmq-config-xml-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
-    }
-    
-    /**
-     * Creates the mule proxy http config.
-     * @throws Exception if generation fails
-     */
-    public void testJvmqueryProxyHttpConfigXml() throws Exception {
-
-        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+    private void addProxyHttpParameters() {
         HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
         httpTransportParameters.setHost("megamouss");
         httpTransportParameters.setPort(8083);
         httpTransportParameters.setPath("/legstar/services/jvmquery");
         httpTransportParameters.add(getParameters());
-        getParameters().put("hostCharset", "IBM01140");
-        
-        UmoComponentParameters umoComponentParameters = new UmoComponentParameters();
-        umoComponentParameters.setImplementationName("com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
-        umoComponentParameters.add(getParameters());
-
-        File componentConfFilesDir = new File(GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateProxyHttpConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-        compare(componentConfFilesDir,
-                "mule-proxy-http-config-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
     }
 
     /**
-     * Creates the mule proxy wmq config.
-     * @throws Exception if generation fails
+     * Proxy WMQ parameter set.
      */
-    public void testJvmqueryProxyWmqConfigXml() throws Exception {
-
-        CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
+    private void addProxyWmqParameters() {
         WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
         wmqTransportParameters.setJndiUrl(
                 WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
@@ -228,18 +182,100 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         wmqTransportParameters.setRequestQueue("JVMQUERY.POJO.REQUEST.QUEUE");
         wmqTransportParameters.setReplyQueue("JVMQUERY.POJO.REPLY.QUEUE");
         wmqTransportParameters.add(getParameters());
-        
-        UmoComponentParameters umoComponentParameters = new UmoComponentParameters();
-        umoComponentParameters.setImplementationName("com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
-        umoComponentParameters.add(getParameters());
+    }
+    /**
+     * LSFILEAE HTTP JAVA test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterHttpJavaConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaeMuleComponent(),
+                SampleConfigurationTransport.HTTP,
+                SampleConfigurationPayloadType.JAVA,
+                SampleConfigurationHostMessagingType.LEGSTAR);
+    }
 
-        File componentConfFilesDir = new File(GEN_CONF_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentConfFilesDir, true);
-        AbstractCixsMuleGenerator.generateProxyWmqConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir);
-        compare(componentConfFilesDir,
-                "mule-proxy-wmq-config-" + muleComponent.getName() + ".xml",
-                muleComponent.getName());
+    /**
+     * LSFILEAE HTTP XML test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterHttpXmlConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaeMuleComponent(),
+                SampleConfigurationTransport.HTTP,
+                SampleConfigurationPayloadType.XML,
+                SampleConfigurationHostMessagingType.LEGSTAR);
+    }
+
+    /**
+     * LSFILEAE WMQ JAVA LEGSTAR test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterWmqJavaLegstarConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaeMuleComponent(),
+                SampleConfigurationTransport.WMQ,
+                SampleConfigurationPayloadType.JAVA,
+                SampleConfigurationHostMessagingType.LEGSTAR);
+    }
+
+    /**
+     * LSFILEAE WMQ JAVA MQCIH test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterWmqJavaMqcihConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaeMuleComponent(),
+                SampleConfigurationTransport.WMQ,
+                SampleConfigurationPayloadType.JAVA,
+                SampleConfigurationHostMessagingType.MQCIH);
+    }
+
+    /**
+     * LSFILEAX HTTP JAVA test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaxAdapterHttpJavaConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaxMuleComponent(),
+                SampleConfigurationTransport.HTTP,
+                SampleConfigurationPayloadType.JAVA,
+                SampleConfigurationHostMessagingType.LEGSTAR);
+    }
+
+    /**
+     * LSFILEAX HTTP XML test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaxAdapterHttpXmlConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaxMuleComponent(),
+                SampleConfigurationTransport.HTTP,
+                SampleConfigurationPayloadType.XML,
+                SampleConfigurationHostMessagingType.LEGSTAR);
+    }
+
+    /**
+     * LSFILEAX WMQ JAVA test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaxAdapterWmqJavaConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaxMuleComponent(),
+                SampleConfigurationTransport.WMQ,
+                SampleConfigurationPayloadType.JAVA,
+                SampleConfigurationHostMessagingType.LEGSTAR);
+    }
+
+    /**
+     * JVMQUERY HTTP test case.
+     * @throws Exception if generation fails
+     */
+    public void testJvmqueryProxyHttpConfigXml() throws Exception {
+        testProxyConfigXml(Samples.getJvmQueryMuleComponent(),
+                SampleConfigurationTransport.HTTP);
+    }
+
+    /**
+     * JVMQUERY WMQ test case.
+     * @throws Exception if generation fails
+     */
+    public void testJvmqueryProxyWmqConfigXml() throws Exception {
+        testProxyConfigXml(Samples.getJvmQueryMuleComponent(),
+                SampleConfigurationTransport.WMQ);
     }
 
 }

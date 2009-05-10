@@ -30,8 +30,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.w3c.dom.DOMException;
@@ -50,9 +48,6 @@ import com.legstar.coxb.transform.HostTransformException;
  * LegStar binding transformers.
  */
 public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMuleTransformer {
-
-    /** Logger. */
-    private final Log _log = LogFactory.getLog(getClass());
 
     /**
      * Constructor for single part transformers.
@@ -95,19 +90,10 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
      * a LegStarMessage reply.
      */
     @SuppressWarnings("unchecked")
-    public Object transform(
+    public Object hostTransform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
-        if (_log.isDebugEnabled()) {
-            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
-        }
 
-        /* Don't transform a message content if an exception is reported */
-        if (esbMessage.getExceptionPayload() != null) {
-            throw new TransformerException(
-                    getI18NMessages().hostTransformFailure(),
-                    this, esbMessage.getExceptionPayload().getException());
-        }
         try {
 
             Object src = esbMessage.getPayload();

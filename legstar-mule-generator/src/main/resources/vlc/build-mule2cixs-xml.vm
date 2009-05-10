@@ -57,6 +57,7 @@
             custBinDir="${antModel.custBinDir}"
             hostCharset="${antModel.hostCharset}"
             sampleConfigurationTransport="${antModel.sampleConfigurationTransport}"
+            sampleConfigurationHostMessagingType="${antModel.sampleConfigurationHostMessagingType}"
           >
             <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
                 packageName="${antModel.cixsMuleComponent.packageName}">
@@ -115,8 +116,10 @@
                 zosQueueManager="${antModel.wmqTransportParameters.zosQueueManager}"
                 requestQueue="${antModel.wmqTransportParameters.requestQueue}"
                 replyQueue="${antModel.wmqTransportParameters.replyQueue}"
+#if(${antModel.wmqTransportParameters.errorQueue})
 #if(${antModel.wmqTransportParameters.errorQueue.length()} > 0)
                 errorQueue="${antModel.wmqTransportParameters.errorQueue}"
+#end
 #end
             />
 #end

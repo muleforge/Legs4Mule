@@ -50,6 +50,7 @@
             custBinDir="..\legstar-mule-generator\target\classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="HTTP"
+            sampleConfigurationHostMessagingType="LEGSTAR"
           >
             <cixsMuleComponent name="lsfileac"
                 packageName="org.mule.transport.legstar.test.lsfileac">

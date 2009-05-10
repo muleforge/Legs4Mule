@@ -516,6 +516,13 @@
                 <version>${legstarVersion}</version>
             </dependency>
 
+            <!-- LegStar Standard WMQ transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cmqrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
             <!-- LegStar Service Model -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>

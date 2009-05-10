@@ -17,6 +17,8 @@ import java.util.Map;
 import org.mule.transport.legstar.model.CixsMuleComponent;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel;
 import org.mule.transport.legstar.model.WmqTransportParameters;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
@@ -38,21 +40,13 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE =
         "vlc/cixsmule-component-ant-build-jar-xml.vm";
 
-    /** Velocity template for adapter-http mule configuration xml. */
-    public static final String COMPONENT_ADAPTER_HTTP_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-adapter-http-config-xml.vm";
+    /** Velocity template for adapter mule configuration xml. */
+    public static final String COMPONENT_ADAPTER_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-adapter-config-xml.vm";
 
-    /** Velocity template for adapter-wmq mule configuration xml. */
-    public static final String COMPONENT_ADAPTER_WMQ_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-adapter-wmq-config-xml.vm";
-
-    /** Velocity template for proxy-http mule configuration xml. */
-    public static final String COMPONENT_PROXY_HTTP_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-proxy-http-config-xml.vm";
-
-    /** Velocity template for procy-wmq mule configuration xml. */
-    public static final String COMPONENT_PROXY_WMQ_CONFIG_XML_VLC_TEMPLATE =
-        "vlc/cixsmule-component-proxy-wmq-config-xml.vm";
+    /** Velocity template for proxy mule configuration xml. */
+    public static final String COMPONENT_PROXY_CONFIG_XML_VLC_TEMPLATE =
+        "vlc/cixsmule-component-proxy-config-xml.vm";
 
     /** Velocity template for java to host byte array transformer. */
     public static final String OPERATION_JAVA_TO_HOST_VLC_TEMPLATE =
@@ -306,133 +300,113 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * Create the Mule adapter configuration file for java payloads over http.
+     * Create the Mule adapter configuration file for java payloads.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentConfFilesDir where to store the generated file
+     * @param transport the type of transport selected for the sample configuration
+     * @param payloadType whether the sample configuration is for java or XML payloads
+     * @param messagingType the type of messaging expected by the mainframe
+     * @return the generated file name
      * @throws CodeGenMakeException if generation fails
      */
-    public static void generateAdapterHttpConfigXml(
+    public static String generateAdapterConfigXml(
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
-            final File componentConfFilesDir)
+            final File componentConfFilesDir,
+            final SampleConfigurationTransport transport,
+            final SampleConfigurationPayloadType payloadType,
+            final SampleConfigurationHostMessagingType messagingType)
     throws CodeGenMakeException {
-        parameters.put("clientPayload", "java");
+
+        String fileName = getAdapterConfigurationFileName(component.getName(),
+                transport, payloadType, messagingType);
+
+        parameters.put("sampleConfigurationTransport",
+                transport.toString().toLowerCase(Locale.getDefault()));
+        parameters.put("sampleConfigurationPayloadType",
+                payloadType.toString().toLowerCase(Locale.getDefault()));
+        parameters.put("sampleConfigurationHostMessagingType",
+                messagingType.toString().toLowerCase(Locale.getDefault()));
+
         generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_ADAPTER_HTTP_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_ADAPTER_CONFIG_XML_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
                 component,
                 parameters,
                 componentConfFilesDir,
-                "mule-adapter-http-config-" + component.getName() + ".xml");
+                fileName);
+
+        return fileName;
+    }
+    
+    /**
+     * Create an adapter configuration file name that is as descriptive as possible.
+     * @param componentName the generated service
+     * @param transport the sample transport
+     * @param payloadType the payload type
+     * @param messagingType the sample host messaging
+     * @return a file name
+     */
+    public static String getAdapterConfigurationFileName(
+            final String componentName,
+            final SampleConfigurationTransport transport,
+            final SampleConfigurationPayloadType payloadType,
+            final SampleConfigurationHostMessagingType messagingType) {
+
+        return "mule-adapter-config-" + componentName
+        + '-' + transport.toString().toLowerCase(Locale.getDefault())
+        + '-' + payloadType.toString().toLowerCase(Locale.getDefault())
+        + '-' + messagingType.toString().toLowerCase(Locale.getDefault())
+        + ".xml";
     }
 
     /**
-     * Create the Mule adapter configuration file for XML payloads over http.
+     * Create the Mule proxy configuration XML file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentConfFilesDir where to store the generated file
+     * @param transport the type of transport selected for the sample configuration
+     * @return the generated file name
      * @throws CodeGenMakeException if generation fails
      */
-    public static void generateAdapterHttpConfigXmlXml(
+    public static String generateProxyConfigXml(
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
-            final File componentConfFilesDir)
+            final File componentConfFilesDir,
+            final SampleConfigurationTransport transport)
     throws CodeGenMakeException {
-        parameters.put("clientPayload", "xml");
+
+        String fileName = getProxyConfigurationFileName(component.getName(),
+                transport);
+
+        parameters.put("sampleConfigurationTransport",
+                transport.toString().toLowerCase(Locale.getDefault()));
+
         generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_ADAPTER_HTTP_CONFIG_XML_VLC_TEMPLATE,
+                COMPONENT_PROXY_CONFIG_XML_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
                 component,
                 parameters,
                 componentConfFilesDir,
-                "mule-adapter-http-config-xml-" + component.getName() + ".xml");
+                fileName);
+        
+        return fileName;
     }
 
     /**
-     * Create the Mule proxy over http configuration XML file.
-     * @param component the Mule component description
-     * @param parameters miscellaneous help parameters
-     * @param componentConfFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
+     * Create a proxy configuration file name that is as descriptive as possible.
+     * @param componentName the generated service
+     * @param transport the sample transport
+     * @return a file name
      */
-    public static void generateProxyHttpConfigXml(
-            final CixsMuleComponent component,
-            final Map < String, Object > parameters,
-            final File componentConfFilesDir)
-    throws CodeGenMakeException {
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_PROXY_HTTP_CONFIG_XML_VLC_TEMPLATE,
-                COMPONENT_MODEL_NAME,
-                component,
-                parameters,
-                componentConfFilesDir,
-                "mule-proxy-http-config-" + component.getName() + ".xml");
-    }
+    public static String getProxyConfigurationFileName(
+            final String componentName,
+            final SampleConfigurationTransport transport) {
 
-    /**
-     * Create the Mule proxy over wmq configuration XML file.
-     * @param component the Mule component description
-     * @param parameters miscellaneous help parameters
-     * @param componentConfFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     */
-    public static void generateProxyWmqConfigXml(
-            final CixsMuleComponent component,
-            final Map < String, Object > parameters,
-            final File componentConfFilesDir)
-    throws CodeGenMakeException {
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_PROXY_WMQ_CONFIG_XML_VLC_TEMPLATE,
-                COMPONENT_MODEL_NAME,
-                component,
-                parameters,
-                componentConfFilesDir,
-                "mule-proxy-wmq-config-" + component.getName() + ".xml");
-    }
-
-    /**
-     * Create the Mule adapter configuration file for java payloads over wmq.
-     * @param component the Mule component description
-     * @param parameters miscellaneous help parameters
-     * @param componentConfFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     */
-    public static void generateAdapterWmqConfigXml(
-            final CixsMuleComponent component,
-            final Map < String, Object > parameters,
-            final File componentConfFilesDir)
-    throws CodeGenMakeException {
-        parameters.put("clientPayload", "java");
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_ADAPTER_WMQ_CONFIG_XML_VLC_TEMPLATE,
-                COMPONENT_MODEL_NAME,
-                component,
-                parameters,
-                componentConfFilesDir,
-                "mule-adapter-wmq-config-" + component.getName() + ".xml");
-    }
-
-    /**
-     * Create the Mule adapter configuration file for XML payloads over wmq.
-     * @param component the Mule component description
-     * @param parameters miscellaneous help parameters
-     * @param componentConfFilesDir where to store the generated file
-     * @throws CodeGenMakeException if generation fails
-     */
-    public static void generateAdapterWmqConfigXmlXml(
-            final CixsMuleComponent component,
-            final Map < String, Object > parameters,
-            final File componentConfFilesDir)
-    throws CodeGenMakeException {
-        parameters.put("clientPayload", "xml");
-        generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_ADAPTER_WMQ_CONFIG_XML_VLC_TEMPLATE,
-                COMPONENT_MODEL_NAME,
-                component,
-                parameters,
-                componentConfFilesDir,
-                "mule-adapter-wmq-config-xml-" + component.getName() + ".xml");
+        return "mule-proxy-config-" + componentName
+        + '-' + transport.toString().toLowerCase(Locale.getDefault())
+        + ".xml";
     }
 
     /**
@@ -768,6 +742,42 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public void addWmqTransportParameters(
             final WmqTransportParameters httpTransportParameters) {
         getAntModel().setWmqTransportParameters(httpTransportParameters);
+    }
+
+    /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @return the host messaging used by generated service configuration samples.
+     */
+    protected SampleConfigurationHostMessagingType getSampleConfigurationHostMessagingTypeInternal() {
+        return getAntModel().getSampleConfigurationHostMessagingType();
+    }
+
+    /**
+     * @return the host messaging used by generated service configuration samples.
+     */
+    public String getSampleConfigurationHostMessagingType() {
+        return getSampleConfigurationHostMessagingTypeInternal().toString();
+    }
+
+    /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @param sampleConfigurationHostMessagingType the host messaging used by generated service configuration samples.
+     */
+    private void setSampleConfigurationHostMessagingTypeInternal(
+            final SampleConfigurationHostMessagingType sampleConfigurationHostMessagingType) {
+        getAntModel().setSampleConfigurationHostMessagingType(sampleConfigurationHostMessagingType);
+    }
+
+    /**
+     * @param sampleConfigurationHostMessagingType the host messaging used by generated service configuration samples.
+     */
+    public void setSampleConfigurationHostMessagingType(
+            final String sampleConfigurationHostMessagingType) {
+        SampleConfigurationHostMessagingType value = SampleConfigurationHostMessagingType.valueOf(
+                    sampleConfigurationHostMessagingType.toUpperCase(Locale.getDefault()));
+        setSampleConfigurationHostMessagingTypeInternal(value);
     }
 
 }

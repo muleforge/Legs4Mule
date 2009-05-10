@@ -45,6 +45,10 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /** Set of parameters needed for Websphere MQ transport. */
     private WmqTransportParameters mWmqTransportParameters = new WmqTransportParameters();
 
+    /** The host messaging used by generated service configuration samples. */
+    private SampleConfigurationHostMessagingType mSampleConfigurationHostMessagingType =
+        SampleConfigurationHostMessagingType.LEGSTAR;
+
     /**
      * Construct the model with a generator name and velocity template.
      * @param generatorName to designate the generator
@@ -147,6 +151,30 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     }
     
     /**
+     * Sample configurations are generated either for java object payloads
+     * or XML. Clients using these sample configurations are then expected to send
+     * this type of payload.
+     */
+    public enum SampleConfigurationPayloadType {
+        /** Java object. */
+        JAVA,
+        /** XML. */
+        XML
+    }
+    
+    /**
+     * Sample configurations are generated either for a certain type of host
+     * messaging. Depending on messaging, host data will be wrapped into a
+     * different type of message.
+     */
+    public enum SampleConfigurationHostMessagingType {
+        /** LegStar messaging (LegStar is installed on the mainframe). */
+        LEGSTAR,
+        /** CICS MQ Bridge. */
+        MQCIH
+    }
+    
+    /**
      * @return the transport used by generated configuration samples.
      */
     public SampleConfigurationTransport getSampleConfigurationTransport() {
@@ -189,6 +217,22 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     public void setWmqTransportParameters(
             final WmqTransportParameters wmqTransportParameters) {
         mWmqTransportParameters = wmqTransportParameters;
+    }
+
+    /**
+     * @return the host messaging used by generated service configuration samples
+     */
+    public SampleConfigurationHostMessagingType getSampleConfigurationHostMessagingType() {
+        return mSampleConfigurationHostMessagingType;
+    }
+
+    /**
+     * @param sampleConfigurationHostMessagingType the host messaging used by generated
+     *  service configuration samples
+     */
+    public void setSampleConfigurationHostMessagingType(
+            final SampleConfigurationHostMessagingType sampleConfigurationHostMessagingType) {
+        mSampleConfigurationHostMessagingType = sampleConfigurationHostMessagingType;
     }
 
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    This Mule configuration implements a proxy service for a mainframe program.
+    Transport from mainframe to proxy is JMS/WebSphere MQ.
+-->
+<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spring="http://www.springframework.org/schema/beans"
+        xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
+        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
+        xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
+    xsi:schemaLocation="http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+        http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
+        http://www.mulesource.org/schema/mule/jms/2.2 http://www.mulesource.org/schema/mule/jms/2.2/mule-jms.xsd
+        http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd">
+
+    <description>Mule configuration file for jvmquery proxy service</description>
+
+    <jms:connector name="jmsJndiConnector"
+        jndiInitialFactory="com.sun.jndi.fscontext.RefFSContextFactory"
+        jndiProviderUrl="file:///JNDI-Directory"
+        connectionFactoryJndiName="ConnectionFactory"
+        specification="1.1"
+        jndiDestinations="true"
+        forceJndiDestinations="true"
+        disableTemporaryReplyToDestinations="true"
+        numberOfConsumers="1" />
+
+    <jms:endpoint name="MainframeRequestEndpoint" synchronous="true"
+         queue="JVMQUERY.POJO.REQUEST.QUEUE" />
+
+    <model name="jvmqueryModel">
+
+        <service name="queryJvmProxyService">
+            <inbound>
+                <inbound-endpoint ref="MainframeRequestEndpoint">
+                    <transformers>
+                        <jms:jmsmessage-to-object-transformer />
+                        <legstar:host-to-java-transformer
+                            class="org.mule.transport.legstar.test.jvmquery.HostToJvmQueryRequestMuleTransformer" />
+                    </transformers>
+                    <response-transformers>
+                        <legstar:java-to-host-transformer
+                            class="org.mule.transport.legstar.test.jvmquery.JvmQueryReplyToHostMuleTransformer" />
+                        <message-properties-transformer>
+                            <add-message-property key="JMS_IBM_MsgType" value="2"/>
+                        </message-properties-transformer>
+                        <jms:object-to-jmsmessage-transformer />
+                    </response-transformers>
+                </inbound-endpoint>
+            </inbound>
+            <component class="com.legstar.xsdc.test.cases.jvmquery.JVMQuery"/>
+        </service>
+
+    </model>
+</mule>

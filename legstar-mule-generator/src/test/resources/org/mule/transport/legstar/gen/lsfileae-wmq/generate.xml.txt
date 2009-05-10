@@ -50,6 +50,7 @@
             custBinDir="..\legstar-mule-generator\target\classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="WMQ"
+            sampleConfigurationHostMessagingType="MQCIH"
           >
             <cixsMuleComponent name="lsfileae-wmq"
                 packageName="org.mule.transport.legstar.test.lsfileae">
@@ -72,8 +73,8 @@
                 jndiContextFactory="com.sun.jndi.fscontext.RefFSContextFactory"
                 connectionFactory="ConnectionFactory"
                 zosQueueManager="CSQ1"
-                requestQueue="CICSA.REQUEST.QUEUE"
-                replyQueue="CICSA.REPLY.QUEUE"
+                requestQueue="CICS01.BRIDGE.REQUEST.QUEUE"
+                replyQueue="CICS01.BRIDGE.REPLY.QUEUE"
             />
         </mule2cixsgen>
     

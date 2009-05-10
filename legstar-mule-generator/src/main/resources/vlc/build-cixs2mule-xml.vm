@@ -117,8 +117,10 @@
                 zosQueueManager="${antModel.wmqTransportParameters.zosQueueManager}"
                 requestQueue="${antModel.wmqTransportParameters.requestQueue}"
                 replyQueue="${antModel.wmqTransportParameters.replyQueue}"
+#if(${antModel.wmqTransportParameters.errorQueue})
 #if(${antModel.wmqTransportParameters.errorQueue.length()} > 0)
                 errorQueue="${antModel.wmqTransportParameters.errorQueue}"
+#end
 #end
             />
 #end

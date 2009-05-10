@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.Map;
 
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.jaxws.gen.Jaxws2CixsGenerator;
@@ -77,8 +78,6 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
 
         /* Determine target files locations */
         File componentConfFilesDir = getTargetMuleConfigDir();
-        File operationPropertiesFilesDir = getTargetPropDir();
-
 
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
         {
@@ -89,30 +88,20 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
 
             Jaxws2CixsGenerator.generateHolders(
                     operation, parameters, operationClassFilesDir);
-            Jaxws2CixsGenerator.generateProgramProperties(
-                    operation, parameters, operationPropertiesFilesDir);
-
         }
 
         /* Produce mule configuration samples  */
+        generateAdapterConfigXml(
+                getCixsMuleComponent(), parameters, componentConfFilesDir,
+                getSampleConfigurationTransportInternal(),
+                SampleConfigurationPayloadType.JAVA,
+                getSampleConfigurationHostMessagingTypeInternal());
+        generateAdapterConfigXml(
+                getCixsMuleComponent(), parameters, componentConfFilesDir,
+                getSampleConfigurationTransportInternal(),
+                SampleConfigurationPayloadType.XML,
+                getSampleConfigurationHostMessagingTypeInternal());
 
-        /* Produce sample configurations  */
-        switch(getSampleConfigurationTransportInternal()) {
-        case HTTP:
-            generateAdapterHttpConfigXml(
-                    getCixsMuleComponent(), parameters, componentConfFilesDir);
-            generateAdapterHttpConfigXmlXml(
-                    getCixsMuleComponent(), parameters, componentConfFilesDir);
-            break;
-        case WMQ:
-            generateAdapterWmqConfigXml(
-                    getCixsMuleComponent(), parameters, componentConfFilesDir);
-            generateAdapterWmqConfigXmlXml(
-                    getCixsMuleComponent(), parameters, componentConfFilesDir);
-            break;
-        default:
-            break;
-        }
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
         {
             /* Determine target files locations */

@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 
@@ -29,8 +27,6 @@ import com.legstar.coxb.transform.HostTransformException;
 public abstract class AbstractJavaToHostMuleTransformer
 extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
 
-    /** Logger. */
-    private final Log _log = LogFactory.getLog(getClass());
 
     /**
      * Constructor for single part transformers.
@@ -66,13 +62,10 @@ extends AbstractHostJavaMuleTransformer implements IObjectToHostTransformer {
      * if this is a multi part transformer or not.
      * <p/>
      *  */
-    public Object transform(
+    public Object hostTransform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
 
-        if (_log.isDebugEnabled()) {
-            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
-        }
         try {
 
             /* Single part messages come with binding transformers */

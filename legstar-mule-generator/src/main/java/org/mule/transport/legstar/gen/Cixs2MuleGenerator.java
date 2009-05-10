@@ -83,18 +83,9 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         File componentConfFilesDir = getTargetMuleConfigDir();
         
         /* Produce sample configurations  */
-        switch(getSampleConfigurationTransportInternal()) {
-        case HTTP:
-            generateProxyHttpConfigXml(
-                    getCixsMuleComponent(), parameters, componentConfFilesDir);
-            break;
-        case WMQ:
-            generateProxyWmqConfigXml(
-                    getCixsMuleComponent(), parameters, componentConfFilesDir);
-            break;
-        default:
-            break;
-        }
+        generateProxyConfigXml(
+                getCixsMuleComponent(), parameters, componentConfFilesDir,
+                getSampleConfigurationTransportInternal());
         
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {
 

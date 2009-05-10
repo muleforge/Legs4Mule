@@ -27,8 +27,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.w3c.dom.Document;
@@ -48,9 +46,6 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
     
     /** When XML is encoded, we assume this encoding. TODO get from Mule.*/
     private static final String XML_ENCODING = "UTF-8";
-
-    /** Logger. */
-    private final Log _log = LogFactory.getLog(getClass());
 
     /**
      * Constructor for single part transformers.
@@ -89,13 +84,10 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
      * The nature of the binding transformers passed by inherited class determines
      * if this is a multi part transformer or not.
      *  */
-    public Object transform(
+    public Object hostTransform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
 
-        if (_log.isDebugEnabled()) {
-            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
-        }
         try {
 
             /* Single part messages come with binding transformers */

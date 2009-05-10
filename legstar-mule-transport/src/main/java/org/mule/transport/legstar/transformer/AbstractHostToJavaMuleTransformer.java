@@ -16,8 +16,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 
@@ -30,9 +28,6 @@ import com.legstar.coxb.transform.HostTransformException;
  */
 public abstract class AbstractHostToJavaMuleTransformer extends AbstractHostJavaMuleTransformer {
 
-    /** Logger. */
-    private final Log _log = LogFactory.getLog(getClass());
-    
     /**
      * Constructor for single part transformers.
      * <p/>
@@ -68,19 +63,10 @@ public abstract class AbstractHostToJavaMuleTransformer extends AbstractHostJava
      * {@inheritDoc}
      */
     @SuppressWarnings("unchecked")
-    public Object transform(
+    public Object hostTransform(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
-        if (_log.isDebugEnabled()) {
-            _log.debug("Transform request for type " + esbMessage.getPayload().getClass().getSimpleName());
-        }
         
-        /* Don't transform a message content if an exception is reported */
-        if (esbMessage.getExceptionPayload() != null) {
-            throw new TransformerException(
-                    getI18NMessages().hostTransformFailure(),
-                    this, esbMessage.getExceptionPayload().getException());
-        }
         try {
             
             Object src = esbMessage.getPayload();
