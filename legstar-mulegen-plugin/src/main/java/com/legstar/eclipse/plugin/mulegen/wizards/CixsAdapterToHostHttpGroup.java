@@ -25,18 +25,18 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 /**
  * The HTTP transport (Adapter to Mainframe) control group.
  * <p/>
- * Parameters needed by clients to reach an adapter over HTTP.
+ * Parameters needed by adapter to reach the mainframe over HTTP.
  *
  */
 public class CixsAdapterToHostHttpGroup extends AbstractCixsControlsGroup {
 
-    /** The Host address on which HTTP listens to mainframe clients. */
+    /** The Host address on which mainframe HTTP server listens to clients. */
     private Text mHttpHostText = null;
 
-    /** The Port on which HTTP listens to mainframe clients. */
+    /** The Port on which mainframe HTTP server listens to clients. */
     private Text mHttpPortText = null;
 
-    /** The Path on which HTTP listens to mainframe clients. */
+    /** The Path on which mainframe HTTP server listens to clients. */
     private Text mHttpPathText = null;
 
     /** The user id for basic authentication. */
@@ -163,19 +163,19 @@ public class CixsAdapterToHostHttpGroup extends AbstractCixsControlsGroup {
     public void initExtendedControls() {
 
         setHttpHost(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_MAINFRAME_LAST_HTTP_HOST,
+                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_HOST,
                 getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST)));
+                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_HOST)));
         
         setHttpPort(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_MAINFRAME_LAST_HTTP_PORT,
+                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PORT,
                 getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT)));
+                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_PORT)));
 
         setHttpPath(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_MAINFRAME_LAST_HTTP_PATH,
+                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PATH,
                 getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_MAINFRAME_HTTP_PATH)));
+                        PreferenceConstants.ADAPTER_TO_HOST_HTTP_PATH)));
     }
 
     /**
@@ -184,11 +184,12 @@ public class CixsAdapterToHostHttpGroup extends AbstractCixsControlsGroup {
     public void storeExtendedProjectPreferences() {
 
         getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_MAINFRAME_LAST_HTTP_HOST, getHttpHost());
+                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_HOST, getHttpHost());
         getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_MAINFRAME_LAST_HTTP_PORT, getHttpPort());
+                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PORT, getHttpPort());
         getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_MAINFRAME_LAST_HTTP_PATH, getHttpPath());
+                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PATH, getHttpPath());
+        
     }
 
     /**

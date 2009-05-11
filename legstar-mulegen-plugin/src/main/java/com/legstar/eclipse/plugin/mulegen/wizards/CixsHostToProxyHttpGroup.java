@@ -35,23 +35,23 @@ public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
      */
     public void initExtendedControls() {
 
-        setHttpHost(getProjectPreferences().get(PreferenceConstants.PROXY_LAST_HTTP_HOST,
-                getWizardPage().getStore().getString(PreferenceConstants.PROXY_DEFAULT_HTTP_HOST)));
+        setHttpHost(getProjectPreferences().get(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_HOST,
+                getWizardPage().getStore().getString(PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_HOST)));
         
-        setHttpPort(getProjectPreferences().get(PreferenceConstants.PROXY_LAST_HTTP_PORT,
-                getWizardPage().getStore().getString(PreferenceConstants.PROXY_DEFAULT_HTTP_PORT)));
+        setHttpPort(getProjectPreferences().get(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PORT,
+                getWizardPage().getStore().getString(PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_PORT)));
 
-        setHttpPath(getProjectPreferences().get(PreferenceConstants.PROXY_LAST_HTTP_PATH,
+        setHttpPath(getProjectPreferences().get(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PATH,
                 getWizardPage().getStore().getString(
-                        PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE).replace(
+                        PreferenceConstants.HOST_TO_PROXY_HTTP_PATH_TEMPLATE).replace(
                                 "${service.name}", getWizardPage().getServiceName())));
         
         getDfhwbcliButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.PROXY_LAST_DFHWBCLI_BUTTON_SELECTION, true));
+                PreferenceConstants.HOST_TO_PROXY_LAST_DFHWBCLI_BUTTON_SELECTION, true));
         getWebapiButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.PROXY_LAST_WEBAPI_BUTTON_SELECTION, false));
+                PreferenceConstants.HOST_TO_PROXY_LAST_WEBAPI_BUTTON_SELECTION, false));
         getLegstarButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.PROXY_LAST_LEGSTAR_BUTTON_SELECTION, false));
+                PreferenceConstants.HOST_TO_PROXY_LAST_LEGSTAR_BUTTON_SELECTION, false));
     }
 
     /**
@@ -59,18 +59,18 @@ public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
      */
     public void storeExtendedProjectPreferences() {
 
-        getProjectPreferences().put(PreferenceConstants.PROXY_LAST_HTTP_HOST, getHttpHost());
-        getProjectPreferences().put(PreferenceConstants.PROXY_LAST_HTTP_PORT, getHttpPort());
-        getProjectPreferences().put(PreferenceConstants.PROXY_LAST_HTTP_PATH, getHttpPath());
+        getProjectPreferences().put(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_HOST, getHttpHost());
+        getProjectPreferences().put(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PORT, getHttpPort());
+        getProjectPreferences().put(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PATH, getHttpPath());
 
         getProjectPreferences().putBoolean(
-                PreferenceConstants.PROXY_LAST_DFHWBCLI_BUTTON_SELECTION,
+                PreferenceConstants.HOST_TO_PROXY_LAST_DFHWBCLI_BUTTON_SELECTION,
                 getDfhwbcliButton().getSelection());
         getProjectPreferences().putBoolean(
-                PreferenceConstants.PROXY_LAST_WEBAPI_BUTTON_SELECTION,
+                PreferenceConstants.HOST_TO_PROXY_LAST_WEBAPI_BUTTON_SELECTION,
                 getWebapiButton().getSelection());
         getProjectPreferences().putBoolean(
-                PreferenceConstants.PROXY_LAST_LEGSTAR_BUTTON_SELECTION,
+                PreferenceConstants.HOST_TO_PROXY_LAST_LEGSTAR_BUTTON_SELECTION,
                 getLegstarButton().getSelection());
     }
 

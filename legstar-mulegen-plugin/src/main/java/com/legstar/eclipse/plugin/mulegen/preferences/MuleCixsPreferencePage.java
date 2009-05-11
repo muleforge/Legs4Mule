@@ -68,30 +68,6 @@ implements IWorkbenchPreferencePage {
                 Messages.preference_mule_config_folder_label + ':',
                 getFieldEditorParent()));
 
-        addField(new StringFieldEditor(
-                PreferenceConstants.HOST_URI,
-                Messages.preference_adapter_mainframe_uri_label + ':',
-                getFieldEditorParent()));
-
-        addField(new StringFieldEditor(
-                PreferenceConstants.COBOL_SAMPLE_FOLDER,
-                Messages.preference_cobol_folder_label + ':',
-                getFieldEditorParent()));
-
-        addField(new StringFieldEditor(
-                PreferenceConstants.PROXY_DEFAULT_HTTP_HOST,
-                Messages.preference_proxy_http_host_label + ':',
-                getFieldEditorParent()));
-
-        addField(new StringFieldEditor(
-                PreferenceConstants.PROXY_DEFAULT_HTTP_PORT,
-                Messages.preference_proxy_http_port_label + ':',
-                getFieldEditorParent()));
-
-        addField(new StringFieldEditor(
-                PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE,
-                Messages.preference_proxy_http_path_template_label + ':',
-                getFieldEditorParent()));
     }
 
     /**

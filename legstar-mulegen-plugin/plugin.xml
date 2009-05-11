@@ -44,6 +44,16 @@
             class="com.legstar.eclipse.plugin.mulegen.preferences.MuleCixsPreferencePage"
             id="com.legstar.eclipse.plugin.mule"
             name="%mulegen_preference_page_title"/>
+        <page
+            category="com.legstar.eclipse.plugin.mule"
+            class="com.legstar.eclipse.plugin.mulegen.preferences.MuleCixsProxyPreferencePage"
+            id="com.legstar.eclipse.plugin.mule.proxy"
+            name="%mulegen_proxy_preference_page_title"/>
+        <page
+            category="com.legstar.eclipse.plugin.mule"
+            class="com.legstar.eclipse.plugin.mulegen.preferences.MuleCixsAdapterPreferencePage"
+            id="com.legstar.eclipse.plugin.mule.adapter"
+            name="%mulegen_adapter_preference_page_title"/>
     </extension>
 
     <extension

@@ -15,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 import org.mule.transport.legstar.model.CixsMuleComponent;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
 import com.legstar.cixs.gen.model.AbstractCixsService;
@@ -64,11 +65,23 @@ extends AbstractCixsMuleGeneratorWizardRunnable {
             (Mule2CixsGeneratorWizardPage) cixsGenWizardPage;
         setModel(page, genModel);
         genModel.setMuleHome(page.getMuleHome());
-        genModel.setHttpTransportParameters(
-                page.getCixsAdapterToHostHttpGroup().getHttpTransportParameters());
         genModel.setTargetJarDir(new File(page.getTargetJarDir()));
         genModel.setTargetMuleConfigDir(
                 new File(page.getTargetMuleConfigDir()));
+        
+        genModel.setSampleConfigurationTransport(
+                page.getSampleConfigurationTransport());
+        if (page.getSampleConfigurationTransport() == SampleConfigurationTransport.HTTP) {
+            genModel.setHttpTransportParameters(
+                    page.getCixsAdapterToHostHttpGroup().getHttpTransportParameters());
+        } else if (page.getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ) {
+            genModel.setWmqTransportParameters(
+                    page.getCixsAdapterToHostWmqGroup().getWmqTransportParameters());
+            
+            genModel.setSampleConfigurationHostMessagingType(
+                    page.getSampleConfigurationHostMessagingType());
+        }
+
         return genModel;
     }
 

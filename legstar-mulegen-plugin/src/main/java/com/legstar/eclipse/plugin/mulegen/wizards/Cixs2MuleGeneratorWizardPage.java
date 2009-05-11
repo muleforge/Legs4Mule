@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.eclipse.plugin.mulegen.Messages;
 import com.legstar.eclipse.plugin.mulegen.Activator;
@@ -31,8 +32,7 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
  * This page collects parameters needed for Cixs to Mule artifacts generation.
  *
  */
-public class Cixs2MuleGeneratorWizardPage
-extends AbstractCixsMuleGeneratorWizardPage {
+public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizardPage {
 
     /** Page name. */
     private static final String PAGE_NAME = "Cixs2MuleGeneratorWizardPage";
@@ -51,6 +51,9 @@ extends AbstractCixsMuleGeneratorWizardPage {
 
     /** HTTP Proxy client parameters. */
     private CixsHostToProxyHttpGroup mCixsHostToProxyHttpGroup;
+
+    /** WMQ Proxy client parameters. */
+    private CixsHostToProxyWmqGroup mCixsHostToProxyWmqGroup;
 
     /**
      * Construct the page.
@@ -101,10 +104,12 @@ extends AbstractCixsMuleGeneratorWizardPage {
         composite.setLayout(new RowLayout());
 
         mCixsHostToProxyHttpGroup = new CixsHostToProxyHttpGroup(this);
-
         mCixsHostToProxyHttpGroup.createButton(composite);
- 
         mCixsHostToProxyHttpGroup.createControls(container);
+
+        mCixsHostToProxyWmqGroup = new CixsHostToProxyWmqGroup(this);
+        mCixsHostToProxyWmqGroup.createButton(composite);
+        mCixsHostToProxyWmqGroup.createControls(container);
     }
 
     /** {@inheritDoc} */
@@ -116,10 +121,26 @@ extends AbstractCixsMuleGeneratorWizardPage {
                 PreferenceConstants.COBOL_SAMPLE_FOLDER));
 
         getUmoComponentTargetGroup().initControls();
+        getCixsHostToProxyHttpGroup().initControls();
+        getCixsHostToProxyWmqGroup().initControls();
+
         getUmoComponentTargetGroup().getButton().setSelection(true);
 
-        getCixsHostToProxyHttpGroup().initControls();
-        getCixsHostToProxyHttpGroup().getButton().setSelection(true);
+        /* Make sure one of the adapter transports groups is visible */
+        SampleConfigurationTransport sampleConfigurationTransport =
+            SampleConfigurationTransport.valueOf(getProjectPreferences().get(
+                    PreferenceConstants.PROXY_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
+                    getStore().getDefaultString(
+                            PreferenceConstants.PROXY_LAST_SAMPLE_CONFIGURATION_TRANSPORT)));
+                
+        if (sampleConfigurationTransport == SampleConfigurationTransport.HTTP) {
+            getCixsHostToProxyHttpGroup().getButton().setSelection(true);
+            getCixsHostToProxyWmqGroup().getButton().setSelection(false);
+        }
+        if (sampleConfigurationTransport == SampleConfigurationTransport.WMQ) {
+            getCixsHostToProxyHttpGroup().getButton().setSelection(false);
+            getCixsHostToProxyWmqGroup().getButton().setSelection(true);
+        }
     }
 
     /** {@inheritDoc} */
@@ -133,6 +154,7 @@ extends AbstractCixsMuleGeneratorWizardPage {
 
         getUmoComponentTargetGroup().createListeners();
         getCixsHostToProxyHttpGroup().createListeners();
+        getCixsHostToProxyWmqGroup().createListeners();
     }
 
     /** {@inheritDoc} */
@@ -140,6 +162,7 @@ extends AbstractCixsMuleGeneratorWizardPage {
 
         getUmoComponentTargetGroup().setVisibility();
         getCixsHostToProxyHttpGroup().setVisibility();
+        getCixsHostToProxyWmqGroup().setVisibility();
 
         getShell().layout(new Control[] {mTargetGroup, mDeploymentGroup});
 
@@ -151,7 +174,12 @@ extends AbstractCixsMuleGeneratorWizardPage {
             return false;
         }
         
-        if(!getCixsHostToProxyHttpGroup().validateControls()) {
+        if (getSampleConfigurationTransport() == SampleConfigurationTransport.HTTP
+                && !getCixsHostToProxyHttpGroup().validateControls()) {
+            return false;
+        }
+        if (getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ
+                && !getCixsHostToProxyWmqGroup().validateControls()) {
             return false;
         }
 
@@ -169,6 +197,10 @@ extends AbstractCixsMuleGeneratorWizardPage {
         
         getUmoComponentTargetGroup().storeProjectPreferences();
         getCixsHostToProxyHttpGroup().storeProjectPreferences();
+        getCixsHostToProxyWmqGroup().storeProjectPreferences();
+        getProjectPreferences().put(
+                PreferenceConstants.PROXY_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
+                getSampleConfigurationTransport().toString());
     }
 
     /**
@@ -199,4 +231,24 @@ extends AbstractCixsMuleGeneratorWizardPage {
         return mCixsHostToProxyHttpGroup;
     }
 
+    /**
+     * @return the WMQ Proxy client parameters
+     */
+    public CixsHostToProxyWmqGroup getCixsHostToProxyWmqGroup() {
+        return mCixsHostToProxyWmqGroup;
+    }
+
+    /**
+     * @return the client transport selected
+     */
+    public final SampleConfigurationTransport getSampleConfigurationTransport() {
+        if (getCixsHostToProxyHttpGroup().getSelection()) {
+            return SampleConfigurationTransport.HTTP;
+        }
+        if (getCixsHostToProxyWmqGroup().getSelection()) {
+            return SampleConfigurationTransport.WMQ;
+        }
+        return SampleConfigurationTransport.HTTP;
+    }
+    
 }

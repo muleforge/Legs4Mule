@@ -31,11 +31,14 @@ public class Messages extends NLS {
     public static String preference_user_jar_location_label;
     /** Mule configurations folder preference label.*/
     public static String preference_mule_config_folder_label;
-    /** Mainframe legstar listening URI label.*/
-    public static String preference_adapter_mainframe_uri_label;
     /** Cobol samples folder preference label.*/
     public static String preference_cobol_folder_label;
  
+    /** Preference page title.*/
+    public static String mulegen_proxy_preference_page_title;
+    /** Preference page description.*/
+    public static String preference_proxy_page_description;
+
     /** Proxy http scheme template preference label.*/
     public static String preference_proxy_http_scheme_label;
     /** Proxy http host template preference label.*/
@@ -44,6 +47,18 @@ public class Messages extends NLS {
     public static String preference_proxy_http_port_label;
     /** Proxy http path template preference label.*/
     public static String preference_proxy_http_path_template_label;
+
+    /** WMQ suffix for Queue name receiving requests label.*/
+    public static String preference_proxy_wmq_request_queue_suffix_label;
+    /** WMQ suffix for Queue name receiving replies label.*/
+    public static String preference_proxy_wmq_reply_queue_suffix_label;
+    /** WMQ suffix for Queue name receiving errors label.*/
+    public static String preference_proxy_wmq_error_queue_suffix_label;
+
+    /** Preference page title.*/
+    public static String mulegen_adapter_preference_page_title;
+    /** Preference page description.*/
+    public static String preference_adapter_page_description;
 
     /** The name filter to which this wizard is associated.*/
     public static String filename_filter;
@@ -134,9 +149,38 @@ public class Messages extends NLS {
     /** Invalid path.*/
     public static String invalid_http_path_msg;
 
+    /** Settings for WMQ group label.*/
+    public static String wmq_transport_group_label;
+    /** URL used to do naming lookups for WMQ resources label.*/
+    public static String wmq_jndi_url_label;
+    /** context factory class to do naming lookups for WMQ resources label.*/
+    public static String wmq_jndi_context_factory_label;
+    /** connection-factory used to lookup queues/topics in a naming directory (JNDI) label.*/
+    public static String wmq_connection_factory_label;
+    /** ZOS WMQ Queue Manager label.*/
+    public static String wmq_zos_queue_manager_label;
+    /** WMQ Queue name receiving requests label.*/
+    public static String wmq_request_queue_label;
+    /** WMQ Queue name receiving replies label.*/
+    public static String wmq_reply_queue_label;
+    /** WMQ Queue name receiving errors label.*/
+    public static String wmq_error_queue_label;
+
+    /** Invalid jndi url.*/
+    public static String invalid_wmq_jndi_url_msg;
+    /** Invalid JNDI context factory.*/
+    public static String invalid_wmq_jndi_context_factory_msg; 
+    /** Invalid connection factory.*/
+    public static String invalid_wmq_connection_factory_msg; 
+    /** Invalid queue manager. */
+    public static String invalid_wmq_zos_queue_manager_msg; 
+    /** Invalid request queue name. */
+    public static String invalid_wmq_target_queue_msg; 
+    /** Invalid reply queue name. */
+    public static String invalid_wmq_target_reply_queue_msg; 
     
-    /** Choice of sample Cobol Http client label.*/
-    public static String sample_cobol_http_client_type_label;
+    /** Choice of sample host messaging label.*/
+    public static String sample_adapter_host_messaging_type_label;
 
     static {
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);
