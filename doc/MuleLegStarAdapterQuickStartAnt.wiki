@@ -1,12 +1,16 @@
-h1. QuickStart ESB adapter for a CICS program.
+h1. QuickStart ESB adapter for a CICS program, using ant scripts.
 
 h2. QuickStart description
 
 The purpose of this quickstart document is to quickly build a functioning sample integrating Mule with a backend IBM CICS system.
 
-Once deployed, the generated ESB component will act as an adapter for the sample CICS COBOL program LSFILEAE. ESB clients can then consume the ESB component without any knowledge of the actual legacy backend system:
+Once deployed, the generated Mule service will act as an adapter for the sample CICS COBOL program LSFILEAE. ESB clients can then consume the Mule service without any knowledge of the actual legacy backend system:
 
-!Legs4Mule-quickstart-adapter.png!
+!Legs4Mule-quickstart-adapter-http.png!
+
+If you would rather use WebSphere MQ instead of HTTP as the wire protocol to reach the mainframe then the Mule configuration will be:
+
+!Legs4Mule-quickstart-adapter-wmq.png!
 
 h2. Installation
 
@@ -14,8 +18,6 @@ Follow instructions in:[InstallationInstructions]
 
 The installed CICS modules include the LSFILEAE COBOL sample program that we will be using for this quickstart.
 
-We will be using HTTP connectivity to CICS for this quickstart (Alternatively, you can use Sockets or Websphere MQ).
- 
 h2. Generate a Mule component adapter for a mainframe program
 
 These steps will guide you through the process of generating an ESB adapter using ant scripts. There is an alternative method, using Eclipse plugins, that will be described later.
@@ -34,27 +36,27 @@ Next step turns the XML schema types into Java annotated classes. This is achiev
 
  * From the ant folder, run command *ant -f build-coxb.xml*. This should create binding classes which can be used as an alternative to the JAXB classes to achieve high performances.
 
-The last step generates the lsfileaeBridgeUMO Mule component.
+The last step generates the transformers and Mule configuration.
 
-From the ant folder run command *ant -f build-mule2cixs.xml*. 
+From the ant folder run command *ant -f build-mule2cixs.xml*. By default, this script uses HTTP connectivity to CICS. For WebSphere MQ edit the script and follow directions.
 
-Under src/com/legstar/test/cixs/mule/lsfileae you will find the generated LsfileaeCallable.java source of the actual Mule component.
+Under src/com/legstar/test/cixs/mule/lsfileae you will find the generated transformer classes that turn java value objects or XML to mainframe byte arrays. These transformers can be used in any Mule configuration and are independant from the transport chosen.
 
 Under legstar_adapter, Mule configuration samples are generated:
 
- * mule-adapter-bridge-config-lsfileae.xml
+ * mule-adapter-config-lsfileae-http-java-legstar.xml
 
- Is the Mule configuration file. Notice that generated transformers are referenced. These transformers turn mainframe data to java objects.Access to mainframe uses the Mule Legstar transport which is based on HTTP.
+ Is the Mule configuration file. Notice that generated transformers are referenced. Access to mainframe uses the transport that you have chosen previously. The client is expected to send serialized java objects over an inbound TCP connection.
 
- * mule-adapter-standalone-config-lsfileae.xml
+ * mule-adapter-config-lsfileae-http-xml-legstar.xml
  
- Is an alternative to the previous configuration that you can use with the associated legstar-invoker-config.xml, if you need Socket or WebSphere MQ access to the mainframe.
+ Is an alternative where clients can send XML over TCP instead of serialized java objects.
 
-The ant folder contains the build.xml generated ant script which bundles the mule-legstar-lsfileae.jar file and deploys the generated component to your Mule installation (Defined by the MULE_HOME environment variable).
+The ant folder contains the build.xml generated ant script which bundles the mule-legstar-lsfileae.jar file and deploys the generated transformers to your Mule installation (Defined by the MULE_HOME environment variable).
 
-h2. Running the ESB component adapter
+h2. Running the Mule service adapter
 
-The src/org/mule/providers/legstar/test/lsfileae folder contains a LsfileaeBridgeTest.java program that you can use to invoke the newly deployed component.
+The src/org/mule/transport/legstar/test/lsfileae folder contains a LsfileaeHttpTest junit class that you can use to invoke the newly deployed component. This uses the Mule junit framework and will start a Mule instance as part of the test itself. You don't need to actually deploy the generated artifacts in order to run this test
 
-LsfileaeBridgeTest is a JUnit test using the Mule unit test framework so you don't need to actually deploy the component in order to run the test.
+LsfileaeHttpXmlTest is an alternative where the client sends XML rather than serialized Java objects.
 

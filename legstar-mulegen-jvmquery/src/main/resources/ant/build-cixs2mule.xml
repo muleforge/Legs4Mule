@@ -99,6 +99,10 @@
             sampleConfigurationTransport="HTTP"
             sampleCobolHttpClientType="DFHWBCLI"
           >
+            <!-- If you want MQ connectivity, change this
+                 parameter and the WMQ transport parameters below:
+                sampleConfigurationTransport="WMQ"
+            -->
             <!-- Only single operation services are supported. -->
             <cixsMuleComponent name="${mule.component}"
                 packageName="${package.name}">
@@ -127,6 +131,16 @@
                 path="/legstar/services/${mule.component}"
             />
             
+            <!-- WMQ transport parameters
+            <wmqTransportParameters
+                jndiUrl="file:///JNDI-Directory"
+                jndiContextFactory="com.sun.jndi.fscontext.RefFSContextFactory"
+                connectionFactory="ConnectionFactory"
+                zosQueueManager="CSQ1"
+                requestQueue="JVMQUERY.POJO.REQUEST.QUEUE"
+                replyQueue="JVMQUERY.POJO.REPLY.QUEUE"
+            />
+             -->
           
         </cixs2mulegen>
     
