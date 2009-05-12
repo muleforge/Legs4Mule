@@ -1,18 +1,19 @@
 h1. LegStar for Mule Distribution content
 
-This distribution provides a Mule transport for mainframe integration based on the [LegStar open-source legacy integration product|http://www.legsem.com/legstar].
-The distribution file contains the prerequisite LegStar modules in addition to the Mule transport.
+This distribution provides Mule transformers and transports for mainframe integration based on the [LegStar open-source legacy integration product|http://www.legsem.com/legstar].
+The distribution file contains the prerequisite LegStar core modules in addition to the LegStar for Mule modules.
 
-The transport is called legstar-mule-transport-x.jar, where x is the version number, under the lib sub-directory.
+The runtime classes are bundled in legstar-mule-transport-x.jar, where x is the version number, under the lib sub-directory.
 
-The distribution also contains a generation tool that creates ad-hoc Mule components. Such components are regular UMO components.
-Without such a tool, you would have to manually map a mainframe program input and output structures to a UMO input and output messages.
+The LegStar for Mule transport can be configured to use HTTP or WebSphere MQ as its underlying wire protocol to communicate with mainframes. Calls can be initiated from Mule or from the Mainframe.
 
-The LegStar for Mule generator tool also creates sample configuration files for Mule ready for testing.
+The distribution also contains a generation tool that creates ad-hoc Mule transformers. Without such a tool, you would have to manually map mainframe programs input and output COBOL structures to Mule input and output messages.
 
-The generated components can either be adapters, wrapping a mainframe program in a Mule component or proxies, giving mainframe programs outbound access to Mule services.
+The LegStar for Mule generator tool also creates sample Mule configuration files ready for testing.
 
-The generation tool is called legstar-mule-generator-x.jar, where x is the version number, under the *lib* sub-directory.
+Generated configurations implement either adapters, giving Mule clients access to mainframe programs or proxies, giving mainframe programs outbound access to Mule services.
+
+The generation tool classes are bundled in legstar-mule-generator-x.jar, where x is the version number, under the *lib* sub-directory.
 
 The *lib* sub-directory contains all the core LegStar libraries and their dependencies ready to compile your own services.
 
@@ -24,7 +25,7 @@ h1. Installing LegStar for Mule
 
 h2. Pre requisites
 
-LegStar for Mule requires at least Mule 1.4.4.
+LegStar for Mule requires at least Mule 2.2.1.
 
 If you want to use WebSphere MQ as a transport, you will need the following WebSphere MQ client libraries (to be copied to $MULE_HOME/lib/opt):
 
@@ -43,11 +44,17 @@ You should have Mule installed and the MULE_HOME environment variable should poi
 JRE 1.5+ and ANT 1.6.5+ are both prerequisites for LegStar.
 Make sure JAVA_HOME and ANT_HOME environment variables are set and that $JAVA_HOME/bin and $ANT_HOME/bin are both in you system path.
 
-You should have access to a CICS TS region where the CICS IVP resources, such as file FILEA (CSD group DFH$FILEA), are installed.
+In order to run the samples, you should have access to a CICS TS region where the CICS IVP resources, such as file FILEA (CSD group DFH$FILEA), are installed.
 
 h2. Installing zOS CICS modules
 
-This is a requirement for adapter services.
+This is a requirement for adapter services if you intend to use the LegStar HTTP protocol as shown in the following table. Otherwise, go to the next section.
+
+Do you need to install the LegStar zOS CICS modules?
+
+||                || *Adapters*           || *Proxies*      ||
+|| *HTTP*         | Yes                  | No             |
+|| *Websphere MQ* | No (with IBM CICS MQ Bridge) | No             |
 
 Download the LegStar [distribution for ZOS|http://www.legsem.com/legstar/legstar-distribution-zos/index.html].
  
@@ -63,7 +70,7 @@ Set the LEGSTAR_HOME environment variable to point to the installation sub-folde
 
 Update your LD_LIBRARY_PATH (PATH on windows) environment variable so that it contains $LEGSTAR_HOME/bin.
 
-h1. Go through the quickstart
+h1. Go through the quickstarts
 
 Start by the runtime quickstarts which will help you complete and validate your installation.
 
@@ -76,3 +83,8 @@ The legstar-adapter quickstart accesses a mainframe program from Mule and the le
 1. From legstar_adapter folder follow instructions in the readme.txt file.
 
 2. From legstar_proxy folder follow instructions in the readme.txt file.
+
+h2. Development time quickstarts
+
+They are described in the Documentation section of the [Legs4Mule home page|http://www.mulesource.org/display/LEGSTAR/Home].
+

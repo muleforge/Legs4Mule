@@ -4,11 +4,8 @@ Overview:
   to a mainframe program from an Mule component known as an adapter. This will
   also check that Mule and LegStar are properly configured.
   
-  The sample demonstrates 2 different setups:
-  - The bridge setup uses the Legs4Mule transport which uses HTTP as its underlying
-    protocol.
-  - The standalone setting uses regular LegStar transport and can use HTTP, Sockets
-    or WebSphere MQ.
+  The sample uses the Legs4Mule transport which uses HTTP as its underlying
+  protocol.
 
 Prerequisites:
 =============
@@ -22,7 +19,7 @@ Prerequisites:
 
 Settings:
 =========
-  Check parameters in legstar-invoker-config.xml and ant/build-mule2cixs.xml.
+  Check parameters in ant/build-mule2cixs.xml.
   Make sure connectivity parameters match your mainframe settings.
 
 Running this quickstart:

@@ -48,7 +48,7 @@ public class AntBuildCixs2MuleModelTest extends AbstractTestTemplate {
     public void testJvmqueryHttpGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-http");
+        muleComponent.setName(muleComponent.getName());
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(SampleConfigurationTransport.HTTP);

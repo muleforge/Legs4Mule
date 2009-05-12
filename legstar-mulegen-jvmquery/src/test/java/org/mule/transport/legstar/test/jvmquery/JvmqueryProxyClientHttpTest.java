@@ -11,21 +11,30 @@
 package org.mule.transport.legstar.test.jvmquery;
 
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+import org.apache.commons.httpclient.HttpClient;
+import org.apache.commons.httpclient.methods.ByteArrayRequestEntity;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.mule.tck.FunctionalTestCase;
 
-import com.legstar.test.client.ProxyClientHttp;
+import com.legstar.coxb.host.HostData;
 
 
 /**
- * Test the generated ESB.
+ * Test the generated proxy.
+ * <p/>
+ * This test simulates a mainframe HTTP request/response to a LegStar proxy.
  *
  */
 public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
 
-    /** Target ESB URL.*/
-    public static final String JVMQUERY_PROXY_URL = "http://${host}:8083/legstar/services/jvmquery-http";
+    /** Target proxy URL.*/
+    public static final String JVMQUERY_PROXY_URL = "http://localhost:8083/legstar/services/jvmquery";
 
-    /** Raw mainframe request. */
+    /** Raw mainframe request in hex. */
     public static final String MAINFRAME_REQUEST_DATA =
         /*0 0 0 2 M U L E _ H O M E - - - - - - - - - - - - - - - - - - -*/
         "00000002d4e4d3c56dc8d6d4c540404040404040404040404040404040404040"
@@ -34,7 +43,7 @@ public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
         /*  - - - - */
         + "40404040";
 
-    /** Expected raw mainframe response sample. */
+    /** Expected raw mainframe response in hex. */
     public static final String EXPECTED_MAINFRAME_RESPONSE_DATA =
         /* 0 0 0 2 F r a n c e - - - - - - - - - - - - - - - - - - - - - -*/
         "00000002c6998195838540404040404040404040404040404040404040404040"
@@ -54,7 +63,7 @@ public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-proxy-config-jvmquery-http-http.xml";
+        return "mule-proxy-config-jvmquery-http.xml";
     }
 
     /**
@@ -62,11 +71,34 @@ public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
      * @throws Exception if test fails
      */
     public void testRun() throws Exception {
-        ProxyClientHttp client = new ProxyClientHttp(JVMQUERY_PROXY_URL);
-        String response = client.invoke(MAINFRAME_REQUEST_DATA,
+        String response = invoke(MAINFRAME_REQUEST_DATA,
                 EXPECTED_MAINFRAME_RESPONSE_DATA.length() / 2);
         assertEquals(EXPECTED_MAINFRAME_RESPONSE_DATA.substring(0, 131),
                 response.substring(0, 131));
     }
 
+    /**
+     * Invoke the proxy deployed at the specified URL.
+     * @param mainframeRequestData a hex string of the raw mainframe data
+     * @param expectedResponseSize the size in bytes of the expected response
+     * @return a hex string of the mainframe response data
+     * @throws Exception if invoke fails
+     */
+    public String invoke(
+            final String mainframeRequestData,
+            final int expectedResponseSize) throws Exception {
+        HttpClient httpClient = new HttpClient();
+        PostMethod postMethod = new PostMethod(JVMQUERY_PROXY_URL);
+        ByteArrayRequestEntity requestEntity = new ByteArrayRequestEntity(
+                HostData.toByteArray(mainframeRequestData), "application/octet-stream");
+        postMethod.setRequestEntity(requestEntity);
+        if (200 != httpClient.executeMethod(postMethod)) {
+           throw new IOException(postMethod.getStatusText()); 
+        }
+        if (expectedResponseSize != postMethod.getResponseContentLength()) {
+            throw new IOException("Content length returned does not match");
+        }
+        return HostData.toHexString(postMethod.getResponseBody());
+    }
+    
 }

@@ -72,7 +72,7 @@
 
         <!-- Mule service Generator ant task -->
         <taskdef name="cixs2mulegen"
-            classname="org.mule.providers.legstar.gen.Cixs2MuleGenerator"
+            classname="org.mule.transport.legstar.gen.Cixs2MuleGenerator"
             classpathref="classpath" 
         /> 
 
@@ -96,7 +96,8 @@
             jaxbBinDir="${jaxb.bin.dir}"
             coxbBinDir="${coxb.bin.dir}"
             custBinDir="${cust.bin.dir}"
-            
+            sampleConfigurationTransport="HTTP"
+            sampleCobolHttpClientType="DFHWBCLI"
           >
             <!-- Only single operation services are supported. -->
             <cixsMuleComponent name="${mule.component}"
@@ -119,13 +120,13 @@
                 implementationName="${target.umo}"
             />
 
-            <!-- HTTP transport parameters
+            <!-- HTTP transport parameters -->
             <httpTransportParameters
-                host="legstar.com"
-                port="8765"
+                host="localhost"
+                port="8083"
                 path="/legstar/services/${mule.component}"
             />
-            -->
+            
           
         </cixs2mulegen>
     

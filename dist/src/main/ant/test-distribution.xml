@@ -30,9 +30,6 @@
         <!-- Distribution samples origin location   -->
         <property name="sample1.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/legstar_adapter" />
         <property name="sample2.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/legstar_proxy" />
-        <property name="sample3.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/chttprt" />
-        <property name="sample4.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/cmqrt" />
-        <property name="sample5.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/csokrt" />
     
     </target>
 
@@ -91,30 +88,6 @@
             <arg value="ant"/>
             <arg value="-f"/>
             <arg value="${sample2.dir}/build.xml"/>
-            <arg value="runtest"/>
-        </exec>
-        <exec executable="cmd" failonerror="true">
-            <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
-            <arg value="/c"/>
-            <arg value="ant"/>
-            <arg value="-f"/>
-            <arg value="${sample3.dir}/build.xml"/>
-            <arg value="runtest"/>
-        </exec>
-        <exec executable="cmd" failonerror="true">
-            <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
-            <arg value="/c"/>
-            <arg value="ant"/>
-            <arg value="-f"/>
-            <arg value="${sample4.dir}/build.xml"/>
-            <arg value="runtest"/>
-        </exec>
-        <exec executable="cmd" failonerror="true">
-            <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
-            <arg value="/c"/>
-            <arg value="ant"/>
-            <arg value="-f"/>
-            <arg value="${sample5.dir}/build.xml"/>
             <arg value="runtest"/>
         </exec>
 

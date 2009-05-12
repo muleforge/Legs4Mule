@@ -6,7 +6,7 @@
         <version>1.0-RC4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <artifactId>legstar-mulegen-jvmquery-http</artifactId>
+    <artifactId>legstar-mulegen-jvmquery</artifactId>
     <packaging>jar</packaging>
     <version>1.0-RC4-SNAPSHOT</version>
     <name>Sample Proxy for POJO JVMQuery over HTTP</name>

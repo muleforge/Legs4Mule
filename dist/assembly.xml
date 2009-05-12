@@ -72,35 +72,6 @@ Assembly descriptor for the full distribution.
         </fileSet>
 
         <!-- ==================================== -->
-        <!-- Includes the adapter transport samples.
-             The ant scripts that come with the adapter transport samples need to be overriden. -->
-        <fileSet>
-            <directory>${legstarTempLocation}/legstar-${legstarVersion}/samples/quickstarts</directory>
-            <outputDirectory>samples/mule/quickstarts</outputDirectory>
-            <includes>
-                <include>chttprt/**</include>
-                <include>cmqrt/**</include>
-                <include>csokrt/**</include>
-            </includes>
-            <excludes>
-                <exclude>**/build.xml</exclude>
-            </excludes>
-        </fileSet>
-        <fileSet>
-            <directory>src/main/ant/adapters/transports</directory>
-            <outputDirectory>samples/mule/quickstarts/chttprt</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>src/main/ant/adapters/transports</directory>
-            <outputDirectory>samples/mule/quickstarts/cmqrt</outputDirectory>
-        </fileSet>
-        <fileSet>
-            <directory>src/main/ant/adapters/transports</directory>
-            <outputDirectory>samples/mule/quickstarts/csokrt</outputDirectory>
-        </fileSet>
-        
-
-        <!-- ==================================== -->
         <!-- Includes the quickstart proxy sample -->
         <!-- Target POJO sources  -->
         <fileSet>
@@ -182,5 +153,6 @@ Assembly descriptor for the full distribution.
                 <exclude>com.sun.xml.ws:*</exclude>
             </excludes>
         </dependencySet>
+
      </dependencySets>
 </assembly>
