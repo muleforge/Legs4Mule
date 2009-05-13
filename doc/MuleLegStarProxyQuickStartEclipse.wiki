@@ -1,22 +1,24 @@
-h1. QuickStart ESB proxy for a CICS program, using HTTP and Eclipse plugins.
+h1. QuickStart ESB proxy for a CICS program, using Eclipse plugins.
 
 h2. QuickStart description
 
-This is an alternative to [MuleLegStarOutboundQuickStart] using Eclipse plugins rather than ant scripts.
+This is an alternative to [MuleLegStarProxyQuickStartAnt] using Eclipse plugins rather than ant scripts.
 
-Using Eclipse plugins, we will walk you through the process of integrating a backend IBM CICS system with a Mule component.
+Using Eclipse plugins, we will walk you through the process of integrating a backend IBM CICS system with a Mule service.
 
-Once deployed, the generated ESB component will act as a proxy for a CICS COBOL program. In this example, the COBOL program acts as a client and the proxy ESB component invokes a POJO (plain old java object) method on behalf of the COBOL client.
+Once deployed, the generated Mule service will act as a proxy for a CICS COBOL program. In this example, the COBOL program acts as a client and the proxy Mule service invokes a POJO (plain old java object) method on behalf of the COBOL client.
 
 !Legs4Mule-quickstart-proxy-http.png!
+
+If you would rather use WebSphere MQ instead of HTTP as the wire protocol to reach Mule from the mainframe then the Mule configuration will be:
+
+!Legs4Mule-quickstart-proxy-wmq.png!
 
 h2. Installation
 
 Follow instructions in:[InstallationInstructions].
 
 The src/com/legstar/xsdc/test/cases/jvmquery folder of your legstar-mule installation, contains a sample POJO called *JVMQuery.java*. As the name implies, JVMQuery queries a JVM for system variables such as environment variables and locale. A caller can specify an array of environment variables for which values should be queried. If you look at the *queryJvm* method, you will notice that it takes a single data object called *JVMQueryRequest* as input and produces a data object called *JVMQueryReply*.
-
-This example uses HTTP connectivity from CICS to Mule using the LegStar Mule transport.
 
 Start Eclipse and select menu option Help\-\->Software Updates\-\->Find and Install...
 
@@ -26,7 +28,7 @@ Create a *New Remote Site* named legstar-mule and have the URL point to: http://
  
 With this new site selected, when you press the finish button, you are presented with all the plugins you need. Select the entire LegStar group, click next, accept the license terms and then click finish which should end the installation process.
  
-h2. Generate a Mule component proxy for a mainframe program
+h2. Generate a Mule service proxy for a mainframe program
 
 Start by creating a new Java project called MuleJvmquery and select the project.
 
@@ -82,9 +84,9 @@ If you open *JvmQueryReply.java*, you will notice that classes exhibit annotatio
 
 !EclipseProxyBindingResults.png!
 
-h3. Generate an ESB component proxy for the JVMQuery POJO
+h3. Generate an Mule service proxy for the JVMQuery POJO
 
-The last step generates the queryJvmLocalUMO Mule component.
+The last step generates the queryJvmLocalUMO Mule service.
 
 With your MuleJvmquery project selected, select the Operations mapping plugin:
 
@@ -127,21 +129,29 @@ requests from the mainframe on the host name, port number and path provided here
 
 There is also a choice of COBOL client sample programs you can generate. These programs are examples you can use to invoke the component from your own program. DFHWBCLI is a simple API that comes with CICS since version TS 2.3 and is still available in recent CICS versions. The CICS WEB API is part of CICS since TS 3.1 and above. Finally, you can use the LegStar own HTTP client API. These are C libraries that are part of the LegStar z/OS distribution.
 
+As an alternative to HTTP, you can select WebSphere MQ connectivity to the mainframe:
+
+!EclipseMuleProxyGenerationPage1Wmq.png!
+
+If you selected WebSphere MQ rather than HTTP, the generated COBOL sample uses MQ APIs.
+
 When you are satisfied, click on Finish which will generate the Mule proxy: 
 
 !EclipseMuleProxyGenerationPage3.png!
 
-Under src/com/legstar/test/cixs/mule/jvmquery you will find a set of generated transformers such as *HostByteArrayToJvmQueryRequest.java* or *JvmQueryReplyToHostByteArray.java*. These are generated Mule transformers which are in charge of marshaling/unmarshaling the mainframe data into java data objects.
+Under src/com/legstar/test/cixs/mule/jvmquery you will find the generated transformer classes that turn java value objects or XML to mainframe byte arrays. These transformers can be used in any Mule configuration and are independant from the transport chosen.
 
-Under conf, Mule configuration samples are generated:
+Under legstar_proxy, a Mule configuration sample is generated:
 
- * mule-proxy-config-jvmquery.xml
+ * mule-proxy-config-jvmquery-http.xml
 
- Is the Mule component descriptor. This sample component implements a sequence of 3 actions in a Request/Response exchange pattern. The first action marshals the mainframe request data into a *JvmQueryRequest* java data object. The second one invokes the *queryJvm* method of the POJO using the standard Mule capabilities. Finally the third one unmarshals the *JvmQueryReply* java data object into a mainframe reply.
+ Is the Mule service descriptor. This implements a Request/Response exchange pattern. Upon receiving data from the mainframe, a transformer turns that data into a *JvmQueryRequest* java data object. On return from invoking the POJO, another transformer turns the *JvmQueryReply* java data object into a mainframe reply.
+
+ Check the connectivity parameters in the configuration file to see if they fit your needs.
 
 The ant folder contains the build.xml generated ant script which bundles the mule-legstar-jvmquery.jar file and deploys the generated component to your Mule installation (Defined by the MULE_HOME environment variable).
 
-h3. Test the ESB component proxy
+h3. Testing the Mule service proxy
 
 The *cobol* folder contains a generated skeleton COBOL CICS program that you can use to test the ESB proxy. Edit this code and perform the following changes:
 

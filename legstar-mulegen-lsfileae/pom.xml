@@ -27,6 +27,9 @@
                 <version>2.4.2</version>
                 <configuration>
                     <skipTests>${no-mainframe-available}</skipTests>
+                    <excludes> 
+                        <exclude>LsfileaeClientTest.java</exclude> 
+                    </excludes> 
                 </configuration>
             </plugin>
         </plugins>

@@ -56,7 +56,7 @@ Under legstar_proxy, a Mule configuration sample is generated:
 
 The ant folder contains the build.xml generated ant script which bundles the mule-legstar-jvmquery.jar file and deploys the generated component to your Mule installation (Defined by the MULE_HOME environment variable).
 
-h2. Running the Mule service proxy
+h2. Testing the Mule service proxy
 
 The *cobol* folder contains a generated skeleton COBOL CICS program that you can use to test the ESB proxy. Edit this code and perform the following changes:
 
