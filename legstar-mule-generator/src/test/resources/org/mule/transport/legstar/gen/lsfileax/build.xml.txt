@@ -25,11 +25,8 @@
          <fileset dir="target\classes">
             <include name="**/lsfileax/**/*.class"/>
          </fileset>
-         <fileset dir="target\src\gen\prop">
-            <include name="lsfileae.properties"/>
-         </fileset>
-         <fileset dir="target\src\gen\prop">
-            <include name="lsfileac.properties"/>
+         <fileset dir="target\src\gen\conf">
+            <include name="*.xml"/>
          </fileset>
       </jar>
    </target>

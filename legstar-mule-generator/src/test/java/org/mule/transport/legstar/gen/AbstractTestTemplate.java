@@ -57,9 +57,6 @@ public class AbstractTestTemplate extends TestCase {
     /** Web descriptors files will be generated here. */
     public static final File GEN_ANT_DIR = new File("target/src/gen/ant");
 
-    /** Properties files will be generated here. */
-    public static final File GEN_PROP_DIR = new File("target/src/gen/prop");
-
     /** Reference to jar files location. */
     public static final File GEN_JAR_DIR = new File("${env.MULE_HOME}/lib/user");
 

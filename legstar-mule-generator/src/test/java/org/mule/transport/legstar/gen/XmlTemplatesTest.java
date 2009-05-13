@@ -36,7 +36,6 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         getParameters().put("coxbBinDir", COXB_BIN_DIR.getPath());
         getParameters().put("targetBinDir", GEN_BIN_DIR.getPath());
         getParameters().put("custBinDir", CUST_BIN_DIR.getPath());
-        getParameters().put("targetPropDir", GEN_PROP_DIR.getPath());
         getParameters().put("targetMuleConfigDir", GEN_CONF_DIR.getPath());
     }
 

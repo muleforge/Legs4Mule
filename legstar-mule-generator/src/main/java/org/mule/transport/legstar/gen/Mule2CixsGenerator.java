@@ -48,13 +48,6 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
      * @throws CodeGenMakeException if input is invalid
      */
     public final void checkExtendedExtendedInput() throws CodeGenMakeException {
-        try {
-            CodeGenUtil.checkDirectory(
-                    getTargetPropDir(), true, "TargetPropDir");
-
-        } catch (IllegalArgumentException e) {
-            throw new CodeGenMakeException(e);
-        }
     }
 
     /** {@inheritDoc} */

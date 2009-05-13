@@ -41,7 +41,6 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
     private void initCixsMuleComponent(final CixsMuleComponent muleComponent) {
         mGenerator.setCixsMuleComponent(muleComponent);
         mGenerator.setTargetAntDir(GEN_ANT_DIR);
-        mGenerator.setTargetPropDir(GEN_PROP_DIR);
         mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
         mGenerator.setTargetSrcDir(GEN_SRC_DIR);
         mGenerator.setTargetJarDir(GEN_JAR_DIR);

@@ -19,6 +19,9 @@
          <fileset dir="target\classes">
             <include name="**/jvmquery/**/*.class"/>
          </fileset>
+         <fileset dir="target\src\gen\conf">
+            <include name="*.xml"/>
+         </fileset>
       </jar>
    </target>
 </project>

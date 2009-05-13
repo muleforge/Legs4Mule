@@ -43,10 +43,8 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     private void initCixsMuleComponent(final CixsMuleComponent muleComponent) {
         mGenerator.setCixsMuleComponent(muleComponent);
         mGenerator.setTargetAntDir(GEN_ANT_DIR);
-        mGenerator.setTargetPropDir(GEN_PROP_DIR);
         mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
         mGenerator.setTargetSrcDir(GEN_SRC_DIR);
-        mGenerator.setTargetPropDir(GEN_PROP_DIR);
         mGenerator.setTargetJarDir(GEN_JAR_DIR);
         mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
         mGenerator.setTargetBinDir(GEN_BIN_DIR);
@@ -141,15 +139,6 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         try {
             generator.getCixsMuleComponent().addCixsOperation(
                     Samples.getLsfileaeMuleComponent().getCixsOperations().get(0));
-            generator.execute();
-            fail();
-        } catch (Exception e) {
-            assertEquals("java.lang.IllegalArgumentException:"
-                    + " TargetPropDir: No directory name was specified",
-                    e.getCause().getMessage());
-        }
-        try {
-            generator.setTargetPropDir(GEN_PROP_DIR);
             generator.execute();
         } catch (Exception e) {
             fail(e.getMessage());

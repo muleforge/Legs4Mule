@@ -19,8 +19,8 @@
          <fileset dir="target\classes">
             <include name="**/lsfileal/**/*.class"/>
          </fileset>
-         <fileset dir="target\src\gen\prop">
-            <include name="lsfileal.properties"/>
+         <fileset dir="target\src\gen\conf">
+            <include name="*.xml"/>
          </fileset>
       </jar>
    </target>
