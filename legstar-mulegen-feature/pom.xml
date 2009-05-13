@@ -3,10 +3,10 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>1.0-RC4</version>
+        <version>1.0-RC5-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <version>1.0-RC4</version>
+    <version>1.0-RC5-SNAPSHOT</version>
     <artifactId>legstar-mulegen-feature</artifactId>
     <packaging>pom</packaging>
     <name>LegStar Mule Service Generator Eclipse feature</name>

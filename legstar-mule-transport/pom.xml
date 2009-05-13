@@ -3,12 +3,12 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>1.0-RC4</version>
+        <version>1.0-RC5-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mule-transport</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-RC4</version>
+    <version>1.0-RC5-SNAPSHOT</version>
     <name>LegStar for Mule Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>

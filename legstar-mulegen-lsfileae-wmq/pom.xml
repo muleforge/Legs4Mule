@@ -3,12 +3,12 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>1.0-RC4</version>
+        <version>1.0-RC5-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mulegen-lsfileae-wmq</artifactId>
     <packaging>jar</packaging>
-    <version>1.0-RC4</version>
+    <version>1.0-RC5-SNAPSHOT</version>
     <name>Sample Adapter for program LSFILEAE over WMQ</name>
     <description>Sample Adapter for program LSFILEAE which uses a COMMAREA with same input and output layout over WebSphere MQ</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
