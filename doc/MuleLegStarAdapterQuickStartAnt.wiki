@@ -16,9 +16,9 @@ h2. Installation
 
 Follow instructions in:[InstallationInstructions]
 
-The installed CICS modules include the LSFILEAE COBOL sample program that we will be using for this quickstart.
+If you installed the z/OS CICS modules, then the target LSFILEAE COBOL program is ready. Otherwise, the source is in the samples/mule/quickstarts/legstar_adapter/cobol sub-folder and you need to upload, compile and install it in CICS.
 
-h2. Generate a Mule component adapter for a mainframe program
+h2. Generate a Mule service adapter for a mainframe program
 
 These steps will guide you through the process of generating an ESB adapter using ant scripts. There is an alternative method, using Eclipse plugins, that will be described later.
 
@@ -54,9 +54,11 @@ Under legstar_adapter, Mule configuration samples are generated:
 
 The ant folder contains the build.xml generated ant script which bundles the mule-legstar-lsfileae.jar file and deploys the generated transformers to your Mule installation (Defined by the MULE_HOME environment variable).
 
-h2. Running the Mule service adapter
+h2. Testing the Mule service adapter
 
-The src/org/mule/transport/legstar/test/lsfileae folder contains a LsfileaeHttpTest junit class that you can use to invoke the newly deployed component. This uses the Mule junit framework and will start a Mule instance as part of the test itself. You don't need to actually deploy the generated artifacts in order to run this test
+The installation src/org/mule/transport/legstar/test/lsfileae folder contains the LsfileaeClientTest junit class that you can use to invoke the newly deployed component.
 
-LsfileaeHttpXmlTest is an alternative where the client sends XML rather than serialized Java objects.
+Alternatively, the src/org/mule/transport/legstar/test/lsfileae folder also contains LsfileaeHttpTest junit class that uses the Mule junit framework and will start a Mule instance as part of the test itself. You don't need to actually deploy the generated artifacts in order to run this test but you have to include the Mule libraries in your project classpath.
+
+LsfileaeHttpXmlTest is an alternative to LsfileaeHttpTest where the client sends XML rather than serialized Java objects.
 

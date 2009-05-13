@@ -3,7 +3,7 @@ h1. LegStar for Mule Distribution content
 This distribution provides Mule transformers and transports for mainframe integration based on the [LegStar open-source legacy integration product|http://www.legsem.com/legstar].
 The distribution file contains the prerequisite LegStar core modules in addition to the LegStar for Mule modules.
 
-The runtime classes are bundled in legstar-mule-transport-x.jar, where x is the version number, under the lib sub-directory.
+The runtime classes are bundled in legstar-mule-transport-x-dist.jar, where x is the version number, under the lib sub-directory. There is also a legstar-mule-transport-x.jar file but it does not contain dependencies.
 
 The LegStar for Mule transport can be configured to use HTTP or WebSphere MQ as its underlying wire protocol to communicate with mainframes. Calls can be initiated from Mule or from the Mainframe.
 
@@ -69,6 +69,8 @@ Unzip the distribution file to a location of your choice.
 Set the LEGSTAR_HOME environment variable to point to the installation sub-folder named legstar-mule-x (x being the version number).
 
 Update your LD_LIBRARY_PATH (PATH on windows) environment variable so that it contains $LEGSTAR_HOME/bin.
+
+Copy legstar-mule-transport-x-dist.jar to $MULE_HOME/lib/user.
 
 h1. Go through the quickstarts
 

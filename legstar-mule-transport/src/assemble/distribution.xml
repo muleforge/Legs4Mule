@@ -1,0 +1,40 @@
+<assembly>
+    <id>dist</id>
+    
+    <formats>
+        <format>jar</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+    <fileSets>
+
+        <fileSet>
+            <directory>src/main/resources</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>**</include>
+            </includes>
+        </fileSet>
+        
+    </fileSets>
+
+    <dependencySets>
+        <dependencySet>
+            <outputDirectory>/</outputDirectory>
+            <unpack>true</unpack>
+            <scope>runtime</scope>
+            <excludes>
+                <exclude>commons-beanutils:*</exclude>
+                <exclude>commons-collections:*</exclude>
+                <exclude>commons-jxpath:*</exclude>
+                <exclude>commons-lang:*</exclude>
+                <exclude>log4j:*</exclude>
+                <exclude>org.springframework:*</exclude>
+                <exclude>junit:*</exclude>
+                <exclude>javax.servlet:*</exclude>
+                <exclude>javax.resource:*</exclude>
+            </excludes>
+        </dependencySet>
+    </dependencySets>
+  
+</assembly>

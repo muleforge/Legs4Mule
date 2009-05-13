@@ -13,6 +13,31 @@
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
+    <build>
+        <plugins>
+             <!-- Assembly generation plugin.  -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId> 
+                <configuration>
+                    <!--<finalName>legstar-jbossesb</finalName> -->
+                    <appendAssemblyId>true</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>src/assemble/distribution.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
+                        <phase>package</phase> <!-- append to the packaging phase. -->
+                        <goals>
+                            <goal>attached</goal> <!-- goals == mojos -->
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
 
         <dependency>
