@@ -48,7 +48,7 @@
     
         <mule2cixsgen targetSrcDir="${antModel.targetSrcDir}"
             targetMuleConfigDir="${antModel.targetMuleConfigDir}"
-            targetPropDir="${antModel.targetPropDir}"
+            targetDistDir="${antModel.targetDistDir}"
             targetAntDir="${antModel.targetAntDir}"
             targetJarDir="${antModel.targetJarDir}"
             targetBinDir="${antModel.targetBinDir}"
@@ -87,15 +87,6 @@
                     />
 #end
                 </cixsOperation>
-#end
-#if ($antModel.cixsMuleComponent.muleStartupPathElements.size() > 0)
-                <muleStartupPathElement>
-                    <path>
-#foreach ($muleStartupPathElement in $antModel.cixsMuleComponent.muleStartupPathElements)
-                        <pathelement location="${muleStartupPathElement}"/>
-#end
-                    </path>
-                </muleStartupPathElement>
 #end
             </cixsMuleComponent>
 #if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("http")})

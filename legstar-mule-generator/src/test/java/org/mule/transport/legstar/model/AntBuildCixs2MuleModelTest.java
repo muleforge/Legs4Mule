@@ -99,7 +99,7 @@ public class AntBuildCixs2MuleModelTest extends AbstractTestTemplate {
                 "generate.xml");
 
         compare(mAntModel.getTargetAntDir(), "generate.xml",
-                mAntModel.getCixsMuleComponent().getInterfaceClassName());
+                mAntModel.getCixsMuleComponent().getName());
         runAnt(mAntModel.getTargetAntDir(), "generate.xml");
     }
     
@@ -129,7 +129,7 @@ public class AntBuildCixs2MuleModelTest extends AbstractTestTemplate {
         CodeGenUtil.checkDirectory(mAntModel.getJaxbBinDir(), true);
         mAntModel.setTargetSrcDir(new File(targetDir, "src/main/java"));
         mAntModel.setTargetBinDir(new File(targetDir, "target/classes"));
-        mAntModel.setTargetPropDir(new File(targetDir, "src/main/resources"));
+        mAntModel.setTargetDistDir(new File(targetDir, "target/dist"));
         mAntModel.setTargetMuleConfigDir(new File(targetDir, "src/main/resources"));
         mAntModel.setTargetJarDir(new File("${mule.home}/lib/user"));
         mAntModel.setTargetAntDir(new File(targetDir, "ant"));

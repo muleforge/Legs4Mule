@@ -66,6 +66,9 @@ public class AbstractTestTemplate extends TestCase {
     /** COBOL code will be generated here. */
     public static final File GEN_COBOL_DIR = new File("target/src/gen/cobol");
 
+    /** Distributable archives are generated here. */
+    public static final File GEN_DIST_DIR = new File("target/dist");
+    
     /** The host character set. */
     public static final String HOSTCHARSET = "IBM01140";
 

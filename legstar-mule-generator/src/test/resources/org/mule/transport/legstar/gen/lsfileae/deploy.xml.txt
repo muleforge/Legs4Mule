@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Deploy a distribution archive to Mule server.
+  -->
+<project basedir="." default="deploy-jar" name="deploy-jar">
+    <target name="create-jar">
+        <ant antfile="target\src\gen\ant/build-jar.xml"/>
+    </target>
+    <target name="deploy-jar" depends="create-jar">
+        <delete file="${env.MULE_HOME}\lib\user/legstar-lsfileae.jar"
+            includeEmptyDirs="true" quiet="true"/>
+        <copy file="target\dist/legstar-lsfileae.jar"
+            todir="${env.MULE_HOME}\lib\user"/>
+    </target>
+</project>

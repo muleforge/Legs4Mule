@@ -18,9 +18,8 @@ import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 import org.mule.transport.legstar.model.UmoComponentParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;
-import com.legstar.cixs.jaxws.gen.Cixs2JaxwsGenerator;
 import com.legstar.cixs.jaxws.gen.StructuresGenerator;
-import com.legstar.cixs.jaxws.model.CobolHttpClientType;
+import com.legstar.cixs.gen.model.options.CobolHttpClientType;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
 
@@ -105,21 +104,15 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             generateXmlToHostTransformers(
                     operation, parameters, operationClassFilesDir);
 
-            Cixs2JaxwsGenerator.generateCobolCicsClient(
-                    getCixsMuleComponent(), operation, parameters,
-                    getTargetCobolDir(),
-                    getSampleCobolHttpClientTypeInternal());
-                    
             /* Generate sample COBOL clients. */
             switch(getSampleConfigurationTransportInternal()) {
             case HTTP:
-                Cixs2JaxwsGenerator.generateCobolCicsClient(
+                generateCobolSampleHttpClient(
                         getCixsMuleComponent(), operation, parameters,
                         getTargetCobolDir(),
                         getSampleCobolHttpClientTypeInternal());
                 break;
             case WMQ:
-                /* TODO move to core legstar */
                 generateCobolSampleWmqClient(
                         getCixsMuleComponent(), operation, parameters,
                         getTargetCobolDir());

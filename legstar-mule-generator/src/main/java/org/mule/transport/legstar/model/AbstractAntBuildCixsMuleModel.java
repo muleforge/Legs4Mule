@@ -13,7 +13,7 @@ package org.mule.transport.legstar.model;
 import java.io.File;
 
 import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
-import com.legstar.cixs.jaxws.model.HttpTransportParameters;
+import com.legstar.cixs.gen.model.options.HttpTransportParameters;
 
 /**
  * Holds the set of parameters needed to generate an ant script file.

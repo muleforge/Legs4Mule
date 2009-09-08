@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Create an jar archive for a legstar component.
+  -->
+<project basedir="." default="create-jar" name="build-jar">
+   <target name="clean">
+      <delete file="target\dist/legstar-lsfileal.jar" includeEmptyDirs="true" quiet="true"/>
+   </target>
+   <target name="create-jar" depends="clean">
+      <jar destfile="target\dist/legstar-lsfileal.jar">
+            <!-- Generated Mule component binaries -->
+            <fileset dir="target\gen-classes">
+                <include name="org/mule/transport/legstar/test/lsfileal/*.class"/>
+            </fileset>
+            <!-- JAXB binaries -->
+            <fileset dir="target\classes"
+                includes="com/legstar/test/coxb/lsfileal/*.class"/>
+            <!-- Binding binaries -->
+            <fileset dir="target\classes"
+                includes="com/legstar/test/coxb/lsfileal/bind/*.class"/>
+            <!-- Mule configuration file -->
+            <fileset dir="target\src\gen\conf">
+                <include name="*.xml"/>
+            </fileset>
+      </jar>
+   </target>
+</project>

@@ -41,7 +41,7 @@
     
         <mule2cixsgen targetSrcDir="..\legstar-mulegen-lsfileac\src\main\java"
             targetMuleConfigDir="..\legstar-mulegen-lsfileac\src\main\resources"
-            targetPropDir="..\legstar-mulegen-lsfileac\src\main\resources"
+            targetDistDir="..\legstar-mulegen-lsfileac\target\dist"
             targetAntDir="..\legstar-mulegen-lsfileac\ant"
             targetJarDir="${mule.home}\lib\user"
             targetBinDir="..\legstar-mulegen-lsfileac\target\classes"

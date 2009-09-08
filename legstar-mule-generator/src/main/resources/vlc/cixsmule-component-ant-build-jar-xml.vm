@@ -3,7 +3,7 @@
 ##@author Fady
 ##@version 0.1
 ##/////////////////////////////////////////////////////////////////////
-##
+#set($jarFile = "${targetDistDir}/legstar-${muleComponent.name}.jar")
 ## ==================================================================
 ## Macro will help make sure we process packages only once
 ## ==================================================================
@@ -13,63 +13,63 @@
 #end
 #end
 ## ==================================================================
-## Create a list of unique jaxb package names
+## Create lists of unique jaxb,coxb,cust package names
+## ==================================================================
+#macro(addPackages $structures, $jaxbPackages, $coxbPackages, $custPackages)
+#foreach($structure in $structures)
+#set($newPackage = ${structure.jaxbPackageName})
+#addPackage($jaxbPackages, $newPackage)
+#set($newPackage = ${structure.coxbPackageName})
+#addPackage($coxbPackages, $newPackage)
+#if(${structure.custPackageName})
+#set($newPackage = ${structure.custPackageName})
+#addPackage($custPackages, $newPackage)
+#end
+#end
+#end
+## ==================================================================
+## Create a list of unique jaxb,coxb,cust package names
 ## ==================================================================
 #set($jaxbPackages = [])
-#foreach ($cixsOperation in $muleComponent.cixsOperations)
-#foreach ($cixsStructure in $cixsOperation.getInput())
-#set($newPackage = ${cixsStructure.jaxbPackageName})
-#addPackage($jaxbPackages, $newPackage)
-#end
-#foreach ($cixsStructure in $cixsOperation.getOutput())
-#set($newPackage = ${cixsStructure.jaxbPackageName})
-#addPackage($jaxbPackages, $newPackage)
-#end
-#end
-## ==================================================================
-## Create a list of unique coxb (binding) package names
-## ==================================================================
 #set($coxbPackages = [])
+#set($custPackages = [])
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-#foreach ($cixsStructure in $cixsOperation.getInput())
-#set($newPackage = ${cixsStructure.coxbPackageName})
-#addPackage($coxbPackages, $newPackage)
-#end
-#foreach ($cixsStructure in $cixsOperation.getOutput())
-#set($newPackage = ${cixsStructure.coxbPackageName})
-#addPackage($coxbPackages, $newPackage)
-#end
+#addPackages($cixsOperation.getInput(), $jaxbPackages, $coxbPackages, $custPackages)
+#addPackages($cixsOperation.getOutput(), $jaxbPackages, $coxbPackages, $custPackages)
 #end
 <?xml version="1.0" encoding="UTF-8"?>
-<project basedir=".." default="create-jar" name="build-jar">
-   <property environment="env"/>
-   <property name="jarFile" value="${targetJarDir}/mule-legstar-${muleComponent.name}.jar"/>
+<!-- =================================================================================
+     Create an jar archive for a legstar component.
+  -->
+<project basedir="${generateBaseDir}" default="create-jar" name="build-jar">
    <target name="clean">
       <delete file="${jarFile}" includeEmptyDirs="true" quiet="true"/>
    </target>
    <target name="create-jar" depends="clean">
       <jar destfile="${jarFile}">
+            <!-- Generated Mule component binaries -->
+            <fileset dir="${targetBinDir}">
+                <include name="${muleComponent.packageName.replace(".","/")}/*.class"/>
+            </fileset>
+            <!-- JAXB binaries -->
 #foreach ($jaxbPackage in $jaxbPackages)
-         <fileset dir="${jaxbBinDir}">
-            <include name="${jaxbPackage.replace(".","/")}/*.class"/>
-         </fileset>
+            <fileset dir="${jaxbBinDir}"
+                includes="${jaxbPackage.replace(".","/")}/*.class"/>
 #end
+            <!-- Binding binaries -->
 #foreach ($coxbPackage in $coxbPackages)
-         <fileset dir="${coxbBinDir}">
-            <include name="${coxbPackage.replace(".","/")}/*.class"/>
-         </fileset>
+            <fileset dir="${coxbBinDir}"
+                includes="${coxbPackage.replace(".","/")}/*.class"/>
 #end
-         <fileset dir="${targetBinDir}">
-            <include name="${muleComponent.packageName.replace(".","/")}/*.class"/>
-         </fileset>
-#if($targetBinDir != $custBinDir)
-         <fileset dir="${custBinDir}">
-            <include name="**/${muleComponent.name}/**/*.class"/>
-         </fileset>
+#foreach ($custPackage in $custPackages)
+            <!-- Custom binding binaries if they are external to the project -->
+            <fileset dir="${custBinDir}"
+                includes="${custPackage.replace(".","/")}/*.class"/>
 #end
-         <fileset dir="${targetMuleConfigDir}">
-            <include name="*.xml"/>
-         </fileset>
+            <!-- Mule configuration file -->
+            <fileset dir="${targetMuleConfigDir}">
+                <include name="*.xml"/>
+            </fileset>
       </jar>
    </target>
 </project>

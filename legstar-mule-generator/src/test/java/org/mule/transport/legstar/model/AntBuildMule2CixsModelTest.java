@@ -157,7 +157,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
         CodeGenUtil.checkDirectory(mAntModel.getJaxbBinDir(), true);
         mAntModel.setTargetSrcDir(new File(targetDir, "src/main/java"));
         mAntModel.setTargetBinDir(new File(targetDir, "target/classes"));
-        mAntModel.setTargetPropDir(new File(targetDir, "src/main/resources"));
+        mAntModel.setTargetDistDir(new File(targetDir, "target/dist"));
         mAntModel.setTargetMuleConfigDir(new File(targetDir, "src/main/resources"));
         mAntModel.setTargetJarDir(new File("${mule.home}/lib/user"));
         mAntModel.setTargetAntDir(new File(targetDir, "ant"));

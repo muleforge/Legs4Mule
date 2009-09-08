@@ -23,7 +23,9 @@ import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConf
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
 import com.legstar.cixs.gen.model.CixsOperation;
-import com.legstar.cixs.jaxws.model.HttpTransportParameters;
+import com.legstar.cixs.gen.model.options.CobolHttpClientType;
+import com.legstar.cixs.gen.model.options.HttpTransportParameters;
+import com.legstar.cixs.jaxws.gen.Cixs2JaxwsGenerator;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
 
@@ -39,6 +41,10 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     /** Velocity template for ant build jar. */
     public static final String COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE =
         "vlc/cixsmule-component-ant-build-jar-xml.vm";
+
+    /** Velocity template for service ant-deploy. */
+    public static final String COMPONENT_ANT_DEPLOY_VLC_TEMPLATE =
+        "vlc/cixsmule-component-ant-deploy-xml.vm";
 
     /** Velocity template for adapter mule configuration xml. */
     public static final String COMPONENT_ADAPTER_CONFIG_XML_VLC_TEMPLATE =
@@ -414,24 +420,87 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentAntFilesDir where to store the generated file
+     * @return the generated file name
      * @throws CodeGenMakeException if generation fails
      */
-    public static void generateAntBuildJar(
+    public static String generateAntBuildJar(
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentAntFilesDir)
     throws CodeGenMakeException {
+        String fileName = "build-jar.xml";
         generateFile(CIXS_MULE_GENERATOR_NAME,
                 COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
                 component,
                 parameters,
                 componentAntFilesDir,
-        "build.xml");
+                fileName);
+        return fileName;
+    }
+
+    /**
+     * Create the deploy Ant Build file.
+     * @param component the Mule component description
+     * @param parameters miscellaneous help parameters
+     * @param serviceAntFilesDir where to store the generated file
+     * @return the generated file name
+     * @throws CodeGenMakeException if generation fails
+     */
+    public static String generateAntDeploy(
+            final CixsMuleComponent component,
+            final Map < String, Object > parameters,
+            final File serviceAntFilesDir)
+    throws CodeGenMakeException {
+        String fileName = "deploy.xml";
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                COMPONENT_ANT_DEPLOY_VLC_TEMPLATE,
+                COMPONENT_MODEL_NAME,
+                component,
+                parameters,
+                serviceAntFilesDir,
+                fileName);
+        return fileName;
+    }
+    /**
+     * Create a COBOl CICS HTTP Client program to use for testing.
+     * TODO Move to core LegStar
+     * @param service the ESB service description
+     * @param operation the operation for which a program is to be generated
+     * @param parameters the set of parameters to pass to template engine
+     * @param cobolFilesDir location where COBOL code should be generated
+     * @param cobolHttpClientType the type of cobol http client to generate
+     * @throws CodeGenMakeException if generation fails
+     */
+    protected static void generateCobolSampleHttpClient(
+            final CixsMuleComponent service,
+            final CixsOperation operation,
+            final Map < String, Object > parameters,
+            final File cobolFilesDir,
+            final CobolHttpClientType cobolHttpClientType) throws CodeGenMakeException {
+        String template;
+        switch(cobolHttpClientType) {
+        case DFHWBCLI:
+            template = Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_DFHWBCLI_CLIENT_VLC_TEMPLATE;
+            break;
+        case WEBAPI:
+            template = Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_WEBAPI_CLIENT_VLC_TEMPLATE;
+            break;
+        default:
+            template = Cixs2JaxwsGenerator.OPERATION_COBOL_CICS_LSHTTAPI_CLIENT_VLC_TEMPLATE;
+        }
+        generateFile(CIXS_MULE_GENERATOR_NAME,
+                template,
+                COMPONENT_MODEL_NAME,
+                service,
+                parameters,
+                cobolFilesDir,
+                operation.getCicsProgramName() + ".cbl");
     }
 
     /**
      * Create a COBOl CICS WMQ Client program to use for testing.
+     * TODO Move to core LegStar
      * @param service the proxy service description
      * @param operation the operation for which a program is to be generated
      * @param parameters the set of parameters to pass to template engine
@@ -466,6 +535,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                 getTargetAntDir(), true, "TargetAntDir");
         CodeGenUtil.checkDirectory(
                 getTargetMuleConfigDir(), true, "TargetMuleConfigDir");
+        CodeGenUtil.checkDirectory(
+                getTargetDistDir(), true, "TargetDistDir");
 
         /* Check that we are provided with valid locations to
          * reference.*/
@@ -536,6 +607,8 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         File serviceAntFilesDir = getTargetAntDir();
 
         generateAntBuildJar(
+                getCixsMuleComponent(), parameters, serviceAntFilesDir);
+        generateAntDeploy(
                 getCixsMuleComponent(), parameters, serviceAntFilesDir);
 
         generateExtended(parameters);

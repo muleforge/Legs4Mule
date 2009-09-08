@@ -17,7 +17,6 @@ import org.mule.transport.legstar.model.CixsMuleComponent;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.jaxws.gen.Jaxws2CixsGenerator;
-import com.legstar.cixs.jaxws.model.WebServiceParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 
@@ -207,8 +206,7 @@ public class TransformersTemplatesTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         CixsOperation operation = muleComponent.getCixsOperations().get(0);
         File transformersDir = getTransformersDir(muleComponent);
-        getParameters().put(WebServiceParameters.WSDL_TARGET_NAMESPACE_PROPERTY,
-                Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
+        operation.setNamespace(Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
                 + '/' + muleComponent.getName());
         AbstractCixsMuleGenerator.generateHostToXmlTransformer(
                 operation, getParameters(), transformersDir,

@@ -20,7 +20,7 @@ import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConf
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
-import com.legstar.cixs.jaxws.model.HttpTransportParameters;
+import com.legstar.cixs.gen.model.options.HttpTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 /**
@@ -37,10 +37,13 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         getParameters().put("targetBinDir", GEN_BIN_DIR.getPath());
         getParameters().put("custBinDir", CUST_BIN_DIR.getPath());
         getParameters().put("targetMuleConfigDir", GEN_CONF_DIR.getPath());
+        getParameters().put("targetDistDir", GEN_DIST_DIR.getPath());
+        getParameters().put("generateBaseDir", ".");
+        getParameters().put("targetAntDir", GEN_ANT_DIR.getPath());
     }
 
     /**
-     * build.xml creates the mule component ready for deployment.
+     * build-jar.xml creates the mule component ready for deployment.
      * @throws Exception if generation fails
      */
     public void testAntBuildJar() throws Exception {
@@ -50,9 +53,26 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
         File componentAntFilesDir = new File(GEN_ANT_DIR, muleComponent.getName());
         CodeGenUtil.checkDirectory(componentAntFilesDir, true);
-        Mule2CixsGenerator.generateAntBuildJar(
+        String filename = Mule2CixsGenerator.generateAntBuildJar(
                 muleComponent, getParameters(), componentAntFilesDir);
-        compare(componentAntFilesDir, "build.xml",
+        compare(componentAntFilesDir, filename,
+                muleComponent.getName());
+    }
+
+    /**
+     * deploy.xml deploys the jar archive to a Mule server.
+     * @throws Exception if generation fails
+     */
+    public void testAntDeploy() throws Exception {
+
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        getParameters().put("generationTarget", "adapter");
+
+        File componentAntFilesDir = new File(GEN_ANT_DIR, muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentAntFilesDir, true);
+        String filename = Mule2CixsGenerator.generateAntDeploy(
+                muleComponent, getParameters(), componentAntFilesDir);
+        compare(componentAntFilesDir, filename,
                 muleComponent.getName());
     }
 

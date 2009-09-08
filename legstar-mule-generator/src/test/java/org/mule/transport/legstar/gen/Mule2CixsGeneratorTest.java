@@ -45,6 +45,7 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         mGenerator.setTargetAntDir(GEN_ANT_DIR);
         mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
         mGenerator.setTargetSrcDir(GEN_SRC_DIR);
+        mGenerator.setTargetDistDir(GEN_DIST_DIR);
         mGenerator.setTargetJarDir(GEN_JAR_DIR);
         mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
         mGenerator.setTargetBinDir(GEN_BIN_DIR);
@@ -114,6 +115,14 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         }
         try {
             generator.setTargetMuleConfigDir(GEN_CONF_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("TargetDistDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetDistDir(GEN_DIST_DIR);
             generator.execute();
             fail();
         } catch (Exception e) {
@@ -198,7 +207,9 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     private void checkResults(final CixsMuleComponent muleComponent) {
         
         compare(mGenerator.getTargetAntDir(),
-                "build.xml", muleComponent.getName());
+                "build-jar.xml", muleComponent.getName());
+        compare(mGenerator.getTargetAntDir(),
+                "deploy.xml", muleComponent.getName());
         
         String congFileName = AbstractCixsMuleGenerator.getAdapterConfigurationFileName(
                 muleComponent.getName(),

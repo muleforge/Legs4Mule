@@ -12,7 +12,7 @@ package org.mule.transport.legstar.model;
 
 import java.io.File;
 
-import com.legstar.cixs.jaxws.model.CobolHttpClientType;
+import com.legstar.cixs.gen.model.options.CobolHttpClientType;
 
 /**
  * This is a model for Cixs to Mule component generation. The generated 

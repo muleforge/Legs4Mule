@@ -42,7 +42,7 @@
     
         <cixs2mulegen targetSrcDir="..\legstar-mulegen-jvmquery\src\main\java"
             targetMuleConfigDir="..\legstar-mulegen-jvmquery\src\main\resources"
-            targetPropDir="..\legstar-mulegen-jvmquery\src\main\resources"
+            targetDistDir="..\legstar-mulegen-jvmquery\target\dist"
             targetAntDir="..\legstar-mulegen-jvmquery\ant"
             targetJarDir="${mule.home}\lib\user"
             targetBinDir="..\legstar-mulegen-jvmquery\target\classes"

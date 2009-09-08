@@ -49,7 +49,7 @@
     
         <cixs2mulegen targetSrcDir="${antModel.targetSrcDir}"
             targetMuleConfigDir="${antModel.targetMuleConfigDir}"
-            targetPropDir="${antModel.targetPropDir}"
+            targetDistDir="${antModel.targetDistDir}"
             targetAntDir="${antModel.targetAntDir}"
             targetJarDir="${antModel.targetJarDir}"
             targetBinDir="${antModel.targetBinDir}"

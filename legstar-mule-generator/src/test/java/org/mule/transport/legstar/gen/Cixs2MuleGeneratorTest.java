@@ -43,6 +43,7 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         mGenerator.setTargetAntDir(GEN_ANT_DIR);
         mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
         mGenerator.setTargetSrcDir(GEN_SRC_DIR);
+        mGenerator.setTargetDistDir(GEN_DIST_DIR);
         mGenerator.setTargetJarDir(GEN_JAR_DIR);
         mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
         mGenerator.setCoxbBinDir(COXB_BIN_DIR);
@@ -111,6 +112,14 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         }
         try {
             generator.setTargetMuleConfigDir(GEN_CONF_DIR);
+            generator.execute();
+            fail();
+        } catch (Exception e) {
+            assertEquals("TargetDistDir: No directory name was specified",
+                    e.getMessage());
+        }
+        try {
+            generator.setTargetDistDir(GEN_DIST_DIR);
             generator.execute();
             fail();
         } catch (Exception e) {
@@ -238,7 +247,9 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
     private void checkResults(final CixsMuleComponent muleComponent) throws Exception {
 
         compare(mGenerator.getTargetAntDir(),
-                "build.xml", muleComponent.getName());
+                "build-jar.xml", muleComponent.getName());
+        compare(mGenerator.getTargetAntDir(),
+                "deploy.xml", muleComponent.getName());
 
         String congFileName = AbstractCixsMuleGenerator.getProxyConfigurationFileName(
                 muleComponent.getName(),
@@ -294,10 +305,7 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
 
             String res = getSource(GEN_COBOL_DIR, 
                     operation.getCicsProgramName() + ".cbl");
-            /* The substring(1060) is necessary because the template is coming from
-             * core legstar and still has a variable part containing the date and
-             * time of generation. 1060 will get us beyond the cobol header.*/
-            assertEquals(expectedCobolRes.substring(1060), res.substring(1060));
+            assertEquals(expectedCobolRes, res);
         }
 
     }

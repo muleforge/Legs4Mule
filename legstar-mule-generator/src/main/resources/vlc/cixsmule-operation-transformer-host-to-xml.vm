@@ -5,6 +5,7 @@
 ##/////////////////////////////////////////////////////////////////////
 #parse("vlc/cixsmule-operation-transformer-common.vm")
 #set($transformerType = "HostTo${holderType}XmlMuleTransformer")
+#set($holderNamespace = ${cixsOperation.responseHolderNamespace})
 import com.legstar.coxb.transform.HostTransformException;
 import org.mule.transport.legstar.transformer.AbstractHostToXmlMuleTransformer;
 #if($holder)
@@ -49,7 +50,7 @@ public class ${transformerType} extends AbstractHostToXmlMuleTransformer {
 #if($holder)
     /** {@inheritDoc} */
     public QName getHolderQName() throws TransformerException {
-        return new QName("${wsdlTargetNamespace}",
+        return new QName("${holderNamespace}",
                 "${holderType}");
     }
 #end

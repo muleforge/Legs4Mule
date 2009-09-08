@@ -18,7 +18,6 @@ import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConf
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.jaxws.gen.Jaxws2CixsGenerator;
-import com.legstar.cixs.jaxws.model.WebServiceParameters;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
 
@@ -54,11 +53,6 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
     public void addExtendedParameters(final Map < String, Object > parameters) {
         parameters.put("generationTarget", GENERATION_TARGET);
 
-        /* Some artifacts like holders have XML markup. They need an XML namespace */
-        parameters.put(WebServiceParameters.WSDL_TARGET_NAMESPACE_PROPERTY,
-                Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
-                + '/' + getCixsService().getName());
-        
     }
 
     /**
@@ -116,6 +110,27 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
 
     }
 
+    /**
+     * Generate default values where they are missing in the model. This
+     * will reduce the amount of code in the velocity templates.
+     */
+    protected void completeModel() {
+        /* Some artifacts like holders have XML markup. They need an XML namespace */
+        getCixsService().setNamespace(
+                Jaxws2CixsGenerator.DEFAULT_WSDL_TARGET_NAMESPACE_PREFIX
+                + '/' + getCixsService().getName());
+
+        for (CixsOperation operation : getCixsService().getCixsOperations()) {
+            if (operation.getPackageName() == null 
+                    || operation.getPackageName().length() == 0) {
+                operation.setPackageName(getCixsService().getPackageName());
+            }
+            if (operation.getNamespace() == null 
+                    || operation.getNamespace().length() == 0) {
+                operation.setNamespace(getCixsService().getNamespace());
+            }
+        }
+    }
     /**
      * @return a good default path that the host could use to reach
      *  the generated service adapter
