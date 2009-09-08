@@ -111,6 +111,17 @@ Assembly descriptor for the full distribution.
                 <include>*.properties</include>
             </includes>
         </fileSet>
+
+        <!-- ======================================================== -->
+        <!-- Special transport assembly that bundles all dependencies -->
+        <fileSet>
+            <directory>../legstar-mule-transport/target</directory>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>*-dist.jar</include>
+            </includes>
+        </fileSet>
+
     </fileSets>
 
     <files>

@@ -2,30 +2,32 @@ h1. LegStar for Mule
 
 h2. Overview
 
-Legs4Mule is a Mule transport for IBM mainframes, based on the [LegStar open-source mainframe integration|http://www.legsem.com/legstar] project.
+LegStar for Mule provides Transformers and Transports for IBM mainframes. It is based on the [LegStar open-source mainframe integration|http://www.legsem.com/legstar] project.
 
-Legs4Mule has design time features that generates artifacts for Mule. These artifacts can be deployed as Mule UMOs of 2 types:
+Legs4Mule has design time features that generate artifacts for Mule:
 
-* Mainframe Adapters gives access to a remote mainframe program from any ESB client
-
-* Mainframe proxies give mainframe programs access to ESB UMO components
+* Generated Transformers are standard Mule transformers that turn mainframe data, described by COBOL structures, into Java objects or XML. These transformers use the [LegStar COBOL binding features, based on JAXB|http://www.legsem.com/legstar/legstar-coxbgen/].
+* Generated Mainframe Adapters services give Mule clients access to mainframe programs over HTTP or WebSphere MQ.
+* Generated Mainframe Proxy services give mainframe programs access to Mule components over HTTP or WebSphere MQ.
 
 h2. Benefits
 
 * End-to-end open-source mainframe integration solution
-* Bi-directional, mainframe acts as server for Mule clients or as client for Mule UMOs
-* Binary wire protocol between Mule and the mainframe, reduces overhead
 * Flexible COBOL binding framework based on Java binding (JAXB)
+* Completely integrated in Mule 2.0, using the same configuration framework
+* Bi-directional, mainframe acts as server for Mule clients or as client for Mule services
+* Choice of HTTP or WebSphere MQ wire protocols to reach the mainframe
+* Binary wire protocol between Mule and the mainframe, reduces overhead
 
 h2. Status
 
-Legs4Mule 1.0-RC3 is available for download from [here|http://dist.muleforge.org/legstar-transport/].
+Legs4Mule 1.0-RC4 is available for download from [here|http://dist.muleforge.org/legstar-transport/].
 
-Version 1.0-RC3 has been tested with Mule 1.4.4.
+Version 1.0-RC4 has been tested with Mule 2.2.1.
 
 The project is seeking contributors.
 
-h3. Documentation
+h2. Documentation
 
 [Installation instructions|InstallationInstructions]
 
@@ -36,4 +38,12 @@ h3. Documentation
 [Quickstart for mainframe adapter using Eclipse|MuleLegStarAdapterQuickStartEclipse]
 
 [Quickstart for mainframe proxy using Eclipse|MuleLegStarProxyQuickStartEclipse]
+
+h2. Links
+
+* [Training and support|http://www.legsem.com/]
+* [PL/I to COBOL Structure converter|http://code.google.com/p/legstar-pli2cob/]
+
+
+
 
