@@ -3,13 +3,13 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>1.0-RC5-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mulegen-site</artifactId>
     <packaging>pom</packaging>
     <name>LegStar for Mule Generator Eclipse site</name>
-    <version>1.0-RC5-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <description>Mule Generator Eclipse site.</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
@@ -36,6 +36,19 @@
                                     <property name="legstarMuleVersion" value="${pom.parent.version}" />
                                     <property name="muleVersion" value="${muleVersion}" />
                                 </ant>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!-- Populate Eclipse site -->
+                        <id>populate-site</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="${basedir}/src/main/ant/populate-site.xml" />
                             </tasks>
                         </configuration>
                         <goals>

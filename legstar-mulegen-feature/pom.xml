@@ -3,17 +3,28 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>1.0-RC5-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <version>1.0-RC5-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <artifactId>legstar-mulegen-feature</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
     <name>LegStar Mule Service Generator Eclipse feature</name>
     <description>Mule Service Generator Eclipse feature.</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
     <build>
+
+        <!-- Follows Eclipse features naming convention (except for SNAPSHOTS). -->
+        <finalName>com.legstar.eclipse.feature.mulegen_${project.version}</finalName>
+        <resources>
+            <resource>
+                <directory>${project.basedir}</directory>
+                <includes>
+                    <include>feature.xml</include>
+                </includes>
+            </resource>
+        </resources>
 
         <plugins>
 

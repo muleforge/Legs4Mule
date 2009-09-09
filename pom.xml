@@ -3,13 +3,13 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-RC5-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>LegStar for Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>2.2.1</muleVersion>
         <legstarVersion>1.2.6</legstarVersion>
-        <legstarMuleVersion>1.0-RC5-SNAPSHOT</legstarMuleVersion>
+        <legstarMuleVersion>1.0.0-SNAPSHOT</legstarMuleVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 

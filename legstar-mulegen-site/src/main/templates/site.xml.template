@@ -1,27 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<site>
+<site associateSitesURL="http://www.legsem.com/legstar/eclipse/update/legstarsites.xml">
    <description url="http://www.legsem.com/legstar/mule/eclipse/update/">
       LegStar Mule Eclipse plugins
    </description>
    <feature url="features/com.legstar.eclipse.feature.mulegen_@LEGSTAR-MULE-PLUGIN-VERSION@.jar" id="com.legstar.eclipse.feature.mulegen" version="@LEGSTAR-MULE-PLUGIN-VERSION@">
-      <category name="LegStar"/>
+      <category name="LegStar for Mule"/>
    </feature>
-   <feature url="http://www.legsem.com/legstar/eclipse/update/features/com.legstar.eclipse.feature.common_@LEGSTAR-VERSION@.jar" id="com.legstar.eclipse.feature.common" version="@LEGSTAR-PLUGIN-VERSION@">
-      <category name="LegStar"/>
-   </feature>
-   <feature url="http://www.legsem.com/legstar/eclipse/update/features/com.legstar.eclipse.feature.schemagen_@LEGSTAR-VERSION@.jar" id="com.legstar.eclipse.feature.schemagen" version="@LEGSTAR-PLUGIN-VERSION@">
-      <category name="LegStar"/>
-   </feature>
-   <feature url="http://www.legsem.com/legstar/eclipse/update/features/com.legstar.eclipse.feature.coxbgen_@LEGSTAR-VERSION@.jar" id="com.legstar.eclipse.feature.coxbgen" version="@LEGSTAR-PLUGIN-VERSION@">
-      <category name="LegStar"/>
-   </feature>
-   <feature url="http://www.legsem.com/legstar/eclipse/update/features/com.legstar.eclipse.feature.cixsmap_@LEGSTAR-VERSION@.jar" id="com.legstar.eclipse.feature.cixsmap" version="@LEGSTAR-PLUGIN-VERSION@">
-      <category name="LegStar"/>
-   </feature>
-   <feature url="http://www.legsem.com/legstar/eclipse/update/features/com.legstar.eclipse.feature.jaxwsgen_@LEGSTAR-VERSION@.jar" id="com.legstar.eclipse.feature.jaxwsgen" version="@LEGSTAR-PLUGIN-VERSION@">
-      <category name="LegStar"/>
-   </feature>
-   <category-def name="LegStar" label="LegStar Eclipse plugins">
+   <category-def name="LegStar for Mule" label="LegStar for Mule Eclipse Tools">
       <description>
          Features available as Eclipse plugins
       </description>

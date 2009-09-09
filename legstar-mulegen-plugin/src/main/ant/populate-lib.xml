@@ -1,0 +1,23 @@
+<!-- =================================================================================
+     This script brings in dependencies into the plugin lib folder.
+     This is needed because the plugin needs to pick these dependencies as resources.
+ -->
+<project basedir="../../.." default="populateLib" name="populate-lib">
+
+    <target name="populateLib">
+
+        <echo message="Populating Eclipse plugin lib"/>
+        <copy todir="${basedir}/lib">
+            <fileset dir="${basedir}/../legstar-mule-transport/target">
+                <include name="*.jar"/>
+                <exclude name="*-dist.jar"/>
+                <exclude name="*-sources.jar"/>
+            </fileset>
+            <fileset dir="${basedir}/../legstar-mule-generator/target">
+                <include name="*.jar"/>
+                <exclude name="*-sources.jar"/>
+            </fileset>
+        </copy>
+  
+  </target>
+</project>

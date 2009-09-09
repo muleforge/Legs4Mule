@@ -13,7 +13,7 @@
             property="legstarMulePluginVersion" 
             input="${legstarMuleVersion}" 
             regexp="(\d|\.)-(.*)" 
-            replace="\1\.0\.\2"
+            replace="\1\.\2"
             defaultValue="${legstarMuleVersion}"
         /> 
         <propertyregex 

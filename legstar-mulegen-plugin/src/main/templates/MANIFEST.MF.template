@@ -20,5 +20,4 @@ Bundle-ClassPath: .,
  lib/legstar-mule-generator-@LEGSTAR-MULE-VERSION@.jar,
  lib/legstar-mule-transport-@LEGSTAR-MULE-VERSION@.jar,
  lib/mule-core-@MULE-VERSION@.jar,
- lib/mule-transport-http-@MULE-VERSION@.jar,
- lib/legstar-common-plugin-@LEGSTAR-PLUGIN-VERSION@.jar
+ lib/mule-transport-http-@MULE-VERSION@.jar
