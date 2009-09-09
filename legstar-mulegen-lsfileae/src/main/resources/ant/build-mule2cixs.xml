@@ -34,8 +34,8 @@
         <property name="ant.dir" value="ant"/>
         <!-- Generated Mule configurations target location   -->
         <property name="conf.dir" value="."/>
-        <!-- Generated Properties files target location   -->
-        <property name="prop.dir" value="."/>
+        <!-- Generated distribution archives files target location   -->
+        <property name="dist.dir" value="dist"/>
         
         <!-- Jar files target location   -->
         <property name="jar.dir" value="${mule.home}/lib/user"/>
@@ -83,7 +83,7 @@
     
         <mule2cixsgen targetSrcDir="${src.dir}"
             targetMuleConfigDir="${conf.dir}"
-            targetPropDir="${prop.dir}"
+            targetDistDir="${dist.dir}"
             targetAntDir="${ant.dir}"
             targetJarDir="${jar.dir}"
             targetBinDir="${bin.dir}"

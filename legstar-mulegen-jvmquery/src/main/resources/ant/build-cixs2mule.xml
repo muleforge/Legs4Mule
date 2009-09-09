@@ -42,6 +42,8 @@
         <!-- Generated COBOL code target location   -->
         <property name="cobol.dir" value="cobol"/>
         
+        <!-- Generated distribution archives files target location   -->
+        <property name="dist.dir" value="dist"/>
         <!-- Jar files target location   -->
         <property name="jar.dir" value="${mule.home}/lib/user"/>
 
@@ -90,6 +92,7 @@
         <cixs2mulegen targetSrcDir="${src.dir}"
             targetMuleConfigDir="${conf.dir}"
             targetCobolDir="${cobol.dir}"
+            targetDistDir="${dist.dir}"
             targetAntDir="${ant.dir}"
             targetJarDir="${jar.dir}"
             targetBinDir="${bin.dir}"
