@@ -11,11 +11,10 @@
 package com.legstar.eclipse.plugin.mulegen.preferences;
 
 import org.eclipse.jface.preference.DirectoryFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
 
+import com.legstar.eclipse.plugin.cixscom.preferences.AbstractCixsPreferencePage;
 import com.legstar.eclipse.plugin.mulegen.Messages;
 import com.legstar.eclipse.plugin.mulegen.Activator;
 
@@ -33,14 +32,13 @@ import com.legstar.eclipse.plugin.mulegen.Activator;
  * be accessed directly via the preference store.
  */
 
-public class MuleCixsPreferencePage extends FieldEditorPreferencePage
-implements IWorkbenchPreferencePage {
+public class MuleCixsPreferencePage extends AbstractCixsPreferencePage {
 
     /**
      * Constructs a preference page.
      */
     public MuleCixsPreferencePage() {
-        super(GRID);
+        super();
         setPreferenceStore(Activator.getDefault().getPreferenceStore());
         setDescription(Messages.preference_page_description);
     }
@@ -52,6 +50,8 @@ implements IWorkbenchPreferencePage {
      * restore itself.
      */
     public void createFieldEditors() {
+
+        super.createFieldEditors();
 
         addField(new DirectoryFieldEditor(
                 PreferenceConstants.MULE_INSTALL_FOLDER,
