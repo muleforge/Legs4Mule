@@ -19,7 +19,6 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId> 
                 <configuration>
-                    <!--<finalName>legstar-jbossesb</finalName> -->
                     <appendAssemblyId>true</appendAssemblyId>
                     <descriptors>
                         <descriptor>src/assemble/distribution.xml</descriptor>
@@ -40,71 +39,86 @@
 
     <dependencies>
 
+        <!-- Mule core  -->
         <dependency>
-            <groupId>commons-configuration</groupId>
-            <artifactId>commons-configuration</artifactId>
+            <groupId>org.mule</groupId>
+            <artifactId>mule-core</artifactId>
         </dependency>
-
+        <!-- Mule client  -->
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-client</artifactId>
+        </dependency>
+        <!-- Mule spring configuration  -->
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-spring-config</artifactId>
+        </dependency>
+        <!-- Mule spring beans  -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>
+        <!-- Mule HTTP transport  -->
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-http</artifactId>
         </dependency>
-
+        <!-- Mule JMS transport  -->
         <dependency>
             <groupId>org.mule.transports</groupId>
             <artifactId>mule-transport-jms</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-module-client</artifactId>
-        </dependency>
+        <!-- We use ClassUtils -->
+        <dependency> 
+            <groupId>commons-lang</groupId> 
+            <artifactId>commons-lang</artifactId> 
+        </dependency> 
 
-        <dependency>
-            <groupId>org.mule</groupId>
-            <artifactId>mule-core</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-        </dependency>
-
+        <!-- LegStar binding API -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-coxbapi</artifactId>
         </dependency>
-
+        <!-- LegStar binding runtime -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-coxbrt</artifactId>
         </dependency>
-
+        <!-- LegStar messaging -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-messaging</artifactId>
         </dependency>
-
+        <!-- LegStar MQ transport (we need the MQCIH classes) -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-cmqrt</artifactId>
         </dependency>
+        <!-- LegStar Mock transport (needed by legstar-mock) -->
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-cmockrt</artifactId>
+        </dependency>
 
+        <!-- Mule functional tests  -->
         <dependency>
             <groupId>org.mule.tests</groupId>
             <artifactId>mule-tests-functional</artifactId>
         </dependency>
-
+        <!-- Mock objects  -->
         <dependency>
             <groupId>mockobjects</groupId>
             <artifactId>mockobjects-core</artifactId>
         </dependency>
 
+        <!-- LegStar JAXB test cases  -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-jaxbgen-cases</artifactId>
         </dependency>
-
+        <!-- LegStar Binding test cases  -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-coxbgen-cases</artifactId>
