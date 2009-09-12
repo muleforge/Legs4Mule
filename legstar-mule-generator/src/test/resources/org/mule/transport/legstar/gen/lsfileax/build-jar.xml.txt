@@ -3,11 +3,14 @@
      Create an jar archive for a legstar component.
   -->
 <project basedir="." default="create-jar" name="build-jar">
-   <target name="clean">
-      <delete file="target\dist/legstar-lsfileax.jar" includeEmptyDirs="true" quiet="true"/>
-   </target>
+
+    <target name="clean">
+        <delete file="target\dist/legstar-lsfileax.jar" includeEmptyDirs="true" quiet="true"/>
+    </target>
+
    <target name="create-jar" depends="clean">
-      <jar destfile="target\dist/legstar-lsfileax.jar">
+        <mkdir dir="target\dist"/>
+        <jar destfile="target\dist/legstar-lsfileax.jar">
             <!-- Generated Mule component binaries -->
             <fileset dir="target\gen-classes">
                 <include name="org/mule/transport/legstar/test/lsfileax/*.class"/>
@@ -26,6 +29,6 @@
             <fileset dir="target\src\gen\conf">
                 <include name="*.xml"/>
             </fileset>
-      </jar>
-   </target>
+        </jar>
+    </target>
 </project>
