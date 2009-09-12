@@ -47,8 +47,9 @@ public class LsfileaeClientTest extends TestCase {
     public void testLsfileae() throws Exception {
         byte[] request = getSerializedJavaRequest();
 
-        Socket socket = new Socket("localhost", 3210);
+        Socket socket = new Socket("megamouss", 3210);
         socket.setSoTimeout(3000);
+        socket.setTcpNoDelay(true);
 
         OutputStream socketOut = socket.getOutputStream();
         DataOutputStream dos = new DataOutputStream(socketOut);
