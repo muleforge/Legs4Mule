@@ -101,6 +101,11 @@
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-cmockrt</artifactId>
         </dependency>
+        <!-- LegStar TCP transport (we need the CIM definition) -->
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-csokrt</artifactId>
+        </dependency>
 
         <!-- Mule functional tests  -->
         <dependency>

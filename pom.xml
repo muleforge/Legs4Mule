@@ -554,6 +554,13 @@
                 <version>${legstarVersion}</version>
             </dependency>
 
+            <!-- LegStar Standard TCP transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-csokrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
             <!-- LegStar Service Model -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>

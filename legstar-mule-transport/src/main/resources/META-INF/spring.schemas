@@ -1,2 +1,3 @@
 http\://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd=META-INF/mule-legstar-1.0.xsd
 http\://www.legsem.com/legstar/xml/mule-legstar-mock-1.0.xsd=META-INF/mule-legstar-mock-1.0.xsd
+http\://www.legsem.com/legstar/xml/mule-legstar-tcp-1.0.xsd=META-INF/mule-legstar-tcp-1.0.xsd

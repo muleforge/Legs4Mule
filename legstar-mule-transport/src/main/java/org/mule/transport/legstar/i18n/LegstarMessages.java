@@ -223,4 +223,11 @@ public class LegstarMessages extends MessageFactory {
     public Message mqcihNonZeroCompCode(final int compcode) {
         return createMessage(BUNDLE_PATH, MSG_NUM_19);
     }
+
+    /**
+     * @return Mule message has invalid body
+     */
+    public Message invalidBodyMessage() {
+        return createMessage(BUNDLE_PATH, 20);
+    }
 }

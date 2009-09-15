@@ -7,7 +7,7 @@ import org.mule.api.endpoint.OutboundEndpoint;
 import org.mule.api.transport.DispatchException;
 import org.mule.transport.AbstractMessageDispatcher;
 import org.mule.transport.DefaultMessageAdapter;
-import org.mule.transport.legstar.mock.i18n.LegstarMockMessages;
+import org.mule.transport.legstar.i18n.LegstarMessages;
 
 import com.legstar.messaging.LegStarConnection;
 import com.legstar.messaging.LegStarMessage;
@@ -23,8 +23,8 @@ public class LegstarMockMessageDispatcher extends AbstractMessageDispatcher {
     /** A simulated mainframe connection. */
     private LegStarConnection _mockConnection;
     
-    /** Localized messages. */
-    private static final LegstarMockMessages I18N = new LegstarMockMessages();
+    /** Localized common messages. */
+    private static final LegstarMessages I18N_COMMON = new LegstarMessages();
     
     /**
      * Constructor.
@@ -69,7 +69,7 @@ public class LegstarMockMessageDispatcher extends AbstractMessageDispatcher {
                     legstarReplyMessage.toByteArray());
             return new DefaultMuleMessage(adapter);
         } else {
-            throw new DispatchException(I18N.invalidBodyMessage(),
+            throw new DispatchException(I18N_COMMON.invalidBodyMessage(),
                     requestMuleMessage, event.getEndpoint());  
         }
     }

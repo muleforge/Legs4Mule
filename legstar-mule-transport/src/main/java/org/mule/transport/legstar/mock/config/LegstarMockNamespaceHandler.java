@@ -9,6 +9,7 @@ import org.mule.endpoint.URIBuilder;
  * and supporting endpoint elements.
  */
 public class LegstarMockNamespaceHandler extends AbstractMuleNamespaceHandler {
+
     /** {@inheritDoc} */
     public void init() {
         /* This creates handlers for 'endpoint', 'outbound-endpoint' and 'inbound-endpoint' elements.

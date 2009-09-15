@@ -8,17 +8,17 @@
  * LICENSE.txt file.
  */
 
-package org.mule.transport.legstar.mock;
+package org.mule.transport.legstar.tcp;
 
 import org.mule.api.endpoint.InboundEndpoint;
 import org.mule.tck.AbstractMuleTestCase;
 
 
 /**
- * Tests the creation of the LegstarMockConnector instance by Mule.
+ * Tests the creation of the LegstarTcpConnector instance by Mule.
  *
  */
-public class LegstarMockConnectorFactoryTestCase extends AbstractMuleTestCase {
+public class LegstarTcpConnectorFactoryTestCase extends AbstractMuleTestCase {
 
     /* For general guidelines on writing transports see
        http://mule.mulesource.org/display/MULE/Writing+Transports */
@@ -27,12 +27,12 @@ public class LegstarMockConnectorFactoryTestCase extends AbstractMuleTestCase {
      * Simulates the way Mule will create the connector.
      * @throws Exception if creation fails
      */
-    public void testCreateFromFactory() throws Exception  {
+    public void testCreateFromFactory() throws Exception {
         InboundEndpoint endpoint = muleContext.getRegistry()
                 .lookupEndpointFactory().getInboundEndpoint(getEndpointURI());
         assertNotNull(endpoint);
         assertNotNull(endpoint.getConnector());
-        assertTrue(endpoint.getConnector() instanceof LegstarMockConnector);
+        assertTrue(endpoint.getConnector() instanceof LegstarTcpConnector);
         assertEquals(getEndpointURI(), endpoint.getEndpointURI().getAddress());
     }
 
@@ -40,7 +40,7 @@ public class LegstarMockConnectorFactoryTestCase extends AbstractMuleTestCase {
      * @return a sample URI for the mock transport
      */
     public String getEndpointURI() {
-        return "legstar-mock://localhost";
+        return "legstar-tcp://localhost:1234";
     }
 
 }

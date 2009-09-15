@@ -10,7 +10,6 @@
 
 package org.mule.transport.legstar.mock.i18n;
 
-import org.mule.config.i18n.Message;
 import org.mule.config.i18n.MessageFactory;
 
 /**
@@ -19,13 +18,7 @@ import org.mule.config.i18n.MessageFactory;
 public class LegstarMockMessages extends MessageFactory {
 
     /** Bundle is legstar-mock-messages.properties. */
-    private static final String BUNDLE_PATH = getBundlePath("legstar-mock");
+    //private static final String BUNDLE_PATH = getBundlePath("legstar-mock");
 
-    /**
-     * @return Mule message has invalid body
-     */
-    public Message invalidBodyMessage() {
-        return createMessage(BUNDLE_PATH, 1);
-    }
 
 }

@@ -8,27 +8,27 @@
  * LICENSE.txt file.
  */
 
-package org.mule.transport.legstar.mock;
+package org.mule.transport.legstar.tcp;
 
 import org.mule.api.transport.Connector;
 import org.mule.transport.AbstractConnectorTestCase;
 
 /**
- * Direct test of the mock connector.
+ * Direct test of the tcp connector.
  *
  */
-public class LegstarMockConnectorTestCase extends AbstractConnectorTestCase {
+public class LegstarTcpConnectorTestCase extends AbstractConnectorTestCase {
 
     /** {@inheritDoc} */
     public Connector createConnector() throws Exception {
-        LegstarMockConnector c = new LegstarMockConnector();
+        LegstarTcpConnector c = new LegstarTcpConnector();
         c.setName("Test");
         return c;
     }
 
     /** {@inheritDoc} */
     public String getTestEndpointURI() {
-        return "legstar-mock://localhost";
+        return "legstar-tcp://localhost:1234";
     }
 
     /** {@inheritDoc} */
@@ -36,5 +36,17 @@ public class LegstarMockConnectorTestCase extends AbstractConnectorTestCase {
         return new String("mok message").getBytes();
     }
 
+
+    /**
+     * test setting and retrieving any custom properties.
+     * @throws Exception if test fails.
+     */
+    public void testProperties() throws Exception {
+        assertTrue(getConnector().isSyncEnabled("legstar-tcp"));
+    }
+
+    /** {@inheritDoc} */
+    public void testConnectorMessageRequesterFactory() throws Exception {
+    }
 
 }

@@ -35,7 +35,6 @@ public class LegstarMockEndpointTestCase extends AbstractMuleTestCase {
         assertEquals("legstar-mock://localhost", endpointUri.getAddress());
         assertEquals(-1, endpointUri.getPort());
         assertEquals("localhost", endpointUri.getHost());
-        assertEquals("legstar-mock://localhost", endpointUri.getAddress());
         assertEquals(0, endpointUri.getParams().size());
     }
 

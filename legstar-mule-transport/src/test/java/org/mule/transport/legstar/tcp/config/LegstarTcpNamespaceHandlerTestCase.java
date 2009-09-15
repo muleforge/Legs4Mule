@@ -7,28 +7,27 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.transport.legstar.mock.config;
+package org.mule.transport.legstar.tcp.config;
 
 import org.mule.tck.FunctionalTestCase;
-import org.mule.transport.legstar.mock.LegstarMockConnector;
+import org.mule.transport.legstar.tcp.LegstarTcpConnector;
 
 /**
- * Test for LegstarMockNamespaceHandler.
+ * Test for LegstarTcpNamespaceHandlerTestCase.
  */
-public class LegstarMockNamespaceHandlerTestCase extends FunctionalTestCase {
-    
+public class LegstarTcpNamespaceHandlerTestCase extends FunctionalTestCase {
+
     /** {@inheritDoc} */
     protected String getConfigResources() {
-        return "legstar-mock-namespace-config.xml";
+        return "legstar-tcp-namespace-config.xml";
     }
 
     /**
      * Creates a connector from a spring configuration.
      * @throws Exception if creation fails
      */
-    public void testLegstarMockConfig() throws Exception {
-        LegstarMockConnector c = 
-            (LegstarMockConnector) muleContext.getRegistry().lookupConnector("legstarMockConnector");
+    public void testLegstarTcpConfig() throws Exception {
+        LegstarTcpConnector c = (LegstarTcpConnector) muleContext.getRegistry().lookupConnector("legstarTcpConnector");
         assertNotNull(c);
         assertTrue(c.isConnected());
         assertTrue(c.isStarted());
