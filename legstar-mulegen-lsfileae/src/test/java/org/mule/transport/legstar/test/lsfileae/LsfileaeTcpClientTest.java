@@ -33,7 +33,7 @@ import com.legstar.test.coxb.lsfileae.ObjectFactory;
  * <p/>
  * Client sends/receive serialized java objects.
  */
-public class LsfileaeClientTest extends TestCase {
+public class LsfileaeTcpClientTest extends TestCase {
 
     /** This is part of Mule safe protocol over TCP.*/
     public static final String COOKIE = "You are using SafeProtocol";

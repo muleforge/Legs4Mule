@@ -13,9 +13,9 @@ package org.mule.transport.legstar.gen;
 import java.io.File;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
-import org.mule.transport.legstar.model.WmqTransportParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 /**

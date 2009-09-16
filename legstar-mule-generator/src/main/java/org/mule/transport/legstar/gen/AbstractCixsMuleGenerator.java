@@ -16,7 +16,6 @@ import java.util.Map;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel;
-import org.mule.transport.legstar.model.WmqTransportParameters;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
@@ -25,6 +24,7 @@ import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.gen.model.options.CobolHttpClientType;
 import com.legstar.cixs.gen.model.options.HttpTransportParameters;
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.cixs.jaxws.gen.Cixs2JaxwsGenerator;
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
@@ -802,19 +802,19 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * @param httpTransportParameters the set of WMQ transport parameters
+     * @param wmqTransportParameters the set of WMQ transport parameters
      */
     public void setWmqTransportParameters(
-            final WmqTransportParameters httpTransportParameters) {
-        getAntModel().setWmqTransportParameters(httpTransportParameters);
+            final WmqTransportParameters wmqTransportParameters) {
+        getAntModel().setWmqTransportParameters(wmqTransportParameters);
     }
 
     /**
-     * @param httpTransportParameters the set of WMQ transport parameters
+     * @param wmqTransportParameters the set of WMQ transport parameters
      */
     public void addWmqTransportParameters(
-            final WmqTransportParameters httpTransportParameters) {
-        getAntModel().setWmqTransportParameters(httpTransportParameters);
+            final WmqTransportParameters wmqTransportParameters) {
+        getAntModel().setWmqTransportParameters(wmqTransportParameters);
     }
 
     /**

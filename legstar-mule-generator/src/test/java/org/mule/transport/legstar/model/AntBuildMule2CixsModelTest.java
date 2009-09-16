@@ -19,6 +19,7 @@ import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConf
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 /**
@@ -76,6 +77,38 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
                 "CICS01.BRIDGE.REQUEST.QUEUE");
         mAntModel.getWmqTransportParameters().setReplyQueue(
                 "CICS01.BRIDGE.REPLY.QUEUE");
+
+        processAnt();
+    }
+
+    /**
+     * Adapter case for an LSFILEAE program over legstar-mule TCP.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeTcpGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        muleComponent.setName(muleComponent.getName() + "-tcp");
+        initCixsMuleComponent(muleComponent);
+
+        mAntModel.setSampleConfigurationTransport(
+                SampleConfigurationTransport.TCP);
+
+        processAnt();
+    }
+
+    /**
+     * Adapter case for an LSFILEAE program over legstar-mule MOCK.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeMockGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
+        muleComponent.setName(muleComponent.getName() + "-mock");
+        initCixsMuleComponent(muleComponent);
+
+        mAntModel.setSampleConfigurationTransport(
+                SampleConfigurationTransport.MOCK);
 
         processAnt();
     }

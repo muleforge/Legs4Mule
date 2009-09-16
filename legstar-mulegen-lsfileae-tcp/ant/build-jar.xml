@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Create an jar archive for a legstar component.
+  -->
+<project basedir="D:\Legsem\Legstar\mule\legstar-transport\legstar-mule-generator" default="create-jar" name="build-jar">
+
+    <target name="clean">
+        <delete file="D:\Legsem\Legstar\mule\legstar-transport\legstar-mulegen-lsfileae-tcp\target\dist/legstar-lsfileae-tcp.jar" includeEmptyDirs="true" quiet="true"/>
+    </target>
+
+   <target name="create-jar" depends="clean">
+        <mkdir dir="D:\Legsem\Legstar\mule\legstar-transport\legstar-mulegen-lsfileae-tcp\target\dist"/>
+        <jar destfile="D:\Legsem\Legstar\mule\legstar-transport\legstar-mulegen-lsfileae-tcp\target\dist/legstar-lsfileae-tcp.jar">
+            <!-- Generated Mule component binaries -->
+            <fileset dir="D:\Legsem\Legstar\mule\legstar-transport\legstar-mulegen-lsfileae-tcp\target\classes">
+                <include name="org/mule/transport/legstar/test/lsfileae/*.class"/>
+            </fileset>
+            <!-- JAXB binaries -->
+            <fileset dir="D:\Legsem\Legstar\mule\legstar-transport\legstar-mulegen-lsfileae-tcp\target\classes"
+                includes="com/legstar/test/coxb/lsfileae/*.class"/>
+            <!-- Binding binaries -->
+            <fileset dir="D:\Legsem\Legstar\mule\legstar-transport\legstar-mulegen-lsfileae-tcp\target\classes"
+                includes="com/legstar/test/coxb/lsfileae/bind/*.class"/>
+            <!-- Mule configuration file -->
+            <fileset dir="D:\Legsem\Legstar\mule\legstar-transport\legstar-mulegen-lsfileae-tcp\src\main\resources">
+                <include name="*.xml"/>
+            </fileset>
+        </jar>
+    </target>
+</project>

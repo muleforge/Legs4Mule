@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
+import org.mule.transport.legstar.model.options.TcpTransportParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.jaxws.gen.Jaxws2CixsGenerator;
@@ -47,11 +48,17 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
      * @throws CodeGenMakeException if input is invalid
      */
     public final void checkExtendedExtendedInput() throws CodeGenMakeException {
+        if (getSampleConfigurationTransport().equalsIgnoreCase("tcp")) {
+            getTcpTransportParameters().check();
+        }
     }
 
     /** {@inheritDoc} */
     public void addExtendedParameters(final Map < String, Object > parameters) {
         parameters.put("generationTarget", GENERATION_TARGET);
+        if (getSampleConfigurationTransport().equalsIgnoreCase("tcp")) {
+            getAntModel().getTcpTransportParameters().add(parameters);
+        }
 
     }
 
@@ -63,21 +70,11 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
     public final void generateExtended(
             final Map < String, Object > parameters) throws CodeGenMakeException {
 
+        /* Produce mule configuration samples  */
+
         /* Determine target files locations */
         File componentConfFilesDir = getTargetMuleConfigDir();
 
-        for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
-        {
-
-            /* Determine target files locations */
-            File operationClassFilesDir = CodeGenUtil.classFilesLocation(
-                    getTargetSrcDir(), operation.getPackageName(), true);
-
-            Jaxws2CixsGenerator.generateHolders(
-                    operation, parameters, operationClassFilesDir);
-        }
-
-        /* Produce mule configuration samples  */
         generateAdapterConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir,
                 getSampleConfigurationTransportInternal(),
@@ -89,23 +86,27 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
                 SampleConfigurationPayloadType.XML,
                 getSampleConfigurationHostMessagingTypeInternal());
 
+        /* Produce transformers and holders classes  */
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations())
         {
             /* Determine target files locations */
-            File transformersDir = CodeGenUtil.classFilesLocation(
+            File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(),
                     operation.getPackageName(),
                     true);
 
+            Jaxws2CixsGenerator.generateHolders(
+                    operation, parameters, operationClassFilesDir);
+
             generateHostToJavaTransformers(
-                    operation, parameters, transformersDir);
+                    operation, parameters, operationClassFilesDir);
             generateJavaToHostTransformers(
-                    operation, parameters, transformersDir);
+                    operation, parameters, operationClassFilesDir);
 
             generateHostToXmlTransformers(
-                    operation, parameters, transformersDir);
+                    operation, parameters, operationClassFilesDir);
             generateXmlToHostTransformers(
-                    operation, parameters, transformersDir);
+                    operation, parameters, operationClassFilesDir);
         }
 
     }
@@ -131,11 +132,42 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
             }
         }
     }
+
     /**
      * @return a good default path that the host could use to reach
      *  the generated service adapter
      */
     public final String getDefaultServiceHttpPath() {
         return AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH;
+    }
+
+    /**
+     * @return the set of WMQ transport parameters
+     */
+    public TcpTransportParameters getTcpTransportParameters() {
+        return getAntModel().getTcpTransportParameters();
+    }
+
+    /**
+     * @param tcpTransportParameters the set of TCP transport parameters
+     */
+    public void setTcpTransportParameters(
+            final TcpTransportParameters tcpTransportParameters) {
+        getAntModel().setTcpTransportParameters(tcpTransportParameters);
+    }
+
+    /**
+     * @param tcpTransportParameters the set of TCP transport parameters
+     */
+    public void addTcpTransportParameters(
+            final TcpTransportParameters tcpTransportParameters) {
+        getAntModel().setTcpTransportParameters(tcpTransportParameters);
+    }
+
+    /**
+     * @return the model representing all generation parameters
+     */
+    public AntBuildMule2CixsModel getAntModel() {
+        return (AntBuildMule2CixsModel) super.getAntModel();
     }
 }

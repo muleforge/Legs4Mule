@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This Mule configuration implements an adapter service for a mainframe program.
-      Clients of this Mule service are expected to send serialized java objects over TCP.
+      Clients of this Mule service are expected to send serialized java objects over HTTP.
       Transport from Mule service to mainframe is JMS/WebSphere MQ.
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
-        xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
+        xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
         xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
+        xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
     xsi:schemaLocation=
         "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
-         http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
+         http://www.mulesource.org/schema/mule/http/2.2 http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd
+         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
          http://www.mulesource.org/schema/mule/jms/2.2 http://www.mulesource.org/schema/mule/jms/2.2/mule-jms.xsd
-         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd" >
+        ">
 
     <description>Mule configuration for lsfileae adapter service</description>
 
@@ -27,13 +28,13 @@
         numberOfConsumers="1" >
     </jms:connector>
 
-    <tcp:endpoint name="lsfileaeClientEndpoint" synchronous="true"
-        address="tcp://localhost:3210" />
+    <http:endpoint name="lsfileaeClientEndpoint" synchronous="true"
+        address="http://localhost:3280/lsfileae" />
 
-    <jms:endpoint name="MainframeRequestEndpoint" synchronous="true"
+    <jms:endpoint name="mainframeRequestEndpoint" synchronous="true"
         queue="CICSA.REQUEST.QUEUE" />
 
-    <jms:endpoint name="MainframeReplyEndpoint"
+    <jms:endpoint name="mainframeReplyEndpoint"
         queue="CICSA.REPLY.QUEUE" />
 
     <model name="lsfileaeModel">
@@ -48,14 +49,14 @@
             </inbound>
             <outbound>
                 <pass-through-router>
-                    <outbound-endpoint ref="MainframeRequestEndpoint" >
+                    <outbound-endpoint ref="mainframeRequestEndpoint" >
                         <transformers>
                             <legstar:java-to-host-transformer
                                 hostCharset="IBM01140"
                                 class="org.mule.transport.legstar.test.lsfileae.DfhcommareaToHostMuleTransformer" />
                             <legstar:host-to-legstar-transformer
                                 hostCharset="IBM01140"
-                                replyTo="MainframeReplyEndpoint"
+                                replyTo="mainframeReplyEndpoint"
                             >
                                 <legstar:host-program
                                     name="LSFILEAE"

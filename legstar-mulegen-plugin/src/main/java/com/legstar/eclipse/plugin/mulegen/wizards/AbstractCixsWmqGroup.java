@@ -18,7 +18,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-import org.mule.transport.legstar.model.WmqTransportParameters;
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsControlsGroup;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 import com.legstar.eclipse.plugin.common.wizards.AbstractWizardPage;

@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.mule.transport.legstar.mock;
 
-import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 import org.mule.api.MuleMessage;
 import org.mule.module.client.MuleClient;
 import org.mule.tck.FunctionalTestCase;
 import org.mule.tck.functional.FunctionalTestComponent;
+import org.mule.transport.http.ReleasingInputStream;
 
 import com.legstar.test.coxb.LsfileaeCases;
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
@@ -55,11 +55,11 @@ public class LegstarMockFunctionalTestCase extends FunctionalTestCase {
         MuleMessage result = client.send("lsfileaeClientEndpoint",
                 getJavaRequest(), null);
 
-        /* The TCP transport sends back a java serialized object */
+        /* The HTTP transport sends back a java serialized object */
         assertTrue(null == result.getExceptionPayload());
-        assertTrue(result.getPayload() instanceof byte[]);
+        assertTrue(result.getPayload() instanceof ReleasingInputStream);
         ObjectInputStream in = new ObjectInputStream(
-                new ByteArrayInputStream((byte[]) result.getPayload()));
+                (ReleasingInputStream) result.getPayload());
         Dfhcommarea reply = (Dfhcommarea) in.readObject();
         LsfileaeCases.checkJavaObjectReply100(reply);
     }

@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.mule.transport.legstar.test.lsfileal;
 
-import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 import org.mule.module.client.MuleClient;
 import org.mule.tck.FunctionalTestCase;
+import org.mule.transport.http.ReleasingInputStream;
 import org.mule.api.MuleMessage;
 
 import com.legstar.test.coxb.LsfilealCases;
@@ -48,7 +48,7 @@ public class LsfilealHttpTest extends FunctionalTestCase {
                 "lsfilealClientEndpoint",
                 getJavaObjectRequest(), null);
         ObjectInputStream in = new ObjectInputStream(
-                new ByteArrayInputStream((byte[]) message.getPayload()));
+                (ReleasingInputStream) message.getPayload());
         checkJavaObjectReply((ReplyData) in.readObject());
         
     }

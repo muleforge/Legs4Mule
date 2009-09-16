@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.mule.transport.legstar.test.lsfileax;
 
-import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 import org.mule.module.client.MuleClient;
 import org.mule.tck.FunctionalTestCase;
+import org.mule.transport.http.ReleasingInputStream;
 import org.mule.api.MuleMessage;
 
 import com.legstar.test.coxb.LsfileacCases;
@@ -50,7 +50,7 @@ public class LsfileaxHttpTest extends FunctionalTestCase {
                 "lsfileacClientEndpoint",
                 getJavaObjectLsfileacRequest(), null);
         ObjectInputStream in = new ObjectInputStream(
-                new ByteArrayInputStream((byte[]) message.getPayload()));
+                (ReleasingInputStream) message.getPayload());
         checkJavaObjectLsfileacReply((LsfileacResponseHolder) in.readObject());
         
     }
@@ -66,7 +66,7 @@ public class LsfileaxHttpTest extends FunctionalTestCase {
                 "lsfileaeClientEndpoint",
                 getJavaObjectLsfileaeRequest(), null);
         ObjectInputStream in = new ObjectInputStream(
-                new ByteArrayInputStream((byte[]) message.getPayload()));
+                (ReleasingInputStream) message.getPayload());
         checkJavaObjectLsfileaeReply((Dfhcommarea) in.readObject());
         
     }

@@ -14,6 +14,7 @@ import java.io.File;
 
 import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
 import com.legstar.cixs.gen.model.options.HttpTransportParameters;
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 
 /**
  * Holds the set of parameters needed to generate an ant script file.
@@ -147,7 +148,11 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
         /** Websphere MQ. */
         WMQ,
         /** HTTP. */
-        HTTP
+        HTTP,
+        /** TCP. */
+        TCP,
+        /** MOCK. */
+        MOCK
     }
     
     /**

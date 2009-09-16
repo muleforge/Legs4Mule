@@ -114,6 +114,13 @@
 #end
             />
 #end
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("tcp")})
+            <!-- TCP transport parameters -->
+            <tcpTransportParameters
+                host="${antModel.tcpTransportParameters.host}"
+                port="${antModel.tcpTransportParameters.port}"
+            />
+#end
         </mule2cixsgen>
     
     </target>

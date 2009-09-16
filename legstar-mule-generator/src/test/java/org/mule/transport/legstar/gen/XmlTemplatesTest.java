@@ -15,12 +15,13 @@ import java.io.File;
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 import org.mule.transport.legstar.model.CixsMuleComponent;
 import org.mule.transport.legstar.model.UmoComponentParameters;
-import org.mule.transport.legstar.model.WmqTransportParameters;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
+import org.mule.transport.legstar.model.options.TcpTransportParameters;
 
 import com.legstar.cixs.gen.model.options.HttpTransportParameters;
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 /**
@@ -97,6 +98,9 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
             break;
         case WMQ:
             addAdapterWmqParameters();
+            break;
+        case TCP:
+            addAdapterTcpParameters();
             break;
         default:
             break;
@@ -178,6 +182,16 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     }
 
     /**
+     * Adapter TCP parameter set.
+     */
+    private void addAdapterTcpParameters() {
+        TcpTransportParameters httpTransportParameters = new TcpTransportParameters();
+        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_TCP_HOST);
+        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_TCP_PORT);
+        httpTransportParameters.add(getParameters());
+    }
+
+    /**
      * Proxy HTTP parameter set.
      */
     private void addProxyHttpParameters() {
@@ -244,6 +258,28 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
                 SampleConfigurationTransport.WMQ,
                 SampleConfigurationPayloadType.JAVA,
                 SampleConfigurationHostMessagingType.MQCIH);
+    }
+
+    /**
+     * LSFILEAE TCP JAVA test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterTcpJavaConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaeMuleComponent(),
+                SampleConfigurationTransport.TCP,
+                SampleConfigurationPayloadType.JAVA,
+                SampleConfigurationHostMessagingType.LEGSTAR);
+    }
+
+    /**
+     * LSFILEAE MOCK JAVA test case.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileaeAdapterMockJavaConfigXml() throws Exception {
+        testAdapterConfigXml(Samples.getLsfileaeMuleComponent(),
+                SampleConfigurationTransport.MOCK,
+                SampleConfigurationPayloadType.JAVA,
+                SampleConfigurationHostMessagingType.LEGSTAR);
     }
 
     /**

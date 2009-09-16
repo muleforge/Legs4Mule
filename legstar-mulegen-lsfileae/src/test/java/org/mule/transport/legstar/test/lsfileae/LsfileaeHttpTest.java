@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.mule.transport.legstar.test.lsfileae;
 
-import java.io.ByteArrayInputStream;
 import java.io.ObjectInputStream;
 
 import org.mule.module.client.MuleClient;
 import org.mule.tck.FunctionalTestCase;
+import org.mule.transport.http.ReleasingInputStream;
 import org.mule.api.MuleMessage;
 
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
@@ -47,7 +47,7 @@ public class LsfileaeHttpTest extends FunctionalTestCase {
                 "lsfileaeClientEndpoint",
                 getJavaObjectRequest(), null);
         ObjectInputStream in = new ObjectInputStream(
-                new ByteArrayInputStream((byte[]) message.getPayload()));
+                (ReleasingInputStream) message.getPayload());
         checkJavaObjectReply((Dfhcommarea) in.readObject());
         
     }

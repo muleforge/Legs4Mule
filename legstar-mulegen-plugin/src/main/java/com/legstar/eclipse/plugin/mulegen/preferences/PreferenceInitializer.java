@@ -12,8 +12,8 @@ package com.legstar.eclipse.plugin.mulegen.preferences;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
-import org.mule.transport.legstar.model.WmqTransportParameters;
 
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
 import com.legstar.eclipse.plugin.cixscom.preferences.AbstractCicxsPreferenceInitializer;
 import com.legstar.eclipse.plugin.mulegen.Activator;

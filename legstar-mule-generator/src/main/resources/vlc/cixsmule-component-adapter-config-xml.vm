@@ -1,7 +1,6 @@
 ##/////////////////////////////////////////////////////////////////////
-##Mule Component adapter configuration over HTTP XML Template.
+##Mule Component adapter configuration XML Template.
 ##@author Fady
-##@version 0.1
 ##/////////////////////////////////////////////////////////////////////
 ## ==================================================================
 ## Calculates the maximum host size of a structure
@@ -45,25 +44,44 @@
 #if($sampleConfigurationTransport == "wmq")
 #set($sampleConfigurationTransportComment = "JMS/WebSphere MQ")
 #end
+#if($sampleConfigurationTransport == "tcp")
+#set($sampleConfigurationTransportComment = "LEGSTAR-TCP")
+#end
+#if($sampleConfigurationTransport == "mock")
+#set($sampleConfigurationTransportComment = "LEGSTAR-MOCK")
+#end
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This Mule configuration implements an adapter service for a mainframe program.
-      Clients of this Mule service are expected to send ${sampleConfigurationPayloadTypeComment} over TCP.
+      Clients of this Mule service are expected to send ${sampleConfigurationPayloadTypeComment} over HTTP.
       Transport from Mule service to mainframe is ${sampleConfigurationTransportComment}.
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
+        xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
+        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
 #if($sampleConfigurationTransport == "wmq")
         xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
 #end
-        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
+#if($sampleConfigurationTransport == "tcp")
+        xmlns:legstar-tcp="http://www.mulesource.org/schema/mule/legstar/tcp/2.2"
+#end
+#if($sampleConfigurationTransport == "mock")
+        xmlns:legstar-mock="http://www.mulesource.org/schema/mule/legstar/mock/2.2"
+#end
     xsi:schemaLocation=
         "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
-         http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
+         http://www.mulesource.org/schema/mule/http/2.2 http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd
+         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
 #if($sampleConfigurationTransport == "wmq")
          http://www.mulesource.org/schema/mule/jms/2.2 http://www.mulesource.org/schema/mule/jms/2.2/mule-jms.xsd
 #end
-         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd" >
+#if($sampleConfigurationTransport == "tcp")
+         http://www.mulesource.org/schema/mule/legstar/tcp/2.2 http://www.legsem.com/legstar/xml/mule-legstar-tcp-1.0.xsd
+#end
+#if($sampleConfigurationTransport == "mock")
+         http://www.mulesource.org/schema/mule/legstar/mock/2.2 http://www.legsem.com/legstar/xml/mule-legstar-mock-1.0.xsd
+#end
+        ">
 
     <description>Mule configuration for ${muleComponent.name} adapter service</description>
 
@@ -84,23 +102,29 @@
     </jms:connector>
 #end
 
-#set($I = 0)
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-    <tcp:endpoint name="${cixsOperation.name}ClientEndpoint" synchronous="true"
-        address="tcp://localhost:321$I" />
-#set($I = $I + 1)
+    <http:endpoint name="${cixsOperation.name}ClientEndpoint" synchronous="true"
+        address="http://localhost:3280/${cixsOperation.name}" />
 #end
 
 #if($sampleConfigurationTransport == "http")
-    <legstar:endpoint name="MainframeRequestEndpoint" synchronous="true"
+    <legstar:endpoint name="mainframeRequestEndpoint" synchronous="true"
         address="legstar:${httpURL}" />
 #end
 #if($sampleConfigurationTransport == "wmq")
-    <jms:endpoint name="MainframeRequestEndpoint" synchronous="true"
+    <jms:endpoint name="mainframeRequestEndpoint" synchronous="true"
         queue="${wmqRequestQueue}" />
 
-    <jms:endpoint name="MainframeReplyEndpoint"
+    <jms:endpoint name="mainframeReplyEndpoint"
         queue="${wmqReplyQueue}" />
+#end
+#if($sampleConfigurationTransport == "tcp")
+    <legstar-tcp:endpoint name="mainframeRequestEndpoint" synchronous="true"
+        address="legstar-tcp://${tcpHost}:${tcpPort}" />
+#end
+#if($sampleConfigurationTransport == "mock")
+    <legstar-mock:endpoint name="mainframeRequestEndpoint" synchronous="true"
+        address="legstar-mock://localhost" />
 #end
 
     <model name="${muleComponent.name}Model">
@@ -121,7 +145,7 @@
             </inbound>
             <outbound>
                 <pass-through-router>
-                    <outbound-endpoint ref="MainframeRequestEndpoint" >
+                    <outbound-endpoint ref="mainframeRequestEndpoint" >
                         <transformers>
                             <legstar:${sampleConfigurationPayloadType}-to-host-transformer
 #if($hostCharset)
@@ -133,7 +157,7 @@
                                 hostCharset="${hostCharset}"
 #end
 #if($sampleConfigurationTransport == "wmq")
-                                replyTo="MainframeReplyEndpoint"
+                                replyTo="mainframeReplyEndpoint"
 #end
                             >
                                 <legstar:host-program

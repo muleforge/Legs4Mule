@@ -19,6 +19,7 @@ import org.mule.transport.legstar.gen.Samples;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 /**
