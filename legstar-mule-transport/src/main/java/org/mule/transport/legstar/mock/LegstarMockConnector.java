@@ -1,16 +1,26 @@
 package org.mule.transport.legstar.mock;
 
 import org.mule.transport.AbstractConnector;
+import org.mule.transport.legstar.LegstarConnector;
+import org.mule.transport.legstar.LegstarConnectorHelper;
+import org.mule.transport.legstar.config.HostCredentials;
 import org.mule.api.MuleException;
+import org.mule.api.MuleMessage;
 import org.mule.api.lifecycle.InitialisationException;
 
 /**
  * This connector simulates mainframe access for adapters. 
  */
-public class LegstarMockConnector extends AbstractConnector {
+public class LegstarMockConnector extends AbstractConnector implements LegstarConnector {
     /** This constant defines the main transport protocol identifier. */
     public static final String LEGSTARMOCK = "legstar-mock";
     
+    /** Host user ID. */
+    private String _hostUserID = "";
+    
+    /** Host password. */
+    private String _hostPassword = "";
+
     /* For general guidelines on writing transports see
        http://mule.mulesource.org/display/MULE/Writing+Transports */
 
@@ -74,6 +84,39 @@ public class LegstarMockConnector extends AbstractConnector {
     /** {@inheritDoc} */
     public String getProtocol() {
         return LEGSTARMOCK;
+    }
+
+    /** {@inheritDoc} */
+    public HostCredentials getHostCredentials(final MuleMessage message) {
+        return LegstarConnectorHelper.getHostCredentials(this, message);
+    }
+
+    /**
+     * @return the host user ID
+     */
+    public String getHostUserID() {
+        return _hostUserID;
+    }
+
+    /**
+     * @return the host Password
+     */
+    public String getHostPassword() {
+        return _hostPassword;
+    }
+
+    /**
+     * @param userID the host user ID to set
+     */
+    public void setHostUserID(final String userID) {
+        _hostUserID = userID;
+    }
+
+    /**
+     * @param password the host Password to set
+     */
+    public void setHostPassword(final String password) {
+        _hostPassword = password;
     }
 
 }

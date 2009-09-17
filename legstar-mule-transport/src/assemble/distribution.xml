@@ -33,6 +33,7 @@
                 <exclude>junit:*</exclude>
                 <exclude>javax.servlet:*</exclude>
                 <exclude>javax.resource:*</exclude>
+                <exclude>com.ibm:*</exclude>
             </excludes>
         </dependencySet>
     </dependencySets>

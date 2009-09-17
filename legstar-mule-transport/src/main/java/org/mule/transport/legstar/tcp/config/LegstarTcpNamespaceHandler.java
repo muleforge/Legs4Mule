@@ -22,16 +22,7 @@ public class LegstarTcpNamespaceHandler extends AbstractMuleNamespaceHandler {
 
     /** {@inheritDoc} */
     public void init() {
-        /* This creates handlers for 'endpoint', 'outbound-endpoint' and 'inbound-endpoint' elements.
-           The defaults are sufficient unless you have endpoint styles different from the Mule standard ones
-           The URIBuilder as constants for common required attributes, but you can also pass in a user-defined String[].
-         */
         registerStandardTransportEndpoints(LegstarTcpConnector.LEGSTARTCP, URIBuilder.PATH_ATTRIBUTES);
-
-        /* This will create the handler for your custom 'connector' element.
-         * You will need to add handlers for any other xml elements you define.
-         * For more information see: http://www.mulesource.org/display/MULE2USER/Creating+a+Custom+XML+Namespace
-        */
         registerConnectorDefinitionParser(LegstarTcpConnector.class);
     }
 }

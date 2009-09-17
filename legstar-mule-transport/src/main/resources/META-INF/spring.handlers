@@ -1,3 +1,4 @@
 http\://www.mulesource.org/schema/mule/legstar/2.2=org.mule.transport.legstar.config.LegStarNamespaceHandler
 http\://www.mulesource.org/schema/mule/legstar/mock/2.2=org.mule.transport.legstar.mock.config.LegstarMockNamespaceHandler
 http\://www.mulesource.org/schema/mule/legstar/tcp/2.2=org.mule.transport.legstar.tcp.config.LegstarTcpNamespaceHandler
+http\://www.mulesource.org/schema/mule/legstar/wmq/2.2=org.mule.transport.legstar.wmq.config.LegstarWmqNamespaceHandler

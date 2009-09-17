@@ -88,7 +88,7 @@ public abstract class AbstractHostMuleTransformer extends AbstractMessageAwareTr
         return message.getStringProperty(
                 HOST_CHARSET_PROPERTY, getHostCharset());
     }
-
+    
     /**
      * @return the configurable host character set
      */

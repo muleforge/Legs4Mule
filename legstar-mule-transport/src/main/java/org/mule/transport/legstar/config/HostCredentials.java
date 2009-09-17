@@ -13,7 +13,7 @@ public class HostCredentials implements Credentials {
 
     /** Host user ID. */
     private final String _username;
-    
+
     /** Host password.*/
     private final char[] _password;
 
@@ -43,18 +43,27 @@ public class HostCredentials implements Credentials {
     }
 
     /**
+     * @return a concatenation of user password HTTP style
+     */
+    public String getUserInfo() {
+        return (_username == null) ? null 
+                : ((_password == null) ? _username
+                        : _username + ':' + new String(_password)); 
+    }
+
+    /**
      * {@inheritDoc}
      */
     public boolean equals(final Object obj) {
         if (obj instanceof HostCredentials) {
             HostCredentials objCredentials = (HostCredentials) obj;
             return isEquals(_username, objCredentials.getUsername())
-                && isEquals(_password, objCredentials.getPassword());
+            && isEquals(_password, objCredentials.getPassword());
         } else {
             return false;
         }
     }
-    
+
     /**
      * Compares two strings even if they are null.
      * @param str1 first string

@@ -8,12 +8,17 @@
  * Contributors:
  *     LegSem - initial API and implementation
  ******************************************************************************/
-package org.mule.transport.legstar.cixs.transformer;
+package org.mule.transport.legstar.wmq.transformer;
 
 import org.mule.transformer.AbstractMessageAwareTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.legstar.config.HostProgram;
+import org.mule.transport.legstar.wmq.LegstarWmqConnector;
+import org.mule.api.endpoint.EndpointBuilder;
+import org.mule.api.endpoint.OutboundEndpoint;
 import org.mule.api.transformer.Transformer;
+import org.mule.endpoint.EndpointURIEndpointBuilder;
+import org.mule.endpoint.URIBuilder;
 
 import com.legstar.coxb.host.HostData;
 import com.legstar.test.coxb.LsfileaeCases;
@@ -48,7 +53,7 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
         + "4040404040404040"
         + "40404040"
         + "40404040"
-        + "4040404040404040"
+        + "E2E3D9C5C1D4F240"
         + "4040404040404040"
         + "4040404040404040"
         + "40404040"
@@ -90,6 +95,7 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
     public AbstractMessageAwareTransformer getTransformer() throws Exception {
         HostToMqcihExecRequestMuleTransformer transformer = new HostToMqcihExecRequestMuleTransformer();
         transformer.setHostProgram(new HostProgram("lsfileae.properties"));
+        transformer.setEndpoint(getEndpoint());
         return transformer;
     }
 
@@ -108,4 +114,29 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
         return _TestData;
     }
 
+    /**
+     * @return an outbound endpoint
+     * @throws Exception if endpoint cannot be created
+     */
+    private OutboundEndpoint getEndpoint() throws Exception {
+        EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
+                new URIBuilder(getTestEndpointURI()),
+                muleContext);
+        OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
+                endpointBuilder);
+        LegstarWmqConnector connector = (LegstarWmqConnector) endpoint.getConnector();
+        connector.setHostUserID("P390");
+        connector.setHostPassword("STREAM2");
+        return endpoint;
+    }
+
+    /** @return a URI to connect to. */
+    public String getTestEndpointURI() {
+        return "legstar-wmq://CICS01.BRIDGE.REQUEST.QUEUE"
+        + "?jndiInitialFactory=com.sun.jndi.fscontext.RefFSContextFactory"
+        + "&jndiProviderUrl=file:///JNDI-Directory"
+        + "&connectionFactoryJndiName=ConnectionFactory";
+    }
+
+    
 }

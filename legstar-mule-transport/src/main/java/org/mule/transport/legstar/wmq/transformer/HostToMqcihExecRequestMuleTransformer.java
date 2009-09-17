@@ -1,4 +1,4 @@
-package org.mule.transport.legstar.cixs.transformer;
+package org.mule.transport.legstar.wmq.transformer;
 
 
 import java.io.UnsupportedEncodingException;
@@ -6,6 +6,9 @@ import java.util.Map;
 
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+import org.mule.transport.legstar.LegstarConnector;
+import org.mule.transport.legstar.cixs.transformer.AbstractHostToExecRequestMuleTransformer;
+import org.mule.transport.legstar.config.HostCredentials;
 import org.mule.transport.legstar.config.HostProgram;
 
 import com.legstar.coxb.transform.HostTransformException;
@@ -32,12 +35,6 @@ public class HostToMqcihExecRequestMuleTransformer extends AbstractHostToExecReq
      * */
     private int _waitInterval = -1;
     
-    /**
-     * If user-identifier authentication is active for the CICS bridge,
-     * Authenticator is used with the user identifier in the MQMD identity
-     * context to authenticate the sender of the message.
-     * */
-    private String _authenticator;
     
     /** Flag indicating that a syncpoint should be taken upon return from 
      * execution of DPL program.
@@ -62,7 +59,9 @@ public class HostToMqcihExecRequestMuleTransformer extends AbstractHostToExecReq
     public byte[] wrapHostData(
             final byte[] hostData, final MuleMessage esbMessage) throws TransformerException {
         try {
-            byte[] mqcihBytes = getMqcihBytes(getHostProgram());
+            LegstarConnector connector = (LegstarConnector) getEndpoint().getConnector();
+            byte[] mqcihBytes = getMqcihBytes(getHostProgram(),
+                    connector.getHostCredentials(esbMessage));
             byte[] result =
                 new byte[mqcihBytes.length + CICS_PROGRAM_NAME_LEN + hostData.length];
             System.arraycopy(mqcihBytes, 0,
@@ -125,18 +124,24 @@ public class HostToMqcihExecRequestMuleTransformer extends AbstractHostToExecReq
      * Produce the serialization of the MQCIH header as a byte array in the
      * target host character set.
      * @param hostProgram the target program attributes
+     * @param hostCredentials the credentials used to authenticate to the mainframe
      * @return MQCIH as a byte array
      * @throws TransformerException if message cannot be built
      */
     public final byte[] getMqcihBytes(
-            final HostProgram hostProgram) throws TransformerException {
+            final HostProgram hostProgram,
+            final HostCredentials hostCredentials) throws TransformerException {
         try {
             Mqcih mqcih = new Mqcih();
 
             /* MQCIH needs the output length to include the program name length */
             mqcih.setMqcihOutputdatalength(
                     hostProgram.getMaxDataLength() + CICS_PROGRAM_NAME_LEN);
-            mqcih.setMqcihAuthenticator(getAuthenticator());
+            
+            /* Just in case this is needed. Doc says: only applies if you are using
+             *  an authorization level of VERIFY_UOW or VERIFY_ALL*/
+            mqcih.setMqcihAuthenticator(new String(hostCredentials.getPassword()));
+            
             if (getWaitInterval() > -1) {
                 mqcih.setMqcihGetwaitinterval(getWaitInterval());
             }
@@ -151,7 +156,7 @@ public class HostToMqcihExecRequestMuleTransformer extends AbstractHostToExecReq
                     getI18NMessages().hostTransformFailure(), this, e);
         }
     }
-
+    
     /**
      * @return Time in milliseconds that the MQGET calls issued by the bridge
      * should wait for second and subsequent request messages for the unit of
@@ -168,23 +173,6 @@ public class HostToMqcihExecRequestMuleTransformer extends AbstractHostToExecReq
      * */
     public final void setWaitInterval(final int waitInterval) {
         _waitInterval =  waitInterval;
-    }
-
-    /**
-     * @return the authenticator which is used with the user identifier in the
-     * MQMD identity context to authenticate the sender of the message.
-     * TODO see we can recover this from the Mule session
-     */
-    public String getAuthenticator() {
-        return _authenticator;
-    }
-
-    /**
-     * @param authenticator is used with the user identifier in the
-     * MQMD identity context to authenticate the sender of the message
-     */
-    public void setAuthenticator(final String authenticator) {
-        _authenticator = authenticator;
     }
 
 }

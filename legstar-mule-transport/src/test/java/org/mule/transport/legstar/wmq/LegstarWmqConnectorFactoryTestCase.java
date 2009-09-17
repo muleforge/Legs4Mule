@@ -8,7 +8,7 @@
  * LICENSE.txt file.
  */
 
-package org.mule.transport.legstar.tcp;
+package org.mule.transport.legstar.wmq;
 
 import org.mule.api.endpoint.InboundEndpoint;
 import org.mule.tck.AbstractMuleTestCase;
@@ -18,7 +18,7 @@ import org.mule.tck.AbstractMuleTestCase;
  * Tests the creation of the LegstarTcpConnector instance by Mule.
  *
  */
-public class LegstarTcpConnectorFactoryTestCase extends AbstractMuleTestCase {
+public class LegstarWmqConnectorFactoryTestCase extends AbstractMuleTestCase {
 
     /**
      * Simulates the way Mule will create the connector.
@@ -29,15 +29,16 @@ public class LegstarTcpConnectorFactoryTestCase extends AbstractMuleTestCase {
                 .lookupEndpointFactory().getInboundEndpoint(getEndpointURI());
         assertNotNull(endpoint);
         assertNotNull(endpoint.getConnector());
-        assertTrue(endpoint.getConnector() instanceof LegstarTcpConnector);
-        assertEquals(getEndpointURI(), endpoint.getEndpointURI().getAddress());
+        assertTrue(endpoint.getConnector() instanceof LegstarWmqConnector);
+        assertEquals("CICS01.BRIDGE.REQUEST.QUEUE", endpoint.getEndpointURI().getAddress());
     }
 
-    /**
-     * @return a sample URI for the mock transport
-     */
+    /** {@inheritDoc} */
     public String getEndpointURI() {
-        return "legstar-tcp://localhost:1234";
+        return "legstar-wmq://CICS01.BRIDGE.REQUEST.QUEUE"
+        + "?jndiInitialFactory=com.sun.jndi.fscontext.RefFSContextFactory"
+        + "&jndiProviderUrl=file:///JNDI-Directory"
+        + "&connectionFactoryJndiName=ConnectionFactory";
     }
 
 }

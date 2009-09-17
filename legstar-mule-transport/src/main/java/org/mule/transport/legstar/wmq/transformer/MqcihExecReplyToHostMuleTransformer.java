@@ -1,7 +1,8 @@
-package org.mule.transport.legstar.cixs.transformer;
+package org.mule.transport.legstar.wmq.transformer;
 
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+import org.mule.transport.legstar.cixs.transformer.AbstractExecReplyToHostMuleTransformer;
 
 import com.legstar.messaging.HeaderPartException;
 import com.legstar.messaging.HostMessageFormatException;

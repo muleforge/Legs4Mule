@@ -8,7 +8,7 @@
  * Contributors:
  *     LegSem - initial API and implementation
  ******************************************************************************/
-package org.mule.transport.legstar.cixs.transformer;
+package org.mule.transport.legstar.wmq.transformer;
 
 import org.mule.transformer.AbstractMessageAwareTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;

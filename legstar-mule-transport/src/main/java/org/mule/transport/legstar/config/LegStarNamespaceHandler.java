@@ -8,9 +8,7 @@ import org.mule.config.spring.parsers.generic.ChildDefinitionParser;
 import org.mule.config.spring.parsers.specific.TransformerDefinitionParser;
 import org.mule.endpoint.URIBuilder;
 import org.mule.transport.legstar.cixs.transformer.HostToLegstarExecRequestMuleTransformer;
-import org.mule.transport.legstar.cixs.transformer.HostToMqcihExecRequestMuleTransformer;
 import org.mule.transport.legstar.cixs.transformer.LegstarExecReplyToHostMuleTransformer;
-import org.mule.transport.legstar.cixs.transformer.MqcihExecReplyToHostMuleTransformer;
 import org.mule.transport.legstar.http.LegstarHttpConnector;
 import org.mule.transport.legstar.http.transformer.HostByteArrayToHttpResponse;
 import org.mule.transport.http.HttpConstants;
@@ -38,11 +36,6 @@ public class LegStarNamespaceHandler extends AbstractMuleNamespaceHandler {
                 new TransformerDefinitionParser(HostToLegstarExecRequestMuleTransformer.class));
         registerBeanDefinitionParser("legstar-to-host-transformer",
                 new TransformerDefinitionParser(LegstarExecReplyToHostMuleTransformer.class));
-
-        registerBeanDefinitionParser("host-to-mqcih-transformer",
-                new TransformerDefinitionParser(HostToMqcihExecRequestMuleTransformer.class));
-        registerBeanDefinitionParser("mqcih-to-host-transformer",
-                new TransformerDefinitionParser(MqcihExecReplyToHostMuleTransformer.class));
 
         registerBeanDefinitionParser("host-byte-array-to-http-response-transformer",
                 new TransformerDefinitionParser(HostByteArrayToHttpResponse.class));

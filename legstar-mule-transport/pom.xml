@@ -107,6 +107,28 @@
             <artifactId>legstar-csokrt</artifactId>
         </dependency>
 
+        <!-- IBM WebSphere MQ client -->
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mqjms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>fscontext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>providerutil</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>dhbcore</artifactId>
+        </dependency>
+
         <!-- Mule functional tests  -->
         <dependency>
             <groupId>org.mule.tests</groupId>

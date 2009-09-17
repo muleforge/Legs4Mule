@@ -264,29 +264,6 @@
     </xsd:complexType>
 
     <!--==============================================================-->
-    <!--   CICS MQ Bridge Transformer elements                        -->
-    <!--==============================================================-->
-    <xsd:element name="host-to-mqcih-transformer" type="hostExecRequestTransformerType"
-        substitutionGroup="mule:abstract-transformer">
-        <xsd:annotation>
-            <xsd:documentation>
-                A transformer that wraps host data into MQCIH formatted
-                messages (as expected by IBM CICS MQ Bridge).
-            </xsd:documentation>
-        </xsd:annotation>
-    </xsd:element>
-
-    <xsd:element name="mqcih-to-host-transformer" type="hostExecReplyTransformerType"
-        substitutionGroup="mule:abstract-transformer">
-        <xsd:annotation>
-            <xsd:documentation>
-                A transformer that unwraps host data formatted as an MQCIH
-                message (as produced by IBM CICS MQ Bridge).
-            </xsd:documentation>
-        </xsd:annotation>
-    </xsd:element>
-
-    <!--==============================================================-->
     <!--   LegStar messaging Transformer elements                     -->
     <!--==============================================================-->
     <xsd:element name="host-to-legstar-transformer" type="hostExecRequestTransformerType"

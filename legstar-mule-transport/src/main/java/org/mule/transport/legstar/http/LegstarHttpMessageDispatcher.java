@@ -59,10 +59,11 @@ public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
         HttpMethod httpMethod = super.getMethod(event);
 
         /* Force the content type expected by the Mainframe */
+        httpMethod.removeRequestHeader(HttpConstants.HEADER_CONTENT_TYPE);
         httpMethod.addRequestHeader(HttpConstants.HEADER_CONTENT_TYPE,
                 LEGSTAR_HTTP_CONTENT_TYPE);
         
-        if (isHostTraceOn(event.getMessage())) {
+        if (isHostTraceOn(event.getMessage()) || _log.isDebugEnabled()) {
             httpMethod.addRequestHeader(LEGSTAR_HTTP_HEADER_TRACE_MODE,
                     "true");
         }

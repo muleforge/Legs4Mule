@@ -13,9 +13,12 @@ package org.mule.transport.legstar.tcp;
 import java.net.Socket;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
+import org.mule.transport.legstar.LegstarConnector;
+import org.mule.transport.legstar.LegstarConnectorHelper;
 import org.mule.transport.legstar.config.HostCredentials;
 import org.mule.transport.tcp.TcpConnector;
 import org.mule.api.MuleEvent;
+import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.ImmutableEndpoint;
 import org.mule.api.lifecycle.InitialisationException;
 
@@ -26,20 +29,14 @@ import org.mule.api.lifecycle.InitialisationException;
  * reused with the restriction that each socket is associated with a set of
  * mainframe credentials in addition to the endpoint.
  */
-public class LegstarTcpConnector extends TcpConnector {
+public class LegstarTcpConnector extends TcpConnector implements LegstarConnector {
 
     /** This constant defines the main transport protocol identifier. */
     public static final String LEGSTARTCP = "legstar-tcp";
     
-    /** A mule property that might hold the host user ID. */
-    public static final String HOST_USERID_PROPERTY = "hostUserID";
-    
     /** Host user ID. */
     private String _hostUserID = "";
     
-    /** A mule property that might hold the host password. */
-    public static final String HOST_PASSWORD_PROPERTY = "hostPassword";
-
     /** Host password. */
     private String _hostPassword = "";
 
@@ -109,7 +106,7 @@ public class LegstarTcpConnector extends TcpConnector {
      */
     protected Socket getSocket(final MuleEvent event) throws Exception {
         ImmutableEndpoint endpoint = event.getEndpoint();
-        HostCredentials hostCredentials = getHostCredentials(event);
+        HostCredentials hostCredentials = getHostCredentials(event.getMessage());
         LegstarTcpSocketKey socketKey = new LegstarTcpSocketKey(endpoint, hostCredentials);
         if (logger.isDebugEnabled()) {
             logger.debug("borrowing socket for " + socketKey + "/" + socketKey.hashCode());
@@ -133,7 +130,7 @@ public class LegstarTcpConnector extends TcpConnector {
             final Socket socket,
             final MuleEvent event) throws Exception {
         ImmutableEndpoint endpoint = event.getEndpoint();
-        HostCredentials hostCredentials = getHostCredentials(event);
+        HostCredentials hostCredentials = getHostCredentials(event.getMessage());
         LegstarTcpSocketKey socketKey = new LegstarTcpSocketKey(endpoint, hostCredentials);
         _socketsPool.returnObject(socketKey, socket);
         if (logger.isDebugEnabled()) {
@@ -142,25 +139,9 @@ public class LegstarTcpConnector extends TcpConnector {
         }
     }
     
-    /**
-     * Credentials can be set at the connector level or passed as properties
-     * in incoming messages.
-     * <p/>
-     * The dynamic credentials passed in message properties take precedence over
-     * any connector property.
-     * @param event the current event
-     * @return a set of host credentials
-     */
-    protected HostCredentials getHostCredentials(final MuleEvent event) {
-        String hostUserID = (String) event.getProperty(HOST_USERID_PROPERTY);
-        if (hostUserID == null) {
-            hostUserID = getHostUserID();
-        }
-        String hostPassword = (String) event.getProperty(HOST_PASSWORD_PROPERTY);
-        if (hostPassword == null) {
-            hostPassword = getHostPassword();
-        }
-        return new HostCredentials(hostUserID, hostPassword.toCharArray());
+    /** {@inheritDoc} */
+    public HostCredentials getHostCredentials(final MuleMessage message) {
+        return LegstarConnectorHelper.getHostCredentials(this, message);
     }
 
     /**

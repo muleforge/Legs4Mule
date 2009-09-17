@@ -7,29 +7,33 @@
  * license, a copy of which has been included with this distribution in the
  * LICENSE.txt file.
  */
-package org.mule.transport.legstar.tcp.config;
+package org.mule.transport.legstar.wmq.config;
 
 import org.mule.tck.FunctionalTestCase;
-import org.mule.transport.legstar.tcp.LegstarTcpConnector;
+import org.mule.transport.legstar.wmq.LegstarWmqConnector;
 
 /**
- * Test for LegstarTcpNamespaceHandlerTestCase.
+ * Test for LegstarWmqNamespaceHandlerTestCase.
  */
-public class LegstarTcpNamespaceHandlerTestCase extends FunctionalTestCase {
+public class LegstarWmqNamespaceHandlerTestCase extends FunctionalTestCase {
 
     /** {@inheritDoc} */
     protected String getConfigResources() {
-        return "legstar-tcp-namespace-config.xml";
+        return "legstar-wmq-namespace-config.xml";
     }
 
     /**
      * Creates a connector from a spring configuration.
      * @throws Exception if creation fails
      */
-    public void testLegstarTcpConfig() throws Exception {
-        LegstarTcpConnector c = (LegstarTcpConnector) muleContext.getRegistry().lookupConnector("legstarTcpConnector");
+    public void testLegstarWmqConfig() throws Exception {
+        LegstarWmqConnector c = (LegstarWmqConnector) muleContext.getRegistry().lookupConnector("legstarWmqConnector");
         assertNotNull(c);
         assertTrue(c.isConnected());
         assertTrue(c.isStarted());
+
+        //TODO Assert specific properties are configured correctly
+
+
     }
 }
