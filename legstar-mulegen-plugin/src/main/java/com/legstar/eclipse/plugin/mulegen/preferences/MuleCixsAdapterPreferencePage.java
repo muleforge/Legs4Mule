@@ -93,6 +93,15 @@ implements IWorkbenchPreferencePage {
                 PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ERROR_QUEUE,
                 "WMQ " + Messages.wmq_error_queue_label + ':',
                 getFieldEditorParent()));
+
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_HOST,
+                "TCP " + Messages.adapter_to_host_http_host_label + ':',
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_PORT,
+                "TCP " + Messages.adapter_to_host_http_port_label + ':',
+                getFieldEditorParent()));
     }
 
     /**

@@ -76,10 +76,10 @@ public class CixsAdapterToHostHttpGroup extends AbstractCixsControlsGroup {
         AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_http_path_label + ':');
         mHttpPathText = AbstractWizardPage.createText(getGroup()); 
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_http_userid_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_userid_label + ':');
         mHttpUserIdText = AbstractWizardPage.createText(getGroup()); 
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_http_password_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_password_label + ':');
         mHttpPasswordText = AbstractWizardPage.createText(getGroup()); 
 
     }

@@ -5,13 +5,11 @@
  -->
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
         xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
         xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
         xmlns:test="http://www.mulesource.org/schema/mule/test/2.2"
     xsi:schemaLocation=
         "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
-         http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
          http://www.mulesource.org/schema/mule/http/2.2 http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd
          http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
          http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd" >

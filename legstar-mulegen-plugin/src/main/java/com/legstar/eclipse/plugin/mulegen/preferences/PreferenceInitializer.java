@@ -74,6 +74,14 @@ public class PreferenceInitializer extends AbstractCicxsPreferenceInitializer {
         "");
 
         /* --------------------------------------------------------------------- */
+        /* Adapter to Mainframe TCP transport preferences.                       */
+        /* --------------------------------------------------------------------- */
+        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_HOST,
+        "mainframe");
+        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_PORT,
+        "3011");
+
+        /* --------------------------------------------------------------------- */
         /* Mainframe to Proxy HTTP transport preferences.                        */
         /* --------------------------------------------------------------------- */
         store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_HOST,

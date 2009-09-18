@@ -137,10 +137,11 @@ public class Messages extends NLS {
     public static String adapter_to_host_http_port_label;
     /** Path on which mainframe listens to HTTP clients label.*/
     public static String adapter_to_host_http_path_label;
-    /** User id for basic authentication.*/
-    public static String adapter_to_host_http_userid_label;
-    /** Password for basic authentication.*/
-    public static String adapter_to_host_http_password_label;
+
+    /** User id for mainframe authentication.*/
+    public static String adapter_to_host_userid_label;
+    /** Password for mainframe authentication.*/
+    public static String adapter_to_host_password_label;
 
     /** Invalid port number.*/
     public static String invalid_http_port_number_msg;
@@ -181,6 +182,22 @@ public class Messages extends NLS {
     
     /** Choice of sample host messaging label.*/
     public static String sample_adapter_host_messaging_type_label;
+
+
+    /** Settings for target mainframe TCP group label.*/
+    public static String adapter_to_host_tcp_transport_group_label;
+    /** Host address on which mainframe listens to TCP clients label.*/
+    public static String adapter_to_host_tcp_host_label;
+    /** Port on which mainframe listens to TCP clients label.*/
+    public static String adapter_to_host_tcp_port_label;
+
+    /** Invalid port number.*/
+    public static String invalid_tcp_port_number_msg;
+    /** Invalid host.*/
+    public static String invalid_tcp_host_msg;
+
+    /** Settings for target mainframe MOCK group label.*/
+    public static String adapter_to_host_mock_transport_group_label;
 
     static {
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);

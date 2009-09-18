@@ -50,17 +50,30 @@
 #if($sampleConfigurationTransport == "mock")
 #set($sampleConfigurationTransportComment = "LEGSTAR-MOCK")
 #end
+## ==================================================================
+#if($sampleConfigurationHostMessagingType == "legstar")
+#set($hostToRequestTransformer = "legstar:host-to-legstar-transformer")
+#set($responseToHostTransformer = "legstar:legstar-to-host-transformer")
+#end
+#if($sampleConfigurationHostMessagingType == "mqcih")
+#set($hostToRequestTransformer = "legstar-wmq:host-to-mqcih-transformer")
+#set($responseToHostTransformer = "legstar-wmq:mqcih-to-host-transformer")
+#end
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This Mule configuration implements an adapter service for a mainframe program.
       Clients of this Mule service are expected to send ${sampleConfigurationPayloadTypeComment} over HTTP.
       Transport from Mule service to mainframe is ${sampleConfigurationTransportComment}.
  -->
+## ==================================================================
+## XML Schema definitions
+## ==================================================================
 <mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
         xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
 #if($sampleConfigurationTransport == "wmq")
         xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
+        xmlns:legstar-wmq="http://www.mulesource.org/schema/mule/legstar/wmq/2.2"
 #end
 #if($sampleConfigurationTransport == "tcp")
         xmlns:legstar-tcp="http://www.mulesource.org/schema/mule/legstar/tcp/2.2"
@@ -74,6 +87,7 @@
          http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
 #if($sampleConfigurationTransport == "wmq")
          http://www.mulesource.org/schema/mule/jms/2.2 http://www.mulesource.org/schema/mule/jms/2.2/mule-jms.xsd
+         http://www.mulesource.org/schema/mule/legstar/wmq/2.2 http://www.legsem.com/legstar/xml/mule-legstar-wmq-1.0.xsd
 #end
 #if($sampleConfigurationTransport == "tcp")
          http://www.mulesource.org/schema/mule/legstar/tcp/2.2 http://www.legsem.com/legstar/xml/mule-legstar-tcp-1.0.xsd
@@ -85,8 +99,11 @@
 
     <description>Mule configuration for ${muleComponent.name} adapter service</description>
 
+## ==================================================================
+## Connectors definitions
+## ==================================================================
 #if($sampleConfigurationTransport == "wmq")
-    <jms:connector name="jmsJndiConnector"
+    <legstar-wmq:connector name="mainframeConnector"
         jndiInitialFactory="${wmqJndiContextFactory}"
         jndiProviderUrl="${wmqJndiUrl}"
         connectionFactoryJndiName="${wmqConnectionFactory}"
@@ -95,28 +112,30 @@
         forceJndiDestinations="true"
         disableTemporaryReplyToDestinations="true"
         numberOfConsumers="1" >
-#if($sampleConfigurationHostMessagingType == "mqcih")
-        <service-overrides
-            dispatcherFactory="org.mule.transport.legstar.wmq.MqcihJmsMessageDispatcherFactory" />
-#end
-    </jms:connector>
+    </legstar-wmq:connector>
 #end
 
+## ==================================================================
+## Clent endpoints definitions
+## ==================================================================
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
     <http:endpoint name="${cixsOperation.name}ClientEndpoint" synchronous="true"
         address="http://localhost:3280/${cixsOperation.name}" />
 #end
 
+## ==================================================================
+## Mainframe endpoints definitions
+## ==================================================================
 #if($sampleConfigurationTransport == "http")
     <legstar:endpoint name="mainframeRequestEndpoint" synchronous="true"
         address="legstar:${httpURL}" />
 #end
 #if($sampleConfigurationTransport == "wmq")
-    <jms:endpoint name="mainframeRequestEndpoint" synchronous="true"
-        queue="${wmqRequestQueue}" />
+    <legstar-wmq:endpoint name="mainframeRequestEndpoint" synchronous="true"
+        address="legstar-wmq://${wmqRequestQueue}" />
 
-    <jms:endpoint name="mainframeReplyEndpoint"
-        queue="${wmqReplyQueue}" />
+    <legstar-wmq:endpoint name="mainframeReplyEndpoint"
+        address="legstar-wmq://${wmqReplyQueue}" />
 #end
 #if($sampleConfigurationTransport == "tcp")
     <legstar-tcp:endpoint name="mainframeRequestEndpoint" synchronous="true"
@@ -127,6 +146,9 @@
         address="legstar-mock://localhost" />
 #end
 
+## ==================================================================
+## Model and Service definitions
+## ==================================================================
     <model name="${muleComponent.name}Model">
 
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
@@ -152,7 +174,7 @@
                                 hostCharset="${hostCharset}"
 #end                                
                                 class="${qualRequestTransformer}" />
-                            <legstar:host-to-${sampleConfigurationHostMessagingType}-transformer
+                            <${hostToRequestTransformer}
 #if($hostCharset)
                                 hostCharset="${hostCharset}"
 #end
@@ -186,13 +208,13 @@
 #end
 #end
                                 </legstar:host-program>
-                            </legstar:host-to-${sampleConfigurationHostMessagingType}-transformer>
+                            </${hostToRequestTransformer}>
 #if($sampleConfigurationTransport == "wmq")
                             <jms:object-to-jmsmessage-transformer />
 #end
                         </transformers>
                         <response-transformers>
-                            <legstar:${sampleConfigurationHostMessagingType}-to-host-transformer />
+                            <${responseToHostTransformer} />
                             <legstar:host-to-${sampleConfigurationPayloadType}-transformer
 #if($hostCharset)
                                 hostCharset="${hostCharset}"

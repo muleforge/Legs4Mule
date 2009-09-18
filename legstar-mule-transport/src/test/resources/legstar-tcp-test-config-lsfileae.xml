@@ -21,10 +21,6 @@
     <description>Mule configuration for lsfileae adapter service</description>
 
 
-    <!-- 
-    <tcp:endpoint name="lsfileaeClientEndpoint" synchronous="true"
-        address="tcp://localhost:3210" />
-     -->
     <http:endpoint name="lsfileaeClientEndpoint" synchronous="true"
         address="http://localhost:3210" />
 

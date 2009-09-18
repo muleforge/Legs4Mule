@@ -89,7 +89,6 @@
             </releases>
             <layout>default</layout>
         </repository>
-    <!--
         <repository>
             <id>java.net</id>
             <url>https://maven-repository.dev.java.net/nonav/repository/</url>
@@ -99,7 +98,6 @@
             <id>download.java.net</id>
             <url>http://download.java.net/maven/2</url>
         </repository>
--->
         <repository>
             <id>muleforge-repo</id>
             <name>MuleForge Repository</name>

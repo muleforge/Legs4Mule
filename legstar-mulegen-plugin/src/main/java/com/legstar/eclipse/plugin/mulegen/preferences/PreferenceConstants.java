@@ -58,15 +58,15 @@ public final class PreferenceConstants {
     public static final String ADAPTER_TO_HOST_HTTP_PATH =
         "com.legstar.eclipse.plugin.mulegen.adapter.to.host.HttpPath";
 
-    /** Last HTTP Host exposed to JBoss ESB clients. */
+    /** Last HTTP Host exposed to Mule clients. */
     public static final String ADAPTER_TO_HOST_LAST_HTTP_HOST =
         "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastHttpHost";
 
-    /** Last Port on which HTTP listens to JBoss ESB clients. */
+    /** Last Port on which HTTP listens to Mule clients. */
     public static final String ADAPTER_TO_HOST_LAST_HTTP_PORT =
         "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastHttpPort";
 
-    /** Last for path on which HTTP listens to JBoss ESB clients. */
+    /** Last for path on which HTTP listens to Mule clients. */
     public static final String ADAPTER_TO_HOST_LAST_HTTP_PATH =
         "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastHttpPath";
 
@@ -137,6 +137,25 @@ public final class PreferenceConstants {
     public static final String ADAPTER_LAST_MQCIH_MESSAGING_BUTTON_SELECTION =
         "com.legstar.eclipse.plugin.mulegen.adapter.LastMqcihMessaging";
 
+
+    /* --------------------------------------------------------------------- */
+    /* Adapter to Mainframe TCP transport preferences.                       */
+    /* --------------------------------------------------------------------- */
+    /** TCP Host exposed by mainframe to adapter. */
+    public static final String ADAPTER_TO_HOST_DEFAULT_TCP_HOST =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.DefaultTcpHost";
+
+    /** TCP Port on which mainframe listens to adapter. */
+    public static final String ADAPTER_TO_HOST_DEFAULT_TCP_PORT =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.DefaultTcpPort";
+
+    /** Last TCP Host exposed to Mule clients. */
+    public static final String ADAPTER_TO_HOST_LAST_TCP_HOST =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastTcpHost";
+
+    /** Last Port on which TCP listens to Mule clients. */
+    public static final String ADAPTER_TO_HOST_LAST_TCP_PORT =
+        "com.legstar.eclipse.plugin.mulegen.adapter.to.host.LastTcpPort";
 
     /* --------------------------------------------------------------------- */
     /* Mainframe to Proxy HTTP transport preferences.                        */

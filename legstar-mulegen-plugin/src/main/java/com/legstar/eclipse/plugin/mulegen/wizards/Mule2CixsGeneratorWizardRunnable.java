@@ -15,12 +15,10 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 import org.mule.transport.legstar.model.CixsMuleComponent;
-import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
 import com.legstar.cixs.gen.model.AbstractCixsService;
-import com.legstar.eclipse.plugin.cixscom.wizards
-.AbstractCixsGeneratorWizardPage;
+import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 
 /**
  * Background task that performs the actual artifacts generation. The process
@@ -68,19 +66,27 @@ extends AbstractCixsMuleGeneratorWizardRunnable {
         genModel.setTargetJarDir(new File(page.getTargetJarDir()));
         genModel.setTargetMuleConfigDir(
                 new File(page.getTargetMuleConfigDir()));
-        
+
         genModel.setSampleConfigurationTransport(
                 page.getSampleConfigurationTransport());
-        if (page.getSampleConfigurationTransport() == SampleConfigurationTransport.HTTP) {
+
+        switch (page.getSampleConfigurationTransport()) {
+        case HTTP:
             genModel.setHttpTransportParameters(
                     page.getCixsAdapterToHostHttpGroup().getHttpTransportParameters());
-        } else if (page.getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ) {
+            break;
+        case WMQ:
             genModel.setWmqTransportParameters(
                     page.getCixsAdapterToHostWmqGroup().getWmqTransportParameters());
-            
-            genModel.setSampleConfigurationHostMessagingType(
-                    page.getSampleConfigurationHostMessagingType());
+            break;
+        case TCP:
+            genModel.setTcpTransportParameters(
+                    page.getCixsAdapterToHostTcpGroup().getTcpTransportParameters());
+            break;
+        default:
         }
+        genModel.setSampleConfigurationHostMessagingType(
+                page.getSampleConfigurationHostMessagingType());
 
         return genModel;
     }
