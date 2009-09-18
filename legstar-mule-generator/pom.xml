@@ -3,12 +3,12 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.0</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mule-generator</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>LegStar for Mule Generator</name>
     <description>Generates adapters and proxies for inbound and outbound mainframe integration with Mule</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
