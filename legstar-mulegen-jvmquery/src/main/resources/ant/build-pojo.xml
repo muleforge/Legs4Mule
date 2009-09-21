@@ -1,7 +1,7 @@
 <!-- =================================================================================
-     This script compiles the Jvmquery POJO sample.
+     This script compiles the Jvmquery POJO sample and bundles it as a jar archive.
   -->
-<project basedir=".." default="compile">
+<project basedir=".." default="create-jar">
 
     <!-- ===========================================================  -->
     <!-- Setup environment
@@ -29,6 +29,18 @@
             classpathref="classpath"
             includes="com/legstar/xsdc/test/cases/jvmquery/**"
         />
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- Bundle the pojo in a jar archive
+    -->
+    <target name="create-jar" depends="compile">
+        <mkdir dir="dist"/>
+        <jar destfile="dist/legstar-jvmquery-pojo.jar">
+            <fileset dir="build">
+                <include name="com/legstar/xsdc/test/cases/jvmquery/*.class"/>
+            </fileset>
+        </jar>
     </target>
 
 </project>

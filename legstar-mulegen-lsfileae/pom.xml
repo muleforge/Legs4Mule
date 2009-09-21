@@ -28,7 +28,8 @@
                 <configuration>
                     <skipTests>${no-mainframe-available}</skipTests>
                     <excludes> 
-                        <exclude>LsfileaeTcpClientTest.java</exclude> 
+                        <exclude>**/LsfileaeTcpClientTest.java</exclude> 
+                        <exclude>**/LsfileaeHttpClientTest.java</exclude> 
                     </excludes> 
                 </configuration>
             </plugin>

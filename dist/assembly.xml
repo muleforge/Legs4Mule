@@ -133,7 +133,7 @@ Assembly descriptor for the full distribution.
         </file>
         <!--  Readme -->
         <file>
-            <source>../doc/InstallInstructions.wiki</source>
+            <source>${legstar-mule-dev-local-dir}/wiki/InstallInstructions.wiki</source>
             <outputDirectory></outputDirectory>
             <destName>README</destName>
         </file>

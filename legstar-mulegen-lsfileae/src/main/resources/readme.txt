@@ -14,7 +14,7 @@ Prerequisites:
   2. The sample uses the junit ant task. This is not part of the standard ant
      delivery. You need to add junit.jar and ant-junit.jar in ANT_HOME/lib.
   
-  Refer to http://www.mulesource.org/display/LEGSTAR/InstallationInstructions
+  Refer to http://code.google.com/p/legstar-mule/wiki/InstallInstructions
   for details on the installation process.
 
 Settings:
