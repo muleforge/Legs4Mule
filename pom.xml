@@ -8,8 +8,8 @@
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>2.2.1</muleVersion>
-        <legstarVersion>1.2.6</legstarVersion>
-        <legstarMuleVersion>1.0.0</legstarMuleVersion>
+        <legstarVersion>1.3.1</legstarVersion>
+        <legstarMuleVersion>1.0.1-SNAPSHOT</legstarMuleVersion>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
@@ -67,6 +67,7 @@
     </distributionManagement>
 
     <repositories>
+    <!--
         <repository>
             <id>LegStar distribution</id>
             <url>http://www.legsem.com/legstar/maven/repo</url>
@@ -110,6 +111,7 @@
             <url>http://dist.codehaus.org/mule/dependencies/maven2</url>
             <layout>default</layout>
         </repository>
+        -->
     </repositories>
 
     <build>
@@ -781,13 +783,14 @@
         <module>legstar-mulegen-lsfileal</module>
         <module>legstar-mulegen-lsfileax</module>
 
+        <!-- Distribution -->
+        <module>dist</module>
+
         <!-- Eclipse modules -->
         <module>legstar-mulegen-plugin</module>
         <module>legstar-mulegen-feature</module>
         <module>legstar-mulegen-site</module>
-<!-- Does not work on MuleForge
-        <module>dist</module>
--->
+
     </modules>
 
 </project>

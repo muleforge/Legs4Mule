@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="2.1">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan" enabled="true">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Test Plan Lsfileae HTTP" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
@@ -27,7 +27,7 @@
       </ThreadGroup>
       <hashTree>
         <JUnitSampler guiclass="JUnitTestSamplerGui" testclass="JUnitSampler" testname="JUnit Request" enabled="true">
-          <stringProp name="junitSampler.classname">org.mule.transport.legstar.test.lsfileae.LsfileaeClientTest</stringProp>
+          <stringProp name="junitSampler.classname">org.mule.transport.legstar.test.lsfileae.LsfileaeHttpClientTest</stringProp>
           <stringProp name="junitsampler.constructorstring"></stringProp>
           <stringProp name="junitsampler.pkg.filter"></stringProp>
           <stringProp name="junitsampler.success">Test successful</stringProp>

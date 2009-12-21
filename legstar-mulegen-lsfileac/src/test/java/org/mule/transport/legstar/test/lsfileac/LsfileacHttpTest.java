@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.mule.transport.legstar.test.lsfileac;
 
-import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 
 import org.mule.module.client.MuleClient;
@@ -47,8 +47,7 @@ public class LsfileacHttpTest extends FunctionalTestCase {
         MuleMessage message = client.send(
                 "lsfileacClientEndpoint",
                 getJavaObjectRequest(), null);
-        ObjectInputStream in = new ObjectInputStream(
-                new ByteArrayInputStream((byte[]) message.getPayload()));
+        ObjectInputStream in = new ObjectInputStream((InputStream) message.getPayload());
         checkJavaObjectReply((LsfileacResponseHolder) in.readObject());
         
     }
