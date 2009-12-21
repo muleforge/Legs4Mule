@@ -50,7 +50,7 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
         + "00000000"
         + "00000000"
         + "00000000"
-        + "4040404040404040"
+        + "0000000000000000"
         + "40404040"
         + "40404040"
         + "E2E3D9C5C1D4F240"
