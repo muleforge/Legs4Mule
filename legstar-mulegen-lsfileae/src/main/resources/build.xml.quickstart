@@ -10,8 +10,8 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="."/>
-            <pathelement location="build"/>
+            <pathelement location="${basedir}"/>
+            <pathelement location="${basedir}/build"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
             <fileset dir="${mule.home}" includes="lib/opt/*.jar" />
@@ -56,7 +56,7 @@
     <!-- Run junit tests for an adapter
     -->
     <target name="runtest" depends="compileJUnit">
-        <junit printsummary="yes" fork="yes" haltonfailure="yes">
+        <junit printsummary="yes" fork="no" haltonfailure="yes">
             <formatter type="plain"/>
             <test name="org.mule.transport.legstar.test.lsfileae.LsfileaeHttpTest"/>
             <classpath>

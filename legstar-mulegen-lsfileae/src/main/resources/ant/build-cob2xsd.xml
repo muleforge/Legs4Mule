@@ -23,6 +23,7 @@
         <taskdef name="cob2xsd"
             classname="com.legstar.cob2xsd.task.CobolStructureToXsdTask">
             <classpath>
+                <pathelement location="${basedir}"/>
                 <fileset dir="${legstar.home}" includes="lib/*.jar"/>
             </classpath>
         </taskdef>
