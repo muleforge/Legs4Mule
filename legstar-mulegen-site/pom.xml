@@ -49,6 +49,7 @@
                         <configuration>
                             <tasks>
                                 <ant antfile="${basedir}/src/main/ant/populate-site.xml" />
+                                <exec dir="${basedir}" executable="${basedir}/src/main/cmd/publish.bat" failonerror="true" />
                             </tasks>
                         </configuration>
                         <goals>

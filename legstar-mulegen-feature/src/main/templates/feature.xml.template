@@ -421,6 +421,9 @@ END OF TERMS AND CONDITIONS
 
    <requires>
       <import feature="com.legstar.eclipse.feature.common" version="@LEGSTAR-PLUGIN-VERSION@"/>
+      <import feature="com.legstar.eclipse.feature.cixsmap" version="@LEGSTAR-PLUGIN-VERSION@"/>
+      <import feature="com.legstar.eclipse.feature.coxbgen" version="@LEGSTAR-PLUGIN-VERSION@"/>
+      <import feature="com.legstar.eclipse.feature.schemagen" version="@LEGSTAR-PLUGIN-VERSION@"/>
    </requires>
 
    <plugin
