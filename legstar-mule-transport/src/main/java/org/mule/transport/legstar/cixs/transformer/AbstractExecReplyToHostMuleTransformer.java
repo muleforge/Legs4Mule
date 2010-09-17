@@ -12,6 +12,7 @@ package org.mule.transport.legstar.cixs.transformer;
 
 import java.io.InputStream;
 
+import org.mule.transformer.types.DataTypeFactory;
 import org.mule.transport.legstar.transformer.AbstractHostMuleTransformer;
 
 /**
@@ -31,7 +32,7 @@ public abstract class AbstractExecReplyToHostMuleTransformer extends AbstractHos
     public AbstractExecReplyToHostMuleTransformer() {
         registerSourceType(InputStream.class);
         registerSourceType(byte[].class);
-        setReturnClass(Object.class);
+        setReturnDataType(DataTypeFactory.OBJECT);
     }
 
 }

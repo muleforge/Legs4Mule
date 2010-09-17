@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.mule.transport.legstar.wmq.transformer;
 
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.api.transformer.Transformer;
 
@@ -35,8 +35,9 @@ public class MqcihExecReplyToHostMuleTransformerTest extends AbstractTransformer
     }
     
     /** {@inheritDoc} */
-    public AbstractMessageAwareTransformer getTransformer() throws Exception {
+    public AbstractMessageTransformer getTransformer() throws Exception {
         MqcihExecReplyToHostMuleTransformer transformer = new MqcihExecReplyToHostMuleTransformer();
+        transformer.setMuleContext(muleContext);
         return transformer;
     }
 

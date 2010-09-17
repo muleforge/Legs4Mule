@@ -22,12 +22,12 @@ public interface IObjectToHostTransformer {
 
     /**
      * Generic transform method.
-     * @see org.mule.transformer.AbstractMessageAwareTransformer#transform(MuleMessage, String)
+     * @see org.mule.transformer.AbstractMessageTransformer#transformMessage(MuleMessage, String)
      * @param message a Mule message
      * @param outputEncoding the output encoding expected (ignored in this context)
      * @return a single byte array containing host data for single part mainframe payloads
      *  or a map of byte arrays for multipart mainframe payloads.
      * @throws TransformerException if transformation fails
      */
-    Object transform(MuleMessage message, String outputEncoding) throws TransformerException;
+    Object transformMessage(MuleMessage message, String outputEncoding) throws TransformerException;
 }

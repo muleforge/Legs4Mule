@@ -25,7 +25,9 @@ public class LsfileaeHostToXmlTransformerTest extends AbstractTransformerTestCas
 
     /** {@inheritDoc} */
     public Transformer getTransformer() throws Exception {
-        return new LsfileaeHostToXmlTransformer();
+    	LsfileaeHostToXmlTransformer transformer = new LsfileaeHostToXmlTransformer();
+    	transformer.setMuleContext(muleContext);
+        return transformer;
     }
 
     /** {@inheritDoc} */

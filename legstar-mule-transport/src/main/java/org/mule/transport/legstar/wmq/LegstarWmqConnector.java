@@ -24,6 +24,7 @@ import org.mule.transport.jms.JmsConnector;
 import org.mule.transport.legstar.LegstarConnector;
 import org.mule.transport.legstar.LegstarConnectorHelper;
 import org.mule.transport.legstar.config.HostCredentials;
+import org.mule.api.MuleContext;
 import org.mule.api.MuleMessage;
 
 /**
@@ -33,7 +34,14 @@ import org.mule.api.MuleMessage;
  */
 public class LegstarWmqConnector extends JmsConnector implements LegstarConnector {
 
-    /** This constant defines the main transport protocol identifier. */
+    /**
+     * @param context the Mule context
+     */
+    public LegstarWmqConnector(MuleContext context) {
+		super(context);
+	}
+
+	/** This constant defines the main transport protocol identifier. */
     public static final String LEGSTARWMQ = "legstar-wmq";
 
     /** Host user ID. */

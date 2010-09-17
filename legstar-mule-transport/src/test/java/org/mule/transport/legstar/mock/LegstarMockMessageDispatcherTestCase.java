@@ -14,6 +14,7 @@ package org.mule.transport.legstar.mock;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mule.MessageExchangePattern;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.OutboundEndpoint;
@@ -57,13 +58,13 @@ public class LegstarMockMessageDispatcherTestCase extends AbstractMuleTestCase {
         MessageDispatcher dispatcher = factory.create(getEndpoint());
         dispatcher.initialise();
         try {
-            dispatcher.send(getTestEvent(getEndpoint()));
+            dispatcher.process(getTestEvent(getEndpoint()));
             fail();
         } catch (Exception e) {
             assertTrue(e.getMessage().startsWith("Mule message body is not a LegStar message."));
         }
-        MuleMessage muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), getEndpoint()));
+        MuleMessage muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), getEndpoint())).getMessage();
         assertTrue(muleReplyMessage != null);
         assertTrue(muleReplyMessage.getPayload() instanceof byte[]);
         byte[] replyPayload = (byte[]) muleReplyMessage.getPayload();
@@ -82,8 +83,9 @@ public class LegstarMockMessageDispatcherTestCase extends AbstractMuleTestCase {
      */
     public OutboundEndpoint getEndpoint() throws Exception {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
-                new URIBuilder("legstar-mock://localhost"),
-                muleContext);
+                new URIBuilder("legstar-mock://localhost",
+                        muleContext));
+        endpointBuilder.setExchangePattern(MessageExchangePattern.REQUEST_RESPONSE);
         return muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
     }

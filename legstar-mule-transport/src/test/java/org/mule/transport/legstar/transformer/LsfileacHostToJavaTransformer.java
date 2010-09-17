@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.types.DataTypeFactory;
 
 import com.legstar.coxb.transform.AbstractTransformers;
 import com.legstar.test.coxb.lsfileac.ReplyData;
@@ -34,7 +35,7 @@ public class LsfileacHostToJavaTransformer extends AbstractHostToJavaMuleTransfo
         super(new HashMap < String, AbstractTransformers >());
         getBindingTransformersMap().put("ReplyData", new ReplyDataTransformers());
         getBindingTransformersMap().put("ReplyStatus", new ReplyStatusTransformers());
-        setReturnClass(LsfileacHolder.class);
+        setReturnDataType(DataTypeFactory.create(LsfileacHolder.class));
     }
 
     /** {@inheritDoc} */

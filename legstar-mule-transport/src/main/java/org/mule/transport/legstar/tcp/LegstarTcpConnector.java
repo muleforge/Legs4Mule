@@ -27,6 +27,7 @@ import org.mule.transport.legstar.LegstarConnector;
 import org.mule.transport.legstar.LegstarConnectorHelper;
 import org.mule.transport.legstar.config.HostCredentials;
 import org.mule.transport.tcp.TcpConnector;
+import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.ImmutableEndpoint;
@@ -56,9 +57,10 @@ public class LegstarTcpConnector extends TcpConnector implements LegstarConnecto
     /**
      * Overriding the TCP connector in order to substitute the socket
      * factory with our own. We also have our own protocol.
+     * @param context the Mule context.
      */
-    public LegstarTcpConnector() {
-        super();
+    public LegstarTcpConnector(MuleContext context) {
+        super(context);
         setSocketFactory(new LegstarTcpSocketFactory(this));
         setTcpProtocol(new LegstarTcpProtocol());
     }

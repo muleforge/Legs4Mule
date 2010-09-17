@@ -13,7 +13,7 @@ package org.mule.transport.legstar.cixs.transformer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.legstar.config.HostProgram;
 import org.mule.api.transformer.Transformer;
@@ -59,6 +59,7 @@ public class HostToMultipartLegstarExecRequestMuleTransformerTest extends Abstra
     /** This makes sure there is a single instance of test data. */
     private static Map < String, byte[]> _TestData;
     
+    
     /**
      * Constructor.
      */
@@ -72,9 +73,10 @@ public class HostToMultipartLegstarExecRequestMuleTransformerTest extends Abstra
     }
     
     /** {@inheritDoc} */
-    public AbstractMessageAwareTransformer getTransformer() throws Exception {
+    public AbstractMessageTransformer getTransformer() throws Exception {
         HostToLegstarExecRequestMuleTransformer transformer = new HostToLegstarExecRequestMuleTransformer();
         transformer.setHostProgram(new HostProgram("lsfileac.properties"));
+        transformer.setMuleContext(muleContext);
         return transformer;
     }
 

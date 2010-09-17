@@ -3,26 +3,26 @@
       Clients of this Mule service are expected to send serialized java objects over TCP.
       Transport from Mule service to mainframe is LEGSTAR-TCP.
  -->
-<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
-        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
-        xmlns:test="http://www.mulesource.org/schema/mule/test/2.2"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
+        xmlns:test="http://www.mulesoft.org/schema/mule/test"
     xsi:schemaLocation=
-        "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
-         http://www.mulesource.org/schema/mule/http/2.2 http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd
-         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
-         http://www.mulesource.org/schema/mule/test/2.2 http://www.mulesource.org/schema/mule/test/2.2/mule-test.xsd" >
+        "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
+         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd
+         http://www.mulesoft.org/schema/mule/legstar http://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd
+         http://www.mulesoft.org/schema/mule/test http://www.mulesoft.org/schema/mule/test/3.0/mule-test.xsd" >
 
     <description>Mule configuration for lsfileae adapter service</description>
 
-    <http:endpoint name="lsfileaeClientEndpoint" synchronous="true"
+    <http:endpoint name="lsfileaeClientEndpoint" exchange-pattern="request-response"
         address="http://localhost:3210" />
 
     <legstar:connector name="mainframeConnector"/>
 
-    <legstar:endpoint name="MainframeRequestEndpoint" synchronous="true"
-        address="legstar:http://mainframe:4080/CICS/CWBA/LSWEBBIN" connector-ref="mainframeConnector" />
+    <legstar:endpoint name="MainframeRequestEndpoint" exchange-pattern="request-response"
+        address="legstar://mainframe:4080/CICS/CWBA/LSWEBBIN" connector-ref="mainframeConnector" />
 
     <model name="lsfileaeModel">
 

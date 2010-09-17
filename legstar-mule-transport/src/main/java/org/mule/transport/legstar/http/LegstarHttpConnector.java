@@ -22,10 +22,10 @@ import org.mule.transport.http.HttpConstants;
 import org.mule.transport.legstar.LegstarConnector;
 import org.mule.transport.legstar.LegstarConnectorHelper;
 import org.mule.transport.legstar.config.HostCredentials;
+import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.ImmutableEndpoint;
-import org.mule.api.transport.MessageReceiver;
 
 /**
  * <code>LegstarConnector</code> is essentially and <code>HttpConnector</code>
@@ -36,10 +36,7 @@ import org.mule.api.transport.MessageReceiver;
 public class LegstarHttpConnector extends HttpConnector implements LegstarConnector {
     
     /** Protocol internal name. Will not appear in URIs. */
-    public static final String INTERNAL_PROTOCOL = "legstar";
-
-    /** Protocol external name. Will appear in URIs. */
-    public static final String EXTERNAL_PROTOCOL = "legstar:http";
+    public static final String LEGSTARHTTP = "legstar";
 
     /** Host user ID. */
     private String _hostUserID = "";
@@ -51,43 +48,15 @@ public class LegstarHttpConnector extends HttpConnector implements LegstarConnec
     private final Log _log = LogFactory.getLog(getClass());
 
     /**
-     * No-Args constructor.
+     * @param context the Mule context.
      */
-    public LegstarHttpConnector() {
-        registerProtocols();
-    }
-
-    /**
-     * Used to register the legtstar:http
-     * as a valid protocol combination. "legstar" is the scheme
-     * meta info and http is the protocol.
-     */
-    public final void registerProtocols() {
-        registerSupportedProtocolWithoutPrefix(EXTERNAL_PROTOCOL);
+    public LegstarHttpConnector(MuleContext context) {
+    	super(context);
     }
 
     /** {@inheritDoc} */
     public final String getProtocol() {
-        return INTERNAL_PROTOCOL;
-    }
-
-    /** 
-     * Because MessageReceiver getTargetReceiver does a lookup with
-     * a key like legstar://localhost:8083 instead of http://localhost:8083
-     * we override the standard method.
-     * {@inheritDoc}
-     *  */
-    public final MessageReceiver lookupReceiver(final String key) {
-        if (key != null) {
-            MessageReceiver receiver = (MessageReceiver) receivers.get(key);
-            if (receiver == null) {
-                receiver = (MessageReceiver) receivers.get(
-                        key.replace(getProtocol() + ':', "http:"));
-            }
-            return receiver;
-        } else {
-            throw new IllegalArgumentException("Receiver key must not be null");
-        }
+        return LEGSTARHTTP;
     }
 
     /** {@inheritDoc} */

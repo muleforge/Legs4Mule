@@ -12,6 +12,7 @@ package org.mule.transport.legstar.http.transformer;
 
 import java.io.IOException;
 
+import org.mule.transformer.types.DataTypeFactory;
 import org.mule.transport.legstar.i18n.LegstarMessages;
 import org.mule.transport.http.HttpConstants;
 import org.mule.transport.http.HttpResponse;
@@ -36,7 +37,7 @@ public class HostByteArrayToHttpResponse extends MuleMessageToHttpResponse {
      */
     public HostByteArrayToHttpResponse() {
         registerSourceType(byte[].class);
-        setReturnClass(HttpResponse.class);
+        setReturnDataType(DataTypeFactory.create(HttpResponse.class));
     }
 
     /** 
@@ -52,8 +53,8 @@ public class HostByteArrayToHttpResponse extends MuleMessageToHttpResponse {
     throws IOException, TransformerException {
 
         /* Force the content type and content length */
-        msg.setStringProperty(HttpConstants.HEADER_CONTENT_TYPE,
-                LEGSTAR_HTTP_CONTENT_TYPE);
+    	msg.setInboundProperty(HttpConstants.HEADER_CONTENT_TYPE,
+    			LEGSTAR_HTTP_CONTENT_TYPE);
         HttpResponse response = super.createResponse(src, encoding, msg);
         return response;
     }

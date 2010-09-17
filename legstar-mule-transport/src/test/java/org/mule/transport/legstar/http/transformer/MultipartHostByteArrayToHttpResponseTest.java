@@ -19,7 +19,7 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpVersion;
 import org.mule.RequestContext;
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.http.HttpResponse;
 import org.mule.transport.legstar.cixs.transformer.HostToLegstarExecRequestMuleTransformer;
@@ -40,9 +40,10 @@ import com.legstar.test.coxb.LsfileacCases;
 public class MultipartHostByteArrayToHttpResponseTest extends AbstractTransformerTestCase {
 
     /** {@inheritDoc} */
-    public AbstractMessageAwareTransformer getTransformer() throws Exception {
-        AbstractMessageAwareTransformer transformer = new HostByteArrayToHttpResponse();
+    public AbstractMessageTransformer getTransformer() throws Exception {
+    	AbstractMessageTransformer transformer = new HostByteArrayToHttpResponse();
         transformer.initialise();
+        transformer.setMuleContext(muleContext);
         return transformer;
     }
 
@@ -60,6 +61,7 @@ public class MultipartHostByteArrayToHttpResponseTest extends AbstractTransforme
                     HostData.toByteArray(LsfileacCases.getHostBytesHexReplyStatus()));
  
             HostToLegstarExecRequestMuleTransformer transformer = new HostToLegstarExecRequestMuleTransformer();
+            transformer.setMuleContext(muleContext);
             transformer.setHostProgram(new HostProgram("lsfileac.properties"));
             
             return transformer.transform(testData);
@@ -117,8 +119,6 @@ public class MultipartHostByteArrayToHttpResponseTest extends AbstractTransforme
             }
             return false;
         } catch (IOException e) {
-            return false;
-        } catch (TransformerException e) {
             return false;
         }
     }

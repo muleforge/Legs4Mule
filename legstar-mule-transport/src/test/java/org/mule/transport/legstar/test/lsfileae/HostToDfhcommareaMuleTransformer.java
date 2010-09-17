@@ -9,6 +9,7 @@
  *     LegSem - initial API and implementation
  ******************************************************************************/
 package org.mule.transport.legstar.test.lsfileae;
+import org.mule.transformer.types.DataTypeFactory;
 import org.mule.transport.legstar.transformer.AbstractHostToJavaMuleTransformer;
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
 import com.legstar.test.coxb.lsfileae.bind.DfhcommareaTransformers;
@@ -30,7 +31,7 @@ public class HostToDfhcommareaMuleTransformer extends AbstractHostToJavaMuleTran
      */
     public HostToDfhcommareaMuleTransformer() {
         super(new DfhcommareaTransformers());
-        setReturnClass(Dfhcommarea.class);
+        setReturnDataType(DataTypeFactory.create(Dfhcommarea.class));
     }
 
 

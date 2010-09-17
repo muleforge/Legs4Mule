@@ -35,7 +35,7 @@ public class LegstarWmqConnectorTestCase extends AbstractConnectorTestCase {
 
     /** {@inheritDoc} */
     public Connector createConnector() throws Exception {
-        LegstarWmqConnector c = new LegstarWmqConnector();
+        LegstarWmqConnector c = new LegstarWmqConnector(muleContext);
         c.setName("Test");
         c.setHostUserID("champ");
         c.setHostPassword("polion");

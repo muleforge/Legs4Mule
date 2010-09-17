@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.types.DataTypeFactory;
 import org.mule.transport.legstar.config.HostProgram;
 import org.mule.transport.legstar.transformer.AbstractHostMuleTransformer;
 
@@ -54,38 +55,41 @@ public abstract class AbstractHostToExecRequestMuleTransformer extends AbstractH
     public AbstractHostToExecRequestMuleTransformer() {
         registerSourceType(Map.class);
         registerSourceType(byte[].class);
-        setReturnClass(byte[].class);
+        setReturnDataType(DataTypeFactory.BYTE_ARRAY);
     }
 
     /** {@inheritDoc} */
     @SuppressWarnings("unchecked")
     @Override
-    public Object hostTransform(final MuleMessage esbMessage, final String outputEncoding)
-            throws TransformerException {
+	public Object hostTransform(final MuleMessage esbMessage,
+			final String outputEncoding) throws TransformerException {
 
-        Object src = esbMessage.getPayload();
+		Object src = esbMessage.getPayload();
 
-        byte[] wrappedHostData = null;
-        if (src instanceof byte[]) {
-            wrappedHostData = wrapHostData((byte[]) src, esbMessage);
-        } else if (src instanceof Map) {
-            wrappedHostData = wrapHostData((Map < String, byte[] >) src, esbMessage);
-        }
-        
-        /* This will useful when the message is dispatched to the mainframe. */
-        esbMessage.setReplyTo(getReplyTo());
-        
-        /* If the message specifies a host trace mode keep it. otherwise use
-         * the setting at the transformer level */
-        boolean isHostTraceOn = esbMessage.getBooleanProperty(
-                LEGSTAR_HOST_TRACE_ON_KEY, isHostTraceOn());
-        esbMessage.setProperty(
-                LEGSTAR_HOST_TRACE_ON_KEY, isHostTraceOn);
-        
-        setMessageProperties(esbMessage);
+		byte[] wrappedHostData = null;
+		if (src instanceof byte[]) {
+			wrappedHostData = wrapHostData((byte[]) src, esbMessage);
+		} else if (src instanceof Map) {
+			wrappedHostData = wrapHostData((Map<String, byte[]>) src,
+					esbMessage);
+		}
 
-        return wrappedHostData;
-    }
+		/* This will useful when the message is dispatched to the mainframe. */
+		esbMessage.setReplyTo(getReplyTo());
+
+		/*
+		 * If the message specifies a host trace mode keep it. otherwise use the
+		 * setting at the transformer level
+		 */
+		boolean isHostTraceOn = esbMessage.getInboundProperty(
+				LEGSTAR_HOST_TRACE_ON_KEY, isHostTraceOn());
+		esbMessage
+				.setOutboundProperty(LEGSTAR_HOST_TRACE_ON_KEY, isHostTraceOn);
+
+		setMessageProperties(esbMessage);
+
+		return wrappedHostData;
+	}
 
     /**
      * This method wraps a single part payload into a mainframe program execution request message.

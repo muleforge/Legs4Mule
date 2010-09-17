@@ -32,6 +32,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.io.IOUtils;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.types.DataTypeFactory;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -64,7 +65,7 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
         super(xmlBindingTransformers);
         registerSourceType(byte[].class);
         registerSourceType(InputStream.class);
-        setReturnClass(String.class);
+        setReturnDataType(DataTypeFactory.TEXT_STRING);
     }
 
     /**
@@ -79,7 +80,7 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
             final Map < String, AbstractXmlTransformers > xmlBindingTransformersMap) {
         super(xmlBindingTransformersMap);
         registerSourceType(Map.class);
-        setReturnClass(String.class);
+        setReturnDataType(DataTypeFactory.TEXT_STRING);
     }
 
     /**

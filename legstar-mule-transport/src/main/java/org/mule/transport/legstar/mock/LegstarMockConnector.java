@@ -14,6 +14,7 @@ import org.mule.transport.AbstractConnector;
 import org.mule.transport.legstar.LegstarConnector;
 import org.mule.transport.legstar.LegstarConnectorHelper;
 import org.mule.transport.legstar.config.HostCredentials;
+import org.mule.api.MuleContext;
 import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.lifecycle.InitialisationException;
@@ -22,7 +23,15 @@ import org.mule.api.lifecycle.InitialisationException;
  * This connector simulates mainframe access for adapters. 
  */
 public class LegstarMockConnector extends AbstractConnector implements LegstarConnector {
-    /** This constant defines the main transport protocol identifier. */
+
+    /**
+     * @param context the Mule context.
+     */
+	public LegstarMockConnector(MuleContext context) {
+		super(context);
+	}
+
+	/** This constant defines the main transport protocol identifier. */
     public static final String LEGSTARMOCK = "legstar-mock";
     
     /** Host user ID. */

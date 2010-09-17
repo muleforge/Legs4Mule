@@ -13,7 +13,7 @@ package org.mule.transport.legstar.transformer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mule.transport.legstar.i18n.LegstarMessages;
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.util.ClassUtils;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
@@ -24,7 +24,7 @@ import com.legstar.coxb.host.HostContext;
  * ESB Transformers derived from this class deal with esb messages which content is
  * pure zos data.
  */
-public abstract class AbstractHostMuleTransformer extends AbstractMessageAwareTransformer {
+public abstract class AbstractHostMuleTransformer extends AbstractMessageTransformer {
 
     /** Name of property holding the mainframe character set. */
     public static final String HOST_CHARSET_PROPERTY = "hostCharset";
@@ -41,7 +41,7 @@ public abstract class AbstractHostMuleTransformer extends AbstractMessageAwareTr
     /**
      * {@inheritDoc}
      */
-    public Object transform(
+    public Object transformMessage(
             final MuleMessage esbMessage,
             final String encoding) throws TransformerException {
 
@@ -85,8 +85,8 @@ public abstract class AbstractHostMuleTransformer extends AbstractMessageAwareTr
      * message properties or the configured one
      */
     public String getHostCharset(final MuleMessage message) {
-        return message.getStringProperty(
-                HOST_CHARSET_PROPERTY, getHostCharset());
+        return message.getInboundProperty(HOST_CHARSET_PROPERTY,
+        		getHostCharset());
     }
     
     /**
