@@ -30,8 +30,8 @@ public abstract class AbstractExecReplyToHostMuleTransformer extends AbstractHos
      * Because the output is a byte[] or a Map we can't be specific about the return type.
      */
     public AbstractExecReplyToHostMuleTransformer() {
-        registerSourceType(InputStream.class);
-        registerSourceType(byte[].class);
+        registerSourceType(DataTypeFactory.create(InputStream.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
         setReturnDataType(DataTypeFactory.OBJECT);
     }
 

@@ -48,9 +48,7 @@
                 class="org.mule.tck.testmodels.mule.TestSedaService">
             <inbound>
                 <inbound-endpoint ref="lsfileaeClientEndpoint" >
-                    <transformers>
-                        <byte-array-to-object-transformer />
-                    </transformers>
+                    <byte-array-to-object-transformer />
                 </inbound-endpoint>
             </inbound>
 
@@ -59,28 +57,26 @@
             <outbound>
                 <pass-through-router>
                     <outbound-endpoint ref="mainframeRequestEndpoint" >
-                        <transformers>
-                            <legstar:java-to-host-transformer
-                                hostCharset="IBM01147"
-                                class="org.mule.transport.legstar.test.lsfileae.DfhcommareaToHostMuleTransformer" />
-                            <legstar:host-to-legstar-transformer
-                                hostCharset="IBM01147"
-                                replyTo="mainframeReplyEndpoint"
+                        <legstar:java-to-host-transformer
+                            hostCharset="IBM01147"
+                            class="org.mule.transport.legstar.test.lsfileae.DfhcommareaToHostMuleTransformer" />
+                        <legstar:host-to-legstar-transformer
+                            hostCharset="IBM01147"
+                            replyTo="mainframeReplyEndpoint"
+                        >
+                            <legstar:host-program
+                                name="LSFILEAE"
+                                maxDataLength="79"
                             >
-                                <legstar:host-program
-                                    name="LSFILEAE"
-                                    maxDataLength="79"
-                                >
-                                </legstar:host-program>
-                            </legstar:host-to-legstar-transformer>
-                            <jms:object-to-jmsmessage-transformer />
-                        </transformers>
-                        <response-transformers>
+                            </legstar:host-program>
+                        </legstar:host-to-legstar-transformer>
+                        <jms:object-to-jmsmessage-transformer />
+                        <response>
                             <legstar:legstar-to-host-transformer />
                             <legstar:host-to-java-transformer
                                 hostCharset="IBM01147"
                                 class="org.mule.transport.legstar.test.lsfileae.HostToDfhcommareaMuleTransformer" />
-                        </response-transformers>
+                        </response>
                     </outbound-endpoint>
                 </pass-through-router>
             </outbound>

@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.httpclient.Header;
+import org.mule.MessageExchangePattern;
 import org.mule.api.MuleMessage;
 import org.mule.api.transport.MuleMessageFactory;
 import org.mule.api.transport.PropertyScope;
@@ -48,7 +49,9 @@ public class LegstarHttpMessageFactoryTestCase extends AbstractMuleMessageFactor
     /** {@inheritDoc} */
 	@Override
 	protected MuleMessageFactory doCreateMuleMessageFactory() {
-		return new LegstarHttpMuleMessageFactory(muleContext);
+		LegstarHttpMuleMessageFactory messageFactory = new LegstarHttpMuleMessageFactory(muleContext);
+		messageFactory.setExchangePattern(MessageExchangePattern.REQUEST_RESPONSE);
+		return messageFactory;
 	}
 
     /** {@inheritDoc} */
@@ -76,7 +79,7 @@ public class LegstarHttpMessageFactoryTestCase extends AbstractMuleMessageFactor
         assertNotNull(message);
         byte[] bytePayload = (byte[]) message.getPayloadAsBytes();
         assertTrue(Arrays.equals(getLsfileaeMessage100(), bytePayload));
-        assertEquals(HttpConstants.METHOD_POST, message.getOutboundProperty(HttpConnector.HTTP_METHOD_PROPERTY));
+        assertEquals(HttpConstants.METHOD_POST, message.getInboundProperty(HttpConnector.HTTP_METHOD_PROPERTY));
         assertEquals("foo-value", message.getProperty("foo-header", PropertyScope.INBOUND));
     }
 

@@ -63,8 +63,8 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
     public AbstractHostToXmlMuleTransformer(
             final AbstractXmlTransformers xmlBindingTransformers) {
         super(xmlBindingTransformers);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
+        registerSourceType(DataTypeFactory.create(InputStream.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
         setReturnDataType(DataTypeFactory.TEXT_STRING);
     }
 
@@ -79,7 +79,7 @@ public abstract class AbstractHostToXmlMuleTransformer extends AbstractHostXmlMu
     public AbstractHostToXmlMuleTransformer(
             final Map < String, AbstractXmlTransformers > xmlBindingTransformersMap) {
         super(xmlBindingTransformersMap);
-        registerSourceType(Map.class);
+        registerSourceType(DataTypeFactory.create(Map.class));
         setReturnDataType(DataTypeFactory.TEXT_STRING);
     }
 

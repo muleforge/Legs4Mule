@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<xsd:schema xmlns="http://www.mulesoft.org/schema/mule/legstar" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-    xmlns:mule="http://www.mulesoft.org/schema/mule/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-    xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:schemadoc="http://www.mulesoft.org/schema/mule/schemadoc"
-    targetNamespace="http://www.mulesoft.org/schema/mule/legstar" elementFormDefault="qualified"
+<xsd:schema xmlns="http://www.mulesoft.org/schema/mule/legstar"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:mule="http://www.mulesoft.org/schema/mule/core"
+    xmlns:http="http://www.mulesoft.org/schema/mule/http"
+    xmlns:schemadoc="http://www.mulesoft.org/schema/mule/schemadoc"
+    targetNamespace="http://www.mulesoft.org/schema/mule/legstar"
+    elementFormDefault="qualified"
     attributeFormDefault="unqualified">
 
     <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:import namespace="http://www.mulesoft.org/schema/mule/core" schemaLocation="http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd" />
     <xsd:import namespace="http://www.mulesoft.org/schema/mule/http" schemaLocation="http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd" />
-    <xsd:import namespace="http://www.mulesoft.org/schema/mule/jms" schemaLocation="http://www.mulesoft.org/schema/mule/jms/3.0/mule-jms.xsd" />
     <xsd:import namespace="http://www.mulesoft.org/schema/mule/schemadoc" schemaLocation="http://www.mulesoft.org/schema/mule/schemadoc/3.0/mule-schemadoc.xsd" />
 
     <xsd:annotation>

@@ -36,7 +36,7 @@ public class HostByteArrayToHttpResponse extends MuleMessageToHttpResponse {
      * Source is a byte array and response is an HTTP response.
      */
     public HostByteArrayToHttpResponse() {
-        registerSourceType(byte[].class);
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
         setReturnDataType(DataTypeFactory.create(HttpResponse.class));
     }
 
@@ -53,7 +53,7 @@ public class HostByteArrayToHttpResponse extends MuleMessageToHttpResponse {
     throws IOException, TransformerException {
 
         /* Force the content type and content length */
-    	msg.setInboundProperty(HttpConstants.HEADER_CONTENT_TYPE,
+    	msg.setOutboundProperty(HttpConstants.HEADER_CONTENT_TYPE,
     			LEGSTAR_HTTP_CONTENT_TYPE);
         HttpResponse response = super.createResponse(src, encoding, msg);
         return response;

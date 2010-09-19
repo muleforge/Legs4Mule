@@ -7,7 +7,7 @@
     <name>LegStar for Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
-        <muleVersion>3.0.0-RC2</muleVersion>
+        <muleVersion>3.0.0</muleVersion>
         <legstarVersion>1.3.2</legstarVersion>
         <legstarMuleVersion>3.0.0-SNAPSHOT</legstarMuleVersion>
         <springVersion>3.0.3.RELEASE</springVersion>

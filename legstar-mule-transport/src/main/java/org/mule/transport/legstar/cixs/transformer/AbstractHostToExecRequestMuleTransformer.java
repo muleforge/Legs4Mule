@@ -53,8 +53,8 @@ public abstract class AbstractHostToExecRequestMuleTransformer extends AbstractH
      * Constructor registers source and return classes.
      */
     public AbstractHostToExecRequestMuleTransformer() {
-        registerSourceType(Map.class);
-        registerSourceType(byte[].class);
+        registerSourceType(DataTypeFactory.create(Map.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
         setReturnDataType(DataTypeFactory.BYTE_ARRAY);
     }
 

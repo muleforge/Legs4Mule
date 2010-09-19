@@ -58,9 +58,9 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
     public AbstractXmlToHostMuleTransformer(
             final AbstractXmlTransformers xmlBindingTransformers) {
         super(xmlBindingTransformers);
-        registerSourceType(String.class);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
+        registerSourceType(DataTypeFactory.STRING);
+        registerSourceType(DataTypeFactory.create(InputStream.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
         setReturnDataType(DataTypeFactory.BYTE_ARRAY);
     }
 
@@ -74,9 +74,9 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
     public AbstractXmlToHostMuleTransformer(
             final Map < String, AbstractXmlTransformers > xmlBindingTransformersMap) {
         super(xmlBindingTransformersMap);
-        registerSourceType(String.class);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
+        registerSourceType(DataTypeFactory.STRING);
+        registerSourceType(DataTypeFactory.create(InputStream.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
         setReturnDataType(DataTypeFactory.create(Map.class));
     }
 

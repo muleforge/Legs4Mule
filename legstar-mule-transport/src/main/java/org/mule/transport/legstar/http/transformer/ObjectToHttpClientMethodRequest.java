@@ -20,7 +20,7 @@ public class ObjectToHttpClientMethodRequest extends org.mule.transport.http.tra
 			endpointString = endpointString.replace("legstar:", "http:");
 			msg.setOutboundProperty(MuleProperties.MULE_ENDPOINT_PROPERTY, endpointString);
 		}
-		return super.transform(msg, outputEncoding);
+		return super.transformMessage(msg, outputEncoding);
 	}
 
 	
