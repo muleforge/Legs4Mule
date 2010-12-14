@@ -20,6 +20,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel;
 
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsActivator;
 import com.legstar.eclipse.plugin.cixscom.wizards
@@ -49,14 +50,16 @@ extends AbstractCixsGeneratorWizardPage {
      * @param pageDesc the page description
      * @param selection the current workbench selection
      * @param mappingFile the mapping file
+     * @param genModel the generation model
      */
     protected AbstractCixsMuleGeneratorWizardPage(
             final String pageName,
             final String pageTitle,
             final String pageDesc,
             final IStructuredSelection selection,
-            final IFile mappingFile) {
-        super(selection, pageName, pageTitle, pageDesc, mappingFile);
+            final IFile mappingFile,
+            final AbstractAntBuildCixsMuleModel genModel) {
+        super(selection, pageName, pageTitle, pageDesc, mappingFile, genModel);
     }
 
     /** {@inheritDoc} */
@@ -83,13 +86,17 @@ extends AbstractCixsGeneratorWizardPage {
 
     /** {@inheritDoc} */
     public void initExtendedWidgets(final IProject project) {
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-        setTargetMuleConfigDir(getDefaultTargetDir(store,
-                PreferenceConstants.TARGET_MULE_CONFIG_FOLDER));
+        setTargetMuleConfigDir(getInitTargetDir(
+                getGenModel().getTargetMuleConfigDir(),
+                PreferenceConstants.TARGET_MULE_CONFIG_FOLDER,
+                true));
 
-        setTargetJarDir(store.getDefaultString(
-                PreferenceConstants.MULE_USER_JAR_FOLDER));
+        setTargetJarDir(getInitTargetDir(
+                getGenModel().getTargetJarDir(),
+                PreferenceConstants.MULE_USER_JAR_FOLDER,
+                true));
+
     }
 
     /** {@inheritDoc} */
@@ -187,4 +194,10 @@ extends AbstractCixsGeneratorWizardPage {
     }
 
 
+    /**
+     * @return the data model
+     */
+    public AbstractAntBuildCixsMuleModel getGenModel() {
+        return (AbstractAntBuildCixsMuleModel) super.getGenModel();
+    }
 }

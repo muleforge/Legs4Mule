@@ -57,9 +57,12 @@ public abstract class AbstractCixsWmqGroup extends AbstractCixsControlsGroup {
     /**
      * Construct this control group attaching it to a wizard page.
      * @param wizardPage the parent wizard page
+     * @param selected whether this group should initially be selected
      */
-    public AbstractCixsWmqGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
+    public AbstractCixsWmqGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final boolean selected) {
+        super(wizardPage, selected);
     }
 
     /**

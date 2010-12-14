@@ -8,8 +8,9 @@
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>2.2.1</muleVersion>
-        <legstarVersion>1.3.1</legstarVersion>
-        <legstarMuleVersion>1.0.2-SNAPSHOT</legstarMuleVersion>
+        <legstarVersion>1.4.3-SNAPSHOT</legstarVersion>
+        <legstarMuleVersion>2.0.2-SNAPSHOT</legstarMuleVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
@@ -65,54 +66,6 @@
             <url>dav:https://dav.muleforge.org/legstar-transport/maven</url>
         </site>
     </distributionManagement>
-
-    <repositories>
-    <!--
-        <repository>
-            <id>LegStar distribution</id>
-            <url>http://www.legsem.com/legstar/maven/repo</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>LegStar snapshots distributions</id>
-            <url>http://www.legsem.com/legstar/maven/snapshots</url>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>java.net</id>
-            <url>https://maven-repository.dev.java.net/nonav/repository/</url>
-            <layout>legacy</layout>
-        </repository>
-        <repository>
-            <id>download.java.net</id>
-            <url>http://download.java.net/maven/2</url>
-        </repository>
-        <repository>
-            <id>muleforge-repo</id>
-            <name>MuleForge Repository</name>
-            <url>http://repository.muleforge.org</url>
-            <layout>default</layout>
-        </repository>
-        <repository>
-            <id>codehaus-repo</id>
-            <name>Codehaus Repository</name>
-            <url>http://dist.codehaus.org/mule/dependencies/maven2</url>
-            <layout>default</layout>
-        </repository>
-        -->
-    </repositories>
 
     <build>
 

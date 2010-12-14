@@ -11,6 +11,7 @@
 package org.mule.transport.legstar.model;
 
 import java.io.File;
+import java.util.Properties;
 
 import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
 import com.legstar.cixs.gen.model.options.HttpTransportParameters;
@@ -24,54 +25,110 @@ import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixsModel
 {
     
+    /* ====================================================================== */
+    /* Following are default values.                                        = */
+    /* ====================================================================== */
+    public static final SampleConfigurationTransport DEFAULT_SAMPLE_CONFIGURATION_TRANSPORT = SampleConfigurationTransport.HTTP;
+    
+    public static final SampleConfigurationHostMessagingType DEFAULT_SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE = SampleConfigurationHostMessagingType.LEGSTAR;
+
+    /* ====================================================================== */
+    /* Following are key identifiers for this model persistence.            = */
+    /* ====================================================================== */
+
+    /** Mule product location on file system. */
+    public static final String MULE_HOME = "muleHome";
+
+    /** Where the LegStar Mule generator product is installed. */
+    public static final String MULEGEN_PRODUCT_LOCATION = "mulegenProductLocation";
+
+    /** Target directory where Mule configuration files will be created. */
+    public static final String TARGET_MULE_CONFIG_DIR = "targetMuleConfigDir";
+
+    /** Target location for mule jar files. */
+    public static final String TARGET_JAR_DIR = "targetJarDir";
+
+    /** Transports supported by generated service configuration samples. */
+    public static final String SAMPLE_CONFIGURATION_TRANSPORT = "sampleConfigurationTransport";
+
+    /** Host messaging used by generated service configuration samples. */
+    public static final String SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE = "sampleConfigurationHostMessagingType";
+
+    /* ====================================================================== */
+    /* Following are this class fields that are persistent.                 = */
+    /* ====================================================================== */
+
     /** Mule product location on file system.*/
-    private String mMuleHome;
+    private String _muleHome;
     
     /** Where the LegStar Mule generator product is installed on the file system.
      * The Mule generator might reside somewhere else than the LegStar core product. */
-    private String mMulegenProductLocation;
+    private String _mulegenProductLocation;
     
     /** The target directory where Mule configuration files will be created. */
-    private File mTargetMuleConfigDir;
+    private File _targetMuleConfigDir;
     
     /** The target location for mule jar files. */
-    private File mTargetJarDir;
+    private File _targetJarDir;
     
     /** The transports supported by generated service configuration samples. */
-    private SampleConfigurationTransport mSampleConfigurationTransport = SampleConfigurationTransport.HTTP;
+    private SampleConfigurationTransport _sampleConfigurationTransport = DEFAULT_SAMPLE_CONFIGURATION_TRANSPORT;
 
     /** Set of parameters needed for HTTP transport. */
-    private HttpTransportParameters mHttpTransportParameters = new HttpTransportParameters();
+    private HttpTransportParameters _httpTransportParameters = new HttpTransportParameters();
 
     /** Set of parameters needed for Websphere MQ transport. */
-    private WmqTransportParameters mWmqTransportParameters = new WmqTransportParameters();
+    private WmqTransportParameters _wmqTransportParameters = new WmqTransportParameters();
 
     /** The host messaging used by generated service configuration samples. */
-    private SampleConfigurationHostMessagingType mSampleConfigurationHostMessagingType =
-        SampleConfigurationHostMessagingType.LEGSTAR;
+    private SampleConfigurationHostMessagingType _sampleConfigurationHostMessagingType =
+        DEFAULT_SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE;
 
     /**
      * Construct the model with a generator name and velocity template.
      * @param generatorName to designate the generator
-     * @param vlcTemplate a velocity template that accecpts this model
+     * @param vlcTemplate a velocity template that accepts this model
      */
     public AbstractAntBuildCixsMuleModel(
             final String generatorName, final String vlcTemplate) {
         super(generatorName, vlcTemplate);
+        _httpTransportParameters = new HttpTransportParameters();
+        _wmqTransportParameters = new WmqTransportParameters();
+        setCixsMuleComponent(new CixsMuleComponent());
+    }
+    
+    /**
+     * Construct from a properties file.
+     * 
+     * @param generatorName to designate the generator
+     * @param vlcTemplate a velocity template that accepts this model
+     */
+    public AbstractAntBuildCixsMuleModel(final String generatorName,
+            final String vlcTemplate, final Properties props) {
+        super(generatorName, vlcTemplate);
+        setMuleHome(getString(props, MULE_HOME, null));
+        setMulegenProductLocation(getString(props, MULEGEN_PRODUCT_LOCATION, null));
+        setSampleConfigurationTransport(getString(props, SAMPLE_CONFIGURATION_TRANSPORT,
+                DEFAULT_SAMPLE_CONFIGURATION_TRANSPORT.toString()));
+        _httpTransportParameters = new HttpTransportParameters(props);
+        _wmqTransportParameters = new WmqTransportParameters(props);
+        setSampleConfigurationHostMessagingType(getString(props, SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE,
+                DEFAULT_SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE.toString()));
+        setCixsMuleComponent(new CixsMuleComponent(props));
     }
     
     /**
      * @return the Mule product location on file system
      */
     public final String getMuleHome() {
-        return mMuleHome;
+        return _muleHome;
     }
 
     /**
      * @param muleHome the Mule product location on file system to set
      */
     public final void setMuleHome(final String muleHome) {
-        mMuleHome = muleHome;
+        _muleHome = muleHome;
     }
 
     /**
@@ -79,7 +136,7 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      *  created
      */
     public final File getTargetMuleConfigDir() {
-        return mTargetMuleConfigDir;
+        return _targetMuleConfigDir;
     }
 
     /**
@@ -88,21 +145,21 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      */
     public final void setTargetMuleConfigDir(
             final File targetMuleConfigDir) {
-        mTargetMuleConfigDir = targetMuleConfigDir;
+        _targetMuleConfigDir = targetMuleConfigDir;
     }
 
     /**
      * @return the target location for mule jar files
      */
     public final File getTargetJarDir() {
-        return mTargetJarDir;
+        return _targetJarDir;
     }
 
     /**
      * @param targetJarDir the target location for mule jar files to set
      */
     public final void setTargetJarDir(final File targetJarDir) {
-        mTargetJarDir = targetJarDir;
+        _targetJarDir = targetJarDir;
     }
 
     /**
@@ -127,7 +184,7 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      * This is needed for ant scripts classpaths.
      */
     public final String getMulegenProductLocation() {
-        return mMulegenProductLocation;
+        return _mulegenProductLocation;
     }
 
     /**
@@ -136,7 +193,7 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      */
     public final void setMulegenProductLocation(
             final String mulegenProductLocation) {
-        mMulegenProductLocation = mulegenProductLocation;
+        _mulegenProductLocation = mulegenProductLocation;
     }
 
     /**
@@ -168,7 +225,7 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     }
     
     /**
-     * Sample configurations are generated either for a certain type of host
+     * Sample configurations are generated for a certain type of host
      * messaging. Depending on messaging, host data will be wrapped into a
      * different type of message.
      */
@@ -183,7 +240,7 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      * @return the transport used by generated configuration samples.
      */
     public SampleConfigurationTransport getSampleConfigurationTransport() {
-        return mSampleConfigurationTransport;
+        return _sampleConfigurationTransport;
     }
 
     /**
@@ -191,14 +248,22 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      */
     public void setSampleConfigurationTransport(
             final SampleConfigurationTransport sampleConfigurationTransport) {
-        mSampleConfigurationTransport = sampleConfigurationTransport;
+        _sampleConfigurationTransport = sampleConfigurationTransport;
+    }
+
+    /**
+     * @param sampleConfigurationTransport the transport used by generated configuration samples.
+     */
+    public void setSampleConfigurationTransport(
+            final String sampleConfigurationTransport) {
+        _sampleConfigurationTransport = SampleConfigurationTransport.valueOf(sampleConfigurationTransport);
     }
 
     /**
      * @return set of parameters needed for HTTP transport
      */
     public HttpTransportParameters getHttpTransportParameters() {
-        return mHttpTransportParameters;
+        return _httpTransportParameters;
     }
 
     /**
@@ -206,14 +271,14 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      */
     public void setHttpTransportParameters(
             final HttpTransportParameters httpTransportParameters) {
-        mHttpTransportParameters = httpTransportParameters;
+        _httpTransportParameters = httpTransportParameters;
     }
 
     /**
      * @return set of parameters needed for WebSphere MQ transport
      */
     public WmqTransportParameters getWmqTransportParameters() {
-        return mWmqTransportParameters;
+        return _wmqTransportParameters;
     }
 
     /**
@@ -221,14 +286,14 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      */
     public void setWmqTransportParameters(
             final WmqTransportParameters wmqTransportParameters) {
-        mWmqTransportParameters = wmqTransportParameters;
+        _wmqTransportParameters = wmqTransportParameters;
     }
 
     /**
      * @return the host messaging used by generated service configuration samples
      */
     public SampleConfigurationHostMessagingType getSampleConfigurationHostMessagingType() {
-        return mSampleConfigurationHostMessagingType;
+        return _sampleConfigurationHostMessagingType;
     }
 
     /**
@@ -237,7 +302,33 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      */
     public void setSampleConfigurationHostMessagingType(
             final SampleConfigurationHostMessagingType sampleConfigurationHostMessagingType) {
-        mSampleConfigurationHostMessagingType = sampleConfigurationHostMessagingType;
+        _sampleConfigurationHostMessagingType = sampleConfigurationHostMessagingType;
     }
 
+    /**
+     * @param sampleConfigurationHostMessagingType
+     *            the host messaging used by generated service configuration
+     *            samples
+     */
+    public void setSampleConfigurationHostMessagingType(
+            final String sampleConfigurationHostMessagingType) {
+        _sampleConfigurationHostMessagingType = SampleConfigurationHostMessagingType
+                .valueOf(sampleConfigurationHostMessagingType);
+    }
+
+    /**
+     * @return a properties file holding the values of this object fields
+     */
+    public Properties toProperties() {
+        Properties props = super.toProperties();
+        putString(props, MULE_HOME, getMuleHome());
+        putString(props, MULEGEN_PRODUCT_LOCATION, getMulegenProductLocation());
+        putString(props, SAMPLE_CONFIGURATION_TRANSPORT,
+                getSampleConfigurationTransport().toString());
+        props.putAll(getHttpTransportParameters().toProperties());
+        props.putAll(getWmqTransportParameters().toProperties());
+        putString(props, SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE,
+                getSampleConfigurationHostMessagingType().toString());
+        return props;
+    }
 }

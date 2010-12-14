@@ -24,9 +24,9 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.legstar.cixs.gen.ant.CixsHelper;
 import com.legstar.codegen.CodeGenHelper;
 import com.legstar.codegen.CodeGenUtil;
-import com.legstar.coxb.gen.CoxbHelper;
 
 import junit.framework.TestCase;
 
@@ -89,7 +89,7 @@ public class AbstractTestTemplate extends TestCase {
             mParameters = new HashMap < String, Object >();
             CodeGenHelper helper = new CodeGenHelper();
             mParameters.put("helper", helper);
-            mParameters.put("coxbHelper", new CoxbHelper());
+            mParameters.put("cixsHelper", new CixsHelper());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
