@@ -753,12 +753,12 @@
 
         <!-- Integration test modules -->
         <module>legstar-mulegen-jvmquery</module>
-        <module>legstar-mulegen-jvmquery-wmq</module>
+        <module>legstar-mulegen-jvmquerywmq</module>
         <module>legstar-mulegen-lsfileac</module>
         <module>legstar-mulegen-lsfileae</module>
-        <module>legstar-mulegen-lsfileae-wmq</module>
-        <module>legstar-mulegen-lsfileae-tcp</module>
-        <module>legstar-mulegen-lsfileae-mock</module>
+        <module>legstar-mulegen-lsfileaewmq</module>
+        <module>legstar-mulegen-lsfileaetcp</module>
+        <module>legstar-mulegen-lsfileaemock</module>
         <module>legstar-mulegen-lsfileal</module>
         <module>legstar-mulegen-lsfileax</module>
 
