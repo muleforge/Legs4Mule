@@ -59,7 +59,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void testLsfileaeWmqGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-wmq");
+        muleComponent.setName(muleComponent.getName() + "wmq");
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(
@@ -88,7 +88,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void testLsfileaeTcpGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-tcp");
+        muleComponent.setName(muleComponent.getName() + "tcp");
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(
@@ -104,7 +104,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void testLsfileaeMockGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-mock");
+        muleComponent.setName(muleComponent.getName() + "mock");
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(

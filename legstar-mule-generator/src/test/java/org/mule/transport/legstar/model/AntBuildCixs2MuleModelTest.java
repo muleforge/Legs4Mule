@@ -67,7 +67,7 @@ public class AntBuildCixs2MuleModelTest extends AbstractTestTemplate {
     public void testJvmqueryWmqGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-wmq");
+        muleComponent.setName(muleComponent.getName() + "wmq");
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(SampleConfigurationTransport.WMQ);

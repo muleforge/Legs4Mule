@@ -6,7 +6,7 @@
         <version>2.0.2-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
-    <artifactId>legstar-mulegen-lsfileae-mock</artifactId>
+    <artifactId>legstar-mulegen-lsfileaemock</artifactId>
     <packaging>jar</packaging>
     <version>2.0.2-SNAPSHOT</version>
     <name>Sample Adapter for program LSFILEAE over MOCK</name>
