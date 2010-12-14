@@ -19,8 +19,8 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="..\legstar-mulegen-lsfileae-tcp\target\classes"/>
-            <pathelement location="..\legstar-mulegen-lsfileae-tcp\target\classes"/>
+            <pathelement location="..\legstar-mulegen-lsfileaetcp\target\classes"/>
+            <pathelement location="..\legstar-mulegen-lsfileaetcp\target\classes"/>
             <pathelement location="..\legstar-mule-generator\target\classes"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
@@ -39,20 +39,20 @@
   
     <target name="generateMule2Cixs" depends="init">
     
-        <mule2cixsgen targetSrcDir="..\legstar-mulegen-lsfileae-tcp\src\main\java"
-            targetMuleConfigDir="..\legstar-mulegen-lsfileae-tcp\src\main\resources"
-            targetDistDir="..\legstar-mulegen-lsfileae-tcp\target\dist"
-            targetAntDir="..\legstar-mulegen-lsfileae-tcp\ant"
+        <mule2cixsgen targetSrcDir="..\legstar-mulegen-lsfileaetcp\src\main\java"
+            targetMuleConfigDir="..\legstar-mulegen-lsfileaetcp\src\main\resources"
+            targetDistDir="..\legstar-mulegen-lsfileaetcp\target\dist"
+            targetAntDir="..\legstar-mulegen-lsfileaetcp\ant"
             targetJarDir="${mule.home}\lib\user"
-            targetBinDir="..\legstar-mulegen-lsfileae-tcp\target\classes"
-            jaxbBinDir="..\legstar-mulegen-lsfileae-tcp\target\classes"
-            coxbBinDir="..\legstar-mulegen-lsfileae-tcp\target\classes"
+            targetBinDir="..\legstar-mulegen-lsfileaetcp\target\classes"
+            jaxbBinDir="..\legstar-mulegen-lsfileaetcp\target\classes"
+            coxbBinDir="..\legstar-mulegen-lsfileaetcp\target\classes"
             custBinDir="..\legstar-mule-generator\target\classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="TCP"
             sampleConfigurationHostMessagingType="LEGSTAR"
           >
-            <cixsMuleComponent name="lsfileae-tcp"
+            <cixsMuleComponent name="lsfileaetcp"
                 packageName="org.mule.transport.legstar.test.lsfileae">
                 <cixsOperation name="lsfileae"
                     cicsProgramName="LSFILEAE"

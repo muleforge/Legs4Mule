@@ -74,20 +74,11 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
             generator.execute();
             fail();
         } catch (Exception e) {
-            assertEquals("You must specify a service description",
-                    e.getCause().getMessage());
-        }
-        CixsMuleComponent muleComponent = new CixsMuleComponent();
-        try {
-            generator.setCixsMuleComponent(muleComponent);
-            generator.execute();
-            fail();
-        } catch (Exception e) {
             assertEquals("You must provide a service name",
                     e.getCause().getMessage());
         }
         try {
-            muleComponent.setName("muleComponentName");
+            generator.getCixsMuleComponent().setName("muleComponentName");
             generator.execute();
             fail();
         } catch (Exception e) {

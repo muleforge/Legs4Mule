@@ -19,8 +19,8 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="..\legstar-mulegen-lsfileae-wmq\target\classes"/>
-            <pathelement location="..\legstar-mulegen-lsfileae-wmq\target\classes"/>
+            <pathelement location="..\legstar-mulegen-lsfileaewmq\target\classes"/>
+            <pathelement location="..\legstar-mulegen-lsfileaewmq\target\classes"/>
             <pathelement location="..\legstar-mule-generator\target\classes"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
@@ -39,20 +39,20 @@
   
     <target name="generateMule2Cixs" depends="init">
     
-        <mule2cixsgen targetSrcDir="..\legstar-mulegen-lsfileae-wmq\src\main\java"
-            targetMuleConfigDir="..\legstar-mulegen-lsfileae-wmq\src\main\resources"
-            targetDistDir="..\legstar-mulegen-lsfileae-wmq\target\dist"
-            targetAntDir="..\legstar-mulegen-lsfileae-wmq\ant"
+        <mule2cixsgen targetSrcDir="..\legstar-mulegen-lsfileaewmq\src\main\java"
+            targetMuleConfigDir="..\legstar-mulegen-lsfileaewmq\src\main\resources"
+            targetDistDir="..\legstar-mulegen-lsfileaewmq\target\dist"
+            targetAntDir="..\legstar-mulegen-lsfileaewmq\ant"
             targetJarDir="${mule.home}\lib\user"
-            targetBinDir="..\legstar-mulegen-lsfileae-wmq\target\classes"
-            jaxbBinDir="..\legstar-mulegen-lsfileae-wmq\target\classes"
-            coxbBinDir="..\legstar-mulegen-lsfileae-wmq\target\classes"
+            targetBinDir="..\legstar-mulegen-lsfileaewmq\target\classes"
+            jaxbBinDir="..\legstar-mulegen-lsfileaewmq\target\classes"
+            coxbBinDir="..\legstar-mulegen-lsfileaewmq\target\classes"
             custBinDir="..\legstar-mule-generator\target\classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="WMQ"
             sampleConfigurationHostMessagingType="MQCIH"
           >
-            <cixsMuleComponent name="lsfileae-wmq"
+            <cixsMuleComponent name="lsfileaewmq"
                 packageName="org.mule.transport.legstar.test.lsfileae">
                 <cixsOperation name="lsfileae"
                     cicsProgramName="LSFILEAE"

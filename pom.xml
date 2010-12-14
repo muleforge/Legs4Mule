@@ -3,13 +3,12 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar-pom</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>2.0.2-SNAPSHOT</version>
     <name>LegStar for Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>2.2.1</muleVersion>
         <legstarVersion>1.4.3-SNAPSHOT</legstarVersion>
-        <legstarMuleVersion>2.0.2-SNAPSHOT</legstarMuleVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
@@ -357,28 +356,28 @@
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mule-transport</artifactId>
-                <version>${legstarMuleVersion}</version>
+                <version>${version}</version>
             </dependency>
 
             <!-- LegStar for Mule generator -->    
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mule-generator</artifactId>
-                <version>${legstarMuleVersion}</version>
+                <version>${version}</version>
             </dependency>
 
             <!-- LegStar for Mule adapter sample -->    
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mulegen-lsfileae</artifactId>
-                <version>${legstarMuleVersion}</version>
+                <version>${version}</version>
             </dependency>
 
             <!-- LegStar for Mule proxy sample -->    
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mulegen-jvmquery</artifactId>
-                <version>${legstarMuleVersion}</version>
+                <version>${version}</version>
             </dependency>
 
             <!-- Mule intra-vm transport -->

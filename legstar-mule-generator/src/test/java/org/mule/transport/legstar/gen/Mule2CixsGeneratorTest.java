@@ -72,17 +72,8 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
                     + " JaxbBinDir: No directory name was specified",
                     e.getCause().getMessage());
         }
-        CixsMuleComponent muleComponent = new CixsMuleComponent();
         try {
             generator.setJaxbBinDir(new File("target/classes"));
-            generator.execute();
-            fail();
-        } catch (Exception e) {
-            assertEquals("You must specify a service description",
-                    e.getCause().getMessage());
-        }
-        try {
-            generator.setCixsMuleComponent(muleComponent);
             generator.execute();
             fail();
         } catch (Exception e) {
@@ -90,7 +81,7 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
                     e.getCause().getMessage());
         }
         try {
-            muleComponent.setName("muleComponentName");
+            generator.getCixsMuleComponent().setName("muleComponentName");
             generator.execute();
             fail();
         } catch (Exception e) {
