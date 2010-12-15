@@ -11,26 +11,49 @@
 package org.mule.transport.legstar.model;
 
 import java.util.Map;
+import java.util.Properties;
 
 import com.legstar.codegen.CodeGenMakeException;
+import com.legstar.codegen.models.AbstractPropertiesModel;
 
 /**
  * Set of parameters describing UMO component target.
  */
-public class UmoComponentParameters {
+public class UmoComponentParameters extends AbstractPropertiesModel {
 
     /* ====================================================================== */
-    /* = Constants section                                                  = */
+    /* Following are this class fields that are persistent.                 = */
     /* ====================================================================== */
+
+    /** The target UMO component category. */
+    private String _implementationName;
+    
+    /* ====================================================================== */
+    /* Following are key identifiers for this model persistence. = */
+    /* ====================================================================== */
+
     /** The class of the object or an object reference of the component being registered as an UMO. */ 
     public static final String UMO_COMPONENT_IMPLEMENTATION_NAME_PROPERTY = "umoComponentImplementationName";
 
-    /* ====================================================================== */
-    /* = Properties section                                                 = */
-    /* ====================================================================== */
-    /** The target UMO component category. */
-    private String mImplementationName;
+    /**
+     * Construct an empty model.
+     */
+    public UmoComponentParameters() {
+        
+    }
     
+    /**
+     * Construct from a properties file.
+     * 
+     * @param props
+     *            the property file
+     */
+    public UmoComponentParameters(final Properties props) {
+        super(props);
+        setImplementationName(getString(props,
+                UMO_COMPONENT_IMPLEMENTATION_NAME_PROPERTY, null));
+    }
+ 
     /**
      * UMO component parameters are expected by templates to come from a parameters map.
      * @param parameters a parameters map to which UMO component parameters must be added
@@ -54,14 +77,22 @@ public class UmoComponentParameters {
      * @return the target UMO component implementation name
      */
     public String getImplementationName() {
-        return mImplementationName;
+        return _implementationName;
     }
 
     /**
      * @param implementationName the target UMO component implementation name to set
      */
     public void setImplementationName(final String implementationName) {
-        mImplementationName = implementationName;
+        _implementationName = implementationName;
     }
 
+    /**
+     * @return a properties file holding the values of this object fields
+     */
+    public Properties toProperties() {
+        Properties props = super.toProperties();
+        putString(props, UMO_COMPONENT_IMPLEMENTATION_NAME_PROPERTY, getImplementationName());
+        return props;
+    }
 }

@@ -39,6 +39,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void setUp() {
         super.setUp();
         mAntModel = new AntBuildMule2CixsModel();
+        mAntModel.setMuleHome("${env.MULE2_HOME}");
     }
 
     /**

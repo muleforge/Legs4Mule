@@ -48,11 +48,11 @@
     <!-- Generate the JAXB classes source
     -->
     <target name="generateJAXB" depends="init">
-        <echo message="Generating JAXB classes for schema/lsfileae.xsd" />
+        <echo message="Generating JAXB classes for schema/jvmquery.xsd" />
         <jaxbgen 
-            xsdFile="schema/lsfileae.xsd"
+            xsdFile="schema/jvmquery.xsd"
             targetDir="src"
-            jaxbPackageName="com.legstar.test.coxb.lsfileae"
+            jaxbPackageName="com.legstar.test.coxb.jvmquery"
             generateIsSetMethod="true"
             serializableUid="1"
         />
@@ -67,7 +67,7 @@
             destdir="bin"
             classpathref="classpath"
             fork="yes"
-            includes="com/legstar/test/coxb/lsfileae/**"
+            includes="com/legstar/test/coxb/jvmquery/**"
         />
     </target>
   
@@ -75,14 +75,15 @@
     <!-- Generate Transformers by reflecting on JAXB classes.
     -->
     <target name="generateCOXB" depends="compileJAXB">
-        <echo message="Generating Transformers for [Dfhcommarea]" />
+        <echo message="Generating Transformers for [JvmQueryRequest, JvmQueryReply]" />
         <coxbgen 
             targetDir="src"
-            jaxbPackageName="com.legstar.test.coxb.lsfileae"
-            coxbPackageName="com.legstar.test.coxb.lsfileae.bind"
+            jaxbPackageName="com.legstar.test.coxb.jvmquery"
+            coxbPackageName="com.legstar.test.coxb.jvmquery.bind"
             xmlTransformers="true"
             >
-            <jaxbRootClass name="Dfhcommarea"/>
+            <jaxbRootClass name="JvmQueryRequest"/>
+            <jaxbRootClass name="JvmQueryReply"/>
         </coxbgen>
     </target>
 
@@ -94,7 +95,7 @@
             destdir="bin"
             classpathref="classpath"
             fork="yes"
-            includes="com/legstar/test/coxb/lsfileae/**"
+            includes="com/legstar/test/coxb/jvmquery/**"
         />
     </target>
   

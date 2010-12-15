@@ -29,7 +29,7 @@
         <!-- Generated source code target location   -->
         <property name="src.dir" value="src"/>
         <!-- Generated binaries target location  -->
-        <property name="bin.dir" value="build"/>
+        <property name="bin.dir" value="bin"/>
         <!-- Generated Ant scripts target location   -->
         <property name="ant.dir" value="ant"/>
         <!-- Generated Mule configurations target location   -->

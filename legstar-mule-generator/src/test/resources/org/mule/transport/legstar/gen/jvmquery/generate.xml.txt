@@ -15,7 +15,7 @@
     <target name="init">
 
         <property environment="env"/>
-        <property name="mule.home" value="${env.MULE_HOME}"/>
+        <property name="mule.home" value="${env.MULE2_HOME}"/>
         <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
 
         <!-- Classpath setting -->

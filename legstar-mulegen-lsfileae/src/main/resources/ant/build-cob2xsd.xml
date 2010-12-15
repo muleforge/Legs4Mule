@@ -37,11 +37,8 @@
         <cob2xsd target="${xsd.dir}"
             targetNamespace="http://legstar.com/test/coxb/lsfileae"
             addLegStarAnnotations="true"
-            jaxbPackageName="com.legstar.test.coxb.lsfileae"
         >
-            <fileset dir="${cobol.dir}">
-                <include name="*"/>
-            </fileset>
+            <fileset file="${cobol.dir}/lsfileae"/>
         </cob2xsd>
     </target>
   

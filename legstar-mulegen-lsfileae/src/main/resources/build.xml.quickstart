@@ -11,7 +11,7 @@
         <!-- Classpath setting -->
         <path id="classpath">
             <pathelement location="${basedir}"/>
-            <pathelement location="${basedir}/build"/>
+            <pathelement location="${basedir}/bin"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
             <fileset dir="${mule.home}" includes="lib/opt/*.jar" />
@@ -30,7 +30,6 @@
         <ant antfile="ant/build-cob2xsd.xml" dir="${basedir}"/>
         
         <!-- Generate JAXB annotated classes and COBOL binding classes -->
-        <ant antfile="ant/build-jaxb.xml" dir="${basedir}"/>
         <ant antfile="ant/build-coxb.xml" dir="${basedir}"/>
     
         <!-- Generate Mule Mainframe Adapter artifacts -->
@@ -44,7 +43,7 @@
     <target name="compileJUnit" depends="init">
         <javac target="1.5"
             srcdir="src"
-            destdir="build"
+            destdir="bin"
             classpathref="classpath"
             fork="no"
             debug="true"

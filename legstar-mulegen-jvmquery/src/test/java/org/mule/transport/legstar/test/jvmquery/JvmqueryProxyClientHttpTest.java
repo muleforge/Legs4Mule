@@ -34,8 +34,8 @@ public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
 
     /** Raw mainframe request in hex. */
     public static final String MAINFRAME_REQUEST_DATA =
-        /*0 0 0 2 M U L E _ H O M E - - - - - - - - - - - - - - - - - - -*/
-        "00000002d4e4d3c56dc8d6d4c540404040404040404040404040404040404040"
+        /*0 0 0 2 M U L E 2 _ H O M E - - - - - - - - - - - - - - - - - -*/
+        "00000002d4e4d3c5f26dc8d6d4c5404040404040404040404040404040404040"
         /*  - - - - J A V A _ H O M E - - - - - - - - - - - - - - - - - - -*/
         + "40404040d1c1e5c16dc8d6d4c540404040404040404040404040404040404040"
         /*  - - - - */

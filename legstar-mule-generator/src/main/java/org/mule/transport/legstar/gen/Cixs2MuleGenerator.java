@@ -15,7 +15,6 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
-import org.mule.transport.legstar.model.CixsMuleComponent;
 import org.mule.transport.legstar.model.UmoComponentParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;

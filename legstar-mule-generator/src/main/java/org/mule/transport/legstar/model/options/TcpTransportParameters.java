@@ -13,43 +13,86 @@ package org.mule.transport.legstar.model.options;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Properties;
 
 import com.legstar.codegen.CodeGenMakeException;
 import com.legstar.codegen.CodeGenUtil;
+import com.legstar.codegen.models.AbstractPropertiesModel;
 
 /**
  * Set of parameters needed for TCP transport.
  */
-public class TcpTransportParameters {
+public class TcpTransportParameters extends AbstractPropertiesModel {
 
-    /** The URL scheme. */
-    private String mScheme = "tcp";
-
-    /** The host on which the HTTP server listens. */
-    private String mHost =  CodeGenUtil.getLocalIPAddress();
+    /* ====================================================================== */
+    /* Following are this class default values.                             = */
+    /* ====================================================================== */
 
     /** The default port number on which the HTTP server listens. */
-    public static final int DEFAULT_PORT = 3060;
+    public static final int DEFAULT_TCP_PORT = 3060;
+
+    /** The default scheme to use for URLs. */
+    public static final String DEFAULT_TCP_SCHEME = "tcp";
+
+    /* ====================================================================== */
+    /* Following are this class fields that are persistent.                 = */
+    /* ====================================================================== */
+
+    /** The URL scheme. */
+    private String _tcpScheme = DEFAULT_TCP_SCHEME;
+
+    /** The host on which the HTTP server listens. */
+    private String _tcpHost;
 
     /** The port number on which the HTTP server listens. */
-    private int mPort = DEFAULT_PORT;
+    private int _tcpPort = DEFAULT_TCP_PORT;
 
     /** User ID for basic authentication. */
-    private String mUserId = "";
+    private String _tcpUserId = "";
 
     /** Password for basic authentication. */
-    private String mPassword = "";
+    private String _tcpPassword = "";
 
+    /* ====================================================================== */
+    /* Following are key identifiers for this model persistence. = */
+    /* ====================================================================== */
+    /** TCP host. */
+    public static final String TCP_HOST = "tcpHost";
+
+    /** TCP port. */
+    public static final String TCP_PORT = "tcpPort";
+
+    /** TCP user id. */
+    public static final String TCP_USERID = "tcpUserId";
+
+    /** TCP password. */
+    public static final String TCP_PASSWORD = "tcpPassword";
+
+    /** TCP URL. */
+    public static final String TCP_URL = "tcpURL";
+
+    
+    public TcpTransportParameters() {
+        _tcpHost =  CodeGenUtil.getLocalIPAddress();
+    }
+
+    public TcpTransportParameters(final Properties props) {
+        super(props);
+        setHost(getString(props, TCP_HOST, CodeGenUtil.getLocalIPAddress()));
+        setPort(getInt(props, TCP_PORT, DEFAULT_TCP_PORT));
+        setUserId(getString(props, TCP_USERID, ""));
+        setPassword(getString(props, TCP_PASSWORD, ""));
+    }
     /**
      * TCP parameters are expected by templates to come from a parameters map.
      * @param parameters a parameters map to which tcp parameters must be added
      */
     public void add(final Map < String, Object > parameters) {
-        parameters.put("tcpHost", getHost());
-        parameters.put("tcpPort", Integer.toString(getPort()));
-        parameters.put("tcpUserId", getUserId());
-        parameters.put("tcpPassword", getPassword());
-        parameters.put("tcpURL", getUrl());
+        parameters.put(TCP_HOST, getHost());
+        parameters.put(TCP_PORT, Integer.toString(getPort()));
+        parameters.put(TCP_USERID, getUserId());
+        parameters.put(TCP_PASSWORD, getPassword());
+        parameters.put(TCP_URL, getUrl());
     }
 
     /**
@@ -98,63 +141,74 @@ public class TcpTransportParameters {
      * @return the scheme to use with TCP
      */
     public String getScheme() {
-        return mScheme;
+        return _tcpScheme;
     }
 
     /**
      * @return the host on which the HTTP server listens
      */
     public String getHost() {
-        return mHost;
+        return _tcpHost;
     }
 
     /**
      * @param host the host on which the HTTP server listens
      */
     public void setHost(final String host) {
-        mHost = host;
+        _tcpHost = host;
     }
 
     /**
      * @return the port number on which the HTTP server listens
      */
     public int getPort() {
-        return mPort;
+        return _tcpPort;
     }
 
     /**
      * @param port the port number on which the HTTP server listens
      */
     public void setPort(final int port) {
-        mPort = port;
+        _tcpPort = port;
     }
 
     /**
      * @return the user ID for basic authentication
      */
     public String getUserId() {
-        return mUserId;
+        return _tcpUserId;
     }
 
     /**
      * @param userId the user ID for basic authentication to set
      */
     public void setUserId(final String userId) {
-        mUserId = userId;
+        _tcpUserId = userId;
     }
 
     /**
      * @return the password for basic authentication
      */
     public String getPassword() {
-        return mPassword;
+        return _tcpPassword;
     }
 
     /**
      * @param password the password for basic authentication to set
      */
     public void setPassword(final String password) {
-        mPassword = password;
+        _tcpPassword = password;
     }
 
+    /**
+     * @return a properties file holding the values of this object fields
+     */
+    public Properties toProperties() {
+        Properties props = super.toProperties();
+        putString(props, TCP_HOST, getHost());
+        putInt(props, TCP_PORT, getPort());
+        putString(props, TCP_USERID, getUserId());
+        putString(props, TCP_PASSWORD, getPassword());
+        return props;
+    }
 }
