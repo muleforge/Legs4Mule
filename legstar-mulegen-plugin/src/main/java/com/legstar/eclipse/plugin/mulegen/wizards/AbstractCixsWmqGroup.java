@@ -34,35 +34,41 @@ import com.legstar.eclipse.plugin.mulegen.Messages;
 public abstract class AbstractCixsWmqGroup extends AbstractCixsControlsGroup {
 
     /** The URL used to do naming lookups for WMQ resources. */
-    private Text mWmqJndiUrlText = null;
+    private Text _wmqJndiUrlText = null;
 
     /** The context factory class to do naming lookups for WMQ resources. */
-    private Text mWmqJndiContextFactoryText = null;
+    private Text _wmqJndiContextFactoryText = null;
 
     /** The connection-factory used to lookup queues/topics in a naming directory (JNDI). */
-    private Text mWmqConnectionFactoryText = null;
+    private Text _wmqConnectionFactoryText = null;
 
     /** The ZOS WMQ Queue Manager. */
-    private Text mWmqZosQueueManagerText = null;
+    private Text _wmqZosQueueManagerText = null;
 
     /** The WMQ Queue name receiving requests. */
-    private Text mWmqRequestQueueText = null;
+    private Text _wmqRequestQueueText = null;
 
     /** The WMQ Queue name receiving replies. */
-    private Text mWmqReplyQueueText = null;
+    private Text _wmqReplyQueueText = null;
 
     /** The WMQ Queue name receiving errors. */
-    private Text mWmqErrorQueueText = null;
+    private Text _wmqErrorQueueText = null;
+    
+    /** The data model. */
+    private WmqTransportParameters _genModel;
 
     /**
      * Construct this control group attaching it to a wizard page.
      * @param wizardPage the parent wizard page
+     * @param genModel the data model
      * @param selected whether this group should initially be selected
      */
     public AbstractCixsWmqGroup(
             final AbstractCixsGeneratorWizardPage wizardPage,
+            final WmqTransportParameters genModel,
             final boolean selected) {
         super(wizardPage, selected);
+        _genModel = genModel;
     }
 
     /**
@@ -80,25 +86,25 @@ public abstract class AbstractCixsWmqGroup extends AbstractCixsControlsGroup {
         super.createControls(composite, Messages.wmq_transport_group_label, 2);
 
         AbstractWizardPage.createLabel(getGroup(), Messages.wmq_jndi_url_label + ':');
-        mWmqJndiUrlText = AbstractWizardPage.createText(getGroup()); 
+        _wmqJndiUrlText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.wmq_jndi_context_factory_label + ':');
-        mWmqJndiContextFactoryText = AbstractWizardPage.createText(getGroup()); 
+        _wmqJndiContextFactoryText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.wmq_connection_factory_label + ':');
-        mWmqConnectionFactoryText = AbstractWizardPage.createText(getGroup()); 
+        _wmqConnectionFactoryText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.wmq_zos_queue_manager_label + ':');
-        mWmqZosQueueManagerText = AbstractWizardPage.createText(getGroup()); 
+        _wmqZosQueueManagerText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.wmq_request_queue_label + ':');
-        mWmqRequestQueueText = AbstractWizardPage.createText(getGroup()); 
+        _wmqRequestQueueText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.wmq_reply_queue_label + ':');
-        mWmqReplyQueueText = AbstractWizardPage.createText(getGroup()); 
+        _wmqReplyQueueText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.wmq_error_queue_label + ':');
-        mWmqErrorQueueText = AbstractWizardPage.createText(getGroup()); 
+        _wmqErrorQueueText = AbstractWizardPage.createText(getGroup()); 
 
     }
 
@@ -106,42 +112,168 @@ public abstract class AbstractCixsWmqGroup extends AbstractCixsControlsGroup {
      * {@inheritDoc} 
      */
     public void createExtendedListeners() {
-        mWmqJndiUrlText.addModifyListener(new ModifyListener() {
+        _wmqJndiUrlText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mWmqJndiContextFactoryText.addModifyListener(new ModifyListener() {
+        _wmqJndiContextFactoryText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mWmqConnectionFactoryText.addModifyListener(new ModifyListener() {
+        _wmqConnectionFactoryText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mWmqZosQueueManagerText.addModifyListener(new ModifyListener() {
+        _wmqZosQueueManagerText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mWmqRequestQueueText.addModifyListener(new ModifyListener() {
+        _wmqRequestQueueText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mWmqReplyQueueText.addModifyListener(new ModifyListener() {
+        _wmqReplyQueueText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mWmqErrorQueueText.addModifyListener(new ModifyListener() {
+        _wmqErrorQueueText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
     }
+
+    /**
+     * {@inheritDoc} 
+     */
+    public void initExtendedControls() {
+        setWmqJndiUrl(getInitWmqJndiUrl());
+        setWmqJndiContextFactory(getInitWmqJndiContextFactory());
+        setWmqConnectionFactory(getInitWmqConnectionFactory());
+        setWmqZosQueueManager(getInitWmqZosQueueManager());
+        setWmqRequestQueue(getInitWmqRequestQueue());
+        setWmqReplyQueue(getInitWmqReplyQueue());
+        setWmqErrorQueue(getInitWmqErrorQueue());
+        
+    }
+    
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitWmqJndiUrl() {
+        String initValue = _genModel.getJndiUrl();
+        if (initValue == null) {
+            initValue = getDefaultWmqJndiUrl();
+        }
+        return initValue;
+    }
+    
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitWmqJndiContextFactory() {
+        String initValue = _genModel.getJndiContextFactory();
+        if (initValue == null) {
+            initValue = getDefaultWmqJndiContextFactory();
+        }
+        return initValue;
+    }
+    
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitWmqConnectionFactory() {
+        String initValue = _genModel.getConnectionFactory();
+        if (initValue == null) {
+            initValue = getDefaultWmqConnectionFactory();
+        }
+        return initValue;
+    }
+    
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitWmqZosQueueManager() {
+        String initValue = _genModel.getZosQueueManager();
+        if (initValue == null) {
+            initValue = getDefaultWmqZosQueueManager();
+        }
+        return initValue;
+    }
+    
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitWmqRequestQueue() {
+        String initValue = _genModel.getRequestQueue();
+        if (initValue == null) {
+            initValue = getDefaultWmqRequestQueue();
+        }
+        return initValue;
+    }
+    
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitWmqReplyQueue() {
+        String initValue = _genModel.getReplyQueue();
+        if (initValue == null) {
+            initValue = getDefaultWmqReplyQueue();
+        }
+        return initValue;
+    }
+    
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitWmqErrorQueue() {
+        String initValue = _genModel.getErrorQueue();
+        if (initValue == null) {
+            initValue = getDefaultWmqErrorQueue();
+        }
+        return initValue;
+    }
+    
+    /**
+     * @return a default value for WMQ JNDI URL
+     */
+    public abstract String getDefaultWmqJndiUrl();
+
+    /**
+     * @return a default value for WMQ JNDI context factory
+     */
+    public abstract String getDefaultWmqJndiContextFactory();
+
+    /**
+     * @return a default value for WMQ connection factory
+     */
+    public abstract String getDefaultWmqConnectionFactory();
+
+    /**
+     * @return a default value for WMQ zos queue manager
+     */
+    public abstract String getDefaultWmqZosQueueManager();
+
+    /**
+     * @return a default value for WMQ request queue
+     */
+    public abstract String getDefaultWmqRequestQueue();
+
+    /**
+     * @return a default value for WMQ reply queue
+     */
+    public abstract String getDefaultWmqReplyQueue();
+
+    /**
+     * @return a default value for WMQ error queue
+     */
+    public abstract String getDefaultWmqErrorQueue();
 
     /**
      * {@inheritDoc} 
@@ -176,118 +308,122 @@ public abstract class AbstractCixsWmqGroup extends AbstractCixsControlsGroup {
         return true;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void updateGenModelExtended() {
+        getGenModel().setJndiUrl(getWmqJndiUrl());
+        getGenModel().setJndiContextFactory(getWmqJndiContextFactory());
+        getGenModel().setConnectionFactory(getWmqConnectionFactory());
+        getGenModel().setZosQueueManager(getWmqZosQueueManager());
+        getGenModel().setRequestQueue(getWmqRequestQueue());
+        getGenModel().setReplyQueue(getWmqReplyQueue());
+        getGenModel().setErrorQueue(getWmqErrorQueue());
+    }
+    
     /**
      * @return URL used to do naming lookups for WMQ resources
      */
     public String getWmqJndiUrl() {
-        return mWmqJndiUrlText.getText();
+        return _wmqJndiUrlText.getText();
     }
 
     /**
      * @param wmqJndiUrl URL used to do naming lookups for WMQ resources
      */
     public void setWmqJndiUrl(final String wmqJndiUrl) {
-        mWmqJndiUrlText.setText(wmqJndiUrl);
+        _wmqJndiUrlText.setText(wmqJndiUrl);
     }
 
     /**
      * @return context factory class to do naming lookups for WMQ resources
      */
     public String getWmqJndiContextFactory() {
-        return mWmqJndiContextFactoryText.getText();
+        return _wmqJndiContextFactoryText.getText();
     }
 
     /**
      * @param wmqJndiContextFactory context factory class JBossESB uses to do naming lookups for WMQ resources
      */
     public void setWmqJndiContextFactory(final String wmqJndiContextFactory) {
-        mWmqJndiContextFactoryText.setText(wmqJndiContextFactory);
+        _wmqJndiContextFactoryText.setText(wmqJndiContextFactory);
     }
 
     /**
      * @return connection-factory used to lookup queues/topics in a naming directory (JNDI)
      */
     public String getWmqConnectionFactory() {
-        return mWmqConnectionFactoryText.getText();
+        return _wmqConnectionFactoryText.getText();
     }
 
     /**
      * @param wmqConnectionFactory connection-factory used to lookup queues/topics in a naming directory (JNDI)
      */
     public void setWmqConnectionFactory(final String wmqConnectionFactory) {
-        mWmqConnectionFactoryText.setText(wmqConnectionFactory);
+        _wmqConnectionFactoryText.setText(wmqConnectionFactory);
     }
 
     /**
      * @return ZOS WMQ Manager
      */
     public String getWmqZosQueueManager() {
-        return mWmqZosQueueManagerText.getText();
+        return _wmqZosQueueManagerText.getText();
     }
 
     /**
      * @param wmqZosQueueManager ZOS WMQ Manager
      */
     public void setWmqZosQueueManager(final String wmqZosQueueManager) {
-        mWmqZosQueueManagerText.setText(wmqZosQueueManager);
+        _wmqZosQueueManagerText.setText(wmqZosQueueManager);
     }
 
     /**
      * @return WMQ Queue name receiving requests
      */
     public String getWmqRequestQueue() {
-        return mWmqRequestQueueText.getText();
+        return _wmqRequestQueueText.getText();
     }
 
     /**
      * @param wmqRequestQueue WMQ Queue name receiving requests
      */
     public void setWmqRequestQueue(final String wmqRequestQueue) {
-        mWmqRequestQueueText.setText(wmqRequestQueue);
+        _wmqRequestQueueText.setText(wmqRequestQueue);
     }
 
     /**
      * @return WMQ Queue name receiving replies
      */
     public String getWmqReplyQueue() {
-        return mWmqReplyQueueText.getText();
+        return _wmqReplyQueueText.getText();
     }
 
     /**
      * @param wmqReplyQueue WMQ Queue name receiving replies
      */
     public void setWmqReplyQueue(final String wmqReplyQueue) {
-        mWmqReplyQueueText.setText(wmqReplyQueue);
+        _wmqReplyQueueText.setText(wmqReplyQueue);
     }
 
     /**
      * @return WMQ Queue name receiving errors
      */
     public String getWmqErrorQueue() {
-        return mWmqErrorQueueText.getText();
+        return _wmqErrorQueueText.getText();
     }
 
     /**
      * @param wmqErrorQueue WMQ Queue name receiving errors
      */
     public void setWmqErrorQueue(final String wmqErrorQueue) {
-        mWmqErrorQueueText.setText(wmqErrorQueue);
+        _wmqErrorQueueText.setText(wmqErrorQueue);
     }
     
+
     /**
-     * @return the WebSphere MQ parameters as a formatted transport parameters object
+     * @return the data model associated with this group
      */
-    public WmqTransportParameters getWmqTransportParameters() {
-        WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
-        wmqTransportParameters.setJndiUrl(getWmqJndiUrl());
-        wmqTransportParameters.setJndiContextFactory(getWmqJndiContextFactory());
-        wmqTransportParameters.setConnectionFactory(getWmqConnectionFactory());
-        wmqTransportParameters.setZosQueueManager(getWmqZosQueueManager());
-        wmqTransportParameters.setRequestQueue(getWmqRequestQueue());
-        wmqTransportParameters.setReplyQueue(getWmqReplyQueue());
-        wmqTransportParameters.setErrorQueue(getWmqErrorQueue());
-        return wmqTransportParameters;
-        
+    public WmqTransportParameters getGenModel() {
+        return _genModel;
     }
 
 }

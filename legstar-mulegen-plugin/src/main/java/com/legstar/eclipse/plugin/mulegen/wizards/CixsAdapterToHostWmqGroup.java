@@ -16,6 +16,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
+
+import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 import com.legstar.eclipse.plugin.common.wizards.AbstractWizardPage;
 import com.legstar.eclipse.plugin.mulegen.Messages;
@@ -30,17 +33,28 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 public class CixsAdapterToHostWmqGroup extends AbstractCixsWmqGroup {
 
     /** Selection of LegStar sample host messaging type.*/
-    private Button mLegstarButton = null;
+    private Button _legstarButton = null;
 
     /** Selection of CICS MQ Bridge sample host messaging type.*/
-    private Button mMqcihButton = null;
+    private Button _mqcihButton = null;
+    
+    /** Host messaging type over MQ chosen.*/
+    private SampleConfigurationHostMessagingType _sampleConfigurationHostMessagingType;
 
     /**
      * Construct this control group attaching it to a wizard page.
      * @param wizardPage the parent wizard page
+     * @param genModel the data model
+     * @param sampleConfigurationHostMessagingType initialHost messaging type over MQ chosen
+     * @param selected whether this group should initially be selected
      */
-    public CixsAdapterToHostWmqGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
+    public CixsAdapterToHostWmqGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final WmqTransportParameters genModel,
+            final SampleConfigurationHostMessagingType sampleConfigurationHostMessagingType,
+            final boolean selected) {
+        super(wizardPage, genModel, selected);
+        _sampleConfigurationHostMessagingType = sampleConfigurationHostMessagingType;
     }
 
     /**
@@ -54,58 +68,23 @@ public class CixsAdapterToHostWmqGroup extends AbstractCixsWmqGroup {
         Composite buttonsComposite = new Composite(getGroup(), SWT.NULL);
         buttonsComposite.setLayout(new RowLayout());
 
-        mMqcihButton = new Button(buttonsComposite, SWT.RADIO);
-        mMqcihButton.setText("CICS MQ Bridge");
+        _mqcihButton = new Button(buttonsComposite, SWT.RADIO);
+        _mqcihButton.setText("CICS MQ Bridge");
 
-        mLegstarButton = new Button(buttonsComposite, SWT.RADIO);
-        mLegstarButton.setText("LegStar");
+        _legstarButton = new Button(buttonsComposite, SWT.RADIO);
+        _legstarButton.setText("LegStar");
     }
 
     /**
      * {@inheritDoc} 
      */
     public void initExtendedControls() {
+        super.initExtendedControls();
 
-        setWmqJndiUrl(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_JNDI_URL,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_URL)));
-
-        setWmqJndiContextFactory(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_JNDI_CONTEXT_FACTORY,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY)));
-
-        setWmqConnectionFactory(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_CONNECTION_FACTORY,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_CONNECTION_FACTORY)));
-
-        setWmqZosQueueManager(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_ZOS_QUEUE_MANAGER,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ZOS_QUEUE_MANAGER)));
-
-        setWmqRequestQueue(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_REQUEST_QUEUE,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REQUEST_QUEUE)));
-
-        setWmqReplyQueue(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_REPLY_QUEUE,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REPLY_QUEUE)));
-
-        setWmqErrorQueue(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_ERROR_QUEUE,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ERROR_QUEUE)));
-
-        getMqcihButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.ADAPTER_LAST_MQCIH_MESSAGING_BUTTON_SELECTION, true));
-
-        getLegstarButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.ADAPTER_LAST_LEGSTAR_MESSAGING_BUTTON_SELECTION, false));
+        getLegstarButton().setSelection(
+                _sampleConfigurationHostMessagingType == SampleConfigurationHostMessagingType.LEGSTAR);
+        getMqcihButton().setSelection(
+                _sampleConfigurationHostMessagingType == SampleConfigurationHostMessagingType.MQCIH);
 
     }
 
@@ -114,58 +93,85 @@ public class CixsAdapterToHostWmqGroup extends AbstractCixsWmqGroup {
      */
     public void createExtendedListeners() {
         super.createExtendedListeners();
-        mLegstarButton.addSelectionListener(new SelectionAdapter() {
+        _legstarButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(final SelectionEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mMqcihButton.addSelectionListener(new SelectionAdapter() {
+        _mqcihButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(final SelectionEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
     }
 
-    /**
-     * {@inheritDoc} 
-     */
-    public void storeExtendedProjectPreferences() {
+    /** {@inheritDoc} */
+    @Override
+    public void updateGenModelExtended() {
+        super.updateGenModelExtended();
 
-        getProjectPreferences().put(PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_JNDI_URL,
-                getWmqJndiUrl());
-        getProjectPreferences().put(PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_JNDI_CONTEXT_FACTORY,
-                getWmqJndiContextFactory());
-        getProjectPreferences().put(PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_CONNECTION_FACTORY,
-                getWmqConnectionFactory());
-        getProjectPreferences().put(PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_ZOS_QUEUE_MANAGER,
-                getWmqZosQueueManager());
-        getProjectPreferences().put(PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_REQUEST_QUEUE,
-                getWmqRequestQueue());
-        getProjectPreferences().put(PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_REPLY_QUEUE,
-                getWmqReplyQueue());
-        getProjectPreferences().put(PreferenceConstants.ADAPTER_TO_HOST_LAST_WMQ_ERROR_QUEUE,
-                getWmqErrorQueue());
-
-        getProjectPreferences().putBoolean(
-                PreferenceConstants.ADAPTER_LAST_LEGSTAR_MESSAGING_BUTTON_SELECTION,
-                getLegstarButton().getSelection());
-        getProjectPreferences().putBoolean(
-                PreferenceConstants.ADAPTER_LAST_MQCIH_MESSAGING_BUTTON_SELECTION,
-                getMqcihButton().getSelection());
+        if (getLegstarButton().getSelection()) {
+            _sampleConfigurationHostMessagingType = SampleConfigurationHostMessagingType.LEGSTAR;
+        }
+        if (getMqcihButton().getSelection()) {
+            _sampleConfigurationHostMessagingType = SampleConfigurationHostMessagingType.MQCIH;
+        }
     }
-
+    
     /**
      * @return the selection of LegStar sample host messaging type
      */
     public Button getLegstarButton() {
-        return mLegstarButton;
+        return _legstarButton;
     }
 
     /**
      * @return the selection of CICS MQ Bridge sample host messaging type
      */
     public Button getMqcihButton() {
-        return mMqcihButton;
+        return _mqcihButton;
+    }
+
+    @Override
+    public String getDefaultWmqConnectionFactory() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_CONNECTION_FACTORY);
+    }
+
+    @Override
+    public String getDefaultWmqErrorQueue() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ERROR_QUEUE);
+    }
+
+    @Override
+    public String getDefaultWmqJndiContextFactory() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY);
+    }
+
+    @Override
+    public String getDefaultWmqJndiUrl() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_URL);
+    }
+
+    @Override
+    public String getDefaultWmqReplyQueue() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REPLY_QUEUE);
+    }
+
+    @Override
+    public String getDefaultWmqRequestQueue() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REQUEST_QUEUE);
+    }
+
+    @Override
+    public String getDefaultWmqZosQueueManager() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ZOS_QUEUE_MANAGER);
     }
 
 }

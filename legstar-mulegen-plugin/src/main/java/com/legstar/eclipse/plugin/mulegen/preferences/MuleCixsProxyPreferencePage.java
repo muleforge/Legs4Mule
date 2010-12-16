@@ -53,7 +53,7 @@ implements IWorkbenchPreferencePage {
     public void createFieldEditors() {
 
         addField(new StringFieldEditor(
-                PreferenceConstants.COBOL_SAMPLE_FOLDER,
+                PreferenceConstants.DEFAULT_COBOL_SAMPLE_FOLDER,
                 Messages.preference_cobol_folder_label + ':',
                 getFieldEditorParent()));
 

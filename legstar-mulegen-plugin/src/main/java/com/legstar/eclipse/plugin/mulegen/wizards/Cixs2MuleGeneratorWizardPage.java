@@ -10,9 +10,10 @@
  ******************************************************************************/
 package com.legstar.eclipse.plugin.mulegen.wizards;
 
+import java.io.File;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -22,10 +23,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.eclipse.plugin.mulegen.Messages;
-import com.legstar.eclipse.plugin.mulegen.Activator;
 import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 
 /**
@@ -38,50 +39,57 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     private static final String PAGE_NAME = "Cixs2MuleGeneratorWizardPage";
 
     /** Where generated COBOL source reside. */
-    private Text mTargetCobolDirText = null;
+    private Text _targetCobolDirText = null;
 
     /** Keeps a reference on the deployment group container. */
-    private Composite mDeploymentGroup = null;
+    private Composite _deploymentGroup = null;
 
     /** Settings for target selection group. */
-    private Group mTargetGroup = null;
+    private Group _targetGroup = null;
 
     /** The UMO component target controls group. */
-    private CixsProxyUmoComponentTargetGroup mUmoComponentTargetGroup;
+    private CixsProxyUmoComponentTargetGroup _umoComponentTargetGroup;
 
     /** HTTP Proxy client parameters. */
-    private CixsHostToProxyHttpGroup mCixsHostToProxyHttpGroup;
+    private CixsHostToProxyHttpGroup _cixsHostToProxyHttpGroup;
 
     /** WMQ Proxy client parameters. */
-    private CixsHostToProxyWmqGroup mCixsHostToProxyWmqGroup;
+    private CixsHostToProxyWmqGroup _cixsHostToProxyWmqGroup;
 
     /**
      * Construct the page.
      * @param selection the current workbench selection
      * @param mappingFile the mapping file
+     * @param genModel the generation model
      */
     protected Cixs2MuleGeneratorWizardPage(
-            final IStructuredSelection selection, final IFile mappingFile) {
-        super(PAGE_NAME,
+            final IStructuredSelection selection,
+            final IFile mappingFile,
+            final AntBuildCixs2MuleModel genModel) {
+        super(selection,
+                PAGE_NAME,
                 Messages.cixs_to_mule_wizard_page_title,
                 Messages.cixs_to_mule_wizard_page_description,
-                selection,
-                mappingFile);
+                mappingFile,
+                genModel);
     }
 
     /** {@inheritDoc} */
     protected void addCixsGroup(final Composite container) {
 
-        mTargetGroup = createGroup(container, Messages.target_selection_group_label, 3);
-        createLabel(mTargetGroup, Messages.target_selection_label + ':');
-        Composite composite = new Composite(mTargetGroup, SWT.NULL);
+        _targetGroup = createGroup(container,
+                Messages.target_selection_group_label, 3);
+        createLabel(_targetGroup, Messages.target_selection_label + ':');
+        Composite composite = new Composite(_targetGroup, SWT.NULL);
         composite.setLayout(new RowLayout());
 
-        mUmoComponentTargetGroup = new CixsProxyUmoComponentTargetGroup(this);
+        _umoComponentTargetGroup = new CixsProxyUmoComponentTargetGroup(this,
+                getGenModel().getUmoComponentTargetParameters(),
+                true);
 
-        mUmoComponentTargetGroup.createButton(composite);
+        _umoComponentTargetGroup.createButton(composite);
 
-        mUmoComponentTargetGroup.createControls(mTargetGroup);
+        _umoComponentTargetGroup.createControls(_targetGroup);
 
         super.addCixsGroup(container);
     }
@@ -89,7 +97,7 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /** {@inheritDoc} */
     public void addWidgetsToTargetGroup(final Composite container) {
         super.addWidgetsToTargetGroup(container);
-        mTargetCobolDirText = createDirectoryFieldEditor(container,
+        _targetCobolDirText = createDirectoryFieldEditor(container,
                 "targetCobolDir",
                 Messages.cobol_target_location_label + ':');
     }
@@ -97,56 +105,48 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /** {@inheritDoc} */
     public void addWidgetsToDeploymentGroup(final Composite container) {
         super.addWidgetsToDeploymentGroup(container);
-        mDeploymentGroup = container;
+        _deploymentGroup = container;
 
-        createLabel(container, Messages.sample_configuration_transport_label + ":");
+        createLabel(container, Messages.sample_configuration_transport_label
+                + ":");
         Composite composite = new Composite(container, SWT.NULL);
         composite.setLayout(new RowLayout());
 
-        mCixsHostToProxyHttpGroup = new CixsHostToProxyHttpGroup(this);
-        mCixsHostToProxyHttpGroup.createButton(composite);
-        mCixsHostToProxyHttpGroup.createControls(container);
+        _cixsHostToProxyHttpGroup = new CixsHostToProxyHttpGroup(
+                this,
+                getGenModel().getHttpTransportParameters(),
+                getGenModel().getSampleCobolHttpClientType(),
+                getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.HTTP);
+        _cixsHostToProxyHttpGroup.createButton(composite);
+        _cixsHostToProxyHttpGroup.createControls(container);
 
-        mCixsHostToProxyWmqGroup = new CixsHostToProxyWmqGroup(this);
-        mCixsHostToProxyWmqGroup.createButton(composite);
-        mCixsHostToProxyWmqGroup.createControls(container);
+        _cixsHostToProxyWmqGroup = new CixsHostToProxyWmqGroup(
+                this,
+                getGenModel().getWmqTransportParameters(),
+                getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ);
+        _cixsHostToProxyWmqGroup.createButton(composite);
+        _cixsHostToProxyWmqGroup.createControls(container);
     }
 
     /** {@inheritDoc} */
     public void initExtendedWidgets(final IProject project) {
         super.initExtendedWidgets(project);
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-        setTargetCobolDir(getDefaultTargetDir(store,
-                PreferenceConstants.COBOL_SAMPLE_FOLDER));
+        setTargetCobolDir(getInitTargetDir(getGenModel().getTargetCobolDir(),
+                PreferenceConstants.DEFAULT_COBOL_SAMPLE_FOLDER,
+                true));
 
         getUmoComponentTargetGroup().initControls();
         getCixsHostToProxyHttpGroup().initControls();
         getCixsHostToProxyWmqGroup().initControls();
 
-        getUmoComponentTargetGroup().getButton().setSelection(true);
 
-        /* Make sure one of the adapter transports groups is visible */
-        SampleConfigurationTransport sampleConfigurationTransport =
-            SampleConfigurationTransport.valueOf(getProjectPreferences().get(
-                    PreferenceConstants.PROXY_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
-                    getStore().getDefaultString(
-                            PreferenceConstants.PROXY_LAST_SAMPLE_CONFIGURATION_TRANSPORT)));
-                
-        if (sampleConfigurationTransport == SampleConfigurationTransport.HTTP) {
-            getCixsHostToProxyHttpGroup().getButton().setSelection(true);
-            getCixsHostToProxyWmqGroup().getButton().setSelection(false);
-        }
-        if (sampleConfigurationTransport == SampleConfigurationTransport.WMQ) {
-            getCixsHostToProxyHttpGroup().getButton().setSelection(false);
-            getCixsHostToProxyWmqGroup().getButton().setSelection(true);
-        }
     }
 
     /** {@inheritDoc} */
     public void createExtendedListeners() {
         super.createExtendedListeners();
-        mTargetCobolDirText.addModifyListener(new ModifyListener() {
+        _targetCobolDirText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 dialogChanged();
             }
@@ -160,11 +160,15 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /** {@inheritDoc} */
     public boolean validateExtendedWidgets() {
 
+        if (!super.validateExtendedWidgets()) {
+            return false;
+        }
+
         getUmoComponentTargetGroup().setVisibility();
         getCixsHostToProxyHttpGroup().setVisibility();
         getCixsHostToProxyWmqGroup().setVisibility();
 
-        getShell().layout(new Control[] {mTargetGroup, mDeploymentGroup});
+        getShell().layout(new Control[] {_targetGroup, _deploymentGroup});
 
         if (!super.validateExtendedWidgets()) {
             return false;
@@ -174,11 +178,11 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
             return false;
         }
         
-        if (getSampleConfigurationTransport() == SampleConfigurationTransport.HTTP
+        if (getCixsHostToProxyHttpGroup().isSelected()
                 && !getCixsHostToProxyHttpGroup().validateControls()) {
             return false;
         }
-        if (getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ
+        if (getCixsHostToProxyWmqGroup().isSelected()
                 && !getCixsHostToProxyWmqGroup().validateControls()) {
             return false;
         }
@@ -191,64 +195,64 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         return true;
     }
 
-    /** {@inheritDoc} */
-    public void storeExtendedProjectPreferences() {
-        super.storeExtendedProjectPreferences();
+    /**
+     * Store the selected values in the project scoped preference store.
+     */
+    public void updateGenModelExtended() {
+
+        getUmoComponentTargetGroup().updateGenModel();
+        getCixsHostToProxyHttpGroup().updateGenModel();
+        getCixsHostToProxyWmqGroup().updateGenModel();
+
+        if (getCixsHostToProxyHttpGroup().isSelected()) {
+            getGenModel().setSampleConfigurationTransport(SampleConfigurationTransport.HTTP);
+        }
+        if (getCixsHostToProxyWmqGroup().isSelected()) {
+            getGenModel().setSampleConfigurationTransport(SampleConfigurationTransport.WMQ);
+        }
         
-        getUmoComponentTargetGroup().storeProjectPreferences();
-        getCixsHostToProxyHttpGroup().storeProjectPreferences();
-        getCixsHostToProxyWmqGroup().storeProjectPreferences();
-        getProjectPreferences().put(
-                PreferenceConstants.PROXY_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
-                getSampleConfigurationTransport().toString());
+        getGenModel().setTargetCobolDir(new File(getTargetCobolDir()));
     }
 
     /**
      * @param targetCobolDirLocation Where generated Cobol files reside
      */
     public void setTargetCobolDir(final String targetCobolDirLocation) {
-        mTargetCobolDirText.setText(targetCobolDirLocation);
+        _targetCobolDirText.setText(targetCobolDirLocation);
     }
 
     /**
      * @return Where generated Cobol files reside
      */
     public String getTargetCobolDir() {
-        return mTargetCobolDirText.getText();
+        return _targetCobolDirText.getText();
     }
 
     /**
      * @return the UMO component target controls group
      */
     public CixsProxyUmoComponentTargetGroup getUmoComponentTargetGroup() {
-        return mUmoComponentTargetGroup;
+        return _umoComponentTargetGroup;
     }
 
     /**
      * @return the HTTP Proxy client parameters
      */
     public CixsHostToProxyHttpGroup getCixsHostToProxyHttpGroup() {
-        return mCixsHostToProxyHttpGroup;
+        return _cixsHostToProxyHttpGroup;
     }
 
     /**
      * @return the WMQ Proxy client parameters
      */
     public CixsHostToProxyWmqGroup getCixsHostToProxyWmqGroup() {
-        return mCixsHostToProxyWmqGroup;
+        return _cixsHostToProxyWmqGroup;
     }
 
     /**
-     * @return the client transport selected
+     * @return the data model
      */
-    public final SampleConfigurationTransport getSampleConfigurationTransport() {
-        if (getCixsHostToProxyHttpGroup().getSelection()) {
-            return SampleConfigurationTransport.HTTP;
-        }
-        if (getCixsHostToProxyWmqGroup().getSelection()) {
-            return SampleConfigurationTransport.WMQ;
-        }
-        return SampleConfigurationTransport.HTTP;
+    public AntBuildCixs2MuleModel getGenModel() {
+        return (AntBuildCixs2MuleModel) super.getGenModel();
     }
-    
 }

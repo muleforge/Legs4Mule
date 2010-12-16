@@ -39,7 +39,7 @@
                             <tasks>
                                 <ant antfile="${basedir}/src/main/ant/maven-to-pde.xml">
                                     <property name="legstarVersion" value="${legstarVersion}" />
-                                    <property name="legstarMuleVersion" value="${legstarMuleVersion}" />
+                                    <property name="legstarMuleVersion" value="${version}" />
                                 </ant>
                             </tasks>
                         </configuration>

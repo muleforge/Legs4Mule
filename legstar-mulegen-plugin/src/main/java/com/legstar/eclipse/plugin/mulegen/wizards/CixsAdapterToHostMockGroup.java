@@ -37,9 +37,12 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
     /**
      * Construct this control group attaching it to a wizard page.
      * @param wizardPage the parent wizard page
+     * @param selected whether this group should initially be selected
      */
-    public CixsAdapterToHostMockGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
+    public CixsAdapterToHostMockGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final boolean selected) {
+        super(wizardPage, selected);
     }
     
     /**
@@ -97,13 +100,6 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
     }
 
     /**
-     * {@inheritDoc} 
-     */
-    public void storeExtendedProjectPreferences() {
-
-    }
-
-    /**
      * @return UserId used for basic authentication
      */
     public String getMockUserId() {
@@ -129,6 +125,11 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
      */
     public void setMockPassword(final String tcpPassword) {
         mMockPasswordText.setText(tcpPassword);
+    }
+
+    @Override
+    public void updateGenModelExtended() {
+        
     }
 
 }

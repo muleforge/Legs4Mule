@@ -26,66 +26,190 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
  * The HTTP transport (Adapter to Mainframe) control group.
  * <p/>
  * Parameters needed by adapter to reach the mainframe over HTTP.
+ * <p/>
  *
  */
 public class CixsAdapterToHostHttpGroup extends AbstractCixsControlsGroup {
 
-    /** The Host address on which mainframe HTTP server listens to clients. */
-    private Text mHttpHostText = null;
+    /** The Host address on which HTTP listens to mainframe clients. */
+    private Text _httpHostText = null;
 
-    /** The Port on which mainframe HTTP server listens to clients. */
-    private Text mHttpPortText = null;
+    /** The Port on which HTTP listens to mainframe clients. */
+    private Text _httpPortText = null;
 
-    /** The Path on which mainframe HTTP server listens to clients. */
-    private Text mHttpPathText = null;
+    /** The Path on which HTTP listens to mainframe clients. */
+    private Text _httpPathText = null;
 
     /** The user id for basic authentication. */
-    private Text mHttpUserIdText = null;
+    private Text _httpUserIdText = null;
 
     /** The password for basic authentication. */
-    private Text mHttpPasswordText = null;
+    private Text _httpPasswordText = null;
+
+    /** The data model. */
+    private HttpTransportParameters _genModel;
 
     /**
      * Construct this control group attaching it to a wizard page.
-     * @param wizardPage the parent wizard page
+     * 
+     * @param wizardPage
+     *            the parent wizard page
+     * @param genModel
+     *            the data model
+     * @param selected
+     *            whether this group should initially be selected
      */
-    public CixsAdapterToHostHttpGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
+    public CixsAdapterToHostHttpGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final HttpTransportParameters genModel,
+            final boolean selected) {
+        super(wizardPage, selected);
+        _genModel = genModel;
     }
     
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     public void createButton(final Composite composite) {
         super.createButton(composite, "HTTP");
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     public void createControls(final Composite composite) {
-        
+
         super.createControls(composite, Messages.adapter_to_host_http_transport_group_label, 2);
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_http_host_label + ':');
-        mHttpHostText = AbstractWizardPage.createText(getGroup()); 
+        AbstractWizardPage.createLabel(getGroup(),
+                Messages.adapter_to_host_http_host_label + ':');
+        _httpHostText = AbstractWizardPage.createText(getGroup());
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_http_port_label + ':');
-        mHttpPortText = AbstractWizardPage.createText(getGroup()); 
+        AbstractWizardPage.createLabel(getGroup(),
+                Messages.adapter_to_host_http_port_label + ':');
+        _httpPortText = AbstractWizardPage.createText(getGroup());
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_http_path_label + ':');
-        mHttpPathText = AbstractWizardPage.createText(getGroup()); 
+        AbstractWizardPage.createLabel(getGroup(),
+                Messages.adapter_to_host_http_path_label + ':');
+        _httpPathText = AbstractWizardPage.createText(getGroup());
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_userid_label + ':');
-        mHttpUserIdText = AbstractWizardPage.createText(getGroup()); 
+        AbstractWizardPage.createLabel(getGroup(),
+                Messages.adapter_to_host_userid_label + ':');
+        _httpUserIdText = AbstractWizardPage.createText(getGroup());
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_password_label + ':');
-        mHttpPasswordText = AbstractWizardPage.createText(getGroup()); 
+        AbstractWizardPage.createLabel(getGroup(),
+                Messages.adapter_to_host_password_label + ':');
+        _httpPasswordText = AbstractWizardPage.createText(getGroup());
 
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
+     */
+    public void initExtendedControls() {
+        setHttpHost(getInitHttpHost());
+        setHttpPort(getInitHttpPort());
+        setHttpPath(getInitHttpPath());
+        setHttpUserId(getInitHttpUserId());
+        setHttpPassword(getInitHttpPassword());
+    }
+
+
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitHttpHost() {
+        String initValue = _genModel.getHost();
+        if (initValue == null) {
+            initValue = getDefaultHttpHost();
+        }
+        return initValue;
+    }
+
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitHttpPort() {
+        int initValue = _genModel.getPort();
+        if (initValue == HttpTransportParameters.PORT_NOT_SET) {
+            initValue = getDefaultHttpPort();
+        }
+        return Integer.toString(initValue);
+    }
+
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitHttpPath() {
+        String initValue = _genModel.getPath();
+        if (initValue == null) {
+            initValue = getDefaultHttpPath();
+        }
+        return initValue;
+    }
+
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitHttpUserId() {
+        String initValue = _genModel.getUserId();
+        if (initValue == null) {
+            initValue = getDefaultHttpUserId();
+        }
+        return initValue;
+    }
+
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitHttpPassword() {
+        String initValue = _genModel.getPassword();
+        if (initValue == null) {
+            initValue = getDefaultHttpPassword();
+        }
+        return initValue;
+    }
+
+    /**
+     * @return a default value
+     */
+    public String getDefaultHttpHost() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_HOST);
+    }
+
+    /**
+     * @return a default value
+     */
+    public int getDefaultHttpPort() {
+        return Integer.parseInt(getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_PORT));
+    }
+
+    /**
+     * @return a default value
+     */
+    public String getDefaultHttpPassword() {
+        return "";
+    }
+
+    /**
+     * @return a default value
+     */
+    public String getDefaultHttpPath() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_HTTP_PATH);
+    }
+
+    /**
+     * @return a default value
+     */
+    public String getDefaultHttpUserId() {
+        return "";
+    }
+
+    /**
+     * {@inheritDoc}
      */
     public boolean validateControls() {
         if (getHttpHost() == null || getHttpHost().length() == 0) {
@@ -93,9 +217,10 @@ public class CixsAdapterToHostHttpGroup extends AbstractCixsControlsGroup {
             return false;
         }
         try {
-            if (Integer.parseInt(getHttpPort()) < 0 
+            if (Integer.parseInt(getHttpPort()) < 0
                     || Integer.parseInt(getHttpPort()) > 65536) {
-                getWizardPage().updateStatus(Messages.invalid_http_port_number_msg);
+                getWizardPage().updateStatus(
+                        Messages.invalid_http_port_number_msg);
                 return false;
             }
         } catch (NumberFormatException e) {
@@ -112,154 +237,123 @@ public class CixsAdapterToHostHttpGroup extends AbstractCixsControlsGroup {
     }
 
     /**
-     * {@inheritDoc} 
+     * {@inheritDoc}
      */
     public void createExtendedListeners() {
 
-        mHttpHostText.addModifyListener(new ModifyListener() {
+        _httpHostText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mHttpPortText.addModifyListener(new ModifyListener() {
+        _httpPortText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mHttpPathText.addModifyListener(new ModifyListener() {
+        _httpPathText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mHttpUserIdText.addModifyListener(new ModifyListener() {
+        _httpUserIdText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mHttpPasswordText.addModifyListener(new ModifyListener() {
+        _httpPasswordText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
     }
 
-    
-    /**
-     * @return the http parameters as a formatted http transport parameters object
-     */
-    public HttpTransportParameters getHttpTransportParameters() {
-        HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
-        httpTransportParameters.setHost(getHttpHost());
-        httpTransportParameters.setPort(Integer.parseInt(getHttpPort()));
-        httpTransportParameters.setPath(getHttpPath());
-        httpTransportParameters.setUserId(getHttpUserId());
-        httpTransportParameters.setPassword(getHttpPassword());
-        return httpTransportParameters;
-    }
-
-    /**
-     * {@inheritDoc} 
-     */
-    public void initExtendedControls() {
-
-        setHttpHost(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_HOST,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_HOST)));
-        
-        setHttpPort(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PORT,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_PORT)));
-
-        setHttpPath(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PATH,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_HTTP_PATH)));
-    }
-
-    /**
-     * {@inheritDoc} 
-     */
-    public void storeExtendedProjectPreferences() {
-
-        getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_HOST, getHttpHost());
-        getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PORT, getHttpPort());
-        getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_HTTP_PATH, getHttpPath());
-        
+    /** {@inheritDoc} */
+    @Override
+    public void updateGenModelExtended() {
+        getGenModel().setHost(getHttpHost());
+        getGenModel().setPort(Integer.parseInt(getHttpPort()));
+        getGenModel().setPath(getHttpPath());
+        getGenModel().setUserId(getHttpUserId());
+        getGenModel().setPassword(getHttpPassword());
     }
 
     /**
      * @return Host address on which HTTP listens to mainframe clients
      */
     public String getHttpHost() {
-        return mHttpHostText.getText();
+        return _httpHostText.getText();
     }
 
     /**
      * @param httpHost Host address on which HTTP listens to mainframe clients
      */
     public void setHttpHost(final String httpHost) {
-        mHttpHostText.setText(httpHost);
+        _httpHostText.setText(httpHost);
     }
 
     /**
      * @return Port on which HTTP listens to mainframe clients
      */
     public String getHttpPort() {
-        return mHttpPortText.getText();
+        return _httpPortText.getText();
     }
 
     /**
      * @param httpPort Port on which HTTP listens to mainframe clients
      */
     public void setHttpPort(final String httpPort) {
-        mHttpPortText.setText(httpPort);
+        _httpPortText.setText(httpPort);
     }
 
     /**
      * @return Path on which HTTP listens to mainframe clients
      */
     public String getHttpPath() {
-        return mHttpPathText.getText();
+        return _httpPathText.getText();
     }
 
     /**
      * @param httpPath Path on which HTTP listens to mainframe clients
      */
     public void setHttpPath(final String httpPath) {
-        mHttpPathText.setText(httpPath);
+        _httpPathText.setText(httpPath);
     }
 
     /**
      * @return UserId used for basic authentication
      */
     public String getHttpUserId() {
-        return mHttpUserIdText.getText();
+        return _httpUserIdText.getText();
     }
 
     /**
      * @param httpUserId UserId used for basic authentication
      */
     public void setHttpUserId(final String httpUserId) {
-        mHttpUserIdText.setText(httpUserId);
+        _httpUserIdText.setText(httpUserId);
     }
 
     /**
      * @return Password used for basic authentication
      */
     public String getHttpPassword() {
-        return mHttpPasswordText.getText();
+        return _httpPasswordText.getText();
     }
 
     /**
      * @param httpPassword Password used for basic authentication
      */
     public void setHttpPassword(final String httpPassword) {
-        mHttpPasswordText.setText(httpPassword);
+        _httpPasswordText.setText(httpPassword);
     }
+
+    /**
+     * @return the data model associated with this group
+     */
+    public HttpTransportParameters getGenModel() {
+        return _genModel;
+    }
+
 
 }

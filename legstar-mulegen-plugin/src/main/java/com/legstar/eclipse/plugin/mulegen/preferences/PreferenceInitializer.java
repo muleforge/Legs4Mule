@@ -38,12 +38,7 @@ public class PreferenceInitializer extends AbstractCicxsPreferenceInitializer {
                 getDefaultMuleLocation() + "/lib/user");
 
         store.setDefault(PreferenceConstants.TARGET_MULE_CONFIG_FOLDER, "conf");
-        store.setDefault(PreferenceConstants.COBOL_SAMPLE_FOLDER, "cobol");
-
-        store.setDefault(PreferenceConstants.ADAPTER_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
-        "HTTP");
-        store.setDefault(PreferenceConstants.PROXY_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
-        "HTTP");
+        store.setDefault(PreferenceConstants.DEFAULT_COBOL_SAMPLE_FOLDER, "cobol");
 
         /* --------------------------------------------------------------------- */
         /* Adapter to Mainframe HTTP transport preferences.                      */

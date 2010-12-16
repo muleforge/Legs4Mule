@@ -37,6 +37,9 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 public abstract class AbstractCixsMuleGeneratorWizardPage
 extends AbstractCixsGeneratorWizardPage {
 
+    /** A model that is common to proxies and adapters for Mule. */
+    private AbstractAntBuildCixsMuleModel _genModel;
+
     /** Where generated Mule configuration files reside. */
     private Text mTargetMuleConfigDirText = null;
 
@@ -45,21 +48,22 @@ extends AbstractCixsGeneratorWizardPage {
 
     /**
      * Construct the page.
+     * @param selection the current workbench selection
      * @param pageName the page name
      * @param pageTitle the page title
      * @param pageDesc the page description
-     * @param selection the current workbench selection
      * @param mappingFile the mapping file
      * @param genModel the generation model
      */
     protected AbstractCixsMuleGeneratorWizardPage(
+            final IStructuredSelection selection,
             final String pageName,
             final String pageTitle,
             final String pageDesc,
-            final IStructuredSelection selection,
             final IFile mappingFile,
             final AbstractAntBuildCixsMuleModel genModel) {
         super(selection, pageName, pageTitle, pageDesc, mappingFile, genModel);
+        _genModel = genModel;
     }
 
     /** {@inheritDoc} */
@@ -122,10 +126,6 @@ extends AbstractCixsGeneratorWizardPage {
         /* Project is valid. Make sure the project is ready for
          * generated sources compilation. */
         return setupProject();
-    }
-
-    /** {@inheritDoc} */
-    public void storeExtendedProjectPreferences() {
     }
 
     /**
@@ -198,6 +198,6 @@ extends AbstractCixsGeneratorWizardPage {
      * @return the data model
      */
     public AbstractAntBuildCixsMuleModel getGenModel() {
-        return (AbstractAntBuildCixsMuleModel) super.getGenModel();
+        return _genModel;
     }
 }

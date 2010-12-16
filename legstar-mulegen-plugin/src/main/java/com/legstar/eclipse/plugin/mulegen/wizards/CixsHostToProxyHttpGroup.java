@@ -10,6 +10,8 @@
  ******************************************************************************/
 package com.legstar.eclipse.plugin.mulegen.wizards;
 
+import com.legstar.cixs.gen.model.options.CobolHttpClientType;
+import com.legstar.cixs.gen.model.options.HttpTransportParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsProxyDeployHttpGroup;
 import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
@@ -17,61 +19,62 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 /**
  * Inherits the behavior of a group of controls for HTTP client parameters.
  * <p/>
- * The target is to manage the preferences at the local level rather than cixcom.
- * This is needed because the preferences should not be shared between execution
- * environments.
+ * The target is to provide default values that are specific to host to proxy.
  */
 public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
 
     /**
      * Construct this control group attaching it to a wizard page.
-     * @param wizardPage the parent wizard page
+     * 
+     * @param wizardPage
+     *            the parent wizard page
+     * @param genModel
+     *            the data model
+     * @param sampleCobolHttpClientType
+     *            initial HTTP sample client type
+     * @param selected
+     *            whether this group should initially be selected
      */
-    public CixsHostToProxyHttpGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
-    }
-    /**
-     * {@inheritDoc} 
-     */
-    public void initExtendedControls() {
-
-        setHttpHost(getProjectPreferences().get(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_HOST,
-                getWizardPage().getStore().getString(PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_HOST)));
-        
-        setHttpPort(getProjectPreferences().get(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PORT,
-                getWizardPage().getStore().getString(PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_PORT)));
-
-        setHttpPath(getProjectPreferences().get(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PATH,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.HOST_TO_PROXY_HTTP_PATH_TEMPLATE).replace(
-                                "${service.name}", getWizardPage().getServiceName())));
-        
-        getDfhwbcliButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.HOST_TO_PROXY_LAST_DFHWBCLI_BUTTON_SELECTION, true));
-        getWebapiButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.HOST_TO_PROXY_LAST_WEBAPI_BUTTON_SELECTION, false));
-        getLegstarButton().setSelection(getProjectPreferences().getBoolean(
-                PreferenceConstants.HOST_TO_PROXY_LAST_LEGSTAR_BUTTON_SELECTION, false));
+    public CixsHostToProxyHttpGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final HttpTransportParameters genModel,
+            final CobolHttpClientType sampleCobolHttpClientType,
+            final boolean selected) {
+        super(wizardPage, genModel, sampleCobolHttpClientType, selected);
     }
 
-    /**
-     * {@inheritDoc} 
-     */
-    public void storeExtendedProjectPreferences() {
+    /** {@inheritDoc} */
+    @Override
+    public String getDefaultHttpHost() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_HOST);
+    }
 
-        getProjectPreferences().put(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_HOST, getHttpHost());
-        getProjectPreferences().put(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PORT, getHttpPort());
-        getProjectPreferences().put(PreferenceConstants.HOST_TO_PROXY_LAST_HTTP_PATH, getHttpPath());
+    /** {@inheritDoc} */
+    @Override
+    public String getDefaultHttpPassword() {
+        return "";
+    }
 
-        getProjectPreferences().putBoolean(
-                PreferenceConstants.HOST_TO_PROXY_LAST_DFHWBCLI_BUTTON_SELECTION,
-                getDfhwbcliButton().getSelection());
-        getProjectPreferences().putBoolean(
-                PreferenceConstants.HOST_TO_PROXY_LAST_WEBAPI_BUTTON_SELECTION,
-                getWebapiButton().getSelection());
-        getProjectPreferences().putBoolean(
-                PreferenceConstants.HOST_TO_PROXY_LAST_LEGSTAR_BUTTON_SELECTION,
-                getLegstarButton().getSelection());
+    /** {@inheritDoc} */
+    @Override
+    public String getDefaultHttpPath() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.HOST_TO_PROXY_HTTP_PATH_TEMPLATE).replace(
+                "${service.name}", getWizardPage().getServiceName());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int getDefaultHttpPort() {
+        return Integer.parseInt(getWizardPage().getStore().getString(
+                PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_PORT));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getDefaultHttpUserId() {
+        return "";
     }
 
 }

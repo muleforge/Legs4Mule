@@ -16,6 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.mule.transport.legstar.model.options.TcpTransportParameters;
 
+import com.legstar.cixs.gen.model.options.HttpTransportParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsControlsGroup;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 import com.legstar.eclipse.plugin.common.wizards.AbstractWizardPage;
@@ -31,23 +32,32 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
 
     /** The Host address on which mainframe TCP server listens to clients. */
-    private Text mTcpHostText = null;
+    private Text _tcpHostText = null;
 
     /** The Port on which mainframe TCP server listens to clients. */
-    private Text mTcpPortText = null;
+    private Text _tcpPortText = null;
 
     /** The user id for basic authentication. */
-    private Text mTcpUserIdText = null;
+    private Text _tcpUserIdText = null;
 
     /** The password for basic authentication. */
-    private Text mTcpPasswordText = null;
+    private Text _tcpPasswordText = null;
+    
+    /** The data model. */
+    private TcpTransportParameters _genModel;
 
     /**
      * Construct this control group attaching it to a wizard page.
      * @param wizardPage the parent wizard page
+     * @param genModel the data model
+     * @param selected whether this group should initially be selected
      */
-    public CixsAdapterToHostTcpGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
+    public CixsAdapterToHostTcpGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final TcpTransportParameters genModel,
+            final boolean selected) {
+        super(wizardPage, selected);
+        _genModel = genModel;
     }
     
     /**
@@ -65,16 +75,16 @@ public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
         super.createControls(composite, Messages.adapter_to_host_tcp_transport_group_label, 2);
 
         AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_tcp_host_label + ':');
-        mTcpHostText = AbstractWizardPage.createText(getGroup()); 
+        _tcpHostText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_tcp_port_label + ':');
-        mTcpPortText = AbstractWizardPage.createText(getGroup()); 
+        _tcpPortText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_userid_label + ':');
-        mTcpUserIdText = AbstractWizardPage.createText(getGroup()); 
+        _tcpUserIdText = AbstractWizardPage.createText(getGroup()); 
 
         AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_password_label + ':');
-        mTcpPasswordText = AbstractWizardPage.createText(getGroup()); 
+        _tcpPasswordText = AbstractWizardPage.createText(getGroup()); 
 
     }
 
@@ -104,22 +114,22 @@ public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
      */
     public void createExtendedListeners() {
 
-        mTcpHostText.addModifyListener(new ModifyListener() {
+        _tcpHostText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mTcpPortText.addModifyListener(new ModifyListener() {
+        _tcpPortText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mTcpUserIdText.addModifyListener(new ModifyListener() {
+        _tcpUserIdText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-        mTcpPasswordText.addModifyListener(new ModifyListener() {
+        _tcpPasswordText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
@@ -144,84 +154,144 @@ public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
      */
     public void initExtendedControls() {
 
-        setTcpHost(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_TCP_HOST,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_HOST)));
-        
-        setTcpPort(getProjectPreferences().get(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_TCP_PORT,
-                getWizardPage().getStore().getString(
-                        PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_PORT)));
+        setTcpHost(getInitTcpHost());
+        setTcpPort(getInitTcpPort());
+        setTcpUserId(getInitTcpUserId());
+        setTcpPassword(getInitTcpPassword());
 
     }
 
     /**
-     * {@inheritDoc} 
+     * @return a safe initial value
      */
-    public void storeExtendedProjectPreferences() {
+    protected String getInitTcpHost() {
+        String initValue = _genModel.getHost();
+        if (initValue == null) {
+            initValue = getDefaultTcpHost();
+        }
+        return initValue;
+    }
 
-        getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_TCP_HOST, getTcpHost());
-        getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_TO_HOST_LAST_TCP_PORT, getTcpPort());
+    /**
+     * @return a default value
+     */
+    public String getDefaultTcpHost() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_HOST);
+    }
+
+    /**
+     * @return a safe initial value
+     */
+    protected String getInitTcpPort() {
+        int initValue = _genModel.getPort();
+        if (initValue == HttpTransportParameters.PORT_NOT_SET) {
+            return getDefaultTcpPort();
+        }
+        return Integer.toString(initValue);
+    }
+
+    /**
+     * @return a default value
+     */
+    public String getDefaultTcpPort() {
+        return getWizardPage().getStore().getString(
+                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_PORT);
+    }
+
+    /**
+     * @return a safe class name initial value
+     */
+    protected String getInitTcpUserId() {
+        String initValue = _genModel.getUserId();
+        if (initValue == null) {
+            initValue = "";
+        }
+        return initValue;
+    }
+
+    /**
+     * @return a safe class name initial value
+     */
+    protected String getInitTcpPassword() {
+        String initValue = _genModel.getPassword();
+        if (initValue == null) {
+            initValue = "";
+        }
+        return initValue;
+    }
+
+    @Override
+    public void updateGenModelExtended() {
+        getGenModel().setHost(getTcpHost());
+        getGenModel().setPort(Integer.parseInt(getTcpPort()));
+        getGenModel().setUserId(getTcpUserId());
+        getGenModel().setPassword(getTcpPassword());
         
     }
+
 
     /**
      * @return Host address on which TCP listens to mainframe clients
      */
     public String getTcpHost() {
-        return mTcpHostText.getText();
+        return _tcpHostText.getText();
     }
 
     /**
      * @param tcpHost Host address on which TCP listens to mainframe clients
      */
     public void setTcpHost(final String tcpHost) {
-        mTcpHostText.setText(tcpHost);
+        _tcpHostText.setText(tcpHost);
     }
 
     /**
      * @return Port on which TCP listens to mainframe clients
      */
     public String getTcpPort() {
-        return mTcpPortText.getText();
+        return _tcpPortText.getText();
     }
 
     /**
      * @param tcpPort Port on which TCP listens to mainframe clients
      */
     public void setTcpPort(final String tcpPort) {
-        mTcpPortText.setText(tcpPort);
+        _tcpPortText.setText(tcpPort);
     }
 
     /**
      * @return UserId used for basic authentication
      */
     public String getTcpUserId() {
-        return mTcpUserIdText.getText();
+        return _tcpUserIdText.getText();
     }
 
     /**
      * @param tcpUserId UserId used for basic authentication
      */
     public void setTcpUserId(final String tcpUserId) {
-        mTcpUserIdText.setText(tcpUserId);
+        _tcpUserIdText.setText(tcpUserId);
     }
 
     /**
      * @return Password used for basic authentication
      */
     public String getTcpPassword() {
-        return mTcpPasswordText.getText();
+        return _tcpPasswordText.getText();
     }
 
     /**
      * @param tcpPassword Password used for basic authentication
      */
     public void setTcpPassword(final String tcpPassword) {
-        mTcpPasswordText.setText(tcpPassword);
+        _tcpPasswordText.setText(tcpPassword);
+    }
+
+    /**
+     * @return the data model associated with this group
+     */
+    public TcpTransportParameters getGenModel() {
+        return _genModel;
     }
 
 }

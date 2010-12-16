@@ -20,12 +20,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
 
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsControlsGroup;
 import com.legstar.eclipse.plugin.mulegen.Messages;
-import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 
 /**
  * This page collects parameters needed for Mule to Cixs artifacts generation.
@@ -45,15 +45,20 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
 
     /**
      * Construct the page.
+     * 
      * @param selection the current workbench selection
      * @param mappingFile the mapping file
+     * @param genModel the generation model
      */
     protected Mule2CixsGeneratorWizardPage(
-            final IStructuredSelection selection, final IFile mappingFile) {
-        super(PAGE_NAME,
+            final IStructuredSelection selection,
+            final IFile mappingFile,
+            final AntBuildMule2CixsModel genModel) {
+        super(selection, PAGE_NAME,
                 Messages.mule_to_cixs_wizard_page_title,
                 Messages.mule_to_cixs_wizard_page_description,
-                selection, mappingFile);
+                mappingFile,
+                genModel);
     }
 
     /** {@inheritDoc} */
@@ -67,10 +72,22 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         composite.setLayout(new RowLayout());
         
         /* Add supported transport groups. */
-        _transportGroups.put(SampleConfigurationTransport.HTTP, new CixsAdapterToHostHttpGroup(this));
-        _transportGroups.put(SampleConfigurationTransport.WMQ, new CixsAdapterToHostWmqGroup(this));
-        _transportGroups.put(SampleConfigurationTransport.TCP, new CixsAdapterToHostTcpGroup(this));
-        _transportGroups.put(SampleConfigurationTransport.MOCK, new CixsAdapterToHostMockGroup(this));
+        _transportGroups.put(SampleConfigurationTransport.HTTP,
+                new CixsAdapterToHostHttpGroup(this,
+                        getGenModel().getHttpTransportParameters(),
+                        getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.HTTP));
+        _transportGroups.put(SampleConfigurationTransport.WMQ,
+                new CixsAdapterToHostWmqGroup(this,
+                        getGenModel().getWmqTransportParameters(),
+                        getGenModel().getSampleConfigurationHostMessagingType(),
+                        getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ));
+        _transportGroups.put(SampleConfigurationTransport.TCP,
+                new CixsAdapterToHostTcpGroup(this,
+                        getGenModel().getTcpTransportParameters(),
+                        getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.TCP));
+        _transportGroups.put(SampleConfigurationTransport.MOCK,
+                new CixsAdapterToHostMockGroup(this,
+                        getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.MOCK));
         
         for (AbstractCixsControlsGroup controlsGroup : _transportGroups.values()) {
             controlsGroup.createButton(composite);
@@ -85,22 +102,6 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
 
         for (AbstractCixsControlsGroup controlsGroup : _transportGroups.values()) {
             controlsGroup.initControls();
-        }
-
-        /* Make sure one of the adapter transports groups is visible */
-        SampleConfigurationTransport sampleConfigurationTransport =
-            SampleConfigurationTransport.valueOf(getProjectPreferences().get(
-                    PreferenceConstants.ADAPTER_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
-                    getStore().getDefaultString(
-                            PreferenceConstants.ADAPTER_LAST_SAMPLE_CONFIGURATION_TRANSPORT)));
-
-        for (Map.Entry < SampleConfigurationTransport, AbstractCixsControlsGroup > entry 
-                : _transportGroups.entrySet()) {
-            if (entry.getKey() == sampleConfigurationTransport) {
-                entry.getValue().getButton().setSelection(true);
-            } else {
-                entry.getValue().getButton().setSelection(false);
-            }
         }
 
         /* FIXME Have to hardcode the size of the wizard page, otherwise
@@ -138,15 +139,19 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         return true;
     }
 
-    /** {@inheritDoc} */
-    public void storeExtendedProjectPreferences() {
-        for (AbstractCixsControlsGroup controlsGroup : _transportGroups.values()) {
-            controlsGroup.storeProjectPreferences();
-        }
-        getProjectPreferences().put(
-                PreferenceConstants.ADAPTER_LAST_SAMPLE_CONFIGURATION_TRANSPORT,
-                getSampleConfigurationTransport().toString());
+    /**
+     * Store the selected values in the project scoped preference store.
+     */
+    public void updateGenModelExtended() {
 
+        for (AbstractCixsControlsGroup controlsGroup : _transportGroups
+                .values()) {
+            controlsGroup.updateGenModel();
+        }
+        getGenModel().setSampleConfigurationTransport(
+                getSampleConfigurationTransport());
+        getGenModel().setSampleConfigurationHostMessagingType(
+                getSampleConfigurationHostMessagingType());
     }
 
     /**
@@ -201,4 +206,10 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         return (CixsAdapterToHostMockGroup) _transportGroups.get(SampleConfigurationTransport.MOCK);
     }
 
+    /**
+     * @return the data model
+     */
+    public AntBuildMule2CixsModel getGenModel() {
+        return (AntBuildMule2CixsModel) super.getGenModel();
+    }
 }

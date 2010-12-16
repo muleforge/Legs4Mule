@@ -18,7 +18,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 
-import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizard;
 import com.legstar.eclipse.plugin.cixscom.wizards
 .AbstractCixsGeneratorWizardRunnable;
@@ -52,7 +51,7 @@ public class Cixs2MuleGeneratorWizard extends AbstractCixsGeneratorWizard {
      */
     public final void addPages() {
         _cixs2MuleGenPage = new Cixs2MuleGeneratorWizardPage(
-                getInitialSelection(), getMappingFile());
+                getInitialSelection(), getMappingFile(), getGenModel());
         addPage(_cixs2MuleGenPage);
     }
 
@@ -67,16 +66,25 @@ public class Cixs2MuleGeneratorWizard extends AbstractCixsGeneratorWizard {
         return new Cixs2MuleGeneratorWizardRunnable(_cixs2MuleGenPage);
     }
 
+    /** {@inheritDoc} */
     @Override
-    public AbstractAntBuildCixsModel createGenModel(final Properties props) {
+    public AntBuildCixs2MuleModel createGenModel(final Properties props) {
         return new AntBuildCixs2MuleModel(props);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public AntBuildCixs2MuleModel getGenModel() {
+        return (AntBuildCixs2MuleModel) super.getGenModel();
+    }
+
+    /** {@inheritDoc} */
     @Override
     public String getGenerationSubject() {
         return GENERATION_SUBJECT;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IRunnableWithProgress getWizardRunnable()
             throws InvocationTargetException {
