@@ -143,6 +143,8 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
      * Store the selected values in the project scoped preference store.
      */
     public void updateGenModelExtended() {
+        
+        super.updateGenModelExtended();
 
         for (AbstractCixsControlsGroup controlsGroup : _transportGroups
                 .values()) {

@@ -80,6 +80,8 @@ public class Messages extends NLS {
     public static String target_mule_jar_location_label;
     /** Invalid mule configuration files location message.*/
     public static String invalid_mule_config_location_msg;
+    /** Unable to locate plugin installation message.*/
+    public static String unable_to_locate_plugin_installation_msg;
 
     /** Cixs to mule generator name.*/
     public static String cixs_to_mule_wizard_page_title;

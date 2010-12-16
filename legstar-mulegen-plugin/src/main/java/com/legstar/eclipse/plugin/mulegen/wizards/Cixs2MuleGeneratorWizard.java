@@ -18,17 +18,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 
-import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizard;
 import com.legstar.eclipse.plugin.cixscom.wizards
 .AbstractCixsGeneratorWizardRunnable;
-import com.legstar.eclipse.plugin.mulegen.Activator;
 
 /**
  * This wizard role is to create a set of Mule artifacts that allows CICS 
  * clients to access a Mule UMO component.
  */
 
-public class Cixs2MuleGeneratorWizard extends AbstractCixsGeneratorWizard {
+public class Cixs2MuleGeneratorWizard extends AbstractCixsMuleGeneratorWizard {
 
     /** What we are trying to generate. */
     public static final String GENERATION_SUBJECT = "Mule proxy Service";
@@ -53,11 +51,6 @@ public class Cixs2MuleGeneratorWizard extends AbstractCixsGeneratorWizard {
         _cixs2MuleGenPage = new Cixs2MuleGeneratorWizardPage(
                 getInitialSelection(), getMappingFile(), getGenModel());
         addPage(_cixs2MuleGenPage);
-    }
-
-    /** {@inheritDoc} */
-    public String getPluginId() {
-        return Activator.PLUGIN_ID;
     }
 
     /** {@inheritDoc} */

@@ -199,6 +199,8 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
      * Store the selected values in the project scoped preference store.
      */
     public void updateGenModelExtended() {
+        
+        super.updateGenModelExtended();
 
         getUmoComponentTargetGroup().updateGenModel();
         getCixsHostToProxyHttpGroup().updateGenModel();

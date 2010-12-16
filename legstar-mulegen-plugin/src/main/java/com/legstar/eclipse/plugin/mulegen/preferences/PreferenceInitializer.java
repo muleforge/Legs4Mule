@@ -114,7 +114,10 @@ public class PreferenceInitializer extends AbstractCicxsPreferenceInitializer {
     public String getDefaultMuleLocation() {
         String value = System.getenv("MULE_HOME");
         if (value == null) {
-            return "";
+            value = System.getenv("MULE2_HOME");
+            if (value == null) {
+                return "";
+            }
         }
         return value;
     }
