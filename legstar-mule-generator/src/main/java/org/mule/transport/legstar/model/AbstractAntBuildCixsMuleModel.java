@@ -29,8 +29,10 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /* Following are default values.                                        = */
     /* ====================================================================== */
     public static final SampleConfigurationTransport DEFAULT_SAMPLE_CONFIGURATION_TRANSPORT = SampleConfigurationTransport.HTTP;
-    
+
     public static final SampleConfigurationHostMessagingType DEFAULT_SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE = SampleConfigurationHostMessagingType.LEGSTAR;
+
+    public static final SampleConfigurationPayloadType DEFAULT_SAMPLE_CONFIGURATION_PAYLOAD_TYPE = SampleConfigurationPayloadType.JAVA;
 
     /* ====================================================================== */
     /* Following are key identifiers for this model persistence.            = */
@@ -53,6 +55,9 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
 
     /** Host messaging used by generated service configuration samples. */
     public static final String SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE = "sampleConfigurationHostMessagingType";
+
+    /** Payload type (serialized java object or XML) for samples. */
+    public static final String SAMPLE_CONFIGURATION_PAYLOAD_TYPE = "sampleConfigurationPayloadType";
 
     /* ====================================================================== */
     /* Following are this class fields that are persistent.                 = */
@@ -84,6 +89,10 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     private SampleConfigurationHostMessagingType _sampleConfigurationHostMessagingType =
         DEFAULT_SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE;
 
+    /** The payload type (serialized java object or XML) for samples. */
+    private SampleConfigurationPayloadType _sampleConfigurationPayloadType =
+        DEFAULT_SAMPLE_CONFIGURATION_PAYLOAD_TYPE;
+
     /**
      * Construct the model with a generator name and velocity template.
      * @param generatorName to designate the generator
@@ -114,6 +123,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
         _wmqTransportParameters = new WmqTransportParameters(props);
         setSampleConfigurationHostMessagingType(getString(props, SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE,
                 DEFAULT_SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE.toString()));
+        setSampleConfigurationPayloadType(getString(props, SAMPLE_CONFIGURATION_PAYLOAD_TYPE,
+                DEFAULT_SAMPLE_CONFIGURATION_PAYLOAD_TYPE.toString()));
         setCixsMuleComponent(new CixsMuleComponent(props));
     }
     
@@ -317,6 +328,32 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     }
 
     /**
+     * @return the payload type (serialized java object or XML) for samples
+     */
+    public SampleConfigurationPayloadType getSampleConfigurationPayloadType() {
+        return _sampleConfigurationPayloadType;
+    }
+
+    /**
+     * @param sampleConfigurationPayloadType the payload type (serialized java object or XML) for samples to set
+     */
+    public void setSampleConfigurationPayloadType(
+            SampleConfigurationPayloadType sampleConfigurationPayloadType) {
+        _sampleConfigurationPayloadType = sampleConfigurationPayloadType;
+    }
+
+    /**
+     * @param sampleConfigurationPayloadType
+     *            the payload type (serialized java object or XML) for samples
+     *            to set
+     */
+    public void setSampleConfigurationPayloadType(
+            String sampleConfigurationPayloadType) {
+        _sampleConfigurationPayloadType = SampleConfigurationPayloadType
+                .valueOf(sampleConfigurationPayloadType);
+    }
+
+    /**
      * @return a properties file holding the values of this object fields
      */
     public Properties toProperties() {
@@ -329,6 +366,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
         props.putAll(getWmqTransportParameters().toProperties());
         putString(props, SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE,
                 getSampleConfigurationHostMessagingType().toString());
+        putString(props, SAMPLE_CONFIGURATION_PAYLOAD_TYPE,
+                getSampleConfigurationPayloadType().toString());
         return props;
     }
 }

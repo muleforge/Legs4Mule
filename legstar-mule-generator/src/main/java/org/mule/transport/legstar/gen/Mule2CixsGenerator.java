@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.Map;
 
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
-import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.options.TcpTransportParameters;
 
 import com.legstar.cixs.gen.model.CixsOperation;
@@ -78,12 +77,7 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         generateAdapterConfigXml(
                 getCixsMuleComponent(), parameters, componentConfFilesDir,
                 getSampleConfigurationTransportInternal(),
-                SampleConfigurationPayloadType.JAVA,
-                getSampleConfigurationHostMessagingTypeInternal());
-        generateAdapterConfigXml(
-                getCixsMuleComponent(), parameters, componentConfFilesDir,
-                getSampleConfigurationTransportInternal(),
-                SampleConfigurationPayloadType.XML,
+                getSampleConfigurationPayloadTypeInternal(),
                 getSampleConfigurationHostMessagingTypeInternal());
 
         /* Produce transformers and holders classes  */
@@ -98,15 +92,22 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
             Jaxws2CixsGenerator.generateHolders(
                     operation, parameters, operationClassFilesDir);
 
-            generateHostToJavaTransformers(
-                    operation, parameters, operationClassFilesDir);
-            generateJavaToHostTransformers(
-                    operation, parameters, operationClassFilesDir);
-
-            generateHostToXmlTransformers(
-                    operation, parameters, operationClassFilesDir);
-            generateXmlToHostTransformers(
-                    operation, parameters, operationClassFilesDir);
+            switch (getSampleConfigurationPayloadTypeInternal()) {
+            case JAVA:
+                generateHostToJavaTransformers(operation, parameters,
+                        operationClassFilesDir);
+                generateJavaToHostTransformers(operation, parameters,
+                        operationClassFilesDir);
+                break;
+            case XML:
+                generateHostToXmlTransformers(operation, parameters,
+                        operationClassFilesDir);
+                generateXmlToHostTransformers(operation, parameters,
+                        operationClassFilesDir);
+                break;
+            default:
+                break;
+            }
         }
 
     }

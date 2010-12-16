@@ -6,7 +6,7 @@
      using LegStar Coxbgen prior to using this script.
      Refer to http://www.legsem.com/legstar for info on generating binding classes.
   -->
-<project basedir=".." default="signalSuccess" name="generate-mule2cics">
+<project basedir="." default="signalSuccess" name="generate-mule2cics">
 
     <!-- ===========================================================  -->
     <!-- Setup environment
@@ -22,7 +22,7 @@
             <pathelement location="..\legstar-mulegen-lsfileac\target\classes"/>
             <pathelement location="..\legstar-mulegen-lsfileac\target\classes"/>
             <pathelement location="..\legstar-mule-generator\target\classes"/>
-            <fileset dir="${legstar.home}" includes="lib/*.jar" />
+            <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
 

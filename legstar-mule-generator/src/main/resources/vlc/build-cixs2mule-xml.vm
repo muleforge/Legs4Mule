@@ -7,7 +7,7 @@
      using LegStar Coxbgen prior to using this script.
      Refer to http://www.legsem.com/legstar for info on generating binding classes.
   -->
-<project basedir="${antModel.productLocation}" default="signalSuccess" name="generate-cixs2mule">
+<project basedir="." default="signalSuccess" name="generate-cixs2mule">
 
     <!-- ===========================================================  -->
     <!-- Setup environment
@@ -27,7 +27,11 @@
             <pathelement location="${antModel.jaxbBinDir}"/>
             <pathelement location="${antModel.coxbBinDir}"/>
             <pathelement location="${antModel.custBinDir}"/>
+#if(${antModel.productLocation})
+            <fileset dir="${antModel.productLocation}" includes="lib/*.jar" />
+#else
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
+#end
 #if(${antModel.mulegenProductLocation})
             <fileset dir="${antModel.mulegenProductLocation}" includes="lib/*.jar" />
 #end
