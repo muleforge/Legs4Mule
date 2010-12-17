@@ -13,6 +13,7 @@ package org.mule.transport.legstar.gen;
 import java.io.File;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.gen.model.options.WmqTransportParameters;
@@ -203,7 +204,7 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         mGenerator.getHttpTransportParameters().setPort(8083);
 
         mGenerator.execute();
-        checkResults(muleComponent);
+        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
     }
 
     /**
@@ -227,15 +228,18 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
                 "JVMQUERY.POJO.REPLY.QUEUE");
 
         mGenerator.execute();
-        checkResults(muleComponent);
+        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
     }
 
     /**
      * Check that all expected artifacts are generated.
      * @param muleComponent the service model
+     * @param sampleConfigurationPayloadType sample payload type
      * @throws Exception if check fails
      */
-    private void checkResults(final CixsMuleComponent muleComponent) throws Exception {
+    private void checkResults(
+            final CixsMuleComponent muleComponent,
+            final SampleConfigurationPayloadType sampleConfigurationPayloadType) throws Exception {
 
         compare(mGenerator.getTargetAntDir(),
                 "build-jar.xml", muleComponent.getName());
@@ -253,31 +257,41 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     mGenerator.getTargetSrcDir(), operation.getPackageName(), true);
 
-            compare(operationClassFilesDir,
-                    "HostTo" + operation.getRequestHolderType() + "MuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    operation.getRequestHolderType() + "ToHostMuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    "HostTo" + operation.getResponseHolderType() + "MuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    operation.getResponseHolderType() + "ToHostMuleTransformer.java",
-                    muleComponent.getName());
+            switch (sampleConfigurationPayloadType) {
+            case JAVA:
+                compare(operationClassFilesDir, "HostTo"
+                        + operation.getRequestHolderType()
+                        + "MuleTransformer.java", muleComponent.getName());
+                compare(operationClassFilesDir, operation
+                        .getRequestHolderType()
+                        + "ToHostMuleTransformer.java", muleComponent.getName());
+                compare(operationClassFilesDir, "HostTo"
+                        + operation.getResponseHolderType()
+                        + "MuleTransformer.java", muleComponent.getName());
+                compare(operationClassFilesDir, operation
+                        .getResponseHolderType()
+                        + "ToHostMuleTransformer.java", muleComponent.getName());
 
-            compare(operationClassFilesDir,
-                    "HostTo" + operation.getRequestHolderType() + "XmlMuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    operation.getRequestHolderType() + "XmlToHostMuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    "HostTo" + operation.getResponseHolderType() + "XmlMuleTransformer.java",
-                    muleComponent.getName());
-            compare(operationClassFilesDir,
-                    operation.getResponseHolderType() + "XmlToHostMuleTransformer.java",
-                    muleComponent.getName());
+                break;
+            case XML:
+                compare(operationClassFilesDir, "HostTo"
+                        + operation.getRequestHolderType()
+                        + "XmlMuleTransformer.java", muleComponent.getName());
+                compare(operationClassFilesDir, operation
+                        .getRequestHolderType()
+                        + "XmlToHostMuleTransformer.java", muleComponent
+                        .getName());
+                compare(operationClassFilesDir, "HostTo"
+                        + operation.getResponseHolderType()
+                        + "XmlMuleTransformer.java", muleComponent.getName());
+                compare(operationClassFilesDir, operation
+                        .getResponseHolderType()
+                        + "XmlToHostMuleTransformer.java", muleComponent
+                        .getName());
+                break;
+            default:
+                break;
+            }
 
             String expectedCobolRes = "";
             if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("http")) {

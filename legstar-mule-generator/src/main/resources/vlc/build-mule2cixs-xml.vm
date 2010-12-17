@@ -6,7 +6,7 @@
      using LegStar Coxbgen prior to using this script.
      Refer to http://www.legsem.com/legstar for info on generating binding classes.
   -->
-<project basedir="." default="signalSuccess" name="generate-mule2cics">
+<project basedir=".." default="signalSuccess" name="generate-mule2cics">
 
     <!-- ===========================================================  -->
     <!-- Setup environment
@@ -62,6 +62,7 @@
             hostCharset="${antModel.hostCharset}"
             sampleConfigurationTransport="${antModel.sampleConfigurationTransport}"
             sampleConfigurationHostMessagingType="${antModel.sampleConfigurationHostMessagingType}"
+            sampleConfigurationPayloadType="${antModel.sampleConfigurationPayloadType}"
           >
             <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
                 packageName="${antModel.cixsMuleComponent.packageName}">

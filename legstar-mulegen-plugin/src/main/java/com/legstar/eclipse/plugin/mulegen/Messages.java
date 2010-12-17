@@ -140,6 +140,9 @@ public class Messages extends NLS {
     /** Path on which mainframe listens to HTTP clients label.*/
     public static String adapter_to_host_http_path_label;
 
+    /** Client to Adapter payload.*/
+    public static String client_to_adapter_payload_label;
+
     /** User id for mainframe authentication.*/
     public static String adapter_to_host_userid_label;
     /** Password for mainframe authentication.*/

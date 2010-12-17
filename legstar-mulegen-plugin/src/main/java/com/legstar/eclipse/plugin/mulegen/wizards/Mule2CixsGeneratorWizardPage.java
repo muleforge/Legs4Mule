@@ -17,10 +17,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
 
@@ -42,6 +46,13 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
 
     /** Keeps a reference on the deployment group container. */
     private Composite mDeploymentGroup = null;
+    
+    /** Selection of client to adapter java payload. */
+    private Button _javaPayloadButton = null;
+
+    /** Selection of client to adapter XML payload. */
+    private Button _xmlPayloadButton = null;
+
 
     /**
      * Construct the page.
@@ -66,6 +77,16 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         super.addWidgetsToDeploymentGroup(container);
 
         mDeploymentGroup = container;
+
+        createLabel(container, Messages.client_to_adapter_payload_label + ":");
+        Composite buttonsComposite = new Composite(container, SWT.NULL);
+        buttonsComposite.setLayout(new RowLayout());
+
+        _javaPayloadButton = new Button(buttonsComposite, SWT.RADIO);
+        _javaPayloadButton.setText("JAVA");
+
+        _xmlPayloadButton = new Button(buttonsComposite, SWT.RADIO);
+        _xmlPayloadButton.setText("XML");
 
         createLabel(container, Messages.adapter_to_host_transport_label + ":");
         Composite composite = new Composite(container, SWT.NULL);
@@ -100,7 +121,15 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     public void initExtendedWidgets(final IProject project) {
         super.initExtendedWidgets(project);
 
-        for (AbstractCixsControlsGroup controlsGroup : _transportGroups.values()) {
+        getJavaPayloadButton()
+                .setSelection(
+                        getGenModel().getSampleConfigurationPayloadType() == SampleConfigurationPayloadType.JAVA);
+        getXmlPayloadButton()
+                .setSelection(
+                        getGenModel().getSampleConfigurationPayloadType() == SampleConfigurationPayloadType.XML);
+
+        for (AbstractCixsControlsGroup controlsGroup : _transportGroups
+                .values()) {
             controlsGroup.initControls();
         }
 
@@ -111,6 +140,20 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
 
     /** {@inheritDoc} */
     public void createExtendedListeners() {
+        super.createExtendedListeners();
+        
+        getJavaPayloadButton().addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(final SelectionEvent e) {
+                dialogChanged();
+            }
+        });
+ 
+        getXmlPayloadButton().addSelectionListener(new SelectionAdapter() {
+            public void widgetSelected(final SelectionEvent e) {
+                dialogChanged();
+            }
+        });
+
         for (AbstractCixsControlsGroup controlsGroup : _transportGroups.values()) {
             controlsGroup.createListeners();
         }
@@ -143,8 +186,16 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
      * Store the selected values in the project scoped preference store.
      */
     public void updateGenModelExtended() {
-        
         super.updateGenModelExtended();
+
+        if (getJavaPayloadButton().getSelection()) {
+            getGenModel().setSampleConfigurationPayloadType(
+                    SampleConfigurationPayloadType.JAVA);
+        }
+        if (getXmlPayloadButton().getSelection()) {
+            getGenModel().setSampleConfigurationPayloadType(
+                    SampleConfigurationPayloadType.XML);
+        }
 
         for (AbstractCixsControlsGroup controlsGroup : _transportGroups
                 .values()) {
@@ -206,6 +257,20 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
      */
     public CixsAdapterToHostMockGroup getCixsAdapterToHostMockGroup() {
         return (CixsAdapterToHostMockGroup) _transportGroups.get(SampleConfigurationTransport.MOCK);
+    }
+
+    /**
+     * @return the selection of client to adapter java payload
+     */
+    public Button getJavaPayloadButton() {
+        return _javaPayloadButton;
+    }
+
+    /**
+     * @return the selection of client to adapter XML payload
+     */
+    public Button getXmlPayloadButton() {
+        return _xmlPayloadButton;
     }
 
     /**

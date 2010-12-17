@@ -219,7 +219,7 @@ public class AbstractTestTemplate extends TestCase {
             final String fileName,
             final String prefix) {
         try {
-            /* Change any windows style antislash */
+            /* Change any windows style backslash */
             String result = getSource(dir, fileName).replace('\\', '/');
             String reference = "/org/mule/transport/legstar/gen/";
             if (prefix != null && prefix.length() > 0) {

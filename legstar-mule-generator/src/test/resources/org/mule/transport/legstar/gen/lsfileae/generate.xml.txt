@@ -6,7 +6,7 @@
      using LegStar Coxbgen prior to using this script.
      Refer to http://www.legsem.com/legstar for info on generating binding classes.
   -->
-<project basedir="." default="signalSuccess" name="generate-mule2cics">
+<project basedir=".." default="signalSuccess" name="generate-mule2cics">
 
     <!-- ===========================================================  -->
     <!-- Setup environment
@@ -51,6 +51,7 @@
             hostCharset="IBM01147"
             sampleConfigurationTransport="HTTP"
             sampleConfigurationHostMessagingType="LEGSTAR"
+            sampleConfigurationPayloadType="JAVA"
           >
             <cixsMuleComponent name="lsfileae"
                 packageName="org.mule.transport.legstar.test.lsfileae">

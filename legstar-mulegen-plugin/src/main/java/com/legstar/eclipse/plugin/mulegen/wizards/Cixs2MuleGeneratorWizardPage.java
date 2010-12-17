@@ -97,6 +97,7 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /** {@inheritDoc} */
     public void addWidgetsToTargetGroup(final Composite container) {
         super.addWidgetsToTargetGroup(container);
+
         _targetCobolDirText = createDirectoryFieldEditor(container,
                 "targetCobolDir",
                 Messages.cobol_target_location_label + ':');
@@ -105,6 +106,7 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /** {@inheritDoc} */
     public void addWidgetsToDeploymentGroup(final Composite container) {
         super.addWidgetsToDeploymentGroup(container);
+
         _deploymentGroup = container;
 
         createLabel(container, Messages.sample_configuration_transport_label
@@ -146,6 +148,7 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /** {@inheritDoc} */
     public void createExtendedListeners() {
         super.createExtendedListeners();
+
         _targetCobolDirText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 dialogChanged();
@@ -199,7 +202,6 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
      * Store the selected values in the project scoped preference store.
      */
     public void updateGenModelExtended() {
-        
         super.updateGenModelExtended();
 
         getUmoComponentTargetGroup().updateGenModel();
