@@ -91,27 +91,6 @@ public class CixsAdapterTcpGroup extends AbstractCixsControlsGroup {
     /**
      * {@inheritDoc} 
      */
-    public boolean validateControls() {
-        if (getTcpHost() == null || getTcpHost().length() == 0) {
-            getWizardPage().updateStatus(Messages.invalid_tcp_host_msg);
-            return false;
-        }
-        try {
-            if (Integer.parseInt(getTcpPort()) < 0 
-                    || Integer.parseInt(getTcpPort()) > 65536) {
-                getWizardPage().updateStatus(Messages.invalid_tcp_port_number_msg);
-                return false;
-            }
-        } catch (NumberFormatException e) {
-            getWizardPage().updateStatus(Messages.invalid_tcp_port_number_msg);
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * {@inheritDoc} 
-     */
     public void createExtendedListeners() {
 
         _tcpHostText.addModifyListener(new ModifyListener() {
@@ -134,19 +113,6 @@ public class CixsAdapterTcpGroup extends AbstractCixsControlsGroup {
                 getWizardPage().dialogChanged();
             }
         });
-    }
-
-    
-    /**
-     * @return the tcp parameters as a formatted tcp transport parameters object
-     */
-    public TcpTransportParameters getTcpTransportParameters() {
-        TcpTransportParameters tcpTransportParameters = new TcpTransportParameters();
-        tcpTransportParameters.setHost(getTcpHost());
-        tcpTransportParameters.setPort(Integer.parseInt(getTcpPort()));
-        tcpTransportParameters.setUserId(getTcpUserId());
-        tcpTransportParameters.setPassword(getTcpPassword());
-        return tcpTransportParameters;
     }
 
     /**
@@ -221,6 +187,30 @@ public class CixsAdapterTcpGroup extends AbstractCixsControlsGroup {
         return initValue;
     }
 
+    /**
+     * {@inheritDoc} 
+     */
+    public boolean validateControls() {
+        if (getTcpHost() == null || getTcpHost().length() == 0) {
+            getWizardPage().updateStatus(Messages.invalid_tcp_host_msg);
+            return false;
+        }
+        try {
+            if (Integer.parseInt(getTcpPort()) < 0 
+                    || Integer.parseInt(getTcpPort()) > 65536) {
+                getWizardPage().updateStatus(Messages.invalid_tcp_port_number_msg);
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            getWizardPage().updateStatus(Messages.invalid_tcp_port_number_msg);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * {@inheritDoc} 
+     */
     @Override
     public void updateGenModelExtended() {
         getGenModel().setHost(getTcpHost());

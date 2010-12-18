@@ -163,10 +163,6 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /** {@inheritDoc} */
     public boolean validateExtendedWidgets() {
 
-        if (!super.validateExtendedWidgets()) {
-            return false;
-        }
-
         getUmoComponentTargetGroup().setVisibility();
         getCixsHostToProxyHttpGroup().setVisibility();
         getCixsHostToProxyWmqGroup().setVisibility();
@@ -205,13 +201,13 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         super.updateGenModelExtended();
 
         getUmoComponentTargetGroup().updateGenModel();
-        getCixsHostToProxyHttpGroup().updateGenModel();
-        getCixsHostToProxyWmqGroup().updateGenModel();
 
         if (getCixsHostToProxyHttpGroup().isSelected()) {
+            getCixsHostToProxyHttpGroup().updateGenModel();
             getGenModel().setSampleConfigurationTransport(SampleConfigurationTransport.HTTP);
         }
         if (getCixsHostToProxyWmqGroup().isSelected()) {
+            getCixsHostToProxyWmqGroup().updateGenModel();
             getGenModel().setSampleConfigurationTransport(SampleConfigurationTransport.WMQ);
         }
         

@@ -18,9 +18,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 
-import com.legstar.eclipse.plugin.cixscom.wizards
-.AbstractCixsGeneratorWizardRunnable;
-
 /**
  * This wizard role is to create a set of Mule artifacts that allows CICS 
  * clients to access a Mule UMO component.
@@ -54,13 +51,6 @@ public class Cixs2MuleGeneratorWizard extends AbstractCixsMuleGeneratorWizard {
     }
 
     /** {@inheritDoc} */
-    protected AbstractCixsGeneratorWizardRunnable getRunnable()
-    throws InvocationTargetException {
-        return new Cixs2MuleGeneratorWizardRunnable(_cixs2MuleGenPage);
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public AntBuildCixs2MuleModel createGenModel(final Properties props) {
         return new AntBuildCixs2MuleModel(props);
     }
@@ -72,13 +62,11 @@ public class Cixs2MuleGeneratorWizard extends AbstractCixsMuleGeneratorWizard {
     }
 
     /** {@inheritDoc} */
-    @Override
     public String getGenerationSubject() {
         return GENERATION_SUBJECT;
     }
 
     /** {@inheritDoc} */
-    @Override
     public IRunnableWithProgress getWizardRunnable()
             throws InvocationTargetException {
         return new Cixs2MuleGeneratorWizardRunnable(_cixs2MuleGenPage);

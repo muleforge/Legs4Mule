@@ -45,7 +45,7 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         new LinkedHashMap < SampleConfigurationTransport, AbstractCixsControlsGroup >();
 
     /** Keeps a reference on the deployment group container. */
-    private Composite mDeploymentGroup = null;
+    private Composite _deploymentGroup = null;
     
     /** Selection of client to adapter java payload. */
     private Button _javaPayloadButton = null;
@@ -76,7 +76,7 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     public void addWidgetsToDeploymentGroup(final Composite container) {
         super.addWidgetsToDeploymentGroup(container);
 
-        mDeploymentGroup = container;
+        _deploymentGroup = container;
 
         createLabel(container, Messages.client_to_adapter_payload_label + ":");
         Composite buttonsComposite = new Composite(container, SWT.NULL);
@@ -166,14 +166,14 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
             controlsGroup.setVisibility();
         }
 
-        getShell().layout(new Control[] {mDeploymentGroup});
+        getShell().layout(new Control[] {_deploymentGroup});
 
         if (!super.validateExtendedWidgets()) {
             return false;
         }
         for (Map.Entry < SampleConfigurationTransport, AbstractCixsControlsGroup > entry 
                 : _transportGroups.entrySet()) {
-            if (entry.getKey() == getSampleConfigurationTransport()) {
+            if (entry.getValue().isSelected()) {
                 if (!entry.getValue().validateControls()) {
                     return false;
                 }
@@ -197,35 +197,25 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
                     SampleConfigurationPayloadType.XML);
         }
 
-        for (AbstractCixsControlsGroup controlsGroup : _transportGroups
-                .values()) {
-            controlsGroup.updateGenModel();
-        }
-        getGenModel().setSampleConfigurationTransport(
-                getSampleConfigurationTransport());
-        getGenModel().setSampleConfigurationHostMessagingType(
-                getSampleConfigurationHostMessagingType());
-    }
-
-    /**
-     * @return the client transport selected
-     */
-    public final SampleConfigurationTransport getSampleConfigurationTransport() {
         for (Map.Entry < SampleConfigurationTransport, AbstractCixsControlsGroup > entry 
                 : _transportGroups.entrySet()) {
-            if (entry.getValue().getSelection()) {
-                return entry.getKey();
+            if (entry.getValue().isSelected()) {
+                entry.getValue().updateGenModel();
+                getGenModel().setSampleConfigurationTransport(entry.getKey());
+                if (entry.getKey() == SampleConfigurationTransport.WMQ) {
+                    getGenModel().setSampleConfigurationHostMessagingType(
+                            getSampleConfigurationHostMessagingType());
+                }
             }
         }
-        return SampleConfigurationTransport.HTTP;
+
     }
 
     /**
      * @return sample configuration host messaging.
      */
     public final SampleConfigurationHostMessagingType getSampleConfigurationHostMessagingType() {
-        if (getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ
-                && getCixsAdapterToHostWmqGroup().getMqcihButton().getSelection()) {
+        if (getCixsAdapterToHostWmqGroup().getMqcihButton().getSelection()) {
             return SampleConfigurationHostMessagingType.MQCIH;
         }
         return SampleConfigurationHostMessagingType.LEGSTAR;
