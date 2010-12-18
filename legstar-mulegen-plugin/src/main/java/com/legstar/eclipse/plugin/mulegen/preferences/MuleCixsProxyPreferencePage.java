@@ -58,44 +58,44 @@ implements IWorkbenchPreferencePage {
                 getFieldEditorParent()));
 
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_HOST,
+                PreferenceConstants.PROXY_DEFAULT_HTTP_HOST,
                 "HTTP " + Messages.preference_proxy_http_host_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_PORT,
+                PreferenceConstants.PROXY_DEFAULT_HTTP_PORT,
                 "HTTP " + Messages.preference_proxy_http_port_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_HTTP_PATH_TEMPLATE,
+                PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE,
                 "HTTP " + Messages.preference_proxy_http_path_template_label + ':',
                 getFieldEditorParent()));
 
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_JNDI_URL,
+                PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_URL,
                 "WMQ " + Messages.wmq_jndi_url_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
+                PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
                 "WMQ " + Messages.wmq_jndi_context_factory_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_CONNECTION_FACTORY,
+                PreferenceConstants.PROXY_DEFAULT_WMQ_CONNECTION_FACTORY,
                 "WMQ " + Messages.wmq_connection_factory_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
+                PreferenceConstants.PROXY_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
                 "WMQ " + Messages.wmq_zos_queue_manager_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_REQUEST_QUEUE_SUFFIX,
+                PreferenceConstants.PROXY_DEFAULT_WMQ_REQUEST_QUEUE_SUFFIX,
                 "WMQ " + Messages.preference_proxy_wmq_request_queue_suffix_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_REPLY_QUEUE_SUFFIX,
+                PreferenceConstants.PROXY_DEFAULT_WMQ_REPLY_QUEUE_SUFFIX,
                 "WMQ " + Messages.preference_proxy_wmq_reply_queue_suffix_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_ERROR_QUEUE_SUFFIX,
+                PreferenceConstants.PROXY_DEFAULT_WMQ_ERROR_QUEUE_SUFFIX,
                 "WMQ " + Messages.preference_proxy_wmq_error_queue_suffix_label + ':',
                 getFieldEditorParent()));
     }

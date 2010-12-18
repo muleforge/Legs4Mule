@@ -30,7 +30,7 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
  * Parameters needed by adapter to reach the mainframe over WebSphere MQ.
  *
  */
-public class CixsAdapterToHostWmqGroup extends AbstractCixsWmqGroup {
+public class CixsAdapterWmqGroup extends AbstractCixsWmqGroup {
 
     /** Selection of LegStar sample host messaging type.*/
     private Button _legstarButton = null;
@@ -48,7 +48,7 @@ public class CixsAdapterToHostWmqGroup extends AbstractCixsWmqGroup {
      * @param sampleConfigurationHostMessagingType initialHost messaging type over MQ chosen
      * @param selected whether this group should initially be selected
      */
-    public CixsAdapterToHostWmqGroup(
+    public CixsAdapterWmqGroup(
             final AbstractCixsGeneratorWizardPage wizardPage,
             final WmqTransportParameters genModel,
             final SampleConfigurationHostMessagingType sampleConfigurationHostMessagingType,
@@ -135,43 +135,43 @@ public class CixsAdapterToHostWmqGroup extends AbstractCixsWmqGroup {
     @Override
     public String getDefaultWmqConnectionFactory() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_CONNECTION_FACTORY);
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_CONNECTION_FACTORY);
     }
 
     @Override
     public String getDefaultWmqErrorQueue() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ERROR_QUEUE);
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_ERROR_QUEUE);
     }
 
     @Override
     public String getDefaultWmqJndiContextFactory() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY);
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY);
     }
 
     @Override
     public String getDefaultWmqJndiUrl() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_URL);
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_JNDI_URL);
     }
 
     @Override
     public String getDefaultWmqReplyQueue() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REPLY_QUEUE);
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_REPLY_QUEUE);
     }
 
     @Override
     public String getDefaultWmqRequestQueue() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REQUEST_QUEUE);
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_REQUEST_QUEUE);
     }
 
     @Override
     public String getDefaultWmqZosQueueManager() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ZOS_QUEUE_MANAGER);
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_ZOS_QUEUE_MANAGER);
     }
 
 }

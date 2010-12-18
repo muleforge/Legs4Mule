@@ -94,20 +94,20 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         
         /* Add supported transport groups. */
         _transportGroups.put(SampleConfigurationTransport.HTTP,
-                new CixsAdapterToHostHttpGroup(this,
+                new CixsAdapterHttpGroup(this,
                         getGenModel().getHttpTransportParameters(),
                         getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.HTTP));
         _transportGroups.put(SampleConfigurationTransport.WMQ,
-                new CixsAdapterToHostWmqGroup(this,
+                new CixsAdapterWmqGroup(this,
                         getGenModel().getWmqTransportParameters(),
                         getGenModel().getSampleConfigurationHostMessagingType(),
                         getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ));
         _transportGroups.put(SampleConfigurationTransport.TCP,
-                new CixsAdapterToHostTcpGroup(this,
+                new CixsAdapterTcpGroup(this,
                         getGenModel().getTcpTransportParameters(),
                         getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.TCP));
         _transportGroups.put(SampleConfigurationTransport.MOCK,
-                new CixsAdapterToHostMockGroup(this,
+                new CixsAdapterMockGroup(this,
                         getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.MOCK));
         
         for (AbstractCixsControlsGroup controlsGroup : _transportGroups.values()) {
@@ -234,29 +234,29 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /**
      * @return the HTTP transport control group
      */
-    public CixsAdapterToHostHttpGroup getCixsAdapterToHostHttpGroup() {
-        return (CixsAdapterToHostHttpGroup) _transportGroups.get(SampleConfigurationTransport.HTTP);
+    public CixsAdapterHttpGroup getCixsAdapterToHostHttpGroup() {
+        return (CixsAdapterHttpGroup) _transportGroups.get(SampleConfigurationTransport.HTTP);
     }
 
     /**
      * @return the WMQ transport control group
      */
-    public CixsAdapterToHostWmqGroup getCixsAdapterToHostWmqGroup() {
-        return (CixsAdapterToHostWmqGroup) _transportGroups.get(SampleConfigurationTransport.WMQ);
+    public CixsAdapterWmqGroup getCixsAdapterToHostWmqGroup() {
+        return (CixsAdapterWmqGroup) _transportGroups.get(SampleConfigurationTransport.WMQ);
     }
 
     /**
      * @return the TCP transport control group
      */
-    public CixsAdapterToHostTcpGroup getCixsAdapterToHostTcpGroup() {
-        return (CixsAdapterToHostTcpGroup) _transportGroups.get(SampleConfigurationTransport.TCP);
+    public CixsAdapterTcpGroup getCixsAdapterToHostTcpGroup() {
+        return (CixsAdapterTcpGroup) _transportGroups.get(SampleConfigurationTransport.TCP);
     }
 
     /**
      * @return the MOCK transport control group
      */
-    public CixsAdapterToHostMockGroup getCixsAdapterToHostMockGroup() {
-        return (CixsAdapterToHostMockGroup) _transportGroups.get(SampleConfigurationTransport.MOCK);
+    public CixsAdapterMockGroup getCixsAdapterToHostMockGroup() {
+        return (CixsAdapterMockGroup) _transportGroups.get(SampleConfigurationTransport.MOCK);
     }
 
     /**

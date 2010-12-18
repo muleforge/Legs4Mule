@@ -111,12 +111,15 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
      * 
      * @param generatorName to designate the generator
      * @param vlcTemplate a velocity template that accepts this model
+     * @param props a set of properties
      */
     public AbstractAntBuildCixsMuleModel(final String generatorName,
             final String vlcTemplate, final Properties props) {
-        super(generatorName, vlcTemplate);
+        super(generatorName, vlcTemplate, props);
         setMuleHome(getString(props, MULE_HOME, null));
         setMulegenProductLocation(getString(props, MULEGEN_PRODUCT_LOCATION, null));
+        setTargetMuleConfigDir(getFile(props, TARGET_MULE_CONFIG_DIR, null));
+        setTargetJarDir(getFile(props, TARGET_JAR_DIR, null));
         setSampleConfigurationTransport(getString(props, SAMPLE_CONFIGURATION_TRANSPORT,
                 DEFAULT_SAMPLE_CONFIGURATION_TRANSPORT.toString()));
         _httpTransportParameters = new HttpTransportParameters(props);
@@ -360,6 +363,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
         Properties props = super.toProperties();
         putString(props, MULE_HOME, getMuleHome());
         putString(props, MULEGEN_PRODUCT_LOCATION, getMulegenProductLocation());
+        putFile(props, TARGET_MULE_CONFIG_DIR, getTargetMuleConfigDir());
+        putFile(props, TARGET_JAR_DIR, getTargetJarDir());
         putString(props, SAMPLE_CONFIGURATION_TRANSPORT,
                 getSampleConfigurationTransport().toString());
         props.putAll(getHttpTransportParameters().toProperties());

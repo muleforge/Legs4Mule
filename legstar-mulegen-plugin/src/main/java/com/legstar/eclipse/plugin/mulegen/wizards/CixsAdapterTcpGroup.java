@@ -29,7 +29,7 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
  * Parameters needed by adapter to reach the mainframe over TCP.
  *
  */
-public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
+public class CixsAdapterTcpGroup extends AbstractCixsControlsGroup {
 
     /** The Host address on which mainframe TCP server listens to clients. */
     private Text _tcpHostText = null;
@@ -52,7 +52,7 @@ public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
      * @param genModel the data model
      * @param selected whether this group should initially be selected
      */
-    public CixsAdapterToHostTcpGroup(
+    public CixsAdapterTcpGroup(
             final AbstractCixsGeneratorWizardPage wizardPage,
             final TcpTransportParameters genModel,
             final boolean selected) {
@@ -177,7 +177,7 @@ public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
      */
     public String getDefaultTcpHost() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_HOST);
+                PreferenceConstants.ADAPTER_DEFAULT_TCP_HOST);
     }
 
     /**
@@ -196,7 +196,7 @@ public class CixsAdapterToHostTcpGroup extends AbstractCixsControlsGroup {
      */
     public String getDefaultTcpPort() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_PORT);
+                PreferenceConstants.ADAPTER_DEFAULT_TCP_PORT);
     }
 
     /**

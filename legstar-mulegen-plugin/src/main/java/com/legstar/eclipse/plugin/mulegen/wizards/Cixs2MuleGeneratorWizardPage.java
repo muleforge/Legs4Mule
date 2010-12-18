@@ -51,10 +51,10 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     private CixsProxyUmoComponentTargetGroup _umoComponentTargetGroup;
 
     /** HTTP Proxy client parameters. */
-    private CixsHostToProxyHttpGroup _cixsHostToProxyHttpGroup;
+    private CixsProxyHttpGroup _cixsHostToProxyHttpGroup;
 
     /** WMQ Proxy client parameters. */
-    private CixsHostToProxyWmqGroup _cixsHostToProxyWmqGroup;
+    private CixsProxyWmqGroup _cixsHostToProxyWmqGroup;
 
     /**
      * Construct the page.
@@ -114,7 +114,7 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         Composite composite = new Composite(container, SWT.NULL);
         composite.setLayout(new RowLayout());
 
-        _cixsHostToProxyHttpGroup = new CixsHostToProxyHttpGroup(
+        _cixsHostToProxyHttpGroup = new CixsProxyHttpGroup(
                 this,
                 getGenModel().getHttpTransportParameters(),
                 getGenModel().getSampleCobolHttpClientType(),
@@ -122,7 +122,7 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         _cixsHostToProxyHttpGroup.createButton(composite);
         _cixsHostToProxyHttpGroup.createControls(container);
 
-        _cixsHostToProxyWmqGroup = new CixsHostToProxyWmqGroup(
+        _cixsHostToProxyWmqGroup = new CixsProxyWmqGroup(
                 this,
                 getGenModel().getWmqTransportParameters(),
                 getGenModel().getSampleConfigurationTransport() == SampleConfigurationTransport.WMQ);
@@ -242,14 +242,14 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
     /**
      * @return the HTTP Proxy client parameters
      */
-    public CixsHostToProxyHttpGroup getCixsHostToProxyHttpGroup() {
+    public CixsProxyHttpGroup getCixsHostToProxyHttpGroup() {
         return _cixsHostToProxyHttpGroup;
     }
 
     /**
      * @return the WMQ Proxy client parameters
      */
-    public CixsHostToProxyWmqGroup getCixsHostToProxyWmqGroup() {
+    public CixsProxyWmqGroup getCixsHostToProxyWmqGroup() {
         return _cixsHostToProxyWmqGroup;
     }
 

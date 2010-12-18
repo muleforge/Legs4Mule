@@ -26,7 +26,7 @@ import com.legstar.eclipse.plugin.mulegen.Messages;
  * Parameters needed by adapter to reach the mainframe over MOCK.
  *
  */
-public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
+public class CixsAdapterMockGroup extends AbstractCixsControlsGroup {
 
     /** The user id for basic authentication. */
     private Text mMockUserIdText = null;
@@ -39,7 +39,7 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
      * @param wizardPage the parent wizard page
      * @param selected whether this group should initially be selected
      */
-    public CixsAdapterToHostMockGroup(
+    public CixsAdapterMockGroup(
             final AbstractCixsGeneratorWizardPage wizardPage,
             final boolean selected) {
         super(wizardPage, selected);

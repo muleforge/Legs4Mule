@@ -72,10 +72,17 @@ public class TcpTransportParameters extends AbstractPropertiesModel {
     public static final String TCP_URL = "tcpURL";
 
     
+    /**
+     * Default constructor.
+     */
     public TcpTransportParameters() {
         _tcpHost =  CodeGenUtil.getLocalIPAddress();
     }
 
+    /**
+     * Construct from properties.
+     * @param props a set of properties
+     */
     public TcpTransportParameters(final Properties props) {
         super(props);
         setHost(getString(props, TCP_HOST, CodeGenUtil.getLocalIPAddress()));

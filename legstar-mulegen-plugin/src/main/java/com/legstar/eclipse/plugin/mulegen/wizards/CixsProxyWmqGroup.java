@@ -22,7 +22,7 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
  * Parameters needed for mainframe clients to reach proxies over WebSphere MQ.
  *
  */
-public class CixsHostToProxyWmqGroup extends AbstractCixsWmqGroup {
+public class CixsProxyWmqGroup extends AbstractCixsWmqGroup {
 
     /**
      * Construct this control group attaching it to a wizard page.
@@ -30,7 +30,7 @@ public class CixsHostToProxyWmqGroup extends AbstractCixsWmqGroup {
      * @param genModel the data model
      * @param selected whether this group should initially be selected
      */
-    public CixsHostToProxyWmqGroup(
+    public CixsProxyWmqGroup(
             final AbstractCixsGeneratorWizardPage wizardPage,
             final WmqTransportParameters genModel,
             final boolean selected) {
@@ -47,45 +47,45 @@ public class CixsHostToProxyWmqGroup extends AbstractCixsWmqGroup {
     @Override
     public String getDefaultWmqConnectionFactory() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_CONNECTION_FACTORY);
+                PreferenceConstants.PROXY_DEFAULT_WMQ_CONNECTION_FACTORY);
     }
 
     @Override
     public String getDefaultWmqErrorQueue() {
         return getQueueNamesPrefix() + '.'
         + getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_ERROR_QUEUE_SUFFIX);
+                PreferenceConstants.PROXY_DEFAULT_WMQ_ERROR_QUEUE_SUFFIX);
     }
 
     @Override
     public String getDefaultWmqJndiContextFactory() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY);
+                PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY);
     }
 
     @Override
     public String getDefaultWmqJndiUrl() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_JNDI_URL);
+                PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_URL);
     }
 
     @Override
     public String getDefaultWmqReplyQueue() {
         return getQueueNamesPrefix() + '.'
         + getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_REPLY_QUEUE_SUFFIX);
+                PreferenceConstants.PROXY_DEFAULT_WMQ_REPLY_QUEUE_SUFFIX);
     }
 
     @Override
     public String getDefaultWmqRequestQueue() {
         return getQueueNamesPrefix() + '.'
         + getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_REQUEST_QUEUE_SUFFIX);
+                PreferenceConstants.PROXY_DEFAULT_WMQ_REQUEST_QUEUE_SUFFIX);
     }
 
     @Override
     public String getDefaultWmqZosQueueManager() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_ZOS_QUEUE_MANAGER);
+                PreferenceConstants.PROXY_DEFAULT_WMQ_ZOS_QUEUE_MANAGER);
     }
 }

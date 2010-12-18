@@ -43,65 +43,65 @@ public class PreferenceInitializer extends AbstractCicxsPreferenceInitializer {
         /* --------------------------------------------------------------------- */
         /* Adapter to Mainframe HTTP transport preferences.                      */
         /* --------------------------------------------------------------------- */
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_HOST,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_HTTP_HOST,
         "mainframe");
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_PORT,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_HTTP_PORT,
         "4081");
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_HTTP_PATH,
+        store.setDefault(PreferenceConstants.ADAPTER_HTTP_PATH,
         "/CICS/CWBA/LSWEBBIN");
 
         /* --------------------------------------------------------------------- */
         /* Adapter to Mainframe WMQ transport preferences.                       */
         /* --------------------------------------------------------------------- */
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_URL,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_WMQ_JNDI_URL,
                 WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
                 WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_CONNECTION_FACTORY,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_WMQ_CONNECTION_FACTORY,
         "ConnectionFactory");
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
         "CSQ1");
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REQUEST_QUEUE,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_WMQ_REQUEST_QUEUE,
         "CICS01.BRIDGE.REQUEST.QUEUE");
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REPLY_QUEUE,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_WMQ_REPLY_QUEUE,
         "CICS01.BRIDGE.REPLY.QUEUE");
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ERROR_QUEUE,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_WMQ_ERROR_QUEUE,
         "");
 
         /* --------------------------------------------------------------------- */
         /* Adapter to Mainframe TCP transport preferences.                       */
         /* --------------------------------------------------------------------- */
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_HOST,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_TCP_HOST,
         "mainframe");
-        store.setDefault(PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_PORT,
+        store.setDefault(PreferenceConstants.ADAPTER_DEFAULT_TCP_PORT,
         "3011");
 
         /* --------------------------------------------------------------------- */
         /* Mainframe to Proxy HTTP transport preferences.                        */
         /* --------------------------------------------------------------------- */
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_HOST,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_HTTP_HOST,
                 CodeGenUtil.getLocalIPAddress());
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_PORT,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_HTTP_PORT,
                 AntBuildCixs2MuleModel.DEFAULT_HTTP_PORT);
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_HTTP_PATH_TEMPLATE,
+        store.setDefault(PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE,
                 AntBuildCixs2MuleModel.DEFAULT_SERVER_PATH_TEMPLATE);
 
         /* --------------------------------------------------------------------- */
         /* Mainframe to Proxy WMQ transport preferences.                         */
         /* --------------------------------------------------------------------- */
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_JNDI_URL,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_URL,
                 WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
                 WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_CONNECTION_FACTORY,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_WMQ_CONNECTION_FACTORY,
         "ConnectionFactory");
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
         "CSQ1");
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_REQUEST_QUEUE_SUFFIX,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_WMQ_REQUEST_QUEUE_SUFFIX,
                 WmqTransportParameters.DEFAULT_REQUEST_QUEUE_SUFFIX);
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_REPLY_QUEUE_SUFFIX,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_WMQ_REPLY_QUEUE_SUFFIX,
                 WmqTransportParameters.DEFAULT_REPLY_QUEUE_SUFFIX);
-        store.setDefault(PreferenceConstants.HOST_TO_PROXY_DEFAULT_WMQ_ERROR_QUEUE_SUFFIX,
+        store.setDefault(PreferenceConstants.PROXY_DEFAULT_WMQ_ERROR_QUEUE_SUFFIX,
                 WmqTransportParameters.DEFAULT_ERROR_QUEUE_SUFFIX);
 
     }

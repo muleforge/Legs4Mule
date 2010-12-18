@@ -13,7 +13,7 @@ package com.legstar.eclipse.plugin.mulegen.wizards;
 import com.legstar.cixs.gen.model.options.CobolHttpClientType;
 import com.legstar.cixs.gen.model.options.HttpTransportParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
-import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsProxyDeployHttpGroup;
+import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsProxyHttpGroup;
 import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 
 /**
@@ -21,7 +21,7 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
  * <p/>
  * The target is to provide default values that are specific to host to proxy.
  */
-public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
+public class CixsProxyHttpGroup extends AbstractCixsProxyHttpGroup {
 
     /**
      * Construct this control group attaching it to a wizard page.
@@ -35,7 +35,7 @@ public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
      * @param selected
      *            whether this group should initially be selected
      */
-    public CixsHostToProxyHttpGroup(
+    public CixsProxyHttpGroup(
             final AbstractCixsGeneratorWizardPage wizardPage,
             final HttpTransportParameters genModel,
             final CobolHttpClientType sampleCobolHttpClientType,
@@ -47,7 +47,7 @@ public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
     @Override
     public String getDefaultHttpHost() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_HOST);
+                PreferenceConstants.PROXY_DEFAULT_HTTP_HOST);
     }
 
     /** {@inheritDoc} */
@@ -60,7 +60,7 @@ public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
     @Override
     public String getDefaultHttpPath() {
         return getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_HTTP_PATH_TEMPLATE).replace(
+                PreferenceConstants.PROXY_HTTP_PATH_TEMPLATE).replace(
                 "${service.name}", getWizardPage().getServiceName());
     }
 
@@ -68,7 +68,7 @@ public class CixsHostToProxyHttpGroup extends AbstractCixsProxyDeployHttpGroup {
     @Override
     public int getDefaultHttpPort() {
         return Integer.parseInt(getWizardPage().getStore().getString(
-                PreferenceConstants.HOST_TO_PROXY_DEFAULT_HTTP_PORT));
+                PreferenceConstants.PROXY_DEFAULT_HTTP_PORT));
     }
 
     /** {@inheritDoc} */

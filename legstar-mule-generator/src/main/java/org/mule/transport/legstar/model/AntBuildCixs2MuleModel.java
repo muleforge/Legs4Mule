@@ -84,7 +84,7 @@ public class AntBuildCixs2MuleModel extends AbstractAntBuildCixsMuleModel {
 
     /**
      * Construct from a properties file.
-     * Construct the model.
+     * @param props properties set.
      */
     public AntBuildCixs2MuleModel(final Properties props) {
         super(CIXS2MULE_GENERATOR_NAME, CIXS2MULE_VELOCITY_MACRO_NAME, props);
