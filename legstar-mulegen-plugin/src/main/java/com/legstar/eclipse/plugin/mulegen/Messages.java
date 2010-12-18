@@ -48,13 +48,6 @@ public class Messages extends NLS {
     /** Proxy http path template preference label.*/
     public static String preference_proxy_http_path_template_label;
 
-    /** WMQ suffix for Queue name receiving requests label.*/
-    public static String preference_proxy_wmq_request_queue_suffix_label;
-    /** WMQ suffix for Queue name receiving replies label.*/
-    public static String preference_proxy_wmq_reply_queue_suffix_label;
-    /** WMQ suffix for Queue name receiving errors label.*/
-    public static String preference_proxy_wmq_error_queue_suffix_label;
-
     /** Preference page title.*/
     public static String mulegen_adapter_preference_page_title;
     /** Preference page description.*/
@@ -129,24 +122,62 @@ public class Messages extends NLS {
     public static String sample_configuration_transport_label;
 
     /** Adapter to mainframe transport label.*/
-    public static String adapter_to_host_transport_label;
+    public static String adapter_transport_label;
 
     /** Settings for target mainframe HTTP group label.*/
-    public static String adapter_to_host_http_transport_group_label;
+    public static String adapter_http_transport_group_label;
     /** Host address on which mainframe listens to HTTP clients label.*/
-    public static String adapter_to_host_http_host_label;
+    public static String adapter_http_host_label;
     /** Port on which mainframe listens to HTTP clients label.*/
-    public static String adapter_to_host_http_port_label;
+    public static String adapter_http_port_label;
     /** Path on which mainframe listens to HTTP clients label.*/
-    public static String adapter_to_host_http_path_label;
+    public static String adapter_http_path_label;
+
+    /** URL used to do naming lookups for WMQ resources label. */
+    public static String adapter_wmq_jndi_url_label;
+    /** context factory class to do naming lookups for WMQ resources label. */
+    public static String adapter_wmq_jndi_context_factory_label;
+    /**
+     * connection-factory used to lookup queues/topics in a naming directory
+     * (JNDI) label.
+     */
+    public static String adapter_wmq_connection_factory_label;
+    /** ZOS WMQ Queue Manager label. */
+    public static String adapter_wmq_zos_queue_manager_label;
+    /** WMQ Queue name receiving requests label. */
+    public static String adapter_wmq_request_queue_label;
+    /** WMQ Queue name receiving replies label. */
+    public static String adapter_wmq_reply_queue_label;
+    /** WMQ Queue name receiving errors label. */
+    public static String adapter_wmq_error_queue_label;
+
+    
+    /** URL used to do naming lookups for WMQ resources label. */
+    public static String proxy_wmq_jndi_url_label;
+    /** context factory class to do naming lookups for WMQ resources label. */
+    public static String proxy_wmq_jndi_context_factory_label;
+    /**
+     * connection-factory used to lookup queues/topics in a naming directory
+     * (JNDI) label.
+     */
+    public static String proxy_wmq_connection_factory_label;
+    /** ZOS WMQ Queue Manager label. */
+    public static String proxy_wmq_zos_queue_manager_label;
+    /** WMQ suffix for Queue name receiving requests label.*/
+    public static String proxy_wmq_request_queue_suffix_label;
+    /** WMQ suffix for Queue name receiving replies label.*/
+    public static String proxy_wmq_reply_queue_suffix_label;
+    /** WMQ suffix for Queue name receiving errors label.*/
+    public static String proxy_wmq_error_queue_suffix_label;
+
 
     /** Client to Adapter payload.*/
     public static String client_to_adapter_payload_label;
 
     /** User id for mainframe authentication.*/
-    public static String adapter_to_host_userid_label;
+    public static String adapter_userid_label;
     /** Password for mainframe authentication.*/
-    public static String adapter_to_host_password_label;
+    public static String adapter_password_label;
 
     /** Invalid port number.*/
     public static String invalid_http_port_number_msg;
@@ -155,46 +186,21 @@ public class Messages extends NLS {
     /** Invalid path.*/
     public static String invalid_http_path_msg;
 
-    /** Settings for WMQ group label.*/
-    public static String wmq_transport_group_label;
-    /** URL used to do naming lookups for WMQ resources label.*/
-    public static String wmq_jndi_url_label;
-    /** context factory class to do naming lookups for WMQ resources label.*/
-    public static String wmq_jndi_context_factory_label;
-    /** connection-factory used to lookup queues/topics in a naming directory (JNDI) label.*/
-    public static String wmq_connection_factory_label;
-    /** ZOS WMQ Queue Manager label.*/
-    public static String wmq_zos_queue_manager_label;
-    /** WMQ Queue name receiving requests label.*/
-    public static String wmq_request_queue_label;
-    /** WMQ Queue name receiving replies label.*/
-    public static String wmq_reply_queue_label;
-    /** WMQ Queue name receiving errors label.*/
-    public static String wmq_error_queue_label;
-
-    /** Invalid jndi url.*/
-    public static String invalid_wmq_jndi_url_msg;
-    /** Invalid JNDI context factory.*/
-    public static String invalid_wmq_jndi_context_factory_msg; 
-    /** Invalid connection factory.*/
-    public static String invalid_wmq_connection_factory_msg; 
-    /** Invalid queue manager. */
-    public static String invalid_wmq_zos_queue_manager_msg; 
-    /** Invalid request queue name. */
-    public static String invalid_wmq_target_queue_msg; 
-    /** Invalid reply queue name. */
-    public static String invalid_wmq_target_reply_queue_msg; 
-    
     /** Choice of sample host messaging label.*/
     public static String sample_adapter_host_messaging_type_label;
 
+    /** Settings for WMQ group label. */
+    public static String adapter_wmq_transport_group_label;
+
+    /** Settings for WMQ group label. */
+    public static String proxy_wmq_transport_group_label;
 
     /** Settings for target mainframe TCP group label.*/
-    public static String adapter_to_host_tcp_transport_group_label;
+    public static String adapter_tcp_transport_group_label;
     /** Host address on which mainframe listens to TCP clients label.*/
-    public static String adapter_to_host_tcp_host_label;
+    public static String adapter_tcp_host_label;
     /** Port on which mainframe listens to TCP clients label.*/
-    public static String adapter_to_host_tcp_port_label;
+    public static String adapter_tcp_port_label;
 
     /** Invalid port number.*/
     public static String invalid_tcp_port_number_msg;
@@ -202,7 +208,7 @@ public class Messages extends NLS {
     public static String invalid_tcp_host_msg;
 
     /** Settings for target mainframe MOCK group label.*/
-    public static String adapter_to_host_mock_transport_group_label;
+    public static String adapter_mock_transport_group_label;
 
     static {
         NLS.initializeMessages(BUNDLE_NAME, Messages.class);

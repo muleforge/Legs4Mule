@@ -57,12 +57,12 @@ public class CixsAdapterMockGroup extends AbstractCixsControlsGroup {
      */
     public void createControls(final Composite composite) {
         
-        super.createControls(composite, Messages.adapter_to_host_mock_transport_group_label, 2);
+        super.createControls(composite, Messages.adapter_mock_transport_group_label, 2);
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_userid_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_userid_label + ':');
         mMockUserIdText = AbstractWizardPage.createText(getGroup()); 
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_password_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_password_label + ':');
         mMockPasswordText = AbstractWizardPage.createText(getGroup()); 
 
     }

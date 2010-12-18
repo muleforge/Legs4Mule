@@ -72,31 +72,31 @@ implements IWorkbenchPreferencePage {
 
         addField(new StringFieldEditor(
                 PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_URL,
-                "WMQ " + Messages.wmq_jndi_url_label + ':',
+                "WMQ " + Messages.proxy_wmq_jndi_url_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
                 PreferenceConstants.PROXY_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
-                "WMQ " + Messages.wmq_jndi_context_factory_label + ':',
+                "WMQ " + Messages.proxy_wmq_jndi_context_factory_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
                 PreferenceConstants.PROXY_DEFAULT_WMQ_CONNECTION_FACTORY,
-                "WMQ " + Messages.wmq_connection_factory_label + ':',
+                "WMQ " + Messages.proxy_wmq_connection_factory_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
                 PreferenceConstants.PROXY_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
-                "WMQ " + Messages.wmq_zos_queue_manager_label + ':',
+                "WMQ " + Messages.proxy_wmq_zos_queue_manager_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
                 PreferenceConstants.PROXY_DEFAULT_WMQ_REQUEST_QUEUE_SUFFIX,
-                "WMQ " + Messages.preference_proxy_wmq_request_queue_suffix_label + ':',
+                "WMQ " + Messages.proxy_wmq_request_queue_suffix_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
                 PreferenceConstants.PROXY_DEFAULT_WMQ_REPLY_QUEUE_SUFFIX,
-                "WMQ " + Messages.preference_proxy_wmq_reply_queue_suffix_label + ':',
+                "WMQ " + Messages.proxy_wmq_reply_queue_suffix_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
                 PreferenceConstants.PROXY_DEFAULT_WMQ_ERROR_QUEUE_SUFFIX,
-                "WMQ " + Messages.preference_proxy_wmq_error_queue_suffix_label + ':',
+                "WMQ " + Messages.proxy_wmq_error_queue_suffix_label + ':',
                 getFieldEditorParent()));
     }
 

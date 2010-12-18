@@ -88,7 +88,7 @@ public class Mule2CixsGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         _xmlPayloadButton = new Button(buttonsComposite, SWT.RADIO);
         _xmlPayloadButton.setText("XML");
 
-        createLabel(container, Messages.adapter_to_host_transport_label + ":");
+        createLabel(container, Messages.adapter_transport_label + ":");
         Composite composite = new Composite(container, SWT.NULL);
         composite.setLayout(new RowLayout());
         

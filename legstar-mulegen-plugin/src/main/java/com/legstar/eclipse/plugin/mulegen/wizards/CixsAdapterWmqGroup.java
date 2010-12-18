@@ -20,6 +20,7 @@ import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConf
 
 import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
+import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsWmqGroup;
 import com.legstar.eclipse.plugin.common.wizards.AbstractWizardPage;
 import com.legstar.eclipse.plugin.mulegen.Messages;
 import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
@@ -53,7 +54,7 @@ public class CixsAdapterWmqGroup extends AbstractCixsWmqGroup {
             final WmqTransportParameters genModel,
             final SampleConfigurationHostMessagingType sampleConfigurationHostMessagingType,
             final boolean selected) {
-        super(wizardPage, genModel, selected);
+        super(wizardPage, genModel, selected, Messages.adapter_wmq_transport_group_label);
         _sampleConfigurationHostMessagingType = sampleConfigurationHostMessagingType;
     }
 
@@ -61,7 +62,6 @@ public class CixsAdapterWmqGroup extends AbstractCixsWmqGroup {
      * {@inheritDoc} 
      */
     public void createControls(final Composite composite) {
-        
         super.createControls(composite);
 
         AbstractWizardPage.createLabel(getGroup(), Messages.sample_adapter_host_messaging_type_label + ':');
@@ -93,6 +93,7 @@ public class CixsAdapterWmqGroup extends AbstractCixsWmqGroup {
      */
     public void createExtendedListeners() {
         super.createExtendedListeners();
+
         _legstarButton.addSelectionListener(new SelectionAdapter() {
             public void widgetSelected(final SelectionEvent e) {
                 getWizardPage().dialogChanged();

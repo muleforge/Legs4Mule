@@ -14,6 +14,8 @@ import java.util.Locale;
 
 import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
+import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsWmqGroup;
+import com.legstar.eclipse.plugin.mulegen.Messages;
 import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 
 /**
@@ -34,7 +36,7 @@ public class CixsProxyWmqGroup extends AbstractCixsWmqGroup {
             final AbstractCixsGeneratorWizardPage wizardPage,
             final WmqTransportParameters genModel,
             final boolean selected) {
-        super(wizardPage, genModel, selected);
+        super(wizardPage, genModel, selected, Messages.proxy_wmq_transport_group_label);
     }
 
     /**

@@ -72,18 +72,18 @@ public class CixsAdapterTcpGroup extends AbstractCixsControlsGroup {
      */
     public void createControls(final Composite composite) {
         
-        super.createControls(composite, Messages.adapter_to_host_tcp_transport_group_label, 2);
+        super.createControls(composite, Messages.adapter_tcp_transport_group_label, 2);
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_tcp_host_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_tcp_host_label + ':');
         _tcpHostText = AbstractWizardPage.createText(getGroup()); 
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_tcp_port_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_tcp_port_label + ':');
         _tcpPortText = AbstractWizardPage.createText(getGroup()); 
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_userid_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_userid_label + ':');
         _tcpUserIdText = AbstractWizardPage.createText(getGroup()); 
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_password_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_password_label + ':');
         _tcpPasswordText = AbstractWizardPage.createText(getGroup()); 
 
     }

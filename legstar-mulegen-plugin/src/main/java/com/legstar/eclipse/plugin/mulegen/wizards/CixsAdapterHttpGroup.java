@@ -40,7 +40,7 @@ public class CixsAdapterHttpGroup extends AbstractCixsHttpGroup {
             final AbstractCixsGeneratorWizardPage wizardPage,
             final HttpTransportParameters genModel,
             final boolean selected) {
-        super(wizardPage, genModel, selected, Messages.adapter_to_host_http_transport_group_label);
+        super(wizardPage, genModel, selected, Messages.adapter_http_transport_group_label);
     }
     
     /**
