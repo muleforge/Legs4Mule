@@ -14,6 +14,7 @@
         <delete>
             <fileset dir="${basedir}/features" includes="*.jar"/>
             <fileset dir="${basedir}/plugins" includes="*.jar"/>
+            <fileset dir="${basedir}" includes="*.jar"/>
         </delete>
 
         <echo message="Populating Eclipse site plugins"/>
@@ -21,6 +22,7 @@
             <fileset dir="${basedir}/../legstar-mulegen-plugin/target">
                 <include name="*.jar"/>
                 <exclude name="*-sources.jar"/>
+                <exclude name="*-javadoc.jar"/>
             </fileset>
             <filtermapper>
                 <replacestring from="-SNAPSHOT" to=".SNAPSHOT"/>
@@ -36,6 +38,17 @@
             <filtermapper>
                 <replacestring from="-SNAPSHOT" to=".SNAPSHOT"/>
             </filtermapper>
+        </copy>
+
+        <echo message="Create a publish command"/>
+        <copy todir="${basedir}/target">
+            <fileset dir="${basedir}/src/main/templates">
+                <include name="publish.bat.template"/>
+            </fileset>
+            <filterset>
+                <filter token="LEGSTAR-LOCAL-SITE-LOCATION" value="${basedir}"/>
+            </filterset>
+            <globmapper from="*.template" to="*"/>
         </copy>
 
   </target>

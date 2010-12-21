@@ -8,7 +8,7 @@
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>2.2.1</muleVersion>
-        <legstarVersion>1.4.3-SNAPSHOT</legstarVersion>
+        <legstarVersion>1.4.3</legstarVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
