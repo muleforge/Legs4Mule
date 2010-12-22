@@ -3,12 +3,12 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>2.0.2-SNAPSHOT</version>
+        <version>2.0.2</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mulegen-jvmquerywmq</artifactId>
     <packaging>jar</packaging>
-    <version>2.0.2-SNAPSHOT</version>
+    <version>2.0.2</version>
     <name>Sample Proxy for POJO JVMQuery over WMQ</name>
     <description>Sample Proxy for POJO JVMQuery over WebSphere MQ</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
