@@ -3,12 +3,12 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>1.0.2-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mulegen-lsfileax</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.2-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>Sample Adapter for program LSFILEAX</name>
     <description>Sample Adapter for programs LSFILEAE and LSFILEAC a case with two methods in the same adapter</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
