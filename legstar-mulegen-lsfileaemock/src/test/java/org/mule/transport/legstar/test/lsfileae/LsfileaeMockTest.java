@@ -31,7 +31,7 @@ public class LsfileaeMockTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-adapter-config-lsfileae-mock-mock-java-legstar.xml";
+        return "mule-adapter-config-lsfileaemock-mock-java-legstar.xml";
     }
     
     /**

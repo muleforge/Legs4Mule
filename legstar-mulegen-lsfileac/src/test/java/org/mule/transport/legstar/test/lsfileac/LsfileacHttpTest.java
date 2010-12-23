@@ -34,7 +34,7 @@ public class LsfileacHttpTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-adapter-config-lsfileac-http-java-legstar.xml";
+        return "mule-adapter-config-lsfileachttp-java-legstar.xml";
     }
     
     /**

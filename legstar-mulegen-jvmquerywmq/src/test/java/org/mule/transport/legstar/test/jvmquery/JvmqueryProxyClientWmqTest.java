@@ -55,7 +55,7 @@ public class JvmqueryProxyClientWmqTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-proxy-config-jvmquery-wmq-wmq.xml";
+        return "mule-proxy-config-jvmquerywmq-wmq.xml";
     }
 
     /**
