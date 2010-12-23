@@ -853,4 +853,40 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         setSampleConfigurationHostMessagingTypeInternal(value);
     }
 
+    /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @return the payload type (serialized java object or XML) for samples.
+     */
+    protected SampleConfigurationPayloadType getSampleConfigurationPayloadTypeInternal() {
+        return getAntModel().getSampleConfigurationPayloadType();
+    }
+
+    /**
+     * @return the payload type (serialized java object or XML) for samples.
+     */
+    public String getSampleConfigurationPayloadType() {
+        return getSampleConfigurationPayloadTypeInternal().toString();
+    }
+
+    /**
+     * When ant 1.7.0 will become widespread, we will be able to expose
+     * this method directly (support for enum JDK 1.5).
+     * @param payload type (serialized java object or XML) for samples.
+     */
+    private void setSampleConfigurationPayloadTypeInternal(
+            final SampleConfigurationPayloadType sampleConfigurationPayloadType) {
+        getAntModel().setSampleConfigurationPayloadType(sampleConfigurationPayloadType);
+    }
+
+    /**
+     * @param sampleConfigurationPayloadType the payload type (serialized java object or XML) for samples.
+     */
+    public void setSampleConfigurationPayloadType(
+            final String sampleConfigurationPayloadType) {
+        SampleConfigurationPayloadType value = SampleConfigurationPayloadType.valueOf(
+                    sampleConfigurationPayloadType.toUpperCase(Locale.getDefault()));
+        setSampleConfigurationPayloadTypeInternal(value);
+    }
+
 }

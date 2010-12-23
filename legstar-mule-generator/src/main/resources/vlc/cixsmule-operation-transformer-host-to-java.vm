@@ -13,7 +13,7 @@ import com.legstar.coxb.transform.AbstractTransformers;
 import org.mule.api.transformer.TransformerException;
 #end
 #foreach($cixsStructure in $cixsStructures)
-#set($javaClassName = ${coxbHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#set($javaClassName = ${cixsHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
 import ${javaClassName};
 #end
 #foreach($cixsStructure in $cixsStructures)

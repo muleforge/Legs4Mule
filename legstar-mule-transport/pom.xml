@@ -16,6 +16,33 @@
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
+    <build>
+        <plugins>
+             <!-- Assembly generation plugin.  -->
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId> 
+                <configuration>
+                    <appendAssemblyId>true</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>src/assemble/distribution.xml</descriptor>
+                    </descriptors>
+                    <archiverConfig>
+                        <duplicateBehavior>skip</duplicateBehavior>
+                    </archiverConfig>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>attached</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
 
         <!-- Mule core  -->

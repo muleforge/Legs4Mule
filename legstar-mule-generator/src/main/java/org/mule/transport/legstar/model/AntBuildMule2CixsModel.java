@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.mule.transport.legstar.model;
 
+import java.util.Properties;
+
 import org.mule.transport.legstar.model.options.TcpTransportParameters;
 
 
@@ -29,6 +31,10 @@ public class AntBuildMule2CixsModel extends AbstractAntBuildCixsMuleModel {
     public static final String MULE2CIXS_VELOCITY_MACRO_NAME =
         "vlc/build-mule2cixs-xml.vm";
     
+    /* ====================================================================== */
+    /* Following are this class default values.                             = */
+    /* ====================================================================== */
+
     /** The default host on which the HTTP server listens. */
     public static final String ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST = "mainframe";
 
@@ -45,12 +51,17 @@ public class AntBuildMule2CixsModel extends AbstractAntBuildCixsMuleModel {
     /** The default port number on which the TCP server listens. */
     public static final int ADAPTER_TO_MAINFRAME_DEFAULT_TCP_PORT = 3011;
 
+    /* ====================================================================== */
+    /* Following are this class fields that are persistent.                 = */
+    /* ====================================================================== */
+
     /** Set of parameters needed for TCP transport. */
-    private TcpTransportParameters mTcpTransportParameters = new TcpTransportParameters();
+    private TcpTransportParameters _tcpTransportParameters;
 
     /** Construct the model. */
     public AntBuildMule2CixsModel() {
         super(MULE2CIXS_GENERATOR_NAME, MULE2CIXS_VELOCITY_MACRO_NAME);
+        _tcpTransportParameters = new TcpTransportParameters();
         getHttpTransportParameters().setHost(ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
         getHttpTransportParameters().setPort(ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
         getHttpTransportParameters().setPath(ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
@@ -60,10 +71,21 @@ public class AntBuildMule2CixsModel extends AbstractAntBuildCixsMuleModel {
     }
 
     /**
+     * Construct from a properties file.
+     * 
+     * @param props the property file
+     */
+    public AntBuildMule2CixsModel(final Properties props) {
+        super(MULE2CIXS_GENERATOR_NAME, MULE2CIXS_VELOCITY_MACRO_NAME, props);
+        _tcpTransportParameters = new TcpTransportParameters(props);
+        
+    }
+    
+    /**
      * @return set of parameters needed for TCP transport
      */
     public TcpTransportParameters getTcpTransportParameters() {
-        return mTcpTransportParameters;
+        return _tcpTransportParameters;
     }
 
     /**
@@ -71,7 +93,15 @@ public class AntBuildMule2CixsModel extends AbstractAntBuildCixsMuleModel {
      */
     public void setTcpTransportParameters(
             final TcpTransportParameters tcpTransportParameters) {
-        mTcpTransportParameters = tcpTransportParameters;
+        _tcpTransportParameters = tcpTransportParameters;
     }
 
+    /**
+     * @return a properties file holding the values of this object fields
+     */
+    public Properties toProperties() {
+        Properties props = super.toProperties();
+        props.putAll(getTcpTransportParameters().toProperties());
+        return props;
+    }
 }

@@ -14,6 +14,7 @@ package org.mule.transport.legstar.model;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.types.Path;
@@ -28,14 +29,30 @@ public class CixsMuleComponent extends AbstractCixsService {
 
     /** List of additional classpath elements that might be needed by
      * generated Mule startup procedure. */
-    private List < Path > mMuleStartupPathElements = new ArrayList < Path >();
+    private List < Path > _muleStartupPathElements = new ArrayList < Path >();
     
+    /**
+     * Construct an empty model.
+     */
+    public CixsMuleComponent() {
+        super();
+    }
+
+    /**
+     * Construct from a properties file.
+     * 
+     * @param props the property file
+     */
+    public CixsMuleComponent(final Properties props) {
+        super(props);
+    }
+
     /**
      * @param path an additional classpath element that might be needed
      *  by generated Mule startup procedure
      */
     public final void addMuleStartupPathElement(final Path path) {
-        mMuleStartupPathElements.add(path);
+        _muleStartupPathElements.add(path);
     }
     
     /**
@@ -44,7 +61,7 @@ public class CixsMuleComponent extends AbstractCixsService {
      */
     public final List < String > getMuleStartupPathElements() {
         List < String > pathElements = new ArrayList < String >();
-        for (Path path : mMuleStartupPathElements) {
+        for (Path path : _muleStartupPathElements) {
             for (String pathElement : path.list()) {
                 pathElements.add(pathElement);
             }
@@ -67,7 +84,7 @@ public class CixsMuleComponent extends AbstractCixsService {
             PathElement pathElement = path.createPathElement();
             pathElement.setLocation(new File(element));
         }
-        mMuleStartupPathElements.add(path);
+        _muleStartupPathElements.add(path);
     }
  
 }

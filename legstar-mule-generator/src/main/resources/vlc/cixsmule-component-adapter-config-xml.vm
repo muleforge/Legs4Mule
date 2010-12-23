@@ -6,7 +6,7 @@
 ## Calculates the maximum host size of a structure
 ## 
 #macro(getLength $structure)
-#set($length = ${coxbHelper.getByteLength(${structure.jaxbPackageName}, ${structure.jaxbType})})
+#set($length = ${cixsHelper.getByteLength(${structure.jaxbPackageName}, ${structure.jaxbType})})
 #end
 ## ==================================================================
 ## for commarea-driven programs, this calculates the size of the

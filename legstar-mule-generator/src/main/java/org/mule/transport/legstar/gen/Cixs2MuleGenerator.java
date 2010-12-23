@@ -94,15 +94,22 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
                     getTargetSrcDir(), operation.getPackageName(), true);
             
-            generateHostToJavaTransformers(
-                    operation, parameters, operationClassFilesDir);
-            generateJavaToHostTransformers(
-                    operation, parameters, operationClassFilesDir);
-
-            generateHostToXmlTransformers(
-                    operation, parameters, operationClassFilesDir);
-            generateXmlToHostTransformers(
-                    operation, parameters, operationClassFilesDir);
+            switch (getSampleConfigurationPayloadTypeInternal()) {
+            case JAVA:
+                generateHostToJavaTransformers(operation, parameters,
+                        operationClassFilesDir);
+                generateJavaToHostTransformers(operation, parameters,
+                        operationClassFilesDir);
+                break;
+            case XML:
+                generateHostToXmlTransformers(operation, parameters,
+                        operationClassFilesDir);
+                generateXmlToHostTransformers(operation, parameters,
+                        operationClassFilesDir);
+                break;
+            default:
+                break;
+            }
 
             /* Generate sample COBOL clients. */
             switch(getSampleConfigurationTransportInternal()) {

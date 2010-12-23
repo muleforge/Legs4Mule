@@ -16,6 +16,7 @@ import org.apache.tools.ant.ProjectHelper;
 import org.mule.transport.legstar.gen.AbstractTestTemplate;
 import org.mule.transport.legstar.gen.Samples;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.AbstractCixsGenerator;
@@ -39,6 +40,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void setUp() {
         super.setUp();
         mAntModel = new AntBuildMule2CixsModel();
+        mAntModel.setMuleHome("${env.MULE2_HOME}");
     }
 
     /**
@@ -59,7 +61,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void testLsfileaeWmqGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-wmq");
+        muleComponent.setName(muleComponent.getName() + "wmq");
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(
@@ -88,7 +90,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void testLsfileaeTcpGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-tcp");
+        muleComponent.setName(muleComponent.getName() + "tcp");
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(
@@ -104,7 +106,7 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
     public void testLsfileaeMockGenerate() throws Exception {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
-        muleComponent.setName(muleComponent.getName() + "-mock");
+        muleComponent.setName(muleComponent.getName() + "mock");
         initCixsMuleComponent(muleComponent);
 
         mAntModel.setSampleConfigurationTransport(
@@ -132,6 +134,18 @@ public class AntBuildMule2CixsModelTest extends AbstractTestTemplate {
         /* Build the model */
         CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         initCixsMuleComponent(muleComponent);
+        processAnt();
+    }
+
+    /**
+     * Adapter case for an LSFILEAC program over legstar-mule HTTP with XML payload.
+     * @throws Exception if generation fails
+     */
+    public void testLsfileacXmlGenerate() throws Exception {
+        /* Build the model */
+        CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
+        initCixsMuleComponent(muleComponent);
+        mAntModel.setSampleConfigurationPayloadType(SampleConfigurationPayloadType.XML);
         processAnt();
     }
 

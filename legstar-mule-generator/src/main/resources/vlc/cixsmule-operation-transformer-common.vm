@@ -22,7 +22,7 @@
 #set($holder = true)
 #else
 #set($cixsStructure = $cixsStructures.get(0))
-#set($javaClassName = ${coxbHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#set($javaClassName = ${cixsHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
 #set($type = ${helper.getClassName(${javaClassName})})
 #end
 ## ==================================================================
