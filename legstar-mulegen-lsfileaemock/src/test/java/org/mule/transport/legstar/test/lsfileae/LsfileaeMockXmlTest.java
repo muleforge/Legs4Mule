@@ -34,7 +34,7 @@ public class LsfileaeMockXmlTest extends FunctionalTestCase {
      * @throws Exception if test fails
      */
     public void testLsfileae() throws Exception {
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         MuleMessage message = client.send(
                 "lsfileaeClientEndpoint",
                 getXmlRequest(),

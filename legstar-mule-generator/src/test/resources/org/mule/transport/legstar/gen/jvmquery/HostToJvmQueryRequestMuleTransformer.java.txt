@@ -1,4 +1,5 @@
 package org.mule.transport.legstar.test.jvmquery;
+import org.mule.transformer.types.DataTypeFactory;
 import org.mule.transport.legstar.transformer.AbstractHostToJavaMuleTransformer;
 import com.legstar.xsdc.test.cases.jvmquery.JVMQueryRequest;
 import com.legstar.test.coxb.jvmquery.bind.JvmQueryRequestTransformers;
@@ -20,7 +21,7 @@ public class HostToJvmQueryRequestMuleTransformer extends AbstractHostToJavaMule
      */
     public HostToJvmQueryRequestMuleTransformer() {
         super(new JvmQueryRequestTransformers());
-        setReturnClass(JVMQueryRequest.class);
+        setReturnDataType(DataTypeFactory.create(JVMQueryRequest.class));
     }
 
 

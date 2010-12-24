@@ -1,4 +1,5 @@
 package org.mule.transport.legstar.test.lsfileal;
+import org.mule.transformer.types.DataTypeFactory;
 import org.mule.transport.legstar.transformer.AbstractHostToJavaMuleTransformer;
 import com.legstar.test.coxb.lsfileal.RequestParms;
 import com.legstar.test.coxb.lsfileal.bind.RequestParmsTransformers;
@@ -20,7 +21,7 @@ public class HostToRequestParmsMuleTransformer extends AbstractHostToJavaMuleTra
      */
     public HostToRequestParmsMuleTransformer() {
         super(new RequestParmsTransformers());
-        setReturnClass(RequestParms.class);
+        setReturnDataType(DataTypeFactory.create(RequestParms.class));
     }
 
 

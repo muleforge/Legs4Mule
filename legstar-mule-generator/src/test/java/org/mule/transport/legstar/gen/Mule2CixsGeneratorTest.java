@@ -27,12 +27,16 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
 
     /** Generator instance. */
     private Mule2CixsGenerator mGenerator;
+    
+    /** True when references should be created. */
+    private static final boolean CREATE_REFERENCES = false;
 
     /** @{inheritDoc}*/
     public void setUp() {
         emptyDir(GEN_DIR);
         mGenerator = new Mule2CixsGenerator();
         mGenerator.init();
+        setCreateReferences(CREATE_REFERENCES);
     }
 
     /**

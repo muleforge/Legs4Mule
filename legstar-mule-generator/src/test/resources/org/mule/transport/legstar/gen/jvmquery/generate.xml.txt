@@ -15,7 +15,7 @@
     <target name="init">
 
         <property environment="env"/>
-        <property name="mule.home" value="${env.MULE_HOME}"/>
+        <property name="mule.home" value="${env.MULE3_HOME}"/>
         <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
 
         <!-- Classpath setting -->
@@ -23,7 +23,7 @@
             <pathelement location="..\legstar-mulegen-jvmquery\target\classes"/>
             <pathelement location="..\legstar-mulegen-jvmquery\target\classes"/>
             <pathelement location="..\legstar-mule-generator\target\classes"/>
-            <fileset dir="${legstar.home}" includes="lib/*.jar" />
+            <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
 

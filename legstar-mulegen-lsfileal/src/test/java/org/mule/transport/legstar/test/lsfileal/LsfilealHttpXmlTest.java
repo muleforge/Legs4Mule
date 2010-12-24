@@ -36,7 +36,7 @@ public class LsfilealHttpXmlTest extends FunctionalTestCase {
      * @throws Exception if test fails
      */
     public void testLsfileal() throws Exception {
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         MuleMessage message = client.send(
                 "lsfilealClientEndpoint",
                 getXmlRequest(),

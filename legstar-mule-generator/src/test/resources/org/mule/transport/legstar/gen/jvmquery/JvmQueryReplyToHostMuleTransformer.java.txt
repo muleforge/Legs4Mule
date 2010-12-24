@@ -1,4 +1,5 @@
 package org.mule.transport.legstar.test.jvmquery;
+import org.mule.transformer.types.SimpleDataType;
 import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 import com.legstar.xsdc.test.cases.jvmquery.JVMQueryReply;
 import com.legstar.test.coxb.jvmquery.bind.JvmQueryReplyTransformers;
@@ -20,7 +21,7 @@ public class JvmQueryReplyToHostMuleTransformer extends AbstractJavaToHostMuleTr
      */
     public JvmQueryReplyToHostMuleTransformer() {
         super(new JvmQueryReplyTransformers());
-        registerSourceType(JVMQueryReply.class);
+        registerSourceType(new SimpleDataType<Object>(JVMQueryReply.class));
     }
 
 

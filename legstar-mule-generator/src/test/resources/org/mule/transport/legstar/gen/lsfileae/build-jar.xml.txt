@@ -5,24 +5,24 @@
 <project basedir="." default="create-jar" name="build-jar">
 
     <target name="clean">
-        <delete file="target\dist/legstar-lsfileae.jar" includeEmptyDirs="true" quiet="true"/>
+        <delete file="target/dist/legstar-lsfileae.jar" includeEmptyDirs="true" quiet="true"/>
     </target>
 
    <target name="create-jar" depends="clean">
-        <mkdir dir="target\dist"/>
-        <jar destfile="target\dist/legstar-lsfileae.jar">
+        <mkdir dir="target/dist"/>
+        <jar destfile="target/dist/legstar-lsfileae.jar">
             <!-- Generated Mule component binaries -->
-            <fileset dir="target\gen-classes">
+            <fileset dir="target/gen-classes">
                 <include name="org/mule/transport/legstar/test/lsfileae/*.class"/>
             </fileset>
             <!-- JAXB binaries -->
-            <fileset dir="target\classes"
+            <fileset dir="target/classes"
                 includes="com/legstar/test/coxb/lsfileae/*.class"/>
             <!-- Binding binaries -->
-            <fileset dir="target\classes"
+            <fileset dir="target/classes"
                 includes="com/legstar/test/coxb/lsfileae/bind/*.class"/>
             <!-- Mule configuration file -->
-            <fileset dir="target\src\gen\conf">
+            <fileset dir="target/src/gen/conf">
                 <include name="*.xml"/>
             </fileset>
         </jar>

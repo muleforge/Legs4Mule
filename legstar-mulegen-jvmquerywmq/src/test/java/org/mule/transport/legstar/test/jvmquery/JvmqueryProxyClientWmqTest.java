@@ -71,7 +71,7 @@ public class JvmqueryProxyClientWmqTest extends FunctionalTestCase {
      */
     @SuppressWarnings("unchecked")
     public void testRun() throws Exception {
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         Map props = new HashMap();
         props.put("JMSReplyTo", "JVMQUERY.POJO.REPLY.QUEUE");
 

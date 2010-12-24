@@ -21,6 +21,4 @@ public class DfhcommareaXmlToHostMuleTransformer extends AbstractXmlToHostMuleTr
     public DfhcommareaXmlToHostMuleTransformer() throws HostTransformException {
         super(new DfhcommareaXmlTransformers());
     }
-
-
 }
