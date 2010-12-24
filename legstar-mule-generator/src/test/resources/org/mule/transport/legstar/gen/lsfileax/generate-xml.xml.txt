@@ -19,8 +19,8 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="../legstar-mulegen-lsfileac/target/classes"/>
-            <pathelement location="../legstar-mulegen-lsfileac/target/classes"/>
+            <pathelement location="../legstar-mulegen-lsfileax/target/classes"/>
+            <pathelement location="../legstar-mulegen-lsfileax/target/classes"/>
             <pathelement location="../legstar-mule-generator/target/classes"/>
             <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
@@ -39,22 +39,34 @@
   
     <target name="generateMule2Cixs" depends="init">
     
-        <mule2cixsgen targetSrcDir="../legstar-mulegen-lsfileac/src/main/java"
-            targetMuleConfigDir="../legstar-mulegen-lsfileac/src/main/resources"
-            targetDistDir="../legstar-mulegen-lsfileac/target/dist"
-            targetAntDir="../legstar-mulegen-lsfileac/ant"
+        <mule2cixsgen targetSrcDir="../legstar-mulegen-lsfileax/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-lsfileax/src/main/resources"
+            targetDistDir="../legstar-mulegen-lsfileax/target/dist"
+            targetAntDir="../legstar-mulegen-lsfileax/ant"
             targetJarDir="${mule.home}/lib/user"
-            targetBinDir="../legstar-mulegen-lsfileac/target/classes"
-            jaxbBinDir="../legstar-mulegen-lsfileac/target/classes"
-            coxbBinDir="../legstar-mulegen-lsfileac/target/classes"
+            targetBinDir="../legstar-mulegen-lsfileax/target/classes"
+            jaxbBinDir="../legstar-mulegen-lsfileax/target/classes"
+            coxbBinDir="../legstar-mulegen-lsfileax/target/classes"
             custBinDir="../legstar-mule-generator/target/classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="HTTP"
             sampleConfigurationHostMessagingType="LEGSTAR"
-            sampleConfigurationPayloadType="JAVA"
+            sampleConfigurationPayloadType="XML"
           >
-            <cixsMuleComponent name="lsfileac"
-                packageName="org.mule.transport.legstar.test.lsfileac">
+            <cixsMuleComponent name="lsfileax"
+                packageName="org.mule.transport.legstar.test.lsfileax">
+                <cixsOperation name="lsfileae"
+                    cicsProgramName="LSFILEAE"
+                    >
+                    <input
+                        jaxbType="Dfhcommarea"
+                        jaxbPackageName="com.legstar.test.coxb.lsfileae"
+                    />
+                    <output
+                        jaxbType="Dfhcommarea"
+                        jaxbPackageName="com.legstar.test.coxb.lsfileae"
+                    />
+                </cixsOperation>
                 <cixsOperation name="lsfileac"
                     cicsProgramName="LSFILEAC"
                     cicsChannel="LSFILEAC-CHANNEL"

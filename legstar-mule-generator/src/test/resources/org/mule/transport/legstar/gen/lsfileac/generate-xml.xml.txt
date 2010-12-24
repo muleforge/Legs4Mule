@@ -51,7 +51,7 @@
             hostCharset="IBM01147"
             sampleConfigurationTransport="HTTP"
             sampleConfigurationHostMessagingType="LEGSTAR"
-            sampleConfigurationPayloadType="JAVA"
+            sampleConfigurationPayloadType="XML"
           >
             <cixsMuleComponent name="lsfileac"
                 packageName="org.mule.transport.legstar.test.lsfileac">

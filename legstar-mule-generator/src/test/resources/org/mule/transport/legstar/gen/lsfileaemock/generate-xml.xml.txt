@@ -19,8 +19,8 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="../legstar-mulegen-lsfileac/target/classes"/>
-            <pathelement location="../legstar-mulegen-lsfileac/target/classes"/>
+            <pathelement location="../legstar-mulegen-lsfileaemock/target/classes"/>
+            <pathelement location="../legstar-mulegen-lsfileaemock/target/classes"/>
             <pathelement location="../legstar-mule-generator/target/classes"/>
             <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
@@ -39,55 +39,35 @@
   
     <target name="generateMule2Cixs" depends="init">
     
-        <mule2cixsgen targetSrcDir="../legstar-mulegen-lsfileac/src/main/java"
-            targetMuleConfigDir="../legstar-mulegen-lsfileac/src/main/resources"
-            targetDistDir="../legstar-mulegen-lsfileac/target/dist"
-            targetAntDir="../legstar-mulegen-lsfileac/ant"
+        <mule2cixsgen targetSrcDir="../legstar-mulegen-lsfileaemock/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-lsfileaemock/src/main/resources"
+            targetDistDir="../legstar-mulegen-lsfileaemock/target/dist"
+            targetAntDir="../legstar-mulegen-lsfileaemock/ant"
             targetJarDir="${mule.home}/lib/user"
-            targetBinDir="../legstar-mulegen-lsfileac/target/classes"
-            jaxbBinDir="../legstar-mulegen-lsfileac/target/classes"
-            coxbBinDir="../legstar-mulegen-lsfileac/target/classes"
+            targetBinDir="../legstar-mulegen-lsfileaemock/target/classes"
+            jaxbBinDir="../legstar-mulegen-lsfileaemock/target/classes"
+            coxbBinDir="../legstar-mulegen-lsfileaemock/target/classes"
             custBinDir="../legstar-mule-generator/target/classes"
             hostCharset="IBM01147"
-            sampleConfigurationTransport="HTTP"
+            sampleConfigurationTransport="MOCK"
             sampleConfigurationHostMessagingType="LEGSTAR"
-            sampleConfigurationPayloadType="JAVA"
+            sampleConfigurationPayloadType="XML"
           >
-            <cixsMuleComponent name="lsfileac"
-                packageName="org.mule.transport.legstar.test.lsfileac">
-                <cixsOperation name="lsfileac"
-                    cicsProgramName="LSFILEAC"
-                    cicsChannel="LSFILEAC-CHANNEL"
+            <cixsMuleComponent name="lsfileaemock"
+                packageName="org.mule.transport.legstar.test.lsfileae">
+                <cixsOperation name="lsfileae"
+                    cicsProgramName="LSFILEAE"
                     >
                     <input
-                        jaxbType="QueryData"
-                        jaxbPackageName="com.legstar.test.coxb.lsfileac"
-                        cicsContainer="QueryData"
-                    />
-                    <input
-                        jaxbType="QueryLimit"
-                        jaxbPackageName="com.legstar.test.coxb.lsfileac"
-                        cicsContainer="QueryLimit"
+                        jaxbType="Dfhcommarea"
+                        jaxbPackageName="com.legstar.test.coxb.lsfileae"
                     />
                     <output
-                        jaxbType="ReplyData"
-                        jaxbPackageName="com.legstar.test.coxb.lsfileac"
-                        cicsContainer="ReplyData"
-                    />
-                    <output
-                        jaxbType="ReplyStatus"
-                        jaxbPackageName="com.legstar.test.coxb.lsfileac"
-                        cicsContainer="ReplyStatus"
+                        jaxbType="Dfhcommarea"
+                        jaxbPackageName="com.legstar.test.coxb.lsfileae"
                     />
                 </cixsOperation>
             </cixsMuleComponent>
-            <!-- HTTP transport parameters -->
-            <httpTransportParameters
-                scheme="http"
-                host="mainframe"
-                port="4081"
-                path="/CICS/CWBA/LSWEBBIN"
-            />
         </mule2cixsgen>
     
     </target>
