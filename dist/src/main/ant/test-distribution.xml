@@ -12,7 +12,7 @@
         
         <property environment="env"/>
         <!-- MULE location -->
-        <property name="mule.home" value="${env.MULE_HOME}" />
+        <property name="mule.home" value="${env.MULE3_HOME}" />
         <!-- Temporary location  -->
         <property name="test.dir" value="${basedir}/target/test-distro" />
         <!-- Source XML schema location  -->
@@ -51,6 +51,7 @@
              Beware: this is os specific -->    
         <exec executable="cmd" failonerror="true">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
             <arg value="ant"/>
             <arg value="-f"/>
@@ -59,6 +60,7 @@
         </exec>
         <exec executable="cmd" failonerror="true">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
             <arg value="ant"/>
             <arg value="-f"/>
@@ -76,6 +78,7 @@
         
         <exec executable="cmd" failonerror="true">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
             <arg value="ant"/>
             <arg value="-f"/>
@@ -84,6 +87,7 @@
         </exec>
         <exec executable="cmd" failonerror="true">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
             <arg value="ant"/>
             <arg value="-f"/>

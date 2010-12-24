@@ -20,10 +20,10 @@
     <!-- Compile the POJO
     -->
     <target name="compile" depends="init">
-        <mkdir dir="build"/>
+        <mkdir dir="bin"/>
         <javac  target="1.5"
             srcdir="src"
-            destdir="build"
+            destdir="bin"
             fork="yes"
             debug="true"
             classpathref="classpath"
@@ -37,7 +37,7 @@
     <target name="create-jar" depends="compile">
         <mkdir dir="dist"/>
         <jar destfile="dist/legstar-jvmquery-pojo.jar">
-            <fileset dir="build">
+            <fileset dir="bin">
                 <include name="com/legstar/xsdc/test/cases/jvmquery/*.class"/>
             </fileset>
         </jar>

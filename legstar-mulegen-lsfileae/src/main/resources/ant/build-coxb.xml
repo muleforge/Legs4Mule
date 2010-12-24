@@ -1,9 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================================================
-     This script generates binding classes from JAXB objects. A set of cobol binding
-     classes is generated, to provide efficient runtime code for visitors (avoids
-     reflection and use of annotations at runtime).
+     This script generates JAXB classes from a COBOL-annotated XML schema. It then
+     goes on and generates Transformers for selected JAXB root classes.
+     Binding classes provide an efficient runtime code for visitors. They avoid
+     reflection and use of annotations at runtime.
+
+     Change all occurences of:
+         - xsdFile         (Your COBOL annotated XML Schema file)
+         - jaxbPackageName (The JAXB package name for generated classes)
+         - jaxbRootClass   (A root class name. Add as many as needed.) 
   -->
-<project basedir=".." default="compileCOXB" name="generate-COXB-classes">
+<project basedir=".." default="signalSuccess" name="generate-COXB-classes">
 
     <!-- ===========================================================  -->
     <!-- Setup environment
@@ -14,54 +21,88 @@
         <!-- LegStar location -->
         <property name="legstar.home" value="${env.LEGSTAR_HOME}" />
 
-        <!-- Path to the source XML schema file   -->
-        <property name="xsd.file" value="schema/lsfileae.xsd" />
-        <!-- Location for generated classes   -->
-        <property name="jaxb.src.dir" value="src" />
-        <!-- Location for generated JAXB binaries   -->
-        <property name="jaxb.bin.dir" value="build" />
-        <!-- The JAXB root object name. Binding is for a single complex
-         element.   -->
-        <property name="jaxb.root.name" value="Dfhcommarea" />
-        
+        <!-- Make sure target directories exist -->
+        <mkdir dir="src"/>
+        <mkdir dir="bin"/>
+    
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="${basedir}"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
             <!--JAXB generated classes (needed for reflection) -->
-            <dirset dir="${jaxb.bin.dir}"/>
+            <dirset dir="bin"/>
         </path>
+        
+        <!-- Generator ant task -->
+        <taskdef name="jaxbgen"
+            classname="com.legstar.jaxb.gen.CobolJAXBGenerator"
+            classpathref="classpath"/>
         
         <!-- COBOL Binding Generator ant task -->
         <taskdef name="coxbgen"
             classname="com.legstar.coxb.gen.CoxbBindingGenerator"
             classpathref="classpath"/>
-    
+        
     </target>
 
     <!-- ===========================================================  -->
-    <!-- Generate binding classes by reflecting on JAXB classes.
+    <!-- Generate the JAXB classes source
     -->
-    <target name="generateCOXB" depends="init">
-        <echo message="Generating binding classes for ${xsd.file}" />
-        <coxbgen 
-            XsdFile="${xsd.file}"
-            JaxbRootObjectName="${jaxb.root.name}"
-            targetDir="${jaxb.src.dir}"
+    <target name="generateJAXB" depends="init">
+        <echo message="Generating JAXB classes for schema/lsfileae.xsd" />
+        <jaxbgen 
+            xsdFile="schema/lsfileae.xsd"
+            targetDir="src"
+            jaxbPackageName="com.legstar.test.coxb.lsfileae"
+            generateIsSetMethod="true"
+            serializableUid="1"
         />
     </target>
 
     <!-- ===========================================================  -->
-    <!-- Compile the generated binding classes
+    <!-- Compile the generated JAXB classes. fork="no" prevents
+    the bug on package-info.java
     -->
-    <target name="compileCOXB" depends="generateCOXB">
-        <javac target="1.5"
-            srcdir="${jaxb.src.dir}"
-            destdir="${jaxb.bin.dir}"
+    <target name="compileJAXB" depends="generateJAXB">
+        <javac srcdir="src"
+            destdir="bin"
             classpathref="classpath"
             fork="yes"
-		        includes="com/legstar/test/coxb/**"
+            includes="com/legstar/test/coxb/lsfileae/**"
         />
     </target>
   
+    <!-- ===========================================================  -->
+    <!-- Generate Transformers by reflecting on JAXB classes.
+    -->
+    <target name="generateCOXB" depends="compileJAXB">
+        <echo message="Generating Transformers for [Dfhcommarea]" />
+        <coxbgen 
+            targetDir="src"
+            jaxbPackageName="com.legstar.test.coxb.lsfileae"
+            coxbPackageName="com.legstar.test.coxb.lsfileae.bind"
+            xmlTransformers="true"
+            >
+            <jaxbRootClass name="Dfhcommarea"/>
+        </coxbgen>
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- Compile the generated Transformers.
+    -->
+    <target name="compileCOXB" depends="generateCOXB">
+        <javac srcdir="src"
+            destdir="bin"
+            classpathref="classpath"
+            fork="yes"
+            includes="com/legstar/test/coxb/lsfileae/**"
+        />
+    </target>
+  
+    <!-- ===========================================================  -->
+    <!-- Delete the probe file to signal success
+    -->
+    <target name="signalSuccess" depends="compileCOXB">
+        <delete file="probe.file.tmp" quiet="true"/>
+    </target>
+    
 </project>

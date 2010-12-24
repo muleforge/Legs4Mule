@@ -29,7 +29,7 @@
         <path id="classpath">
             <pathelement location="${basedir}"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
-            <pathelement location="build"/>
+            <pathelement location="bin"/>
         </path>
         
         <!-- Java Mapping Generator ant task -->
@@ -49,7 +49,6 @@
         <mkdir dir="${xsd.dir}"/>
         <j2scgen 
             namespace="${namespace}"
-            jaxbPackageName="${jaxb.package.name}"
             targetDir="${xsd.dir}"
             targetXsdFileName="${xsd.filename}"
         >
