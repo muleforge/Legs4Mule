@@ -67,33 +67,33 @@
 ## ==================================================================
 ## XML Schema definitions
 ## ==================================================================
-<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
-        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
 #if($sampleConfigurationTransport == "wmq")
-        xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
-        xmlns:legstar-wmq="http://www.mulesource.org/schema/mule/legstar/wmq/2.2"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms/2.2"
+        xmlns:legstar-wmq="http://www.mulesoft.org/schema/mule/legstar/wmq"
 #end
 #if($sampleConfigurationTransport == "tcp")
-        xmlns:legstar-tcp="http://www.mulesource.org/schema/mule/legstar/tcp/2.2"
+        xmlns:legstar-tcp="http://www.mulesoft.org/schema/mule/legstar/tcp"
 #end
 #if($sampleConfigurationTransport == "mock")
-        xmlns:legstar-mock="http://www.mulesource.org/schema/mule/legstar/mock/2.2"
+        xmlns:legstar-mock="http://www.mulesoft.org/schema/mule/legstar/mock"
 #end
     xsi:schemaLocation=
-        "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
-         http://www.mulesource.org/schema/mule/http/2.2 http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd
-         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
+        "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
+         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd
+         http://www.mulesoft.org/schema/mule/legstar http://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd
 #if($sampleConfigurationTransport == "wmq")
-         http://www.mulesource.org/schema/mule/jms/2.2 http://www.mulesource.org/schema/mule/jms/2.2/mule-jms.xsd
-         http://www.mulesource.org/schema/mule/legstar/wmq/2.2 http://www.legsem.com/legstar/xml/mule-legstar-wmq-1.0.xsd
+         http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/3.0/mule-jms.xsd
+         http://www.mulesoft.org/schema/mule/legstar/wmq http://www.legsem.com/legstar/xml/mule-legstar-wmq-3.0.xsd
 #end
 #if($sampleConfigurationTransport == "tcp")
-         http://www.mulesource.org/schema/mule/legstar/tcp/2.2 http://www.legsem.com/legstar/xml/mule-legstar-tcp-1.0.xsd
+         http://www.mulesoft.org/schema/mule/legstar/tcp http://www.legsem.com/legstar/xml/mule-legstar-tcp-3.0.xsd
 #end
 #if($sampleConfigurationTransport == "mock")
-         http://www.mulesource.org/schema/mule/legstar/mock/2.2 http://www.legsem.com/legstar/xml/mule-legstar-mock-1.0.xsd
+         http://www.mulesoft.org/schema/mule/legstar/mock http://www.legsem.com/legstar/xml/mule-legstar-mock-3.0.xsd
 #end
         ">
 
@@ -119,7 +119,7 @@
 ## Clent endpoints definitions
 ## ==================================================================
 #foreach ($cixsOperation in $muleComponent.cixsOperations)
-    <http:endpoint name="${cixsOperation.name}ClientEndpoint" synchronous="true"
+    <http:endpoint name="${cixsOperation.name}ClientEndpoint" exchange-pattern="request-response"
         address="http://localhost:3280/${cixsOperation.name}" />
 #end
 
@@ -127,22 +127,22 @@
 ## Mainframe endpoints definitions
 ## ==================================================================
 #if($sampleConfigurationTransport == "http")
-    <legstar:endpoint name="mainframeRequestEndpoint" synchronous="true"
-        address="legstar:${httpURL}" />
+    <legstar:endpoint name="mainframeRequestEndpoint" exchange-pattern="request-response"
+        address="${legstarHttpAddress}" />
 #end
 #if($sampleConfigurationTransport == "wmq")
-    <legstar-wmq:endpoint name="mainframeRequestEndpoint" synchronous="true"
+    <legstar-wmq:endpoint name="mainframeRequestEndpoint" exchange-pattern="request-response"
         address="legstar-wmq://${wmqRequestQueue}" />
 
     <legstar-wmq:endpoint name="mainframeReplyEndpoint"
         address="legstar-wmq://${wmqReplyQueue}" />
 #end
 #if($sampleConfigurationTransport == "tcp")
-    <legstar-tcp:endpoint name="mainframeRequestEndpoint" synchronous="true"
+    <legstar-tcp:endpoint name="mainframeRequestEndpoint" exchange-pattern="request-response"
         address="legstar-tcp://${tcpHost}:${tcpPort}" />
 #end
 #if($sampleConfigurationTransport == "mock")
-    <legstar-mock:endpoint name="mainframeRequestEndpoint" synchronous="true"
+    <legstar-mock:endpoint name="mainframeRequestEndpoint" exchange-pattern="request-response"
         address="legstar-mock://localhost" />
 #end
 
@@ -160,45 +160,42 @@
         <service name="${cixsOperation.name}AdapterService">
             <inbound>
                 <inbound-endpoint ref="${cixsOperation.name}ClientEndpoint" >
-                    <transformers>
-                        <byte-array-to-object-transformer />
-                    </transformers>
+                    <byte-array-to-object-transformer />
                 </inbound-endpoint>
             </inbound>
             <outbound>
                 <pass-through-router>
                     <outbound-endpoint ref="mainframeRequestEndpoint" >
-                        <transformers>
-                            <legstar:${sampleConfigurationPayloadType}-to-host-transformer
+                        <legstar:${sampleConfigurationPayloadType}-to-host-transformer
 #if($hostCharset)
-                                hostCharset="${hostCharset}"
+                            hostCharset="${hostCharset}"
 #end                                
-                                class="${qualRequestTransformer}" />
-                            <${hostToRequestTransformer}
+                            class="${qualRequestTransformer}" />
+                        <${hostToRequestTransformer}
 #if($hostCharset)
-                                hostCharset="${hostCharset}"
+                            hostCharset="${hostCharset}"
 #end
 #if($sampleConfigurationTransport == "wmq")
-                                replyTo="mainframeReplyEndpoint"
+                            replyTo="mainframeReplyEndpoint"
 #end
-                            >
-                                <legstar:host-program
-                                    name="${cixsOperation.cicsProgramName.toUpperCase()}"
+                        >
+                            <legstar:host-program
+                                name="${cixsOperation.cicsProgramName.toUpperCase()}"
 #if(${cixsOperation.cicsChannel})
-                                    channelName="${cixsOperation.cicsChannel}"
+                                channelName="${cixsOperation.cicsChannel}"
 #else
 #getCommareaLength(${cixsOperation.getInput()})
 #set($inputLength = $length)
 #getCommareaLength(${cixsOperation.getOutput()})
 #set($outputLength = $length)
 #if($outputLength > $inputLength)
-                                    maxDataLength="${outputLength}"
-                                    dataLength="${inputLength}"
+                                maxDataLength="${outputLength}"
+                                dataLength="${inputLength}"
 #else
-                                    maxDataLength="${inputLength}"
+                                maxDataLength="${inputLength}"
 #end
 #end
-                                >
+                            >
 #if(${cixsOperation.cicsChannel})
 #if(${cixsOperation.getInput().size()} > 0)
 #produceContainers(${cixsOperation.getInput()} "input")
@@ -207,20 +204,19 @@
 #produceContainers(${cixsOperation.getOutput()} "output")
 #end
 #end
-                                </legstar:host-program>
-                            </${hostToRequestTransformer}>
+                            </legstar:host-program>
+                        </${hostToRequestTransformer}>
 #if($sampleConfigurationTransport == "wmq")
-                            <jms:object-to-jmsmessage-transformer />
+                        <jms:object-to-jmsmessage-transformer />
 #end
-                        </transformers>
-                        <response-transformers>
+                        <response>
                             <${responseToHostTransformer} />
                             <legstar:host-to-${sampleConfigurationPayloadType}-transformer
 #if($hostCharset)
                                 hostCharset="${hostCharset}"
 #end                                
                                 class="${qualResponseTransformer}" />
-                        </response-transformers>
+                        </response>
                     </outbound-endpoint>
                 </pass-through-router>
             </outbound>

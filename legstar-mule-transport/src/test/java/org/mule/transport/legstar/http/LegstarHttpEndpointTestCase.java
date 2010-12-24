@@ -37,4 +37,18 @@ public class LegstarHttpEndpointTestCase extends AbstractMuleTestCase {
         assertEquals(0, endpointUri.getParams().size());
     }
 
+    /**
+     * Check that LegStar endpoints are valid Mule endpoints.
+     * @throws Exception if test fails
+     */
+    public void testOldstyleEndpointURI() throws Exception  {
+        EndpointURI endpointUri = new MuleEndpointURI("legstar:http://localhost:7856", muleContext);
+        endpointUri.initialise();
+        assertEquals("legstar", endpointUri.getSchemeMetaInfo());
+        assertEquals("http", endpointUri.getScheme());
+        assertEquals("http://localhost:7856", endpointUri.getAddress());
+        assertEquals(7856, endpointUri.getPort());
+        assertEquals("localhost", endpointUri.getHost());
+        assertEquals(0, endpointUri.getParams().size());
+    }
 }

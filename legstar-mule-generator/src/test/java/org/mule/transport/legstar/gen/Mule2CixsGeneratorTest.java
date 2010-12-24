@@ -159,6 +159,9 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         initCixsMuleComponent(muleComponent);
         mGenerator.execute();
         checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
+        mGenerator.setSampleConfigurationPayloadType("XML");
+        mGenerator.execute();
+        checkResults(muleComponent, SampleConfigurationPayloadType.XML);
     }
 
     /**

@@ -35,7 +35,7 @@ import org.mule.api.endpoint.ImmutableEndpoint;
  */
 public class LegstarHttpConnector extends HttpConnector implements LegstarConnector {
     
-    /** Protocol internal name. Will not appear in URIs. */
+    /** Protocol name. */
     public static final String LEGSTARHTTP = "legstar";
 
     /** Host user ID. */
