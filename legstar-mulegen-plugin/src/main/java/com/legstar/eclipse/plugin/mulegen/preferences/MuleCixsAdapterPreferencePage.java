@@ -53,54 +53,54 @@ implements IWorkbenchPreferencePage {
     public void createFieldEditors() {
 
         addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_HOST,
-                "HTTP " + Messages.adapter_to_host_http_host_label + ':',
+                PreferenceConstants.ADAPTER_DEFAULT_HTTP_HOST,
+                "HTTP " + Messages.adapter_http_host_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_HTTP_PORT,
-                "HTTP " + Messages.adapter_to_host_http_port_label + ':',
+                PreferenceConstants.ADAPTER_DEFAULT_HTTP_PORT,
+                "HTTP " + Messages.adapter_http_port_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_HTTP_PATH,
-                "HTTP " + Messages.adapter_to_host_http_path_label + ':',
-                getFieldEditorParent()));
-
-        addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_URL,
-                "WMQ " + Messages.wmq_jndi_url_label + ':',
-                getFieldEditorParent()));
-        addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
-                "WMQ " + Messages.wmq_jndi_context_factory_label + ':',
-                getFieldEditorParent()));
-        addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_CONNECTION_FACTORY,
-                "WMQ " + Messages.wmq_connection_factory_label + ':',
-                getFieldEditorParent()));
-        addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
-                "WMQ " + Messages.wmq_zos_queue_manager_label + ':',
-                getFieldEditorParent()));
-        addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REQUEST_QUEUE,
-                "WMQ " + Messages.wmq_request_queue_label + ':',
-                getFieldEditorParent()));
-        addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_REPLY_QUEUE,
-                "WMQ " + Messages.wmq_reply_queue_label + ':',
-                getFieldEditorParent()));
-        addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_WMQ_ERROR_QUEUE,
-                "WMQ " + Messages.wmq_error_queue_label + ':',
+                PreferenceConstants.ADAPTER_HTTP_PATH,
+                "HTTP " + Messages.adapter_http_path_label + ':',
                 getFieldEditorParent()));
 
         addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_HOST,
-                "TCP " + Messages.adapter_to_host_http_host_label + ':',
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_JNDI_URL,
+                "WMQ " + Messages.adapter_wmq_jndi_url_label + ':',
                 getFieldEditorParent()));
         addField(new StringFieldEditor(
-                PreferenceConstants.ADAPTER_TO_HOST_DEFAULT_TCP_PORT,
-                "TCP " + Messages.adapter_to_host_http_port_label + ':',
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_JNDI_CONTEXT_FACTORY,
+                "WMQ " + Messages.adapter_wmq_jndi_context_factory_label + ':',
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_CONNECTION_FACTORY,
+                "WMQ " + Messages.adapter_wmq_connection_factory_label + ':',
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_ZOS_QUEUE_MANAGER,
+                "WMQ " + Messages.adapter_wmq_zos_queue_manager_label + ':',
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_REQUEST_QUEUE,
+                "WMQ " + Messages.adapter_wmq_request_queue_label + ':',
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_REPLY_QUEUE,
+                "WMQ " + Messages.adapter_wmq_reply_queue_label + ':',
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_DEFAULT_WMQ_ERROR_QUEUE,
+                "WMQ " + Messages.adapter_wmq_error_queue_label + ':',
+                getFieldEditorParent()));
+
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_DEFAULT_TCP_HOST,
+                "TCP " + Messages.adapter_http_host_label + ':',
+                getFieldEditorParent()));
+        addField(new StringFieldEditor(
+                PreferenceConstants.ADAPTER_DEFAULT_TCP_PORT,
+                "TCP " + Messages.adapter_http_port_label + ':',
                 getFieldEditorParent()));
     }
 

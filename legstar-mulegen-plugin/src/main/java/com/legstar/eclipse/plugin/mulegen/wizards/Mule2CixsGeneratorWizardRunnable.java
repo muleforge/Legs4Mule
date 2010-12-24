@@ -10,15 +10,7 @@
  ******************************************************************************/
 package com.legstar.eclipse.plugin.mulegen.wizards;
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-
-import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
-import org.mule.transport.legstar.model.CixsMuleComponent;
-
-import com.legstar.cixs.gen.ant.model.AbstractAntBuildCixsModel;
-import com.legstar.cixs.gen.model.AbstractCixsService;
-import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 
 /**
  * Background task that performs the actual artifacts generation. The process
@@ -47,53 +39,6 @@ extends AbstractCixsMuleGeneratorWizardRunnable {
             final Mule2CixsGeneratorWizardPage mule2CixsGenWizardPage)
     throws InvocationTargetException {
         super(mule2CixsGenWizardPage, ANT_FILE_NAME_ID);
-    }
-
-    /**
-     * Create a model ready to be passed to velocity for ant script generation.
-     * @param cixsGenWizardPage the wizard page holding input parameters
-     * @return a valid model
-     * @throws InvocationTargetException if model cannot be built
-     */
-    protected AbstractAntBuildCixsModel getGenerationModel(
-            final AbstractCixsGeneratorWizardPage cixsGenWizardPage)
-    throws InvocationTargetException {
-        AntBuildMule2CixsModel genModel = new AntBuildMule2CixsModel();
-        Mule2CixsGeneratorWizardPage page =
-            (Mule2CixsGeneratorWizardPage) cixsGenWizardPage;
-        setModel(page, genModel);
-        genModel.setMuleHome(page.getMuleHome());
-        genModel.setTargetJarDir(new File(page.getTargetJarDir()));
-        genModel.setTargetMuleConfigDir(
-                new File(page.getTargetMuleConfigDir()));
-
-        genModel.setSampleConfigurationTransport(
-                page.getSampleConfigurationTransport());
-
-        switch (page.getSampleConfigurationTransport()) {
-        case HTTP:
-            genModel.setHttpTransportParameters(
-                    page.getCixsAdapterToHostHttpGroup().getHttpTransportParameters());
-            break;
-        case WMQ:
-            genModel.setWmqTransportParameters(
-                    page.getCixsAdapterToHostWmqGroup().getWmqTransportParameters());
-            break;
-        case TCP:
-            genModel.setTcpTransportParameters(
-                    page.getCixsAdapterToHostTcpGroup().getTcpTransportParameters());
-            break;
-        default:
-        }
-        genModel.setSampleConfigurationHostMessagingType(
-                page.getSampleConfigurationHostMessagingType());
-
-        return genModel;
-    }
-
-    /** {@inheritDoc} */
-    public AbstractCixsService createCixsService() {
-        return new CixsMuleComponent();
     }
 
 }

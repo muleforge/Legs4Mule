@@ -36,7 +36,7 @@ public class LsfileaeTcpTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-adapter-config-lsfileae-tcp-tcp-java-legstar.xml";
+        return "mule-adapter-config-lsfileaetcp-tcp-java-legstar.xml";
     }
     
     /**

@@ -7,7 +7,7 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:http="http://www.mulesoft.org/schema/mule/http"
         xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
-        xmlns:jms="http://www.mulesoft.org/schema/mule/jms/2.2"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
         xmlns:legstar-wmq="http://www.mulesoft.org/schema/mule/legstar/wmq"
     xsi:schemaLocation=
         "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd

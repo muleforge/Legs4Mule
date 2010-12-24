@@ -10,16 +10,19 @@
  ******************************************************************************/
 package com.legstar.eclipse.plugin.mulegen.wizards;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel;
 
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsActivator;
 import com.legstar.eclipse.plugin.cixscom.wizards
@@ -37,26 +40,28 @@ public abstract class AbstractCixsMuleGeneratorWizardPage
 extends AbstractCixsGeneratorWizardPage {
 
     /** Where generated Mule configuration files reside. */
-    private Text mTargetMuleConfigDirText = null;
+    private Text _targetMuleConfigDirText = null;
 
     /** Where Mule takes users jars from. */
-    private Text mTargetJarDirText = null;
+    private Text _targetJarDirText = null;
 
     /**
      * Construct the page.
+     * @param selection the current workbench selection
      * @param pageName the page name
      * @param pageTitle the page title
      * @param pageDesc the page description
-     * @param selection the current workbench selection
      * @param mappingFile the mapping file
+     * @param genModel the generation model
      */
     protected AbstractCixsMuleGeneratorWizardPage(
+            final IStructuredSelection selection,
             final String pageName,
             final String pageTitle,
             final String pageDesc,
-            final IStructuredSelection selection,
-            final IFile mappingFile) {
-        super(selection, pageName, pageTitle, pageDesc, mappingFile);
+            final IFile mappingFile,
+            final AbstractAntBuildCixsMuleModel genModel) {
+        super(selection, pageName, pageTitle, pageDesc, mappingFile, genModel);
     }
 
     /** {@inheritDoc} */
@@ -65,7 +70,7 @@ extends AbstractCixsGeneratorWizardPage {
 
     /** {@inheritDoc} */
     public void addWidgetsToTargetGroup(final Composite container) {
-        mTargetMuleConfigDirText = createDirectoryFieldEditor(container,
+        _targetMuleConfigDirText = createDirectoryFieldEditor(container,
                 "targetMuleConfigDir",
                 Messages.target_mule_config_location_label + ':');
     }
@@ -76,30 +81,45 @@ extends AbstractCixsGeneratorWizardPage {
 
     /** {@inheritDoc} */
     public void addWidgetsToDeploymentGroup(final Composite container) {
-        mTargetJarDirText = createTextField(container, getStore(),
+        _targetJarDirText = createTextField(container, getStore(),
                 "targetJarDir",
                 Messages.target_mule_jar_location_label + ':');
     }
 
     /** {@inheritDoc} */
     public void initExtendedWidgets(final IProject project) {
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-        setTargetMuleConfigDir(getDefaultTargetDir(store,
-                PreferenceConstants.TARGET_MULE_CONFIG_FOLDER));
+        setTargetMuleConfigDir(getInitTargetDir(
+                getGenModel().getTargetMuleConfigDir(),
+                PreferenceConstants.TARGET_MULE_CONFIG_FOLDER,
+                true));
 
-        setTargetJarDir(store.getDefaultString(
-                PreferenceConstants.MULE_USER_JAR_FOLDER));
+        setTargetJarDir(getInitTargetJarDir());
+
+    }
+    
+    /**
+     * @return an initial value
+     */
+    public String getInitTargetJarDir() {
+        File initValue = getGenModel().getTargetJarDir();
+        if (initValue == null) {
+            return getStore().getString(
+                    PreferenceConstants.MULE_USER_JAR_FOLDER);
+        } else {
+            return initValue.getPath();
+        }
+        
     }
 
     /** {@inheritDoc} */
     public void createExtendedListeners() {
-        mTargetMuleConfigDirText.addModifyListener(new ModifyListener() {
+        _targetMuleConfigDirText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 dialogChanged();
             }
         });
-        mTargetJarDirText.addModifyListener(new ModifyListener() {
+        _targetJarDirText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 dialogChanged();
             }
@@ -115,10 +135,6 @@ extends AbstractCixsGeneratorWizardPage {
         /* Project is valid. Make sure the project is ready for
          * generated sources compilation. */
         return setupProject();
-    }
-
-    /** {@inheritDoc} */
-    public void storeExtendedProjectPreferences() {
     }
 
     /**
@@ -143,17 +159,32 @@ extends AbstractCixsGeneratorWizardPage {
     }
 
     /**
+     * Store the selected values in the project scoped preference store.
+     */
+    public void updateGenModelExtended() {
+        getGenModel().setMuleHome(getMuleHome());
+        try {
+            getGenModel().setMulegenProductLocation(
+                    getWizard().getPluginInstallLocation());
+        } catch (InvocationTargetException e) {
+            updateStatus(Messages.unable_to_locate_plugin_installation_msg);
+        }
+        getGenModel().setTargetJarDir(new File(getTargetJarDir()));
+        getGenModel().setTargetMuleConfigDir(new File(getTargetMuleConfigDir()));
+    }
+
+    /**
      * @param targetJarDirLocation Where generated Jar files reside
      */
     public void setTargetJarDir(final String targetJarDirLocation) {
-        mTargetJarDirText.setText(targetJarDirLocation);
+        _targetJarDirText.setText(targetJarDirLocation);
     }
 
     /**
      * @return Where generated Jar files reside
      */
     public String getTargetJarDir() {
-        return mTargetJarDirText.getText();
+        return _targetJarDirText.getText();
     }
 
     /**
@@ -162,14 +193,14 @@ extends AbstractCixsGeneratorWizardPage {
      */
     public void setTargetMuleConfigDir(
             final String targetMuleConfigDirLocation) {
-        mTargetMuleConfigDirText.setText(targetMuleConfigDirLocation);
+        _targetMuleConfigDirText.setText(targetMuleConfigDirLocation);
     }
 
     /**
      * @return Where generated Mule configurations reside
      */
     public String getTargetMuleConfigDir() {
-        return mTargetMuleConfigDirText.getText();
+        return _targetMuleConfigDirText.getText();
     }
 
     /** {@inheritDoc} */
@@ -181,10 +212,20 @@ extends AbstractCixsGeneratorWizardPage {
      * @return Mule home
      */
     public String getMuleHome() {
-        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-        return store.getString(
+        return getStore().getString(
                 PreferenceConstants.MULE_INSTALL_FOLDER);
+    }
+    
+    /** {@inheritDoc}*/
+    public AbstractCixsMuleGeneratorWizard getWizard() {
+        return (AbstractCixsMuleGeneratorWizard) super.getWizard();
     }
 
 
+    /**
+     * @return the data model
+     */
+    public AbstractAntBuildCixsMuleModel getGenModel() {
+        return (AbstractAntBuildCixsMuleModel) super.getGenModel();
+    }
 }

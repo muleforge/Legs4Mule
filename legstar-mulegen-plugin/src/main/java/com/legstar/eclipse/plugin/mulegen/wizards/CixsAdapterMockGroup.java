@@ -26,7 +26,7 @@ import com.legstar.eclipse.plugin.mulegen.Messages;
  * Parameters needed by adapter to reach the mainframe over MOCK.
  *
  */
-public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
+public class CixsAdapterMockGroup extends AbstractCixsControlsGroup {
 
     /** The user id for basic authentication. */
     private Text mMockUserIdText = null;
@@ -37,9 +37,12 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
     /**
      * Construct this control group attaching it to a wizard page.
      * @param wizardPage the parent wizard page
+     * @param selected whether this group should initially be selected
      */
-    public CixsAdapterToHostMockGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
+    public CixsAdapterMockGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final boolean selected) {
+        super(wizardPage, selected);
     }
     
     /**
@@ -54,12 +57,12 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
      */
     public void createControls(final Composite composite) {
         
-        super.createControls(composite, Messages.adapter_to_host_mock_transport_group_label, 2);
+        super.createControls(composite, Messages.adapter_mock_transport_group_label, 2);
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_userid_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_userid_label + ':');
         mMockUserIdText = AbstractWizardPage.createText(getGroup()); 
 
-        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_to_host_password_label + ':');
+        AbstractWizardPage.createLabel(getGroup(), Messages.adapter_password_label + ':');
         mMockPasswordText = AbstractWizardPage.createText(getGroup()); 
 
     }
@@ -97,13 +100,6 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
     }
 
     /**
-     * {@inheritDoc} 
-     */
-    public void storeExtendedProjectPreferences() {
-
-    }
-
-    /**
      * @return UserId used for basic authentication
      */
     public String getMockUserId() {
@@ -129,6 +125,11 @@ public class CixsAdapterToHostMockGroup extends AbstractCixsControlsGroup {
      */
     public void setMockPassword(final String tcpPassword) {
         mMockPasswordText.setText(tcpPassword);
+    }
+
+    @Override
+    public void updateGenModelExtended() {
+        
     }
 
 }

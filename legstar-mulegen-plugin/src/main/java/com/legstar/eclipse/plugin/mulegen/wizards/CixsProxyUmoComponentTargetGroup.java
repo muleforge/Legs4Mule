@@ -34,7 +34,6 @@ import com.legstar.eclipse.plugin.common.wizards.AbstractWizard;
 import com.legstar.eclipse.plugin.common.wizards.AbstractWizardPage;
 import com.legstar.eclipse.plugin.mulegen.Activator;
 import com.legstar.eclipse.plugin.mulegen.Messages;
-import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 
 /**
  * Holds the controls for an UMO Component proxy target.
@@ -45,14 +44,23 @@ import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
 public class CixsProxyUmoComponentTargetGroup extends AbstractCixsControlsGroup {
 
     /** Target UMO Component UMO component implementation. */
-    private Text mTargetUmoComponentImplementationNameText = null;
+    private Text _targetUmoComponentImplementationNameText = null;
+    
+    /** The data model. */
+    private UmoComponentParameters _genModel;
 
     /**
      * Construct this control holder attaching it to a wizard page.
      * @param wizardPage the parent wizard page
+     * @param genModel the data model
+     * @param selected whether this group should initially be selected
      */
-    public CixsProxyUmoComponentTargetGroup(final AbstractCixsGeneratorWizardPage wizardPage) {
-        super(wizardPage);
+    public CixsProxyUmoComponentTargetGroup(
+            final AbstractCixsGeneratorWizardPage wizardPage,
+            final UmoComponentParameters genModel,
+            final boolean selected) {
+        super(wizardPage, selected);
+        _genModel = genModel;
     }
 
     /**
@@ -70,7 +78,7 @@ public class CixsProxyUmoComponentTargetGroup extends AbstractCixsControlsGroup 
 
         AbstractWizardPage.createLabel(getGroup(),
                 Messages.target_umo_component_implementation_name_label + ':');
-        mTargetUmoComponentImplementationNameText = AbstractWizardPage.createText(getGroup());
+        _targetUmoComponentImplementationNameText = AbstractWizardPage.createText(getGroup());
 
         Button browseButton = AbstractWizardPage.createButton(getGroup(),
                 com.legstar.eclipse.plugin.common.Messages.browse_button_label);
@@ -106,29 +114,30 @@ public class CixsProxyUmoComponentTargetGroup extends AbstractCixsControlsGroup 
     /**
      * {@inheritDoc} 
      */
+    public void initExtendedControls() {
+        setImplementationName(getInitImplementationName());
+    }
+
+    /**
+     * @return a safe implementation name initial value
+     */
+    protected String getInitImplementationName() {
+        String initValue = _genModel.getImplementationName();
+        if (initValue == null) {
+            initValue = "";
+        }
+        return initValue;
+    }
+    /**
+     * {@inheritDoc} 
+     */
     public void createExtendedListeners() {
 
-        mTargetUmoComponentImplementationNameText.addModifyListener(new ModifyListener() {
+        _targetUmoComponentImplementationNameText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 getWizardPage().dialogChanged();
             }
         });
-    }
-
-    /**
-     * {@inheritDoc} 
-     */
-    public void initExtendedControls() {
-        setImplementationName(getProjectPreferences().get(
-                PreferenceConstants.PROXY_LAST_UMO_COMPONENT_IMPLEMENTATION_NAME, ""));
-    }
-
-    /**
-     * {@inheritDoc} 
-     */
-    public void storeExtendedProjectPreferences() {
-        getProjectPreferences().put(
-                PreferenceConstants.PROXY_LAST_UMO_COMPONENT_IMPLEMENTATION_NAME, getImplementationName());
     }
 
     /**
@@ -142,11 +151,17 @@ public class CixsProxyUmoComponentTargetGroup extends AbstractCixsControlsGroup 
         return true;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void updateGenModelExtended() {
+        getGenModel().setImplementationName(getImplementationName());
+    }
+
     /**
      * @return the target UMO component implementation
      */
     public final String getImplementationName() {
-        return mTargetUmoComponentImplementationNameText.getText();
+        return _targetUmoComponentImplementationNameText.getText();
     }
 
     /**
@@ -154,17 +169,14 @@ public class CixsProxyUmoComponentTargetGroup extends AbstractCixsControlsGroup 
      */
     public final void setImplementationName(
             final String implementationName) {
-        mTargetUmoComponentImplementationNameText.setText(implementationName);
+        _targetUmoComponentImplementationNameText.setText(implementationName);
     }
 
     /**
-     * @return the target UMO Component parameters as a formatted parameters object
+     * @return the data model associated with this group
      */
-    public UmoComponentParameters getUmoComponentTargetParameters() {
-        UmoComponentParameters umoComponentParameters = new UmoComponentParameters();
-        umoComponentParameters.setImplementationName(getImplementationName());
-        return umoComponentParameters;
-        
+    public UmoComponentParameters getGenModel() {
+        return _genModel;
     }
 
 }

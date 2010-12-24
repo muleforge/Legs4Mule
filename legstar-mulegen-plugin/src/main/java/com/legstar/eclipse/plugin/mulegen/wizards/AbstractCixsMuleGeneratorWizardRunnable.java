@@ -11,11 +11,9 @@
 package com.legstar.eclipse.plugin.mulegen.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel;
 
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardPage;
 import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizardRunnable;
-import com.legstar.eclipse.plugin.mulegen.Activator;
 
 /**
  * Background task that performs the actual artifacts generation. The process
@@ -38,22 +36,6 @@ extends AbstractCixsGeneratorWizardRunnable {
             final AbstractCixsGeneratorWizardPage cixsGenWizardPage,
             final String antFileNameId) throws InvocationTargetException {
         super(cixsGenWizardPage, antFileNameId);
-    }
-
-    /**
-     * Contribute specific mule generator properties to the ant model.
-     * @param cixsGenWizardPage the wizard page
-     * @param genModel the target model
-     * @throws InvocationTargetException if model cannot be set
-     */
-    protected void setModel(
-            final AbstractCixsGeneratorWizardPage cixsGenWizardPage,
-            final AbstractAntBuildCixsMuleModel genModel)
-    throws InvocationTargetException {
-
-        genModel.setMulegenProductLocation(getPluginInstallLocation(
-                Activator.PLUGIN_ID));
-        super.setModel(cixsGenWizardPage, genModel);
     }
 
 

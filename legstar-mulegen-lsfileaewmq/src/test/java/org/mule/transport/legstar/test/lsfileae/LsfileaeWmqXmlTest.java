@@ -27,7 +27,7 @@ public class LsfileaeWmqXmlTest extends FunctionalTestCase {
 
     /** {@inheritDoc}*/
     protected String getConfigResources() {
-        return "mule-adapter-config-lsfileae-wmq-wmq-xml-mqcih.xml";
+        return "mule-adapter-config-lsfileaewmq-wmq-xml-mqcih.xml";
     }
     
     /**

@@ -72,7 +72,7 @@
         xmlns:http="http://www.mulesoft.org/schema/mule/http"
         xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
 #if($sampleConfigurationTransport == "wmq")
-        xmlns:jms="http://www.mulesoft.org/schema/mule/jms/2.2"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
         xmlns:legstar-wmq="http://www.mulesoft.org/schema/mule/legstar/wmq"
 #end
 #if($sampleConfigurationTransport == "tcp")

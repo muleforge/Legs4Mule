@@ -11,22 +11,24 @@
 package com.legstar.eclipse.plugin.mulegen.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Properties;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
-
-import com.legstar.eclipse.plugin.cixscom.wizards.AbstractCixsGeneratorWizard;
-import com.legstar.eclipse.plugin.cixscom.wizards
-.AbstractCixsGeneratorWizardRunnable;
-import com.legstar.eclipse.plugin.mulegen.Activator;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
 
 /**
  * This wizard role is to create a set of Mule artifacts that allows Mule 
  * clients to access a CICS program as a local UMO component.
  */
-public class Mule2CixsGeneratorWizard extends AbstractCixsGeneratorWizard {
+public class Mule2CixsGeneratorWizard extends AbstractCixsMuleGeneratorWizard {
+
+    /** What we are trying to generate. */
+    public static final String GENERATION_SUBJECT = "Mule Service adapter";
 
     /** The main page of controls. */
-    private Mule2CixsGeneratorWizardPage mMule2CixsGenPage;
+    private Mule2CixsGeneratorWizardPage _mule2CixsGenPage;
 
     /**
      * Constructor for Mule2CixsGeneratorWizard.
@@ -41,23 +43,34 @@ public class Mule2CixsGeneratorWizard extends AbstractCixsGeneratorWizard {
     /**
      * Adding the page to the wizard.
      */
+    @Override
     public final void addPages() {
-        mMule2CixsGenPage = new Mule2CixsGeneratorWizardPage(
-                getInitialSelection(), getMappingFile());
-        addPage(mMule2CixsGenPage);
+        _mule2CixsGenPage = new Mule2CixsGeneratorWizardPage(
+                getInitialSelection(), getMappingFile(), getGenModel());
+        addPage(_mule2CixsGenPage);
     }
 
 
     /** {@inheritDoc} */
-    protected AbstractCixsGeneratorWizardRunnable getRunnable()
-    throws InvocationTargetException {
-        return new Mule2CixsGeneratorWizardRunnable(mMule2CixsGenPage);
+    public AntBuildMule2CixsModel createGenModel(final Properties props) {
+        return new AntBuildMule2CixsModel(props);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public AntBuildMule2CixsModel getGenModel() {
+        return (AntBuildMule2CixsModel) super.getGenModel();
+    }
 
     /** {@inheritDoc} */
-    public String getPluginId() {
-        return Activator.PLUGIN_ID;
+    public String getGenerationSubject() {
+        return GENERATION_SUBJECT;
+    }
+
+    /** {@inheritDoc} */
+    public IRunnableWithProgress getWizardRunnable()
+            throws InvocationTargetException {
+        return new Mule2CixsGeneratorWizardRunnable(_mule2CixsGenPage);
     }
 
 }
