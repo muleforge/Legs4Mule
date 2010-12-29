@@ -3,12 +3,12 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>2.0.3-SNAPSHOT</version>
+        <version>2.0.4-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mulegen-lsfileac</artifactId>
     <packaging>jar</packaging>
-    <version>2.0.3-SNAPSHOT</version>
+    <version>2.0.4-SNAPSHOT</version>
     <name>Sample Adapter for program LSFILEAC</name>
     <description>Sample Adapter for program LSFILEAC which uses CICS CONTAINERS and CHANNELS</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
