@@ -40,9 +40,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.muleforge.org/legstar-transport/branches/2.0.x</connection>
-        <developerConnection>scm:svn:https://svn.muleforge.org/legstar-transport/branches/2.0.x</developerConnection>
-        <url>http://svn.muleforge.org/legstar-transport/branches/2.0.x</url>
+        <connection>scm:svn:http://svn.muleforge.org/legstar-transport/trunk</connection>
+        <developerConnection>scm:svn:https://svn.muleforge.org/legstar-transport/trunk</developerConnection>
+        <url>http://svn.muleforge.org/legstar-transport/trunk</url>
     </scm>
 
     <ciManagement>
