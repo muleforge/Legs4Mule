@@ -19,9 +19,9 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="..\legstar-mulegen-lsfileaewmq\target\classes"/>
-            <pathelement location="..\legstar-mulegen-lsfileaewmq\target\classes"/>
-            <pathelement location="..\legstar-mule-generator\target\classes"/>
+            <pathelement location="../legstar-mulegen-lsfileaewmq/target/classes"/>
+            <pathelement location="../legstar-mulegen-lsfileaewmq/target/classes"/>
+            <pathelement location="../legstar-mule-generator/target/classes"/>
             <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
@@ -39,15 +39,15 @@
   
     <target name="generateMule2Cixs" depends="init">
     
-        <mule2cixsgen targetSrcDir="..\legstar-mulegen-lsfileaewmq\src\main\java"
-            targetMuleConfigDir="..\legstar-mulegen-lsfileaewmq\src\main\resources"
-            targetDistDir="..\legstar-mulegen-lsfileaewmq\target\dist"
-            targetAntDir="..\legstar-mulegen-lsfileaewmq\ant"
-            targetJarDir="${mule.home}\lib\user"
-            targetBinDir="..\legstar-mulegen-lsfileaewmq\target\classes"
-            jaxbBinDir="..\legstar-mulegen-lsfileaewmq\target\classes"
-            coxbBinDir="..\legstar-mulegen-lsfileaewmq\target\classes"
-            custBinDir="..\legstar-mule-generator\target\classes"
+        <mule2cixsgen targetSrcDir="../legstar-mulegen-lsfileaewmq/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-lsfileaewmq/src/main/resources"
+            targetDistDir="../legstar-mulegen-lsfileaewmq/target/dist"
+            targetAntDir="../legstar-mulegen-lsfileaewmq/ant"
+            targetJarDir="${mule.home}/lib/user"
+            targetBinDir="../legstar-mulegen-lsfileaewmq/target/classes"
+            jaxbBinDir="../legstar-mulegen-lsfileaewmq/target/classes"
+            coxbBinDir="../legstar-mulegen-lsfileaewmq/target/classes"
+            custBinDir="../legstar-mule-generator/target/classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="WMQ"
             sampleConfigurationHostMessagingType="MQCIH"

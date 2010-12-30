@@ -29,6 +29,9 @@ import com.legstar.codegen.CodeGenUtil;
  */
 public class XmlTemplatesTest extends AbstractTestTemplate {
 
+    /** True when references should be created. */
+    private static final boolean CREATE_REFERENCES = false;
+
     /** @{inheritDoc}*/
     public void setUp() {
         super.setUp();
@@ -41,6 +44,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         getParameters().put("targetDistDir", GEN_DIST_DIR.getPath());
         getParameters().put("generateBaseDir", ".");
         getParameters().put("targetAntDir", GEN_ANT_DIR.getPath());
+        setCreateReferences(CREATE_REFERENCES);
     }
 
     /**
