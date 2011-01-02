@@ -62,7 +62,7 @@
         </snapshotRepository>
         <site>
             <id>muleforge.webdav.sites</id>
-            <url>dav:https://dav.muleforge.org/legstar-transport/maven</url>
+            <url>dav:https://dav.muleforge.org/legstar-transport/maven/2.0.x</url>
         </site>
     </distributionManagement>
 
