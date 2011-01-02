@@ -12,6 +12,7 @@ package org.mule.transport.legstar.transformer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mule.transport.legstar.LegstarConnector;
 import org.mule.transport.legstar.i18n.LegstarMessages;
 import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.util.ClassUtils;
@@ -25,9 +26,6 @@ import com.legstar.coxb.host.HostContext;
  * pure zos data.
  */
 public abstract class AbstractHostMuleTransformer extends AbstractMessageTransformer {
-
-    /** Name of property holding the mainframe character set. */
-    public static final String HOST_CHARSET_PROPERTY = "hostCharset";
 
     /** Configurable host character set.*/
     private String _hostCharset = HostContext.getDefaultHostCharsetName();
@@ -85,7 +83,7 @@ public abstract class AbstractHostMuleTransformer extends AbstractMessageTransfo
      * message properties or the configured one
      */
     public String getHostCharset(final MuleMessage message) {
-        return message.getInboundProperty(HOST_CHARSET_PROPERTY,
+        return message.getInboundProperty(LegstarConnector.HOST_CHARSET_PROPERTY,
         		getHostCharset());
     }
     

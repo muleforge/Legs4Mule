@@ -25,6 +25,9 @@ public interface LegstarConnector {
     /** A mule property that might hold the host user ID. */
     String HOST_USERID_PROPERTY = "hostUserID";
     
+    /** A mule property that might hold the host character set. */
+    String HOST_CHARSET_PROPERTY = "hostCharset";
+    
     /**
      * Credentials can be set at the connector level or passed as properties
      * in incoming messages.
@@ -45,4 +48,5 @@ public interface LegstarConnector {
      * @return the host Password for mainframe authentication
      */
     String getHostPassword();
+ 
 }

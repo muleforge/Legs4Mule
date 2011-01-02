@@ -30,8 +30,35 @@
         numberOfConsumers="1" >
     </legstar-wmq:connector>
 
+    <!-- Transform serialized java objects to mainframe data -->
+    <legstar:java-to-host-transformer name="lsfileaeJavaToHost"
+        hostCharset="IBM01140"
+        class="org.mule.transport.legstar.test.lsfileae.DfhcommareaToHostMuleTransformer" />
+
+    <!-- Transform mainframe data to serialized java objects -->
+    <legstar:host-to-java-transformer name="lsfileaeHostToJava"
+        hostCharset="IBM01140"
+        class="org.mule.transport.legstar.test.lsfileae.HostToDfhcommareaMuleTransformer" />
+
+    <!-- Wrap mainframe data in a WMQ Bridge request for mainframe program execution -->
+    <legstar-wmq:host-to-mqcih-transformer name="lsfileaeHostToLegStar"
+        hostCharset="IBM01140"
+        replyTo="mainframeReplyEndpoint"
+    >
+        <legstar:host-program
+            name="LSFILEAE"
+            maxDataLength="79"
+        >
+        </legstar:host-program>
+    </legstar-wmq:host-to-mqcih-transformer>
+    
+    <!-- Unwrap WMQ Bridge response to mainframe program execution -->
+    <legstar-wmq:mqcih-to-host-transformer name="lsfileaeLegStarToHost"/>
+
     <http:endpoint name="lsfileaeClientEndpoint" exchange-pattern="request-response"
-        address="http://localhost:3280/lsfileae" />
+        address="http://localhost:3280/lsfileae" >
+        <byte-array-to-object-transformer/>
+    </http:endpoint>
 
     <legstar-wmq:endpoint name="mainframeRequestEndpoint" exchange-pattern="request-response"
         address="legstar-wmq://CICSA.REQUEST.QUEUE" />
@@ -39,41 +66,10 @@
     <legstar-wmq:endpoint name="mainframeReplyEndpoint"
         address="legstar-wmq://CICSA.REPLY.QUEUE" />
 
-    <model name="lsfileaeModel">
-
-        <service name="lsfileaeAdapterService">
-            <inbound>
-                <inbound-endpoint ref="lsfileaeClientEndpoint" >
-                    <byte-array-to-object-transformer />
-                </inbound-endpoint>
-            </inbound>
-            <outbound>
-                <pass-through-router>
-                    <outbound-endpoint ref="mainframeRequestEndpoint" >
-                        <legstar:java-to-host-transformer
-                            hostCharset="IBM01140"
-                            class="org.mule.transport.legstar.test.lsfileae.DfhcommareaToHostMuleTransformer" />
-                        <legstar-wmq:host-to-mqcih-transformer
-                            hostCharset="IBM01140"
-                            replyTo="mainframeReplyEndpoint"
-                        >
-                            <legstar:host-program
-                                name="LSFILEAE"
-                                maxDataLength="79"
-                            >
-                            </legstar:host-program>
-                        </legstar-wmq:host-to-mqcih-transformer>
-                        <jms:object-to-jmsmessage-transformer />
-                        <response>
-                            <legstar-wmq:mqcih-to-host-transformer />
-                            <legstar:host-to-java-transformer
-                                hostCharset="IBM01140"
-                                class="org.mule.transport.legstar.test.lsfileae.HostToDfhcommareaMuleTransformer" />
-                        </response>
-                    </outbound-endpoint>
-                </pass-through-router>
-            </outbound>
-        </service>
-
-    </model>
+    <flow name="lsfileaeAdapter">
+        <inbound-endpoint ref="lsfileaeClientEndpoint" />
+        <outbound-endpoint ref="mainframeRequestEndpoint"
+            transformer-refs="lsfileaeJavaToHost lsfileaeHostToLegStar"
+            responseTransformer-refs="lsfileaeLegStarToHost lsfileaeHostToJava" />
+    </flow>
 </mule>

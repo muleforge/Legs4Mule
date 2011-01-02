@@ -103,4 +103,5 @@ public class LegstarWmqConnector extends JmsConnector implements LegstarConnecto
         _hostPassword = password;
         super.setPassword(password);
     }
+
 }

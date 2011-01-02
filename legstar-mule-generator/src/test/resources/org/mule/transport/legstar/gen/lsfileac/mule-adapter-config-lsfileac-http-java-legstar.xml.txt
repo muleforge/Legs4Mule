@@ -16,49 +16,46 @@
     <description>Mule configuration for lsfileac adapter service</description>
 
 
+    <!-- Transform serialized java objects to mainframe data -->
+    <legstar:java-to-host-transformer name="lsfileacJavaToHost"
+        hostCharset="IBM01140"
+        class="org.mule.transport.legstar.test.lsfileac.LsfileacRequestHolderToHostMuleTransformer" />
+
+    <!-- Transform mainframe data to serialized java objects -->
+    <legstar:host-to-java-transformer name="lsfileacHostToJava"
+        hostCharset="IBM01140"
+        class="org.mule.transport.legstar.test.lsfileac.HostToLsfileacResponseHolderMuleTransformer" />
+
+    <!-- Wrap mainframe data in a LegStar request for mainframe program execution -->
+    <legstar:host-to-legstar-transformer name="lsfileacHostToLegStar"
+        hostCharset="IBM01140"
+    >
+        <legstar:host-program
+            name="LSFILEAC"
+            channelName="LSFILEAC-CHANNEL"
+        >
+            <legstar:input-container name="QueryData" maxLength="48" />
+            <legstar:input-container name="QueryLimit" maxLength="10" />
+            <legstar:output-container name="ReplyData" maxLength="7905" />
+            <legstar:output-container name="ReplyStatus" maxLength="151" />
+        </legstar:host-program>
+    </legstar:host-to-legstar-transformer>
+    
+    <!-- Unwrap LegStar response to mainframe program execution -->
+    <legstar:legstar-to-host-transformer name="lsfileacLegStarToHost"/>
+
     <http:endpoint name="lsfileacClientEndpoint" exchange-pattern="request-response"
-        address="http://localhost:3280/lsfileac" />
+        address="http://localhost:3280/lsfileac" >
+        <byte-array-to-object-transformer/>
+    </http:endpoint>
 
     <legstar:endpoint name="mainframeRequestEndpoint" exchange-pattern="request-response"
         address="legstar://mainframe:4081/CICS/CWBA/LSWEBBIN" />
 
-    <model name="lsfileacModel">
-
-        <service name="lsfileacAdapterService">
-            <inbound>
-                <inbound-endpoint ref="lsfileacClientEndpoint" >
-                    <byte-array-to-object-transformer />
-                </inbound-endpoint>
-            </inbound>
-            <outbound>
-                <pass-through-router>
-                    <outbound-endpoint ref="mainframeRequestEndpoint" >
-                        <legstar:java-to-host-transformer
-                            hostCharset="IBM01140"
-                            class="org.mule.transport.legstar.test.lsfileac.LsfileacRequestHolderToHostMuleTransformer" />
-                        <legstar:host-to-legstar-transformer
-                            hostCharset="IBM01140"
-                        >
-                            <legstar:host-program
-                                name="LSFILEAC"
-                                channelName="LSFILEAC-CHANNEL"
-                            >
-                                    <legstar:input-container name="QueryData" maxLength="48" />
-                                    <legstar:input-container name="QueryLimit" maxLength="10" />
-                                    <legstar:output-container name="ReplyData" maxLength="7905" />
-                                    <legstar:output-container name="ReplyStatus" maxLength="151" />
-                            </legstar:host-program>
-                        </legstar:host-to-legstar-transformer>
-                        <response>
-                            <legstar:legstar-to-host-transformer />
-                            <legstar:host-to-java-transformer
-                                hostCharset="IBM01140"
-                                class="org.mule.transport.legstar.test.lsfileac.HostToLsfileacResponseHolderMuleTransformer" />
-                        </response>
-                    </outbound-endpoint>
-                </pass-through-router>
-            </outbound>
-        </service>
-
-    </model>
+    <flow name="lsfileacAdapter">
+        <inbound-endpoint ref="lsfileacClientEndpoint" />
+        <outbound-endpoint ref="mainframeRequestEndpoint"
+            transformer-refs="lsfileacJavaToHost lsfileacHostToLegStar"
+            responseTransformer-refs="lsfileacLegStarToHost lsfileacHostToJava" />
+    </flow>
 </mule>

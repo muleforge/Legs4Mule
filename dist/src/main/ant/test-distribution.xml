@@ -12,7 +12,7 @@
         
         <property environment="env"/>
         <!-- MULE location -->
-        <property name="mule.home" value="${env.MULE2_HOME}" />
+        <property name="mule.home" value="${env.MULE3_HOME}" />
         <!-- Temporary location  -->
         <property name="test.dir" value="${basedir}/target/test-distro" />
         <!-- Source XML schema location  -->
