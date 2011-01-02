@@ -1,4 +1,5 @@
 package org.mule.transport.legstar.test.lsfileax;
+import org.mule.transformer.types.SimpleDataType;
 import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
 import com.legstar.test.coxb.lsfileae.bind.DfhcommareaTransformers;
@@ -20,7 +21,7 @@ public class DfhcommareaToHostMuleTransformer extends AbstractJavaToHostMuleTran
      */
     public DfhcommareaToHostMuleTransformer() {
         super(new DfhcommareaTransformers());
-        registerSourceType(Dfhcommarea.class);
+        registerSourceType(new SimpleDataType<Object>(Dfhcommarea.class));
     }
 
 

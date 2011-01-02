@@ -63,7 +63,7 @@
         </snapshotRepository>
         <site>
             <id>muleforge.webdav.sites</id>
-            <url>dav:https://dav.muleforge.org/legstar-transport/maven/mule-3.0.x</url>
+            <url>dav:https://dav.muleforge.org/legstar-transport/maven</url>
         </site>
     </distributionManagement>
 

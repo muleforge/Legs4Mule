@@ -1,4 +1,5 @@
 package org.mule.transport.legstar.test.lsfileax;
+import org.mule.transformer.types.SimpleDataType;
 import org.mule.transport.legstar.transformer.AbstractJavaToHostMuleTransformer;
 import java.util.HashMap;
 import com.legstar.coxb.transform.AbstractTransformers;
@@ -25,7 +26,7 @@ public class LsfileacResponseHolderToHostMuleTransformer extends AbstractJavaToH
         super(new HashMap < String, AbstractTransformers >());
         getBindingTransformersMap().put("ReplyData", new ReplyDataTransformers());
         getBindingTransformersMap().put("ReplyStatus", new ReplyStatusTransformers());
-        registerSourceType(LsfileacResponseHolder.class);
+        registerSourceType(new SimpleDataType<Object>(LsfileacResponseHolder.class));
     }
 
     /** {@inheritDoc} */
