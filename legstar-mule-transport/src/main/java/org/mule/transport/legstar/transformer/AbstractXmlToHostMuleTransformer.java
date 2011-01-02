@@ -29,6 +29,7 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.types.DataTypeFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
@@ -57,10 +58,10 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
     public AbstractXmlToHostMuleTransformer(
             final AbstractXmlTransformers xmlBindingTransformers) {
         super(xmlBindingTransformers);
-        registerSourceType(String.class);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
-        setReturnClass(byte[].class);
+        registerSourceType(DataTypeFactory.STRING);
+        registerSourceType(DataTypeFactory.create(InputStream.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
+        setReturnDataType(DataTypeFactory.BYTE_ARRAY);
     }
 
     /**
@@ -73,10 +74,10 @@ extends AbstractHostXmlMuleTransformer implements IObjectToHostTransformer {
     public AbstractXmlToHostMuleTransformer(
             final Map < String, AbstractXmlTransformers > xmlBindingTransformersMap) {
         super(xmlBindingTransformersMap);
-        registerSourceType(String.class);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
-        setReturnClass(Map.class);
+        registerSourceType(DataTypeFactory.STRING);
+        registerSourceType(DataTypeFactory.create(InputStream.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
+        setReturnDataType(DataTypeFactory.create(Map.class));
     }
 
     /**

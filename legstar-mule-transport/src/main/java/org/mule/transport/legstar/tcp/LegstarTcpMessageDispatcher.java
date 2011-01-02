@@ -27,13 +27,14 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.ImmutableEndpoint;
 import org.mule.api.endpoint.OutboundEndpoint;
 import org.mule.api.retry.RetryContext;
 import org.mule.api.transport.DispatchException;
+import org.mule.api.transport.MuleMessageFactory;
+import org.mule.transport.DefaultMuleMessageFactory;
 import org.mule.transport.legstar.i18n.LegstarMessages;
 import org.mule.transport.tcp.TcpInputStream;
 import org.mule.transport.tcp.TcpMessageDispatcher;
@@ -46,16 +47,12 @@ public class LegstarTcpMessageDispatcher extends TcpMessageDispatcher {
     /** Localized common messages. */
     private static final LegstarMessages I18N_COMMON = new LegstarMessages();
 
-    /** The legstar TCP connector.*/
-    private LegstarTcpConnector _connector;
-
     /**
      * Constructor.
      * @param endpoint the endpoint to dispatch to
      */
     public LegstarTcpMessageDispatcher(final OutboundEndpoint endpoint) {
         super(endpoint);
-        _connector = (LegstarTcpConnector) endpoint.getConnector();
     }
 
     /**
@@ -74,24 +71,27 @@ public class LegstarTcpMessageDispatcher extends TcpMessageDispatcher {
      *   */
     public synchronized MuleMessage doSend(final MuleEvent event) throws Exception {
         MuleMessage requestMuleMessage = event.getMessage();
-        Object body = event.transformMessage();
+        Object body = requestMuleMessage.getPayload();
         if (body instanceof byte[]) {
-            Socket socket = _connector.getSocket(event);
+            Socket socket = getConnector().getSocket(event);
             dispatchToSocket(socket, event);
 
             try  {
-                if (returnResponse(event)) {
+                if (returnResponse(event, true)) {
                     try {
-                        Object result = receiveFromSocket(socket, event);
-                        if (result == null) {
+                        Object legstarReplyMessage = receiveFromSocket(socket, event);
+                        if (legstarReplyMessage == null) {
                             return null;
                         }
 
-                        if (result instanceof MuleMessage) {
-                            return (MuleMessage) result;
+                        if (legstarReplyMessage instanceof MuleMessage) {
+                            return (MuleMessage) legstarReplyMessage;
                         }
 
-                        return new DefaultMuleMessage(_connector.getMessageAdapter(result));
+                        MuleMessageFactory messageFactory =
+                        	new DefaultMuleMessageFactory(getConnector().getMuleContext());
+                        return messageFactory.create(legstarReplyMessage,
+                        		getEndpoint().getEncoding());
                     } catch (SocketTimeoutException e) {
                         // we don't necessarily expect to receive a response here
                         logger.info("Socket timed out normally while doing a synchronous receive on endpointUri: "
@@ -102,13 +102,13 @@ public class LegstarTcpMessageDispatcher extends TcpMessageDispatcher {
                     return null;
                 }
             } finally {
-                if (!returnResponse(event)) {
-                    _connector.releaseSocket(socket, event);
+                if (!returnResponse(event, true)) {
+                	getConnector().releaseSocket(socket, event);
                 }
             }
         } else {
             throw new DispatchException(I18N_COMMON.invalidBodyMessage(),
-                    requestMuleMessage, event.getEndpoint());  
+            		event, this);  
         }
     }
 
@@ -166,7 +166,7 @@ public class LegstarTcpMessageDispatcher extends TcpMessageDispatcher {
      */
     private void dispatchToSocket(
             final Socket socket, final MuleEvent event) throws Exception {
-        Object payload = event.transformMessage();
+        Object payload = event.getMessage().getPayload();
         write(socket, payload);
     }
 
@@ -178,7 +178,7 @@ public class LegstarTcpMessageDispatcher extends TcpMessageDispatcher {
      */
     private void write(final Socket socket, final Object data) throws IOException {
         BufferedOutputStream bos = new BufferedOutputStream(socket.getOutputStream());
-        _connector.getTcpProtocol().write(bos, data);
+        getConnector().getTcpProtocol().write(bos, data);
         bos.flush();
     }
 
@@ -196,7 +196,7 @@ public class LegstarTcpMessageDispatcher extends TcpMessageDispatcher {
      * @return the legstar TCP connector
      */
     public LegstarTcpConnector getConnector() {
-        return _connector;
+        return (LegstarTcpConnector) super.getConnector();
     }
 
 }

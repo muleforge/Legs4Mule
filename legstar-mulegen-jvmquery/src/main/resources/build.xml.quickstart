@@ -13,6 +13,7 @@
             <pathelement location="${basedir}"/>
             <pathelement location="${basedir}/bin"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
+            <fileset dir="${mule.home}" includes="lib/boot/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
             <fileset dir="${mule.home}" includes="lib/opt/*.jar" />
             <fileset dir="${mule.home}" includes="lib/user/*.jar" />

@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.mule.transport.legstar.mock;
 
-import org.mule.DefaultMuleMessage;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.OutboundEndpoint;
 import org.mule.api.transport.DispatchException;
+import org.mule.api.transport.MuleMessageFactory;
 import org.mule.transport.AbstractMessageDispatcher;
-import org.mule.transport.DefaultMessageAdapter;
+import org.mule.transport.DefaultMuleMessageFactory;
 import org.mule.transport.legstar.i18n.LegstarMessages;
 
 import com.legstar.messaging.LegStarConnection;
@@ -67,7 +67,7 @@ public class LegstarMockMessageDispatcher extends AbstractMessageDispatcher {
      *   */
     public MuleMessage doSend(final MuleEvent event) throws Exception {
         MuleMessage requestMuleMessage = event.getMessage();
-        Object body = event.transformMessage();
+        Object body = requestMuleMessage.getPayload();
         if (body instanceof byte[]) {
             LegStarMessage legstarRequestMessage = new LegStarMessage();
             legstarRequestMessage.fromByteArray((byte[]) body, 0);
@@ -75,12 +75,13 @@ public class LegstarMockMessageDispatcher extends AbstractMessageDispatcher {
                     requestMuleMessage.getCorrelationId(), null, legstarRequestMessage);
             getMockConnection().recvResponse(legStarRequest);
             LegStarMessage legstarReplyMessage = legStarRequest.getResponseMessage();
-            DefaultMessageAdapter adapter = new DefaultMessageAdapter(
-                    legstarReplyMessage.toByteArray());
-            return new DefaultMuleMessage(adapter);
+            MuleMessageFactory messageFactory =
+            	new DefaultMuleMessageFactory(getConnector().getMuleContext());
+            return messageFactory.create(legstarReplyMessage.toByteArray(),
+            		getEndpoint().getEncoding());
         } else {
             throw new DispatchException(I18N_COMMON.invalidBodyMessage(),
-                    requestMuleMessage, event.getEndpoint());  
+            		event, this);  
         }
     }
 

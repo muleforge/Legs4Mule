@@ -637,6 +637,10 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         switch(getSampleConfigurationTransportInternal()) {
         case HTTP:
             getAntModel().getHttpTransportParameters().add(parameters);
+            // FIXME this code prevents any usage of the HTTPS scheme
+			parameters.put("legstarHttpAddress", getAntModel()
+					.getHttpTransportParameters().getUrl().replace("http:",
+							"legstar:"));
             break;
         case WMQ:
             getAntModel().getWmqTransportParameters().add(parameters);
@@ -654,7 +658,6 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      */
     public abstract void addExtendedParameters(final Map < String, Object > parameters);
 
-    
     /**
      * @return the Mule component 
      */
@@ -883,11 +886,10 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     /**
      * @param sampleConfigurationPayloadType the payload type (serialized java object or XML) for samples.
      */
-    public void setSampleConfigurationPayloadType(
-            final String sampleConfigurationPayloadType) {
-        SampleConfigurationPayloadType value = SampleConfigurationPayloadType.valueOf(
-                    sampleConfigurationPayloadType.toUpperCase(Locale.getDefault()));
-        setSampleConfigurationPayloadTypeInternal(value);
-    }
+	public void setSampleConfigurationPayloadType(
+			final String sampleConfigurationPayloadType) {
+		setSampleConfigurationPayloadTypeInternal(SampleConfigurationPayloadType
+				.valueOf(sampleConfigurationPayloadType));
+	}
 
 }

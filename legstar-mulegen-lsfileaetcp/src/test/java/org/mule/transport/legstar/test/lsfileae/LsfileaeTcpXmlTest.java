@@ -40,7 +40,7 @@ public class LsfileaeTcpXmlTest extends FunctionalTestCase {
      * @throws Exception if test fails
      */
     public void testLsfileae() throws Exception {
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         Map < String, Object > properties = new HashMap < String, Object >();
         properties.put(LegstarTcpConnector.HOST_USERID_PROPERTY, "P390");
         properties.put(LegstarTcpConnector.HOST_PASSWORD_PROPERTY, "STREAM2");

@@ -3,12 +3,13 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar-pom</artifactId>
     <packaging>pom</packaging>
-    <version>2.0.4-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <name>LegStar for Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
-        <muleVersion>2.2.1</muleVersion>
+        <muleVersion>3.0.1</muleVersion>
         <legstarVersion>1.4.3</legstarVersion>
+        <springVersion>3.0.3.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
@@ -40,9 +41,9 @@
     </issueManagement>
 
     <scm>
-        <connection>scm:svn:http://svn.muleforge.org/legstar-transport/trunk</connection>
-        <developerConnection>scm:svn:https://svn.muleforge.org/legstar-transport/trunk</developerConnection>
-        <url>http://svn.muleforge.org/legstar-transport/trunk</url>
+        <connection>scm:svn:http://svn.muleforge.org/legstar-transport/branches/mule-3.0.x</connection>
+        <developerConnection>scm:svn:https://svn.muleforge.org/legstar-transport/branches/mule-3.0.x</developerConnection>
+        <url>http://svn.muleforge.org/legstar-transport/branches/mule-3.0.x</url>
     </scm>
 
     <ciManagement>
@@ -62,7 +63,7 @@
         </snapshotRepository>
         <site>
             <id>muleforge.webdav.sites</id>
-            <url>dav:https://dav.muleforge.org/legstar-transport/maven</url>
+            <url>dav:https://dav.muleforge.org/legstar-transport/maven/mule-3.0.x</url>
         </site>
     </distributionManagement>
 
@@ -625,7 +626,7 @@
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-beans</artifactId>
-                <version>2.5.6</version>
+                <version>${springVersion}</version>
                 <exclusions>
                     <exclusion>
                         <artifactId>commons-logging</artifactId>

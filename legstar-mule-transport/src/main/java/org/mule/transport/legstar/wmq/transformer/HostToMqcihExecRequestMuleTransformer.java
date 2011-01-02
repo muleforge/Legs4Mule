@@ -101,16 +101,19 @@ public class HostToMqcihExecRequestMuleTransformer extends AbstractHostToExecReq
 
     /** {@inheritDoc}  */
     @Override
-    public void setMessageProperties(final MuleMessage esbMessage) {
-        /* CKBR uses the correlationID for UOW lifecycle management. */
-        esbMessage.setCorrelationId("AMQ!NEW_SESSION_CORRELID");
-        
-        /* Tells MQ-mainframe that the content is an MQCIH payload and that it is
-         * already encoded in mainframe character set.*/
-        esbMessage.setProperty("JMS_IBM_Format", "MQCICS  ");
-        esbMessage.setProperty("JMS_IBM_Character_Set", getCCSID(getHostCharset()));
-        
-    }
+	public void setMessageProperties(final MuleMessage esbMessage) {
+		/* CKBR uses the correlationID for UOW lifecycle management. */
+		esbMessage.setCorrelationId("AMQ!NEW_SESSION_CORRELID");
+
+		/*
+		 * Tells MQ-mainframe that the content is an MQCIH payload and that it
+		 * is already encoded in mainframe character set.
+		 */
+		esbMessage.setOutboundProperty("JMS_IBM_Format", "MQCICS  ");
+		esbMessage.setOutboundProperty("JMS_IBM_Character_Set",
+				getCCSID(getHostCharset()));
+
+	}
 
     /**
      * The mainframe CCSID can be derived from the java character set.

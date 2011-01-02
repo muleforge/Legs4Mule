@@ -27,11 +27,15 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
     /** Generator instance. */
     private Cixs2MuleGenerator mGenerator;
 
+    /** True when references should be created. */
+    private static final boolean CREATE_REFERENCES = false;
+
     /** @{inheritDoc}*/
     public void setUp() {
         emptyDir(GEN_DIR);
         mGenerator = new Cixs2MuleGenerator();
         mGenerator.init();
+        setCreateReferences(CREATE_REFERENCES);
     }
 
     /**

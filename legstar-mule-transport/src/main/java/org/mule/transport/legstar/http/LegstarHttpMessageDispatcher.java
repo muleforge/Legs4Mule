@@ -10,16 +10,23 @@
  ******************************************************************************/
 package org.mule.transport.legstar.http;
 
+import java.io.IOException;
+import java.net.URI;
+
+import org.apache.commons.httpclient.HostConfiguration;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.mule.transport.http.HttpClientMessageDispatcher;
 import org.mule.transport.http.HttpConstants;
 import org.mule.transport.legstar.cixs.transformer.AbstractHostToExecRequestMuleTransformer;
+import org.mule.api.ExceptionPayload;
 import org.mule.api.MuleEvent;
+import org.mule.api.MuleException;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.OutboundEndpoint;
 import org.mule.api.transformer.TransformerException;
+import org.mule.api.transport.PropertyScope;
 
 /**
  * <code>LegstarMessageDispatcher</code> delegates most of its behavior
@@ -57,7 +64,7 @@ public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
         }
         
         HttpMethod httpMethod = super.getMethod(event);
-
+        
         /* Force the content type expected by the Mainframe */
         httpMethod.removeRequestHeader(HttpConstants.HEADER_CONTENT_TYPE);
         httpMethod.addRequestHeader(HttpConstants.HEADER_CONTENT_TYPE,
@@ -72,14 +79,39 @@ public class LegstarHttpMessageDispatcher extends HttpClientMessageDispatcher {
     }
     
     /**
+     * We need to override this in order to clean up some HTTP headers which
+     * would percolate back to the client.
+     * */
+    @Override
+	protected MuleMessage getResponseFromMethod(HttpMethod httpMethod,
+			ExceptionPayload ep) throws IOException, MuleException {
+		MuleMessage message = super.getResponseFromMethod(httpMethod, ep);
+		message.removeProperty(HttpConstants.HEADER_CONTENT_LENGTH,
+				PropertyScope.OUTBOUND);
+		message.removeProperty(HttpConstants.HEADER_CONTENT_TYPE,
+				PropertyScope.OUTBOUND);
+
+		return message;
+	}
+
+    @Override
+    protected HostConfiguration getHostConfig(URI uri) throws Exception
+    {
+		// Substitute a regular HTTP URI where the legstar scheme is used
+    	URI httpUri = new URI(uri.toString().replace("legstar:", "http:"));
+        return super.getHostConfig(httpUri);
+    }
+
+    /**
      * @param esbMessage the mule message
      * @return true if the mainframe should trace execution requests
      */
-    public boolean isHostTraceOn(final MuleMessage esbMessage) {
-        return esbMessage.getBooleanProperty(
-                AbstractHostToExecRequestMuleTransformer.LEGSTAR_HOST_TRACE_ON_KEY,
-                false);
-    }
+	public boolean isHostTraceOn(final MuleMessage esbMessage) {
+		return esbMessage
+				.getInboundProperty(
+						AbstractHostToExecRequestMuleTransformer.LEGSTAR_HOST_TRACE_ON_KEY,
+						false);
+	}
 
 }
 

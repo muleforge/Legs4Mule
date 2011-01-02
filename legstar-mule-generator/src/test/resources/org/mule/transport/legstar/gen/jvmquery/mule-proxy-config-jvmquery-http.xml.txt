@@ -3,34 +3,31 @@
     This Mule configuration implements a proxy service for a mainframe program.
     Transport from mainframe to proxy is HTTP.
 -->
-<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spring="http://www.springframework.org/schema/beans"
-        xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
-        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
-    xsi:schemaLocation="http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-        http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
-        http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
+        xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
+    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
+        http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/3.0/mule-tcp.xsd
+        http://www.mulesoft.org/schema/mule/legstar http://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd">
 
     <description>Mule configuration file for jvmquery proxy service</description>
 
 
-    <legstar:endpoint name="MainframeRequestEndpoint" synchronous="true"
-        address="legstar:http://megamouss:8083/legstar/services/jvmquery" />
+    <legstar:endpoint name="MainframeRequestEndpoint" exchange-pattern="request-response"
+        address="legstar://megamouss:8083/legstar/services/jvmquery" />
 
     <model name="jvmqueryModel">
 
         <service name="queryJvmProxyService">
             <inbound>
                 <inbound-endpoint ref="MainframeRequestEndpoint">
-                    <transformers>
-                        <legstar:host-to-java-transformer
-                            class="org.mule.transport.legstar.test.jvmquery.HostToJvmQueryRequestMuleTransformer" />
-                    </transformers>
-                    <response-transformers>
+                    <legstar:host-to-java-transformer
+                        class="org.mule.transport.legstar.test.jvmquery.HostToJvmQueryRequestMuleTransformer" />
+                    <response>
                         <legstar:java-to-host-transformer
                             class="org.mule.transport.legstar.test.jvmquery.JvmQueryReplyToHostMuleTransformer" />
-                    </response-transformers>
+                    </response>
                 </inbound-endpoint>
             </inbound>
             <component class="com.legstar.xsdc.test.cases.jvmquery.JVMQuery"/>

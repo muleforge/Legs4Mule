@@ -45,7 +45,7 @@ public class LsfileaxHttpTest extends FunctionalTestCase {
      * @throws Exception if test fails
      */
     public void testLsfileac() throws Exception {
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         MuleMessage message = client.send(
                 "lsfileacClientEndpoint",
                 getJavaObjectLsfileacRequest(), null);
@@ -61,7 +61,7 @@ public class LsfileaxHttpTest extends FunctionalTestCase {
      * @throws Exception if test fails
      */
     public void testLsfileae() throws Exception {
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         MuleMessage message = client.send(
                 "lsfileaeClientEndpoint",
                 getJavaObjectLsfileaeRequest(), null);

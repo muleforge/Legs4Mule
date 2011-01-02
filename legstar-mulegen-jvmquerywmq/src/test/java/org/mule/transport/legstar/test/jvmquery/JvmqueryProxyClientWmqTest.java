@@ -28,8 +28,8 @@ public class JvmqueryProxyClientWmqTest extends FunctionalTestCase {
 
     /** Raw mainframe request. */
     public static final String MAINFRAME_REQUEST_DATA =
-        /*0 0 0 2 M U L E 2 _ H O M E - - - - - - - - - - - - - - - - - -*/
-        "00000002d4e4d3c5f26dc8d6d4c5404040404040404040404040404040404040"
+        /*0 0 0 2 M U L E 3 _ H O M E - - - - - - - - - - - - - - - - - -*/
+        "00000002d4e4d3c5f36dc8d6d4c5404040404040404040404040404040404040"
         /*  - - - - J A V A _ H O M E - - - - - - - - - - - - - - - - - - -*/
         + "40404040d1c1e5c16dc8d6d4c540404040404040404040404040404040404040"
         /*  - - - - */
@@ -71,7 +71,7 @@ public class JvmqueryProxyClientWmqTest extends FunctionalTestCase {
      */
     @SuppressWarnings("unchecked")
     public void testRun() throws Exception {
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         Map props = new HashMap();
         props.put("JMSReplyTo", "JVMQUERY.POJO.REPLY.QUEUE");
 

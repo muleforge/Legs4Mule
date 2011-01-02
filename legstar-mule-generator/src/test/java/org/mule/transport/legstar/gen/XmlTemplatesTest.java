@@ -29,6 +29,9 @@ import com.legstar.codegen.CodeGenUtil;
  */
 public class XmlTemplatesTest extends AbstractTestTemplate {
 
+    /** True when references should be created. */
+    private static final boolean CREATE_REFERENCES = false;
+
     /** @{inheritDoc}*/
     public void setUp() {
         super.setUp();
@@ -41,6 +44,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         getParameters().put("targetDistDir", GEN_DIST_DIR.getPath());
         getParameters().put("generateBaseDir", ".");
         getParameters().put("targetAntDir", GEN_ANT_DIR.getPath());
+        setCreateReferences(CREATE_REFERENCES);
     }
 
     /**
@@ -164,6 +168,9 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
         httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
         httpTransportParameters.add(getParameters());
+        getParameters().put("legstarHttpAddress",
+        		httpTransportParameters.getUrl().replace("http:",
+						"legstar:"));
     }
 
     /**
@@ -200,6 +207,9 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         httpTransportParameters.setPort(8083);
         httpTransportParameters.setPath("/legstar/services/jvmquery");
         httpTransportParameters.add(getParameters());
+        getParameters().put("legstarHttpAddress",
+        		httpTransportParameters.getUrl().replace("http:",
+						"legstar:"));
     }
 
     /**

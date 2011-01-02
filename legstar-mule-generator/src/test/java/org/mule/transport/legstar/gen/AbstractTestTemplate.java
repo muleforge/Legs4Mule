@@ -10,17 +10,14 @@
  ******************************************************************************/
 package org.mule.transport.legstar.gen;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -77,8 +74,29 @@ public class AbstractTestTemplate extends TestCase {
 
     /** Additional parameter set passed to templates. */
     private Map < String, Object > mParameters;
+    
+    /** Relative location of test resources.*/
+    private static final String TEST_RESOURCES_DIR = "src/test/resources";
+    
+    /** This means references should be created instead of compared to results. */
+    private boolean _createReferences;
 
-    /** Logger. */
+    /**
+     * @return true if references should be created instead of compared to results
+     */
+    public boolean isCreateReferences() {
+		return _createReferences;
+	}
+
+
+	/**
+	 * @param createReferences true if references should be created instead of compared to results
+	 */
+	public void setCreateReferences(boolean createReferences) {
+		_createReferences = createReferences;
+	}
+
+	/** Logger. */
     private final Log _log = LogFactory.getLog(getClass());
 
     /** @{inheritDoc}*/
@@ -105,17 +123,11 @@ public class AbstractTestTemplate extends TestCase {
      */
     public String getSource(
             final File srcDir, final String srcName) throws Exception {
-        BufferedReader in = new BufferedReader(
-                new FileReader(new File(srcDir, srcName)));
-        String resStr = "";
-        String str = in.readLine();
-        while (str != null) {
-            _log.debug(str);
-            resStr += str;
-            str = in.readLine();
-        }
-        in.close();
-        return resStr;
+    	String content = FileUtils.readFileToString(new File(srcDir, srcName));
+    	if (_log.isDebugEnabled()) {
+    		_log.debug(content);
+    	}
+    	return content;
     }
 
     /**
@@ -124,25 +136,14 @@ public class AbstractTestTemplate extends TestCase {
      * @return a string with the entire content
      * @throws IOException if reading fails
      */
-    public String getSource(final String resourceName) throws IOException {
-        InputStream res = getClass().getResourceAsStream(resourceName);
-        if (res != null) {
-            BufferedReader in = new BufferedReader(new InputStreamReader(res));
-            String resStr = "";
-            String str = in.readLine();
-            while (str != null) {
-                _log.debug(str);
-                resStr += str;
-                str = in.readLine();
-            }
-            in.close();
-            return resStr;
-        } else {
-            throw new IOException("Resource " + resourceName + " not found");
-        }
-
-    }
-
+	public String getSource(final String resourceName) throws IOException {
+		String content = FileUtils.readFileToString(new File(TEST_RESOURCES_DIR
+				+ resourceName));
+		if (_log.isDebugEnabled()) {
+			_log.debug(content);
+		}
+		return content;
+	}
 
     /**
      * @return the mParameters
@@ -226,12 +227,32 @@ public class AbstractTestTemplate extends TestCase {
                 reference += prefix + "/";
             }
             reference += fileName + ".txt";
-            String expectedRes = getSource(reference).replace('\\', '/');
-            assertEquals(expectedRes, result);
+            if (isCreateReferences()) {
+            	createReference(reference, result);
+            } else {
+	            String expectedRes = getSource(reference).replace('\\', '/');
+	            assertEquals(expectedRes, result);
+            }
         } catch (IOException e) {
             fail(e.getMessage());
         } catch (Exception e) {
             fail(e.getMessage());
         }
+    }
+    
+    /**
+     * When test cases are initially built, this method create a reference
+     * using test results.
+     * @param resourceName the reference resource name
+     * @param content the file content
+     */
+    public void createReference(final String resourceName, final String content) {
+    	try {
+			FileUtils.writeStringToFile(new File(TEST_RESOURCES_DIR + resourceName),
+					content);
+		} catch (IOException e) {
+            fail(e.getMessage());
+		}
+    	
     }
 }

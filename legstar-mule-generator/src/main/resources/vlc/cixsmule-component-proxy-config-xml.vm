@@ -14,20 +14,19 @@
     This Mule configuration implements a proxy service for a mainframe program.
     Transport from mainframe to proxy is ${sampleConfigurationTransportComment}.
 -->
-<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:spring="http://www.springframework.org/schema/beans"
-        xmlns:tcp="http://www.mulesource.org/schema/mule/tcp/2.2"
-        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:tcp="http://www.mulesoft.org/schema/mule/tcp"
+        xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
 #if($sampleConfigurationTransport == "wmq")
-        xmlns:jms="http://www.mulesource.org/schema/mule/jms/2.2"
+        xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
 #end
-    xsi:schemaLocation="http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
-        http://www.mulesource.org/schema/mule/tcp/2.2 http://www.mulesource.org/schema/mule/tcp/2.2/mule-tcp.xsd
+    xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
+        http://www.mulesoft.org/schema/mule/tcp http://www.mulesoft.org/schema/mule/tcp/3.0/mule-tcp.xsd
 #if($sampleConfigurationTransport == "wmq")
-        http://www.mulesource.org/schema/mule/jms/2.2 http://www.mulesource.org/schema/mule/jms/2.2/mule-jms.xsd
+        http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/3.0/mule-jms.xsd
 #end
-        http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd">
+        http://www.mulesoft.org/schema/mule/legstar http://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd">
 
     <description>Mule configuration file for ${muleComponent.name} proxy service</description>
 
@@ -44,11 +43,11 @@
 #end
 
 #if($sampleConfigurationTransport == "http")
-    <legstar:endpoint name="MainframeRequestEndpoint" synchronous="true"
-        address="legstar:${httpURL}" />
+    <legstar:endpoint name="MainframeRequestEndpoint" exchange-pattern="request-response"
+        address="${legstarHttpAddress}" />
 #end
 #if($sampleConfigurationTransport == "wmq")
-    <jms:endpoint name="MainframeRequestEndpoint" synchronous="true"
+    <jms:endpoint name="MainframeRequestEndpoint" exchange-pattern="request-response"
          queue="${wmqRequestQueue}" />
 #end
 
@@ -63,14 +62,12 @@
         <service name="${cixsOperation.name}ProxyService">
             <inbound>
                 <inbound-endpoint ref="MainframeRequestEndpoint">
-                    <transformers>
 #if($sampleConfigurationTransport == "wmq")
-                        <jms:jmsmessage-to-object-transformer />
+                    <jms:jmsmessage-to-object-transformer />
 #end
-                        <legstar:host-to-java-transformer
-                            class="${qualRequestTransformer}" />
-                    </transformers>
-                    <response-transformers>
+                    <legstar:host-to-java-transformer
+                        class="${qualRequestTransformer}" />
+                    <response>
                         <legstar:java-to-host-transformer
                             class="${qualResponseTransformer}" />
 #if($sampleConfigurationTransport == "wmq")
@@ -79,7 +76,7 @@
                         </message-properties-transformer>
                         <jms:object-to-jmsmessage-transformer />
 #end
-                    </response-transformers>
+                    </response>
                 </inbound-endpoint>
             </inbound>
             <component class="${umoComponentImplementationName}"/>

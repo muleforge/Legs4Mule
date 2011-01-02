@@ -4,12 +4,12 @@
   -->
 <project basedir="." default="deploy-jar" name="deploy-jar">
     <target name="create-jar">
-        <ant antfile="target\src\gen\ant/build-jar.xml"/>
+        <ant antfile="target/src/gen/ant/build-jar.xml"/>
     </target>
     <target name="deploy-jar" depends="create-jar">
-        <delete file="${env.MULE_HOME}\lib\user/legstar-lsfileac.jar"
+        <delete file="${env.MULE_HOME}/lib/user/legstar-lsfileac.jar"
             includeEmptyDirs="true" quiet="true"/>
-        <copy file="target\dist/legstar-lsfileac.jar"
-            todir="${env.MULE_HOME}\lib\user"/>
+        <copy file="target/dist/legstar-lsfileac.jar"
+            todir="${env.MULE_HOME}/lib/user"/>
     </target>
 </project>

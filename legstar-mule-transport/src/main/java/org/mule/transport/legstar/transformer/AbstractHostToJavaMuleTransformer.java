@@ -18,6 +18,7 @@ import java.util.Map.Entry;
 import org.apache.commons.io.IOUtils;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
+import org.mule.transformer.types.DataTypeFactory;
 
 import com.legstar.coxb.transform.AbstractTransformers;
 import com.legstar.coxb.transform.HostTransformException;
@@ -41,8 +42,8 @@ public abstract class AbstractHostToJavaMuleTransformer extends AbstractHostJava
     public AbstractHostToJavaMuleTransformer(
             final AbstractTransformers bindingTransformers) {
         super(bindingTransformers);
-        registerSourceType(byte[].class);
-        registerSourceType(InputStream.class);
+        registerSourceType(DataTypeFactory.create(InputStream.class));
+        registerSourceType(DataTypeFactory.BYTE_ARRAY);
     }
 
     /**
@@ -56,7 +57,7 @@ public abstract class AbstractHostToJavaMuleTransformer extends AbstractHostJava
     public AbstractHostToJavaMuleTransformer(
             final Map < String, AbstractTransformers > bindingTransformersMap) {
         super(bindingTransformersMap);
-        registerSourceType(Map.class);
+        registerSourceType(DataTypeFactory.create(Map.class));
     }
 
     /**

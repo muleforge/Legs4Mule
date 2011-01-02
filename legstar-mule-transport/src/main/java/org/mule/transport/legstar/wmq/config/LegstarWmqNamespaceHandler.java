@@ -21,7 +21,7 @@ package org.mule.transport.legstar.wmq.config;
 
 import org.mule.config.spring.handlers.AbstractMuleNamespaceHandler;
 import org.mule.config.spring.parsers.processors.CheckExclusiveAttributes;
-import org.mule.config.spring.parsers.specific.TransformerDefinitionParser;
+import org.mule.config.spring.parsers.specific.MessageProcessorDefinitionParser;
 import org.mule.transport.jms.config.JmsNamespaceHandler;
 import org.mule.transport.legstar.wmq.LegstarWmqConnector;
 import org.mule.transport.legstar.wmq.transformer.HostToMqcihExecRequestMuleTransformer;
@@ -44,9 +44,9 @@ public class LegstarWmqNamespaceHandler extends AbstractMuleNamespaceHandler {
                     new String[]{JmsNamespaceHandler.NUMBER_OF_CONCURRENT_TRANSACTED_RECEIVERS_ATTRIBUTE},
                     new String[]{JmsNamespaceHandler.NUMBER_OF_CONSUMERS_ATTRIBUTE}}));
         registerBeanDefinitionParser("host-to-mqcih-transformer",
-                new TransformerDefinitionParser(HostToMqcihExecRequestMuleTransformer.class));
+                new MessageProcessorDefinitionParser(HostToMqcihExecRequestMuleTransformer.class));
         registerBeanDefinitionParser("mqcih-to-host-transformer",
-                new TransformerDefinitionParser(MqcihExecReplyToHostMuleTransformer.class));
+                new MessageProcessorDefinitionParser(MqcihExecReplyToHostMuleTransformer.class));
 
     }
 }

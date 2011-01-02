@@ -14,14 +14,14 @@
     <target name="init">
 
         <property environment="env"/>
-        <property name="mule.home" value="${env.MULE2_HOME}"/>
+        <property name="mule.home" value="${env.MULE3_HOME}"/>
         <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="..\legstar-mulegen-lsfileaemock\target\classes"/>
-            <pathelement location="..\legstar-mulegen-lsfileaemock\target\classes"/>
-            <pathelement location="..\legstar-mule-generator\target\classes"/>
+            <pathelement location="../legstar-mulegen-lsfileaemock/target/classes"/>
+            <pathelement location="../legstar-mulegen-lsfileaemock/target/classes"/>
+            <pathelement location="../legstar-mule-generator/target/classes"/>
             <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
@@ -39,15 +39,15 @@
   
     <target name="generateMule2Cixs" depends="init">
     
-        <mule2cixsgen targetSrcDir="..\legstar-mulegen-lsfileaemock\src\main\java"
-            targetMuleConfigDir="..\legstar-mulegen-lsfileaemock\src\main\resources"
-            targetDistDir="..\legstar-mulegen-lsfileaemock\target\dist"
-            targetAntDir="..\legstar-mulegen-lsfileaemock\ant"
-            targetJarDir="${mule.home}\lib\user"
-            targetBinDir="..\legstar-mulegen-lsfileaemock\target\classes"
-            jaxbBinDir="..\legstar-mulegen-lsfileaemock\target\classes"
-            coxbBinDir="..\legstar-mulegen-lsfileaemock\target\classes"
-            custBinDir="..\legstar-mule-generator\target\classes"
+        <mule2cixsgen targetSrcDir="../legstar-mulegen-lsfileaemock/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-lsfileaemock/src/main/resources"
+            targetDistDir="../legstar-mulegen-lsfileaemock/target/dist"
+            targetAntDir="../legstar-mulegen-lsfileaemock/ant"
+            targetJarDir="${mule.home}/lib/user"
+            targetBinDir="../legstar-mulegen-lsfileaemock/target/classes"
+            jaxbBinDir="../legstar-mulegen-lsfileaemock/target/classes"
+            coxbBinDir="../legstar-mulegen-lsfileaemock/target/classes"
+            custBinDir="../legstar-mule-generator/target/classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="MOCK"
             sampleConfigurationHostMessagingType="LEGSTAR"

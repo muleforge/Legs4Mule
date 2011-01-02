@@ -5,6 +5,7 @@
 ##/////////////////////////////////////////////////////////////////////
 #parse("vlc/cixsmule-operation-transformer-common.vm")
 #set($transformerType = "HostTo${holderType}MuleTransformer")
+import org.mule.transformer.types.DataTypeFactory;
 import org.mule.transport.legstar.transformer.AbstractHostToJavaMuleTransformer;
 #if($holder)
 import java.util.HashMap;
@@ -46,7 +47,7 @@ public class ${transformerType} extends AbstractHostToJavaMuleTransformer {
         super(new ${cixsStructure.jaxbType}Transformers());
 #end
 #end
-        setReturnClass(${type}.class);
+        setReturnDataType(DataTypeFactory.create(${type}.class));
     }
 
 #if($holder)

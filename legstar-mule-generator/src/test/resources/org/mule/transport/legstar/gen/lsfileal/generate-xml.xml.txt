@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Generate a Mule component as an adapter for a mainframe program.
+     Artifacts can be used to call a remote Mainframe function.
+     Prerequisite: Cobol binding classes should have been generated
+     using LegStar Coxbgen prior to using this script.
+     Refer to http://www.legsem.com/legstar for info on generating binding classes.
+  -->
+<project basedir=".." default="signalSuccess" name="generate-mule2cics">
+
+    <!-- ===========================================================  -->
+    <!-- Setup environment
+    -->
+    <target name="init">
+
+        <property environment="env"/>
+        <property name="mule.home" value="${env.MULE3_HOME}"/>
+        <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
+
+        <!-- Classpath setting -->
+        <path id="classpath">
+            <pathelement location="../legstar-mulegen-lsfileal/target/classes"/>
+            <pathelement location="../legstar-mulegen-lsfileal/target/classes"/>
+            <pathelement location="../legstar-mule-generator/target/classes"/>
+            <fileset dir=".." includes="lib/*.jar" />
+            <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
+        </path>
+
+        <!-- Mule component Generator ant task -->
+        <taskdef name="mule2cixsgen"
+          classname="org.mule.transport.legstar.gen.Mule2CixsGenerator"
+          classpathref="classpath" 
+        /> 
+
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- This step creates all the artifacts for a Mule component.    -->
+  
+    <target name="generateMule2Cixs" depends="init">
+    
+        <mule2cixsgen targetSrcDir="../legstar-mulegen-lsfileal/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-lsfileal/src/main/resources"
+            targetDistDir="../legstar-mulegen-lsfileal/target/dist"
+            targetAntDir="../legstar-mulegen-lsfileal/ant"
+            targetJarDir="${mule.home}/lib/user"
+            targetBinDir="../legstar-mulegen-lsfileal/target/classes"
+            jaxbBinDir="../legstar-mulegen-lsfileal/target/classes"
+            coxbBinDir="../legstar-mulegen-lsfileal/target/classes"
+            custBinDir="../legstar-mule-generator/target/classes"
+            hostCharset="IBM01147"
+            sampleConfigurationTransport="HTTP"
+            sampleConfigurationHostMessagingType="LEGSTAR"
+            sampleConfigurationPayloadType="XML"
+          >
+            <cixsMuleComponent name="lsfileal"
+                packageName="org.mule.transport.legstar.test.lsfileal">
+                <cixsOperation name="lsfileal"
+                    cicsProgramName="LSFILEAL"
+                    >
+                    <input
+                        jaxbType="RequestParms"
+                        jaxbPackageName="com.legstar.test.coxb.lsfileal"
+                    />
+                    <output
+                        jaxbType="ReplyData"
+                        jaxbPackageName="com.legstar.test.coxb.lsfileal"
+                    />
+                </cixsOperation>
+            </cixsMuleComponent>
+            <!-- HTTP transport parameters -->
+            <httpTransportParameters
+                scheme="http"
+                host="mainframe"
+                port="4081"
+                path="/CICS/CWBA/LSWEBBIN"
+            />
+        </mule2cixsgen>
+    
+    </target>
+  
+    <!-- ===========================================================  -->
+    <!-- Delete the probe file to signal success
+    -->
+    <target name="signalSuccess" depends="generateMule2Cixs">
+        <delete file="${antModel.probeFile}" quiet="true"/>
+    </target>
+    
+</project>

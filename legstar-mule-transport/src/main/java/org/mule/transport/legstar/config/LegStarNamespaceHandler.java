@@ -15,7 +15,7 @@ package org.mule.transport.legstar.config;
 
 import org.mule.config.spring.handlers.AbstractMuleNamespaceHandler;
 import org.mule.config.spring.parsers.generic.ChildDefinitionParser;
-import org.mule.config.spring.parsers.specific.TransformerDefinitionParser;
+import org.mule.config.spring.parsers.specific.MessageProcessorDefinitionParser;
 import org.mule.endpoint.URIBuilder;
 import org.mule.transport.legstar.cixs.transformer.HostToLegstarExecRequestMuleTransformer;
 import org.mule.transport.legstar.cixs.transformer.LegstarExecReplyToHostMuleTransformer;
@@ -31,24 +31,24 @@ public class LegStarNamespaceHandler extends AbstractMuleNamespaceHandler {
     /** {@inheritDoc} */
     public void init() {
         registerStandardTransportEndpoints(
-                LegstarHttpConnector.EXTERNAL_PROTOCOL, URIBuilder.SOCKET_ATTRIBUTES)
+                LegstarHttpConnector.LEGSTARHTTP, URIBuilder.SOCKET_ATTRIBUTES)
                 .addAlias("contentType", HttpConstants.HEADER_CONTENT_TYPE);
         
         registerConnectorDefinitionParser(LegstarHttpConnector.class);
 
-        registerBeanDefinitionParser("java-to-host-transformer", new TransformerDefinitionParser());
-        registerBeanDefinitionParser("host-to-java-transformer", new TransformerDefinitionParser());
+        registerBeanDefinitionParser("java-to-host-transformer", new MessageProcessorDefinitionParser());
+        registerBeanDefinitionParser("host-to-java-transformer", new MessageProcessorDefinitionParser());
 
-        registerBeanDefinitionParser("xml-to-host-transformer", new TransformerDefinitionParser());
-        registerBeanDefinitionParser("host-to-xml-transformer", new TransformerDefinitionParser());
+        registerBeanDefinitionParser("xml-to-host-transformer", new MessageProcessorDefinitionParser());
+        registerBeanDefinitionParser("host-to-xml-transformer", new MessageProcessorDefinitionParser());
 
         registerBeanDefinitionParser("host-to-legstar-transformer",
-                new TransformerDefinitionParser(HostToLegstarExecRequestMuleTransformer.class));
+                new MessageProcessorDefinitionParser(HostToLegstarExecRequestMuleTransformer.class));
         registerBeanDefinitionParser("legstar-to-host-transformer",
-                new TransformerDefinitionParser(LegstarExecReplyToHostMuleTransformer.class));
+                new MessageProcessorDefinitionParser(LegstarExecReplyToHostMuleTransformer.class));
 
         registerBeanDefinitionParser("host-byte-array-to-http-response-transformer",
-                new TransformerDefinitionParser(HostByteArrayToHttpResponse.class));
+                new MessageProcessorDefinitionParser(HostByteArrayToHttpResponse.class));
         
         registerMuleBeanDefinitionParser("host-program",
                 new ChildDefinitionParser("hostProgram", HostProgram.class));

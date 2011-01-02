@@ -1,15 +1,18 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>2.0.4-SNAPSHOT</version>
+        <version>3.0.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mule-transport</artifactId>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <version>2.0.4-SNAPSHOT</version>
-    <name>LegStar for Mule Transport</name>
+
+    <name>LegStar for Mule 3.0 Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
@@ -155,5 +158,4 @@
         </dependency>
 
     </dependencies>
-  
 </project>

@@ -39,12 +39,12 @@ public final class LegstarConnectorHelper {
     public static HostCredentials getHostCredentials(
             final LegstarConnector connector,
             final MuleMessage message) {
-        String hostUserID = (String) message.getProperty(
+        String hostUserID = (String) message.getInboundProperty(
                 LegstarConnector.HOST_USERID_PROPERTY);
         if (hostUserID == null) {
             hostUserID = connector.getHostUserID();
         }
-        String hostPassword = (String) message.getProperty(
+        String hostPassword = (String) message.getInboundProperty(
                 LegstarConnector.HOST_PASSWORD_PROPERTY);
         if (hostPassword == null) {
             hostPassword = connector.getHostPassword();
