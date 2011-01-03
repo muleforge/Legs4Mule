@@ -11,6 +11,8 @@ Prerequisites:
 =============
   1. The sample uses the junit ant task. This is not part of the standard ant
      delivery. You need to add junit.jar and ant-junit.jar in ANT_HOME/lib.
+  2. An instance of Mule 3.0.x is assumed to be running on localhost.
+     The proxy will be autodeployed to $MULE_HOME/apps.
   
   Refer to http://code.google.com/p/legstar-mule/wiki/InstallInstructions
   for details on the installation process.

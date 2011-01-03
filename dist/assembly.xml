@@ -89,7 +89,7 @@ Assembly descriptor for the full distribution.
             <directory>../legstar-mulegen-jvmquery/src/test/java</directory>
             <outputDirectory>samples/mule/quickstarts/legstar_proxy/src</outputDirectory>
             <includes>
-                <include>**/*.java</include>
+                <include>**/JvmqueryHttpClientTest.java</include>
             </includes>
         </fileSet>
         <!-- Set of test parameters -->

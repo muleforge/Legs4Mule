@@ -13,6 +13,22 @@
     <description>Sample Proxy for POJO JVMQuery over HTTP</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.4.2</version>
+                <configuration>
+                    <skipTests>${no-mainframe-available}</skipTests>
+                    <excludes> 
+                        <exclude>**/JvmqueryHttpClientTest.java</exclude> 
+                    </excludes> 
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
 
         <!-- LegStar for Mule transport -->    
