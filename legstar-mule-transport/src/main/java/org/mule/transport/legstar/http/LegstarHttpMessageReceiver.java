@@ -11,6 +11,7 @@
 package org.mule.transport.legstar.http;
 
 import org.mule.transport.http.HttpMessageReceiver;
+import org.mule.api.construct.FlowConstruct;
 import org.mule.api.endpoint.InboundEndpoint;
 import org.mule.api.lifecycle.CreateException;
 import org.mule.api.service.Service;
@@ -36,5 +37,18 @@ public class LegstarHttpMessageReceiver extends HttpMessageReceiver {
         super(connector, service, endpoint);
     }
 
+    /**
+     * Constructs a message receiver for a component.
+     * @param connector the Mule connector
+     * @param flowConstruct the Mule flow 
+     * @param endpoint the Mule endpoint
+     * @throws CreateException if construction fails
+     */
+    public LegstarHttpMessageReceiver(
+            final Connector connector,
+            final FlowConstruct flowConstruct,
+            final InboundEndpoint endpoint) throws CreateException {
+        super(connector, flowConstruct, endpoint);
+    }
 }
 

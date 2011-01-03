@@ -2,6 +2,7 @@
 <!--
     This Mule configuration implements a proxy service for a mainframe program.
     Transport from mainframe to proxy is JMS/WebSphere MQ.
+    Uses Services instead of Flows because of: http://www.mulesoft.org/jira/browse/MULE-5307
 -->
 <mule xmlns="http://www.mulesoft.org/schema/mule/core"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -25,29 +26,30 @@
         disableTemporaryReplyToDestinations="true"
         numberOfConsumers="1" />
 
+    <!-- Transform mainframe data to Java object -->
+    <legstar:host-to-java-transformer name="queryJvmHostToJava"
+        class="org.mule.transport.legstar.test.jvmquery.HostToJvmQueryRequestMuleTransformer" />
+
+    <!-- Transform Java object to mainframe data -->
+    <legstar:java-to-host-transformer name="queryJvmJavaToHost"
+        class="org.mule.transport.legstar.test.jvmquery.JvmQueryReplyToHostMuleTransformer" />
+
+    <!-- Add a JMS property to specify a WMQ response type -->
+    <message-properties-transformer name="SetMQMTReplyType">
+        <add-message-property key="JMS_IBM_MsgType" value="2"/>
+    </message-properties-transformer>
+
     <jms:endpoint name="MainframeRequestEndpoint" exchange-pattern="request-response"
          queue="JVMQUERY.POJO.REQUEST.QUEUE" />
 
     <model name="jvmqueryModel">
-
-        <service name="queryJvmProxyService">
+        <service name="queryJvmProxy">
             <inbound>
-                <inbound-endpoint ref="MainframeRequestEndpoint">
-                    <jms:jmsmessage-to-object-transformer />
-                    <legstar:host-to-java-transformer
-                        class="org.mule.transport.legstar.test.jvmquery.HostToJvmQueryRequestMuleTransformer" />
-                    <response>
-                        <legstar:java-to-host-transformer
-                            class="org.mule.transport.legstar.test.jvmquery.JvmQueryReplyToHostMuleTransformer" />
-                        <message-properties-transformer>
-                            <add-message-property key="JMS_IBM_MsgType" value="2"/>
-                        </message-properties-transformer>
-                        <jms:object-to-jmsmessage-transformer />
-                    </response>
-                </inbound-endpoint>
+                <inbound-endpoint ref="MainframeRequestEndpoint"
+                    transformer-refs="queryJvmHostToJava"
+                    responseTransformer-refs="queryJvmJavaToHost SetMQMTReplyType"/>
             </inbound>
             <component class="com.legstar.xsdc.test.cases.jvmquery.JVMQuery"/>
         </service>
-
     </model>
 </mule>
