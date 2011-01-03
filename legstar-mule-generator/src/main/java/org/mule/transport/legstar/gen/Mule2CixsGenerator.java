@@ -75,7 +75,10 @@ public class Mule2CixsGenerator extends AbstractCixsMuleGenerator {
         File componentConfFilesDir = getTargetMuleConfigDir();
 
         generateAdapterConfigXml(
-                getCixsMuleComponent(), parameters, componentConfFilesDir,
+                getCixsMuleComponent(),
+                parameters,
+                componentConfFilesDir,
+                getSampleConfigurationFileName(),
                 getSampleConfigurationTransportInternal(),
                 getSampleConfigurationPayloadTypeInternal(),
                 getSampleConfigurationHostMessagingTypeInternal());

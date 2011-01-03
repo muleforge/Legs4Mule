@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
-import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.codegen.CodeGenUtil;
@@ -26,7 +25,7 @@ import com.legstar.codegen.CodeGenUtil;
 public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
 
     /** Generator instance. */
-    private Mule2CixsGenerator mGenerator;
+    private Mule2CixsGenerator _generator;
     
     /** True when references should be created. */
     private static final boolean CREATE_REFERENCES = false;
@@ -34,8 +33,8 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     /** @{inheritDoc}*/
     public void setUp() {
         emptyDir(GEN_DIR);
-        mGenerator = new Mule2CixsGenerator();
-        mGenerator.init();
+        _generator = new Mule2CixsGenerator();
+        _generator.init();
         setCreateReferences(CREATE_REFERENCES);
     }
 
@@ -45,17 +44,17 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
      * @param muleComponent the service
      */
     private void initCixsMuleComponent(final CixsMuleComponent muleComponent) {
-        mGenerator.setCixsMuleComponent(muleComponent);
-        mGenerator.setTargetAntDir(GEN_ANT_DIR);
-        mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
-        mGenerator.setTargetSrcDir(GEN_SRC_DIR);
-        mGenerator.setTargetDistDir(GEN_DIST_DIR);
-        mGenerator.setTargetJarDir(GEN_JAR_DIR);
-        mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
-        mGenerator.setTargetBinDir(GEN_BIN_DIR);
-        mGenerator.setHostCharset(HOSTCHARSET);
-        mGenerator.getHttpTransportParameters().setHost("mainframe");
-        mGenerator.getHttpTransportParameters().setPort(4081);
+        _generator.setCixsMuleComponent(muleComponent);
+        _generator.setTargetAntDir(GEN_ANT_DIR);
+        _generator.setTargetMuleConfigDir(GEN_CONF_DIR);
+        _generator.setTargetSrcDir(GEN_SRC_DIR);
+        _generator.setTargetDistDir(GEN_DIST_DIR);
+        _generator.setTargetJarDir(GEN_JAR_DIR);
+        _generator.setJaxbBinDir(JAXB_BIN_DIR);
+        _generator.setTargetBinDir(GEN_BIN_DIR);
+        _generator.setHostCharset(HOSTCHARSET);
+        _generator.getHttpTransportParameters().setHost("mainframe");
+        _generator.getHttpTransportParameters().setPort(4081);
 
         /* We want to share expected results with XmlTemplatesTest */
         List < String > pathElements = new ArrayList < String >();
@@ -157,11 +156,10 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     public final void testLsfileaeGenerateClasses() throws Exception {
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         initCixsMuleComponent(muleComponent);
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
-        mGenerator.setSampleConfigurationPayloadType("XML");
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.XML);
+        generateAndCheck();
+        
+        _generator.setSampleConfigurationPayloadType("XML");
+        generateAndCheck();
     }
 
     /**
@@ -171,8 +169,7 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     public final void testLsfilealGenerateClasses() throws Exception {
         CixsMuleComponent muleComponent = Samples.getLsfilealMuleComponent();
         initCixsMuleComponent(muleComponent);
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
+        generateAndCheck();
     }
 
     /**
@@ -182,8 +179,7 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     public final void testLsfileacGenerateClasses() throws Exception {
         CixsMuleComponent muleComponent = Samples.getLsfileacMuleComponent();
         initCixsMuleComponent(muleComponent);
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
+        generateAndCheck();
     }
 
 
@@ -194,8 +190,7 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     public final void testLsfileaxGenerateClasses() throws Exception {
         CixsMuleComponent muleComponent = Samples.getLsfileaxMuleComponent();
         initCixsMuleComponent(muleComponent);
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
+        generateAndCheck();
     }
 
     /**
@@ -205,70 +200,76 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
     public final void testLsfileaxGenerateXMLClasses() throws Exception {
         CixsMuleComponent muleComponent = Samples.getLsfileaxMuleComponent();
         initCixsMuleComponent(muleComponent);
-        mGenerator.setSampleConfigurationPayloadType("XML");
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.XML);
+        _generator.setSampleConfigurationPayloadType("XML");
+        generateAndCheck();
+    }
+
+    /**
+     * Generate artifacts and check results.
+     * @throws Exception if something goes wrong
+     */
+    public void generateAndCheck() throws Exception {
+    	_generator.getAntModel().setSampleConfigurationFileName(
+				getAdapterConfigurationFileName(
+						_generator.getAntModel().getCixsMuleComponent().getName(),
+						_generator.getAntModel().getSampleConfigurationTransport(),
+						_generator.getAntModel().getSampleConfigurationPayloadType(),
+						_generator.getAntModel().getSampleConfigurationHostMessagingType()));
+
+        _generator.execute();
+        checkResults();
     }
 
     /**
      * Check that all expected artifacts are generated.
-     * @param muleComponent the service model
-     * @param sampleConfigurationPayloadType sample payload type
      */
-    private void checkResults(
-            final CixsMuleComponent muleComponent,
-            final SampleConfigurationPayloadType sampleConfigurationPayloadType) {
+    private void checkResults() {
         
-        compare(mGenerator.getTargetAntDir(),
-                "build-jar.xml", muleComponent.getName());
-        compare(mGenerator.getTargetAntDir(),
-                "deploy.xml", muleComponent.getName());
+        String componentName = _generator.getAntModel().getCixsMuleComponent().getName();
         
-        String congFileName = AbstractCixsMuleGenerator.getAdapterConfigurationFileName(
-                muleComponent.getName(),
-                mGenerator.getSampleConfigurationTransportInternal(),
-                sampleConfigurationPayloadType,
-                mGenerator.getSampleConfigurationHostMessagingTypeInternal());
-        compare(mGenerator.getTargetMuleConfigDir(),
-                congFileName,
-                muleComponent.getName());
+    	compare(_generator.getTargetAntDir(),
+                "build-jar.xml", componentName);
+        compare(_generator.getTargetAntDir(),
+                "deploy.xml", componentName);
         
-        for (CixsOperation operation : muleComponent.getCixsOperations()) {
+        compare(_generator.getTargetMuleConfigDir(),
+        		_generator.getAntModel().getSampleConfigurationFileName(),
+                componentName);
+        
+        for (CixsOperation operation : _generator.getAntModel().getCixsMuleComponent().getCixsOperations()) {
             
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
-                    mGenerator.getTargetSrcDir(), operation.getPackageName(), false);
+                    _generator.getTargetSrcDir(), operation.getPackageName(), false);
             
-            switch (sampleConfigurationPayloadType) {
+            switch (_generator.getAntModel().getSampleConfigurationPayloadType()) {
             case JAVA:
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getRequestHolderType()
-                        + "MuleTransformer.java", muleComponent.getName());
+                        + "MuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getRequestHolderType()
-                        + "ToHostMuleTransformer.java", muleComponent.getName());
+                        + "ToHostMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getResponseHolderType()
-                        + "MuleTransformer.java", muleComponent.getName());
+                        + "MuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getResponseHolderType()
-                        + "ToHostMuleTransformer.java", muleComponent.getName());
+                        + "ToHostMuleTransformer.java", componentName);
 
                 break;
             case XML:
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getRequestHolderType()
-                        + "XmlMuleTransformer.java", muleComponent.getName());
+                        + "XmlMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getRequestHolderType()
-                        + "XmlToHostMuleTransformer.java", muleComponent
-                        .getName());
+                        + "XmlToHostMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getResponseHolderType()
-                        + "XmlMuleTransformer.java", muleComponent.getName());
+                        + "XmlMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getResponseHolderType()
-                        + "XmlToHostMuleTransformer.java", muleComponent
-                        .getName());
+                        + "XmlToHostMuleTransformer.java", componentName);
                 break;
             default:
                 break;

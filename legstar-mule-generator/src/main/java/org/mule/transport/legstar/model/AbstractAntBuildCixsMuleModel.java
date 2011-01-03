@@ -34,6 +34,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
 
     public static final SampleConfigurationPayloadType DEFAULT_SAMPLE_CONFIGURATION_PAYLOAD_TYPE = SampleConfigurationPayloadType.JAVA;
 
+    public static final String DEFAULT_SAMPLE_CONFIGURATION_FILE_NAME = "mule-config.xml";
+
     /* ====================================================================== */
     /* Following are key identifiers for this model persistence.            = */
     /* ====================================================================== */
@@ -58,6 +60,9 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
 
     /** Payload type (serialized java object or XML) for samples. */
     public static final String SAMPLE_CONFIGURATION_PAYLOAD_TYPE = "sampleConfigurationPayloadType";
+
+    /** The sample configuration file name. */
+    public static final String SAMPLE_CONFIGURATION_FILE_NAME = "sampleConfigurationFileName";
 
     /* ====================================================================== */
     /* Following are this class fields that are persistent.                 = */
@@ -92,8 +97,11 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /** The payload type (serialized java object or XML) for samples. */
     private SampleConfigurationPayloadType _sampleConfigurationPayloadType =
         DEFAULT_SAMPLE_CONFIGURATION_PAYLOAD_TYPE;
+    
+    /** The sample configuration file name. */
+    private String _sampleConfigurationFileName = DEFAULT_SAMPLE_CONFIGURATION_FILE_NAME;
 
-    /**
+	/**
      * Construct the model with a generator name and velocity template.
      * @param generatorName to designate the generator
      * @param vlcTemplate a velocity template that accepts this model
@@ -128,6 +136,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
                 DEFAULT_SAMPLE_CONFIGURATION_HOST_MESSAGING_TYPE.toString()));
         setSampleConfigurationPayloadType(getString(props, SAMPLE_CONFIGURATION_PAYLOAD_TYPE,
                 DEFAULT_SAMPLE_CONFIGURATION_PAYLOAD_TYPE.toString()));
+        setSampleConfigurationFileName(getString(props, SAMPLE_CONFIGURATION_FILE_NAME,
+                DEFAULT_SAMPLE_CONFIGURATION_FILE_NAME));
         setCixsMuleComponent(new CixsMuleComponent(props));
     }
     
@@ -357,6 +367,21 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     }
 
     /**
+     * @return the sample configuration file name
+     */
+    public String getSampleConfigurationFileName() {
+		return _sampleConfigurationFileName;
+	}
+
+	/**
+	 * @param sampleConfigurationFileName sample configuration file name
+	 */
+	public void setSampleConfigurationFileName(
+			final String sampleConfigurationFileName) {
+		_sampleConfigurationFileName = sampleConfigurationFileName;
+	}
+
+    /**
      * @return a properties file holding the values of this object fields
      */
     public Properties toProperties() {
@@ -373,6 +398,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
                 getSampleConfigurationHostMessagingType().toString());
         putString(props, SAMPLE_CONFIGURATION_PAYLOAD_TYPE,
                 getSampleConfigurationPayloadType().toString());
+        putString(props, SAMPLE_CONFIGURATION_FILE_NAME,
+                getSampleConfigurationFileName());
         return props;
     }
 }

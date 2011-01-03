@@ -72,7 +72,6 @@ public class AntBuildCixs2MuleModelTest extends AbstractAntBuildCixsMuleModelTes
         getAntModel().getWmqTransportParameters().setReplyQueue(
                 "JVMQUERY.POJO.REPLY.QUEUE");
 
-       
         processAnt("generate.xml");
     }
 
@@ -88,6 +87,7 @@ public class AntBuildCixs2MuleModelTest extends AbstractAntBuildCixsMuleModelTes
         
         getAntModel().getUmoComponentTargetParameters().setImplementationName(
                 "com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
+        
     }
 
     /**
@@ -97,5 +97,19 @@ public class AntBuildCixs2MuleModelTest extends AbstractAntBuildCixsMuleModelTes
     public AntBuildCixs2MuleModel getAntModel() {
 		return (AntBuildCixs2MuleModel) super.getAntModel();
 	}
+
+    /**
+     * Generate the ant script, check it and run it.
+     * @param antName the generated and script name
+     * @throws Exception if something goes wrong
+     */
+    public void processAnt(final String antName) throws Exception {
+        getAntModel().setSampleConfigurationFileName(
+        		getProxyConfigurationFileName(
+        				getAntModel().getCixsMuleComponent().getName(),
+        				getAntModel().getSampleConfigurationTransport()));
+
+        super.processAnt(antName);
+    }
 
 }

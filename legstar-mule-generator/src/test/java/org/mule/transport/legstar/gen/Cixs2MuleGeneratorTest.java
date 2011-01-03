@@ -13,7 +13,6 @@ package org.mule.transport.legstar.gen;
 import java.io.File;
 
 import org.mule.transport.legstar.model.CixsMuleComponent;
-import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 
 import com.legstar.cixs.gen.model.CixsOperation;
 import com.legstar.cixs.gen.model.options.WmqTransportParameters;
@@ -25,7 +24,7 @@ import com.legstar.codegen.CodeGenUtil;
 public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
 
     /** Generator instance. */
-    private Cixs2MuleGenerator mGenerator;
+    private Cixs2MuleGenerator _generator;
 
     /** True when references should be created. */
     private static final boolean CREATE_REFERENCES = false;
@@ -33,8 +32,8 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
     /** @{inheritDoc}*/
     public void setUp() {
         emptyDir(GEN_DIR);
-        mGenerator = new Cixs2MuleGenerator();
-        mGenerator.init();
+        _generator = new Cixs2MuleGenerator();
+        _generator.init();
         setCreateReferences(CREATE_REFERENCES);
     }
 
@@ -44,20 +43,20 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
      * @param muleComponent the service
      */
     private void initCixsMuleComponent(final CixsMuleComponent muleComponent) {
-        mGenerator.setCixsMuleComponent(muleComponent);
-        mGenerator.setTargetAntDir(GEN_ANT_DIR);
-        mGenerator.setTargetMuleConfigDir(GEN_CONF_DIR);
-        mGenerator.setTargetSrcDir(GEN_SRC_DIR);
-        mGenerator.setTargetDistDir(GEN_DIST_DIR);
-        mGenerator.setTargetJarDir(GEN_JAR_DIR);
-        mGenerator.setJaxbBinDir(JAXB_BIN_DIR);
-        mGenerator.setCoxbBinDir(COXB_BIN_DIR);
-        mGenerator.setTargetBinDir(GEN_BIN_DIR);
-        mGenerator.setCustBinDir(CUST_BIN_DIR);
-        mGenerator.setTargetCobolDir(GEN_COBOL_DIR);
-        mGenerator.setHostCharset(HOSTCHARSET);
+        _generator.setCixsMuleComponent(muleComponent);
+        _generator.setTargetAntDir(GEN_ANT_DIR);
+        _generator.setTargetMuleConfigDir(GEN_CONF_DIR);
+        _generator.setTargetSrcDir(GEN_SRC_DIR);
+        _generator.setTargetDistDir(GEN_DIST_DIR);
+        _generator.setTargetJarDir(GEN_JAR_DIR);
+        _generator.setJaxbBinDir(JAXB_BIN_DIR);
+        _generator.setCoxbBinDir(COXB_BIN_DIR);
+        _generator.setTargetBinDir(GEN_BIN_DIR);
+        _generator.setCustBinDir(CUST_BIN_DIR);
+        _generator.setTargetCobolDir(GEN_COBOL_DIR);
+        _generator.setHostCharset(HOSTCHARSET);
         
-        mGenerator.getUmoComponentTargetParameters().setImplementationName(
+        _generator.getUmoComponentTargetParameters().setImplementationName(
                 "com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
     }
 
@@ -203,12 +202,11 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         initCixsMuleComponent(muleComponent);
         
-        mGenerator.setSampleConfigurationTransport("http");
-        mGenerator.getHttpTransportParameters().setHost("megamouss");
-        mGenerator.getHttpTransportParameters().setPort(8083);
+        _generator.setSampleConfigurationTransport("http");
+        _generator.getHttpTransportParameters().setHost("megamouss");
+        _generator.getHttpTransportParameters().setPort(8083);
 
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
+        generateAndCheck();
     }
 
     /**
@@ -219,20 +217,33 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getJvmQueryMuleComponent();
         initCixsMuleComponent(muleComponent);
 
-        mGenerator.setSampleConfigurationTransport("wmq");
-        mGenerator.getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
-        mGenerator.getWmqTransportParameters().setJndiUrl(
+        _generator.setSampleConfigurationTransport("wmq");
+        _generator.getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
+        _generator.getWmqTransportParameters().setJndiUrl(
                 WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
-        mGenerator.getWmqTransportParameters().setJndiContextFactory(
+        _generator.getWmqTransportParameters().setJndiContextFactory(
                 WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
-        mGenerator.getWmqTransportParameters().setZosQueueManager("CSQ1");
-        mGenerator.getWmqTransportParameters().setRequestQueue(
+        _generator.getWmqTransportParameters().setZosQueueManager("CSQ1");
+        _generator.getWmqTransportParameters().setRequestQueue(
                 "JVMQUERY.POJO.REQUEST.QUEUE");
-        mGenerator.getWmqTransportParameters().setReplyQueue(
+        _generator.getWmqTransportParameters().setReplyQueue(
                 "JVMQUERY.POJO.REPLY.QUEUE");
 
-        mGenerator.execute();
-        checkResults(muleComponent, SampleConfigurationPayloadType.JAVA);
+        generateAndCheck();
+    }
+
+    /**
+     * Generate artifacts and check results.
+     * @throws Exception if something goes wrong
+     */
+    public void generateAndCheck() throws Exception {
+    	_generator.getAntModel().setSampleConfigurationFileName(
+				getProxyConfigurationFileName(
+						_generator.getAntModel().getCixsMuleComponent().getName(),
+						_generator.getAntModel().getSampleConfigurationTransport()));
+
+        _generator.execute();
+        checkResults();
     }
 
     /**
@@ -241,72 +252,67 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
      * @param sampleConfigurationPayloadType sample payload type
      * @throws Exception if check fails
      */
-    private void checkResults(
-            final CixsMuleComponent muleComponent,
-            final SampleConfigurationPayloadType sampleConfigurationPayloadType) throws Exception {
+    private void checkResults() throws Exception {
 
-        compare(mGenerator.getTargetAntDir(),
-                "build-jar.xml", muleComponent.getName());
-        compare(mGenerator.getTargetAntDir(),
-                "deploy.xml", muleComponent.getName());
+        String componentName = _generator.getAntModel().getCixsMuleComponent().getName();
 
-        String congFileName = AbstractCixsMuleGenerator.getProxyConfigurationFileName(
-                muleComponent.getName(),
-                mGenerator.getSampleConfigurationTransportInternal());
-        compare(mGenerator.getTargetMuleConfigDir(),
-                congFileName,
-                muleComponent.getName());
+        compare(_generator.getTargetAntDir(),
+                "build-jar.xml", componentName);
+        compare(_generator.getTargetAntDir(),
+                "deploy.xml", componentName);
 
-        for (CixsOperation operation : muleComponent.getCixsOperations()) {
+        compare(_generator.getTargetMuleConfigDir(),
+        		_generator.getAntModel().getSampleConfigurationFileName(),
+                componentName);
+
+        for (CixsOperation operation : _generator.getAntModel().getCixsMuleComponent().getCixsOperations()) {
             File operationClassFilesDir = CodeGenUtil.classFilesLocation(
-                    mGenerator.getTargetSrcDir(), operation.getPackageName(), true);
+                    _generator.getTargetSrcDir(), operation.getPackageName(), true);
 
-            switch (sampleConfigurationPayloadType) {
+            switch (_generator.getAntModel().getSampleConfigurationPayloadType()) {
             case JAVA:
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getRequestHolderType()
-                        + "MuleTransformer.java", muleComponent.getName());
+                        + "MuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getRequestHolderType()
-                        + "ToHostMuleTransformer.java", muleComponent.getName());
+                        + "ToHostMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getResponseHolderType()
-                        + "MuleTransformer.java", muleComponent.getName());
+                        + "MuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getResponseHolderType()
-                        + "ToHostMuleTransformer.java", muleComponent.getName());
+                        + "ToHostMuleTransformer.java", componentName);
 
                 break;
             case XML:
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getRequestHolderType()
-                        + "XmlMuleTransformer.java", muleComponent.getName());
+                        + "XmlMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getRequestHolderType()
-                        + "XmlToHostMuleTransformer.java", muleComponent
-                        .getName());
+                        + "XmlToHostMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, "HostTo"
                         + operation.getResponseHolderType()
-                        + "XmlMuleTransformer.java", muleComponent.getName());
+                        + "XmlMuleTransformer.java", componentName);
                 compare(operationClassFilesDir, operation
                         .getResponseHolderType()
-                        + "XmlToHostMuleTransformer.java", muleComponent
-                        .getName());
+                        + "XmlToHostMuleTransformer.java", componentName);
                 break;
             default:
                 break;
             }
 
             String expectedCobolRes = "";
-            if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("http")) {
+            if (_generator.getSampleConfigurationTransport().equalsIgnoreCase("http")) {
                 expectedCobolRes = getSource(
-                        "/org/mule/transport/legstar/gen/" + muleComponent.getName() + '/'
+                        "/org/mule/transport/legstar/gen/" + componentName + '/'
                         + operation.getCicsProgramName()
                         + "-DFHWBCLI.cbl.txt");
             }
-            if (mGenerator.getSampleConfigurationTransport().equalsIgnoreCase("wmq")) {
+            if (_generator.getSampleConfigurationTransport().equalsIgnoreCase("wmq")) {
                 expectedCobolRes = getSource(
-                        "/org/mule/transport/legstar/gen/" + muleComponent.getName() + '/'
+                        "/org/mule/transport/legstar/gen/" + componentName + '/'
                         + operation.getCicsProgramName()
                         + "-MQ.cbl.txt");
             }

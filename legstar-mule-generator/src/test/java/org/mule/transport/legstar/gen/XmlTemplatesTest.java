@@ -114,7 +114,10 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
                 GEN_CONF_DIR, muleComponent.getName());
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
         String fileName = AbstractCixsMuleGenerator.generateAdapterConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir,
+                muleComponent,
+                getParameters(),
+                componentConfFilesDir,
+                getAdapterConfigurationFileName(muleComponent.getName(), transport, payload, messaging),
                 transport,
                 payload,
                 messaging);
@@ -153,7 +156,10 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
                 GEN_CONF_DIR, muleComponent.getName());
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
         String fileName = AbstractCixsMuleGenerator.generateProxyConfigXml(
-                muleComponent, getParameters(), componentConfFilesDir,
+                muleComponent,
+                getParameters(),
+                componentConfFilesDir,
+                getProxyConfigurationFileName(muleComponent.getName(), transport),
                 transport);
 
         compare(componentConfFilesDir, fileName, muleComponent.getName());

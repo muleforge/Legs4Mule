@@ -310,6 +310,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentConfFilesDir where to store the generated file
+     * @param sampleConfigurationFileName the configuration file name
      * @param transport the type of transport selected for the sample configuration
      * @param payloadType whether the sample configuration is for java or XML payloads
      * @param messagingType the type of messaging expected by the mainframe
@@ -320,13 +321,11 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentConfFilesDir,
+            final String sampleConfigurationFileName,
             final SampleConfigurationTransport transport,
             final SampleConfigurationPayloadType payloadType,
             final SampleConfigurationHostMessagingType messagingType)
     throws CodeGenMakeException {
-
-        String fileName = getAdapterConfigurationFileName(component.getName(),
-                transport, payloadType, messagingType);
 
         parameters.put("sampleConfigurationTransport",
                 transport.toString().toLowerCase(Locale.getDefault()));
@@ -341,37 +340,17 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                 component,
                 parameters,
                 componentConfFilesDir,
-                fileName);
+                sampleConfigurationFileName);
 
-        return fileName;
+        return sampleConfigurationFileName;
     }
     
-    /**
-     * Create an adapter configuration file name that is as descriptive as possible.
-     * @param componentName the generated service
-     * @param transport the sample transport
-     * @param payloadType the payload type
-     * @param messagingType the sample host messaging
-     * @return a file name
-     */
-    public static String getAdapterConfigurationFileName(
-            final String componentName,
-            final SampleConfigurationTransport transport,
-            final SampleConfigurationPayloadType payloadType,
-            final SampleConfigurationHostMessagingType messagingType) {
-
-        return "mule-adapter-config-" + componentName
-        + '-' + transport.toString().toLowerCase(Locale.getDefault())
-        + '-' + payloadType.toString().toLowerCase(Locale.getDefault())
-        + '-' + messagingType.toString().toLowerCase(Locale.getDefault())
-        + ".xml";
-    }
-
     /**
      * Create the Mule proxy configuration XML file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentConfFilesDir where to store the generated file
+     * @param sampleConfigurationFileName the configuration file name
      * @param transport the type of transport selected for the sample configuration
      * @return the generated file name
      * @throws CodeGenMakeException if generation fails
@@ -380,11 +359,9 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentConfFilesDir,
+            final String sampleConfigurationFileName,
             final SampleConfigurationTransport transport)
     throws CodeGenMakeException {
-
-        String fileName = getProxyConfigurationFileName(component.getName(),
-                transport);
 
         parameters.put("sampleConfigurationTransport",
                 transport.toString().toLowerCase(Locale.getDefault()));
@@ -395,24 +372,9 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
                 component,
                 parameters,
                 componentConfFilesDir,
-                fileName);
+                sampleConfigurationFileName);
         
-        return fileName;
-    }
-
-    /**
-     * Create a proxy configuration file name that is as descriptive as possible.
-     * @param componentName the generated service
-     * @param transport the sample transport
-     * @return a file name
-     */
-    public static String getProxyConfigurationFileName(
-            final String componentName,
-            final SampleConfigurationTransport transport) {
-
-        return "mule-proxy-config-" + componentName
-        + '-' + transport.toString().toLowerCase(Locale.getDefault())
-        + ".xml";
+        return sampleConfigurationFileName;
     }
 
     /**
@@ -890,6 +852,21 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
 			final String sampleConfigurationPayloadType) {
 		setSampleConfigurationPayloadTypeInternal(SampleConfigurationPayloadType
 				.valueOf(sampleConfigurationPayloadType));
+	}
+
+    /**
+     * @return the sample configuration file name
+     */
+    public String getSampleConfigurationFileName() {
+		return getAntModel().getSampleConfigurationFileName();
+	}
+
+	/**
+	 * @param sampleConfigurationFileName sample configuration file name
+	 */
+	public void setSampleConfigurationFileName(
+			final String sampleConfigurationFileName) {
+		getAntModel().setSampleConfigurationFileName(sampleConfigurationFileName);
 	}
 
 }

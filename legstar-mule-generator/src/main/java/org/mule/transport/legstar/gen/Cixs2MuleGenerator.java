@@ -83,7 +83,10 @@ public class Cixs2MuleGenerator extends AbstractCixsMuleGenerator {
         
         /* Produce sample configurations  */
         generateProxyConfigXml(
-                getCixsMuleComponent(), parameters, componentConfFilesDir,
+                getCixsMuleComponent(),
+                parameters,
+                componentConfFilesDir,
+                getSampleConfigurationFileName(),
                 getSampleConfigurationTransportInternal());
         
         for (CixsOperation operation : getCixsMuleComponent().getCixsOperations()) {

@@ -15,11 +15,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
+import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
 import com.legstar.cixs.gen.ant.CixsHelper;
 import com.legstar.codegen.CodeGenHelper;
@@ -197,6 +201,52 @@ public class AbstractTestTemplate extends TestCase {
         }
 
     }
+
+	/**
+	 * Create an adapter configuration file name that is as descriptive as
+	 * possible.
+	 * 
+	 * @param componentName
+	 *            the generated service
+	 * @param transport
+	 *            the sample transport
+	 * @param payloadType
+	 *            the payload type
+	 * @param messagingType
+	 *            the sample host messaging
+	 * @return a file name
+	 */
+	public static String getAdapterConfigurationFileName(
+			final String componentName,
+			final SampleConfigurationTransport transport,
+			final SampleConfigurationPayloadType payloadType,
+			final SampleConfigurationHostMessagingType messagingType) {
+
+		return "mule-adapter-config-" + componentName + '-'
+				+ transport.toString().toLowerCase(Locale.getDefault()) + '-'
+				+ payloadType.toString().toLowerCase(Locale.getDefault()) + '-'
+				+ messagingType.toString().toLowerCase(Locale.getDefault())
+				+ ".xml";
+	}
+
+	/**
+	 * Create a proxy configuration file name that is as descriptive as
+	 * possible.
+	 * 
+	 * @param componentName
+	 *            the generated service
+	 * @param transport
+	 *            the sample transport
+	 * @return a file name
+	 */
+	public static String getProxyConfigurationFileName(
+			final String componentName,
+			final SampleConfigurationTransport transport) {
+
+		return "mule-proxy-config-" + componentName + '-'
+				+ transport.toString().toLowerCase(Locale.getDefault())
+				+ ".xml";
+	}
 
     /**
      * Reads a generated artifact and compares its content to a reference file.

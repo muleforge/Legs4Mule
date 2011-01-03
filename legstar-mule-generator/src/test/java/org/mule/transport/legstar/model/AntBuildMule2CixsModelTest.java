@@ -172,5 +172,22 @@ public class AntBuildMule2CixsModelTest extends AbstractAntBuildCixsMuleModelTes
         getAntModel().setSampleConfigurationPayloadType(SampleConfigurationPayloadType.XML);
         processAnt("generate-xml.xml");
     }
+    
+    /**
+     * Generate the ant script, check it and run it.
+     * @param antName the generated and script name
+     * @throws Exception if something goes wrong
+     */
+    public void processAnt(final String antName) throws Exception {
+		getAntModel().setSampleConfigurationFileName(
+				getAdapterConfigurationFileName(
+						getAntModel().getCixsMuleComponent().getName(),
+						getAntModel().getSampleConfigurationTransport(),
+						getAntModel().getSampleConfigurationPayloadType(),
+						getAntModel().getSampleConfigurationHostMessagingType()));
+
+        super.processAnt(antName);
+    }
+
 
 }

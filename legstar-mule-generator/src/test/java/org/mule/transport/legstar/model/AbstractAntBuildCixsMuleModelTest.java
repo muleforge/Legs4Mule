@@ -109,6 +109,7 @@ public abstract class AbstractAntBuildCixsMuleModelTest extends AbstractTestTemp
          * use the placeholder to get this generator classes to supersede the ones
          * that come from the LEGSTAR_HOME location. */
         _antModel.setCustBinDir(new File("../legstar-mule-generator/target/classes"));
+        
     }
 
     /**
