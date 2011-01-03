@@ -35,7 +35,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     /** @{inheritDoc}*/
     public void setUp() {
         super.setUp();
-        getParameters().put("targetJarDir", GEN_JAR_DIR.getPath());
+        getParameters().put("targetAppsDir", GEN_APPS_DIR.getPath());
         getParameters().put("jaxbBinDir", JAXB_BIN_DIR.getPath());
         getParameters().put("coxbBinDir", COXB_BIN_DIR.getPath());
         getParameters().put("targetBinDir", GEN_BIN_DIR.getPath());

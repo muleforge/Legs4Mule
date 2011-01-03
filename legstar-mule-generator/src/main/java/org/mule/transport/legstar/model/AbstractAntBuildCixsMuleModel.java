@@ -49,8 +49,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /** Target directory where Mule configuration files will be created. */
     public static final String TARGET_MULE_CONFIG_DIR = "targetMuleConfigDir";
 
-    /** Target location for mule jar files. */
-    public static final String TARGET_JAR_DIR = "targetJarDir";
+    /** Target location for mule deployment archives. */
+    public static final String TARGET_APPS_DIR = "targetAppsDir";
 
     /** Transports supported by generated service configuration samples. */
     public static final String SAMPLE_CONFIGURATION_TRANSPORT = "sampleConfigurationTransport";
@@ -78,8 +78,8 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     /** The target directory where Mule configuration files will be created. */
     private File _targetMuleConfigDir;
     
-    /** The target location for mule jar files. */
-    private File _targetJarDir;
+    /** The target location for mule deployment archives. */
+    private File _targetAppsDir;
     
     /** The transports supported by generated service configuration samples. */
     private SampleConfigurationTransport _sampleConfigurationTransport = DEFAULT_SAMPLE_CONFIGURATION_TRANSPORT;
@@ -127,7 +127,7 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
         setMuleHome(getString(props, MULE_HOME, null));
         setMulegenProductLocation(getString(props, MULEGEN_PRODUCT_LOCATION, null));
         setTargetMuleConfigDir(getFile(props, TARGET_MULE_CONFIG_DIR, null));
-        setTargetJarDir(getFile(props, TARGET_JAR_DIR, null));
+        setTargetAppsDir(getFile(props, TARGET_APPS_DIR, null));
         setSampleConfigurationTransport(getString(props, SAMPLE_CONFIGURATION_TRANSPORT,
                 DEFAULT_SAMPLE_CONFIGURATION_TRANSPORT.toString()));
         _httpTransportParameters = new HttpTransportParameters(props);
@@ -173,17 +173,17 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
     }
 
     /**
-     * @return the target location for mule jar files
+     * @return the target location for mule deployment archives
      */
-    public final File getTargetJarDir() {
-        return _targetJarDir;
+    public final File getTargetAppsDir() {
+        return _targetAppsDir;
     }
 
     /**
-     * @param targetJarDir the target location for mule jar files to set
+     * @param targetAppsDir the target location for mule deployment archives to set
      */
-    public final void setTargetJarDir(final File targetJarDir) {
-        _targetJarDir = targetJarDir;
+    public final void setTargetAppsDir(final File targetAppsDir) {
+        _targetAppsDir = targetAppsDir;
     }
 
     /**
@@ -389,7 +389,7 @@ public abstract class AbstractAntBuildCixsMuleModel extends AbstractAntBuildCixs
         putString(props, MULE_HOME, getMuleHome());
         putString(props, MULEGEN_PRODUCT_LOCATION, getMulegenProductLocation());
         putFile(props, TARGET_MULE_CONFIG_DIR, getTargetMuleConfigDir());
-        putFile(props, TARGET_JAR_DIR, getTargetJarDir());
+        putFile(props, TARGET_APPS_DIR, getTargetAppsDir());
         putString(props, SAMPLE_CONFIGURATION_TRANSPORT,
                 getSampleConfigurationTransport().toString());
         props.putAll(getHttpTransportParameters().toProperties());

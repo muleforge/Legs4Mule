@@ -101,7 +101,7 @@ public abstract class AbstractAntBuildCixsMuleModelTest extends AbstractTestTemp
         _antModel.setTargetBinDir(new File(_targetDir, "target/classes"));
         _antModel.setTargetDistDir(new File(_targetDir, "target/dist"));
         _antModel.setTargetMuleConfigDir(new File(_targetDir, "src/main/resources"));
-        _antModel.setTargetJarDir(new File("${mule.home}/lib/user"));
+        _antModel.setTargetAppsDir(new File("${mule.home}/apps"));
         _antModel.setTargetAntDir(new File(_targetDir, "ant"));
         CodeGenUtil.checkDirectory(_antModel.getTargetAntDir(), true);
         

@@ -1,20 +1,17 @@
 ##/////////////////////////////////////////////////////////////////////
-##Jaxws Component ANT deploy Template.
-##@author Fady
+##Mule Component ANT deploy Template.
 ##/////////////////////////////////////////////////////////////////////
 ##
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================================================
      Deploy a distribution archive to Mule server.
   -->
-<project basedir="${generateBaseDir}" default="deploy-jar" name="deploy-jar">
-    <target name="create-jar">
-        <ant antfile="${targetAntDir}/build-jar.xml"/>
+<project basedir="${generateBaseDir}" default="deploy-zip" name="deploy-zip">
+    <target name="create-zip">
+        <ant antfile="${targetAntDir}/build-zip.xml"/>
     </target>
-    <target name="deploy-jar" depends="create-jar">
-        <delete file="${targetJarDir}/legstar-${muleComponent.name}.jar"
-            includeEmptyDirs="true" quiet="true"/>
-        <copy file="${targetDistDir}/legstar-${muleComponent.name}.jar"
-            todir="${targetJarDir}"/>
+    <target name="deploy-zip" depends="create-zip">
+        <copy file="${targetDistDir}/legstar-${muleComponent.name}.zip"
+            todir="${targetAppsDir}" overwrite="true"/>
     </target>
 </project>

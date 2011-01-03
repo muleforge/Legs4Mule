@@ -58,8 +58,8 @@ public class AbstractTestTemplate extends TestCase {
     /** Web descriptors files will be generated here. */
     public static final File GEN_ANT_DIR = new File("target/src/gen/ant");
 
-    /** Reference to jar files location. */
-    public static final File GEN_JAR_DIR = new File("${env.MULE_HOME}/lib/user");
+    /** Reference to deployment archives location. */
+    public static final File GEN_APPS_DIR = new File("${env.MULE_HOME}/apps");
 
     /** Reference to binaries location. */
     public static final File GEN_BIN_DIR = new File("target/gen-classes");

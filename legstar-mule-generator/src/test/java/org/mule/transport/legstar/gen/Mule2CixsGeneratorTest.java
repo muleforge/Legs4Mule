@@ -49,7 +49,7 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
         _generator.setTargetMuleConfigDir(GEN_CONF_DIR);
         _generator.setTargetSrcDir(GEN_SRC_DIR);
         _generator.setTargetDistDir(GEN_DIST_DIR);
-        _generator.setTargetJarDir(GEN_JAR_DIR);
+        _generator.setTargetAppsDir(GEN_APPS_DIR);
         _generator.setJaxbBinDir(JAXB_BIN_DIR);
         _generator.setTargetBinDir(GEN_BIN_DIR);
         _generator.setHostCharset(HOSTCHARSET);
@@ -128,11 +128,11 @@ public class Mule2CixsGeneratorTest extends AbstractTestTemplate {
             generator.execute();
             fail();
         } catch (Exception e) {
-            assertEquals("TargetJarDir: No directory name was specified",
+            assertEquals("TargetAppsDir: No directory name was specified",
                     e.getMessage());
         }
         try {
-            generator.setTargetJarDir(GEN_JAR_DIR);
+            generator.setTargetAppsDir(GEN_APPS_DIR);
             generator.execute();
             fail();
         } catch (Exception e) {

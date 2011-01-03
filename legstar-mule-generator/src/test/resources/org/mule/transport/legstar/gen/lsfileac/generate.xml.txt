@@ -43,7 +43,7 @@
             targetMuleConfigDir="../legstar-mulegen-lsfileac/src/main/resources"
             targetDistDir="../legstar-mulegen-lsfileac/target/dist"
             targetAntDir="../legstar-mulegen-lsfileac/ant"
-            targetJarDir="${mule.home}/lib/user"
+            targetAppsDir="${mule.home}/apps"
             targetBinDir="../legstar-mulegen-lsfileac/target/classes"
             jaxbBinDir="../legstar-mulegen-lsfileac/target/classes"
             coxbBinDir="../legstar-mulegen-lsfileac/target/classes"

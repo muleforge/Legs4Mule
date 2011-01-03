@@ -512,9 +512,9 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
             throw (new IllegalArgumentException(
             "TargetBinDir: No directory name was specified"));
         }
-        if (getTargetJarDir() == null) {
+        if (getTargetAppsDir() == null) {
             throw (new IllegalArgumentException(
-            "TargetJarDir: No directory name was specified"));
+            "TargetAppsDir: No directory name was specified"));
         }
 
         /* Check that we have at least one operation. */
@@ -597,9 +597,9 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
      */
     private void addParameters(final Map < String, Object > parameters) {
         parameters.put("generateBaseDir", getGenerateBuildDir());
-        parameters.put("targetJarDir", getTargetJarDir());
-        parameters.put("targetMuleConfigDir", getTargetMuleConfigDir());
-        parameters.put("hostCharset", getHostCharset());
+        parameters.put(AbstractAntBuildCixsMuleModel.TARGET_APPS_DIR, getTargetAppsDir());
+        parameters.put(AbstractAntBuildCixsMuleModel.TARGET_MULE_CONFIG_DIR, getTargetMuleConfigDir());
+        parameters.put(AbstractAntBuildCixsMuleModel.HOST_CHARSET, getHostCharset());
 
         /* Add sample transport related parameters */
         switch(getSampleConfigurationTransportInternal()) {
@@ -657,17 +657,17 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * @return the target mule jar files location
+     * @return the target mule deployment archives location
      */
-    public final File getTargetJarDir() {
-        return getAntModel().getTargetJarDir();
+    public final File getTargetAppsDir() {
+        return getAntModel().getTargetAppsDir();
     }
 
     /**
-     * @param targetJarDir the target mule jar files location to set
+     * @param targetAppsDir the target mule deployment archives location to set
      */
-    public final void setTargetJarDir(final File targetJarDir) {
-        getAntModel().setTargetJarDir(targetJarDir);
+    public final void setTargetAppsDir(final File targetAppsDir) {
+        getAntModel().setTargetAppsDir(targetAppsDir);
     }
 
     /**

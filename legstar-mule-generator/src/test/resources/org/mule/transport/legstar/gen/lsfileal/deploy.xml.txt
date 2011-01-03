@@ -2,14 +2,12 @@
 <!-- =================================================================================
      Deploy a distribution archive to Mule server.
   -->
-<project basedir="." default="deploy-jar" name="deploy-jar">
-    <target name="create-jar">
-        <ant antfile="target/src/gen/ant/build-jar.xml"/>
+<project basedir="." default="deploy-zip" name="deploy-zip">
+    <target name="create-zip">
+        <ant antfile="target/src/gen/ant/build-zip.xml"/>
     </target>
-    <target name="deploy-jar" depends="create-jar">
-        <delete file="${env.MULE_HOME}/lib/user/legstar-lsfileal.jar"
-            includeEmptyDirs="true" quiet="true"/>
-        <copy file="target/dist/legstar-lsfileal.jar"
-            todir="${env.MULE_HOME}/lib/user"/>
+    <target name="deploy-zip" depends="create-zip">
+        <copy file="target/dist/legstar-lsfileal.zip"
+            todir="${env.MULE_HOME}/apps" overwrite="true"/>
     </target>
 </project>

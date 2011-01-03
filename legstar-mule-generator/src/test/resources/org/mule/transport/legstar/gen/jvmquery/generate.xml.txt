@@ -44,7 +44,7 @@
             targetMuleConfigDir="../legstar-mulegen-jvmquery/src/main/resources"
             targetDistDir="../legstar-mulegen-jvmquery/target/dist"
             targetAntDir="../legstar-mulegen-jvmquery/ant"
-            targetJarDir="${mule.home}/lib/user"
+            targetAppsDir="${mule.home}/apps"
             targetBinDir="../legstar-mulegen-jvmquery/target/classes"
             targetCobolDir="../legstar-mulegen-jvmquery/cobol"
             jaxbBinDir="../legstar-mulegen-jvmquery/target/classes"

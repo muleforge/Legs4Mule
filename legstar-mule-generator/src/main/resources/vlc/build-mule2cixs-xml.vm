@@ -54,7 +54,7 @@
             targetMuleConfigDir="${antModel.targetMuleConfigDir}"
             targetDistDir="${antModel.targetDistDir}"
             targetAntDir="${antModel.targetAntDir}"
-            targetJarDir="${antModel.targetJarDir}"
+            targetAppsDir="${antModel.targetAppsDir}"
             targetBinDir="${antModel.targetBinDir}"
             jaxbBinDir="${antModel.jaxbBinDir}"
             coxbBinDir="${antModel.coxbBinDir}"
