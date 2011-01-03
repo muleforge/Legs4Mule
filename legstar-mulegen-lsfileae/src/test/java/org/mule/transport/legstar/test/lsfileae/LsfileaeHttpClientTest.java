@@ -37,12 +37,11 @@ import com.legstar.test.coxb.lsfileae.ObjectFactory;
 public class LsfileaeHttpClientTest extends TestCase {
 
     /** This is the HTTP URL of the adapter (not the target mainframe).*/
-    public static final String LSFILEAE_ADAPTER_URL = "http://megamouss:3280/lsfileae";
+    public static final String LSFILEAE_ADAPTER_URL = "http://localhost:3280/lsfileae";
 
     /**
      * Run the target LSFILEAE mainframe program.
      * Client sends a serialized java object and receive one as a reply.
-     * This implements the Mule SafeProtocol with an initial cookie and data preceded by length.
      * @throws Exception if test fails
      */
     public void testLsfileae() throws Exception {

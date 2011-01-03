@@ -67,6 +67,10 @@
             <zipfileset dir="${custBinDir}" prefix="classes"
                 includes="${custPackage.replace(".","/")}/*.class"/>
 #end
+            <!-- Any other dependency to distribute -->
+            <zipfileset dir="${targetDistDir}" prefix="lib">
+                <include name="*.jar"/>
+            </zipfileset>
             <!-- Mule configuration file -->
             <fileset dir="${targetMuleConfigDir}">
                 <include name="*.xml"/>

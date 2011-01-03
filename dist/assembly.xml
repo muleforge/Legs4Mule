@@ -20,15 +20,6 @@ Assembly descriptor for the full distribution.
             </includes>
         </fileSet>
 
-        <!-- The legstar core XJB binding files -->
-        <fileSet>
-            <directory>${legstarTempLocation}/legstar-distribution-${legstarVersion}/xjb</directory>
-            <outputDirectory>xjb</outputDirectory>
-            <includes>
-                <include>*.*</include>
-            </includes>
-        </fileSet>
-
         <!-- ====================================== -->
         <!-- Includes the quickstart adapter sample -->
         <!-- COBOL sample source code -->
@@ -57,7 +48,7 @@ Assembly descriptor for the full distribution.
             <directory>../legstar-mulegen-lsfileae/src/test/java</directory>
             <outputDirectory>samples/mule/quickstarts/legstar_adapter/src</outputDirectory>
             <includes>
-                <include>**/*.java</include>
+                <include>**/LsfileaeHttpClientTest.java</include>
             </includes>
         </fileSet>
         <!-- Set of test parameters -->

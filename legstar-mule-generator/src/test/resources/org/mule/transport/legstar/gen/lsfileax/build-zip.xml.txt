@@ -25,6 +25,10 @@
                 includes="com/legstar/test/coxb/lsfileae/bind/*.class"/>
             <zipfileset dir="target/classes" prefix="classes"
                 includes="com/legstar/test/coxb/lsfileac/bind/*.class"/>
+            <!-- Any other dependency to distribute -->
+            <zipfileset dir="target/dist" prefix="lib">
+                <include name="*.jar"/>
+            </zipfileset>
             <!-- Mule configuration file -->
             <fileset dir="target/src/gen/conf">
                 <include name="*.xml"/>

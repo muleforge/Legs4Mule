@@ -27,7 +27,7 @@ import com.legstar.coxb.host.HostData;
  * This test simulates a mainframe HTTP request/response to a LegStar proxy.
  *
  */
-public class JvmqueryProxyClientHttpTest extends FunctionalTestCase {
+public class JvmqueryHttpTest extends FunctionalTestCase {
 
     /** Target proxy URL.*/
     public static final String JVMQUERY_PROXY_URL = "http://localhost:8083/legstar/services/jvmquery";

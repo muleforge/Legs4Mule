@@ -13,7 +13,6 @@
             <pathelement location="${basedir}"/>
             <pathelement location="${basedir}/bin"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
-            <fileset dir="${mule.home}" includes="lib/boot/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
             <fileset dir="${mule.home}" includes="lib/opt/*.jar" />
             <fileset dir="${mule.home}" includes="lib/user/*.jar" />
@@ -38,6 +37,9 @@
         <!-- Generate Mule Mainframe Proxy artifacts -->
         <ant antfile="ant/build-cixs2mule.xml" dir="${basedir}"/>
 
+        <!-- Deploy to Mule -->
+        <ant antfile="ant/deploy.xml" dir="${basedir}"/>
+
     </target>  
 
     <!-- ===========================================================  -->
@@ -61,7 +63,7 @@
     <target name="runtest" depends="compileJUnit">
         <junit printsummary="yes" fork="no" haltonfailure="yes">
             <formatter type="plain"/>
-            <test name="org.mule.transport.legstar.test.jvmquery.JvmqueryProxyClientHttpTest"/>
+            <test name="org.mule.transport.legstar.test.jvmquery.JvmqueryHttpClientTest"/>
             <classpath>
                 <path refid="classpath"/>
             </classpath>

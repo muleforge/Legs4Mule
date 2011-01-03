@@ -12,7 +12,6 @@
         <path id="classpath">
             <pathelement location="${basedir}"/>
             <pathelement location="${basedir}/bin"/>
-            <fileset dir="${legstar.home}" includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/boot/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
             <fileset dir="${mule.home}" includes="lib/opt/*.jar" />
@@ -23,7 +22,7 @@
     
     
     <!-- ===========================================================  -->
-    <!-- Generate the Mainframe Adapter
+    <!-- Generate the Mainframe Adapter and deploy it
     -->
     <target name="generate" depends="init">
   
@@ -36,6 +35,9 @@
         <!-- Generate Mule Mainframe Adapter artifacts -->
         <ant antfile="ant/build-mule2cixs.xml" dir="${basedir}"/>
     
+        <!-- Deploy to Mule -->
+        <ant antfile="ant/deploy.xml" dir="${basedir}"/>
+
     </target>  
 
     <!-- ===========================================================  -->
@@ -58,7 +60,7 @@
     <target name="runtest" depends="compileJUnit">
         <junit printsummary="yes" fork="no" haltonfailure="yes">
             <formatter type="plain"/>
-            <test name="org.mule.transport.legstar.test.lsfileae.LsfileaeHttpTest"/>
+            <test name="org.mule.transport.legstar.test.lsfileae.LsfileaeHttpClientTest"/>
             <classpath>
                 <path refid="classpath"/>
             </classpath>
