@@ -66,6 +66,7 @@
 #if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("http")})
             sampleCobolHttpClientType="${antModel.sampleCobolHttpClientType}"
 #end
+            sampleConfigurationFileName="${antModel.sampleConfigurationFileName}"
           >
             <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
                 packageName="${antModel.cixsMuleComponent.packageName}"

@@ -52,6 +52,7 @@
             sampleConfigurationTransport="HTTP"
             sampleConfigurationHostMessagingType="LEGSTAR"
             sampleConfigurationPayloadType="XML"
+            sampleConfigurationFileName="mule-adapter-config-lsfileac-http-xml-legstar.xml"
           >
             <cixsMuleComponent name="lsfileac"
                 packageName="org.mule.transport.legstar.test.lsfileac">

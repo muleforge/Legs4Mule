@@ -20,9 +20,9 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="..\legstar-mulegen-jvmquery\target\classes"/>
-            <pathelement location="..\legstar-mulegen-jvmquery\target\classes"/>
-            <pathelement location="..\legstar-mule-generator\target\classes"/>
+            <pathelement location="../legstar-mulegen-jvmquery/target/classes"/>
+            <pathelement location="../legstar-mulegen-jvmquery/target/classes"/>
+            <pathelement location="../legstar-mule-generator/target/classes"/>
             <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
@@ -40,19 +40,20 @@
   
     <target name="generateCixs2Mule" depends="init">
     
-        <cixs2mulegen targetSrcDir="..\legstar-mulegen-jvmquery\src\main\java"
-            targetMuleConfigDir="..\legstar-mulegen-jvmquery\src\main\resources"
-            targetDistDir="..\legstar-mulegen-jvmquery\target\dist"
-            targetAntDir="..\legstar-mulegen-jvmquery\ant"
-            targetJarDir="${mule.home}\lib\user"
-            targetBinDir="..\legstar-mulegen-jvmquery\target\classes"
-            targetCobolDir="..\legstar-mulegen-jvmquery\cobol"
-            jaxbBinDir="..\legstar-mulegen-jvmquery\target\classes"
-            coxbBinDir="..\legstar-mulegen-jvmquery\target\classes"
-            custBinDir="..\legstar-mule-generator\target\classes"
+        <cixs2mulegen targetSrcDir="../legstar-mulegen-jvmquery/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-jvmquery/src/main/resources"
+            targetDistDir="../legstar-mulegen-jvmquery/target/dist"
+            targetAntDir="../legstar-mulegen-jvmquery/ant"
+            targetJarDir="${mule.home}/lib/user"
+            targetBinDir="../legstar-mulegen-jvmquery/target/classes"
+            targetCobolDir="../legstar-mulegen-jvmquery/cobol"
+            jaxbBinDir="../legstar-mulegen-jvmquery/target/classes"
+            coxbBinDir="../legstar-mulegen-jvmquery/target/classes"
+            custBinDir="../legstar-mule-generator/target/classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="HTTP"
             sampleCobolHttpClientType="DFHWBCLI"
+            sampleConfigurationFileName="mule-proxy-config-jvmquery-http.xml"
           >
             <cixsMuleComponent name="jvmquery"
                 packageName="org.mule.transport.legstar.test.jvmquery"

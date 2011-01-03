@@ -52,6 +52,7 @@
             sampleConfigurationTransport="MOCK"
             sampleConfigurationHostMessagingType="LEGSTAR"
             sampleConfigurationPayloadType="JAVA"
+            sampleConfigurationFileName="mule-adapter-config-lsfileaemock-mock-java-legstar.xml"
           >
             <cixsMuleComponent name="lsfileaemock"
                 packageName="org.mule.transport.legstar.test.lsfileae">

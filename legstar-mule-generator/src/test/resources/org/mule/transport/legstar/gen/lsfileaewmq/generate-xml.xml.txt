@@ -52,6 +52,7 @@
             sampleConfigurationTransport="WMQ"
             sampleConfigurationHostMessagingType="MQCIH"
             sampleConfigurationPayloadType="XML"
+            sampleConfigurationFileName="mule-adapter-config-lsfileaewmq-wmq-xml-mqcih.xml"
           >
             <cixsMuleComponent name="lsfileaewmq"
                 packageName="org.mule.transport.legstar.test.lsfileae">

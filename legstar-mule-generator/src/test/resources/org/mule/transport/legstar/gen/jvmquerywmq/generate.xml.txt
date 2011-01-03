@@ -20,9 +20,9 @@
 
         <!-- Classpath setting -->
         <path id="classpath">
-            <pathelement location="..\legstar-mulegen-jvmquerywmq\target\classes"/>
-            <pathelement location="..\legstar-mulegen-jvmquerywmq\target\classes"/>
-            <pathelement location="..\legstar-mule-generator\target\classes"/>
+            <pathelement location="../legstar-mulegen-jvmquerywmq/target/classes"/>
+            <pathelement location="../legstar-mulegen-jvmquerywmq/target/classes"/>
+            <pathelement location="../legstar-mule-generator/target/classes"/>
             <fileset dir=".." includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
         </path>
@@ -40,18 +40,19 @@
   
     <target name="generateCixs2Mule" depends="init">
     
-        <cixs2mulegen targetSrcDir="..\legstar-mulegen-jvmquerywmq\src\main\java"
-            targetMuleConfigDir="..\legstar-mulegen-jvmquerywmq\src\main\resources"
-            targetDistDir="..\legstar-mulegen-jvmquerywmq\target\dist"
-            targetAntDir="..\legstar-mulegen-jvmquerywmq\ant"
-            targetJarDir="${mule.home}\lib\user"
-            targetBinDir="..\legstar-mulegen-jvmquerywmq\target\classes"
-            targetCobolDir="..\legstar-mulegen-jvmquerywmq\cobol"
-            jaxbBinDir="..\legstar-mulegen-jvmquerywmq\target\classes"
-            coxbBinDir="..\legstar-mulegen-jvmquerywmq\target\classes"
-            custBinDir="..\legstar-mule-generator\target\classes"
+        <cixs2mulegen targetSrcDir="../legstar-mulegen-jvmquerywmq/src/main/java"
+            targetMuleConfigDir="../legstar-mulegen-jvmquerywmq/src/main/resources"
+            targetDistDir="../legstar-mulegen-jvmquerywmq/target/dist"
+            targetAntDir="../legstar-mulegen-jvmquerywmq/ant"
+            targetJarDir="${mule.home}/lib/user"
+            targetBinDir="../legstar-mulegen-jvmquerywmq/target/classes"
+            targetCobolDir="../legstar-mulegen-jvmquerywmq/cobol"
+            jaxbBinDir="../legstar-mulegen-jvmquerywmq/target/classes"
+            coxbBinDir="../legstar-mulegen-jvmquerywmq/target/classes"
+            custBinDir="../legstar-mule-generator/target/classes"
             hostCharset="IBM01147"
             sampleConfigurationTransport="WMQ"
+            sampleConfigurationFileName="mule-proxy-config-jvmquerywmq-wmq.xml"
           >
             <cixsMuleComponent name="jvmquerywmq"
                 packageName="org.mule.transport.legstar.test.jvmquery"

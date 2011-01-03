@@ -63,6 +63,7 @@
             sampleConfigurationTransport="${antModel.sampleConfigurationTransport}"
             sampleConfigurationHostMessagingType="${antModel.sampleConfigurationHostMessagingType}"
             sampleConfigurationPayloadType="${antModel.sampleConfigurationPayloadType}"
+            sampleConfigurationFileName="${antModel.sampleConfigurationFileName}"
           >
             <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
                 packageName="${antModel.cixsMuleComponent.packageName}">

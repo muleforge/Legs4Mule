@@ -52,6 +52,7 @@
             sampleConfigurationTransport="TCP"
             sampleConfigurationHostMessagingType="LEGSTAR"
             sampleConfigurationPayloadType="XML"
+            sampleConfigurationFileName="mule-adapter-config-lsfileaetcp-tcp-xml-legstar.xml"
           >
             <cixsMuleComponent name="lsfileaetcp"
                 packageName="org.mule.transport.legstar.test.lsfileae">

@@ -52,6 +52,7 @@
             sampleConfigurationTransport="HTTP"
             sampleConfigurationHostMessagingType="LEGSTAR"
             sampleConfigurationPayloadType="JAVA"
+            sampleConfigurationFileName="mule-adapter-config-lsfileae-http-java-legstar.xml"
           >
             <cixsMuleComponent name="lsfileae"
                 packageName="org.mule.transport.legstar.test.lsfileae">
