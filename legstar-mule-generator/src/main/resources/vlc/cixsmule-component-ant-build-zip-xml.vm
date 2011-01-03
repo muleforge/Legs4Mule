@@ -1,9 +1,7 @@
 ##/////////////////////////////////////////////////////////////////////
-##Mule Component build and deploy Template.
-##@author Fady
-##@version 0.1
+##Mule Component build archive Template.
 ##/////////////////////////////////////////////////////////////////////
-#set($jarFile = "${targetDistDir}/legstar-${muleComponent.name}.jar")
+#set($zipFile = "${targetDistDir}/legstar-${muleComponent.name}.zip")
 ## ==================================================================
 ## Macro will help make sure we process packages only once
 ## ==================================================================
@@ -39,40 +37,40 @@
 #end
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================================================
-     Create an jar archive for a legstar component.
+     Create an zip archive for a legstar component.
   -->
-<project basedir="${generateBaseDir}" default="create-jar" name="build-jar">
+<project basedir="${generateBaseDir}" default="create-zip" name="build-zip">
 
     <target name="clean">
-        <delete file="${jarFile}" includeEmptyDirs="true" quiet="true"/>
+        <delete file="${zipFile}" quiet="true"/>
     </target>
 
-   <target name="create-jar" depends="clean">
+   <target name="create-zip" depends="clean">
         <mkdir dir="${targetDistDir}"/>
-        <jar destfile="${jarFile}">
+        <zip destfile="${zipFile}">
             <!-- Generated Mule component binaries -->
-            <fileset dir="${targetBinDir}">
+            <zipfileset dir="${targetBinDir}" prefix="classes">
                 <include name="${muleComponent.packageName.replace(".","/")}/*.class"/>
-            </fileset>
+            </zipfileset>
             <!-- JAXB binaries -->
 #foreach ($jaxbPackage in $jaxbPackages)
-            <fileset dir="${jaxbBinDir}"
+            <zipfileset dir="${jaxbBinDir}" prefix="classes"
                 includes="${jaxbPackage.replace(".","/")}/*.class"/>
 #end
             <!-- Binding binaries -->
 #foreach ($coxbPackage in $coxbPackages)
-            <fileset dir="${coxbBinDir}"
+            <zipfileset dir="${coxbBinDir}" prefix="classes"
                 includes="${coxbPackage.replace(".","/")}/*.class"/>
 #end
 #foreach ($custPackage in $custPackages)
             <!-- Custom binding binaries if they are external to the project -->
-            <fileset dir="${custBinDir}"
+            <zipfileset dir="${custBinDir}" prefix="classes"
                 includes="${custPackage.replace(".","/")}/*.class"/>
 #end
             <!-- Mule configuration file -->
             <fileset dir="${targetMuleConfigDir}">
                 <include name="*.xml"/>
             </fileset>
-        </jar>
+        </zip>
     </target>
 </project>

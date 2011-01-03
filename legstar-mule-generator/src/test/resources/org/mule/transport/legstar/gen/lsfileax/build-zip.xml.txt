@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================================================
-     Create an jar archive for a legstar component.
+     Create an zip archive for a legstar component.
   -->
-<project basedir="." default="create-jar" name="build-jar">
+<project basedir="." default="create-zip" name="build-zip">
 
     <target name="clean">
-        <delete file="target/dist/legstar-lsfileax.jar" includeEmptyDirs="true" quiet="true"/>
+        <delete file="target/dist/legstar-lsfileax.zip" quiet="true"/>
     </target>
 
-   <target name="create-jar" depends="clean">
+   <target name="create-zip" depends="clean">
         <mkdir dir="target/dist"/>
-        <jar destfile="target/dist/legstar-lsfileax.jar">
+        <zip destfile="target/dist/legstar-lsfileax.zip">
             <!-- Generated Mule component binaries -->
-            <fileset dir="target/gen-classes">
+            <zipfileset dir="target/gen-classes" prefix="classes">
                 <include name="org/mule/transport/legstar/test/lsfileax/*.class"/>
-            </fileset>
+            </zipfileset>
             <!-- JAXB binaries -->
-            <fileset dir="target/classes"
+            <zipfileset dir="target/classes" prefix="classes"
                 includes="com/legstar/test/coxb/lsfileae/*.class"/>
-            <fileset dir="target/classes"
+            <zipfileset dir="target/classes" prefix="classes"
                 includes="com/legstar/test/coxb/lsfileac/*.class"/>
             <!-- Binding binaries -->
-            <fileset dir="target/classes"
+            <zipfileset dir="target/classes" prefix="classes"
                 includes="com/legstar/test/coxb/lsfileae/bind/*.class"/>
-            <fileset dir="target/classes"
+            <zipfileset dir="target/classes" prefix="classes"
                 includes="com/legstar/test/coxb/lsfileac/bind/*.class"/>
             <!-- Mule configuration file -->
             <fileset dir="target/src/gen/conf">
                 <include name="*.xml"/>
             </fileset>
-        </jar>
+        </zip>
     </target>
 </project>

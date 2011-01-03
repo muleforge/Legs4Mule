@@ -257,9 +257,9 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         String componentName = _generator.getAntModel().getCixsMuleComponent().getName();
 
         compare(_generator.getTargetAntDir(),
-                "build-jar.xml", componentName);
+        		AbstractCixsMuleGenerator.CREATE_ZIP_FILE_NAME, componentName);
         compare(_generator.getTargetAntDir(),
-                "deploy.xml", componentName);
+        		AbstractCixsMuleGenerator.DEPLOY_ZIP_FILE_NAME, componentName);
 
         compare(_generator.getTargetMuleConfigDir(),
         		_generator.getAntModel().getSampleConfigurationFileName(),

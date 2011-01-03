@@ -48,17 +48,17 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     }
 
     /**
-     * build-jar.xml creates the mule component ready for deployment.
+     * build-zip.xml creates the mule component ready for deployment.
      * @throws Exception if generation fails
      */
-    public void testAntBuildJar() throws Exception {
+    public void testAntBuildZip() throws Exception {
 
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         getParameters().put("generationTarget", "adapter");
 
         File componentAntFilesDir = new File(GEN_ANT_DIR, muleComponent.getName());
         CodeGenUtil.checkDirectory(componentAntFilesDir, true);
-        String filename = Mule2CixsGenerator.generateAntBuildJar(
+        String filename = Mule2CixsGenerator.generateAntBuildZip(
                 muleComponent, getParameters(), componentAntFilesDir);
         compare(componentAntFilesDir, filename,
                 muleComponent.getName());

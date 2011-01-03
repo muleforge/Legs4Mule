@@ -1,30 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- =================================================================================
-     Create an jar archive for a legstar component.
+     Create an zip archive for a legstar component.
   -->
-<project basedir="." default="create-jar" name="build-jar">
+<project basedir="." default="create-zip" name="build-zip">
 
     <target name="clean">
-        <delete file="target/dist/legstar-jvmquery.jar" includeEmptyDirs="true" quiet="true"/>
+        <delete file="target/dist/legstar-jvmquery.zip" quiet="true"/>
     </target>
 
-   <target name="create-jar" depends="clean">
+   <target name="create-zip" depends="clean">
         <mkdir dir="target/dist"/>
-        <jar destfile="target/dist/legstar-jvmquery.jar">
+        <zip destfile="target/dist/legstar-jvmquery.zip">
             <!-- Generated Mule component binaries -->
-            <fileset dir="target/gen-classes">
+            <zipfileset dir="target/gen-classes" prefix="classes">
                 <include name="org/mule/transport/legstar/test/jvmquery/*.class"/>
-            </fileset>
+            </zipfileset>
             <!-- JAXB binaries -->
-            <fileset dir="target/classes"
+            <zipfileset dir="target/classes" prefix="classes"
                 includes="com/legstar/test/coxb/jvmquery/*.class"/>
             <!-- Binding binaries -->
-            <fileset dir="target/classes"
+            <zipfileset dir="target/classes" prefix="classes"
                 includes="com/legstar/test/coxb/jvmquery/bind/*.class"/>
             <!-- Mule configuration file -->
             <fileset dir="target/src/gen/conf">
                 <include name="*.xml"/>
             </fileset>
-        </jar>
+        </zip>
     </target>
 </project>

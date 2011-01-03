@@ -38,9 +38,9 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     public static final String CIXS_MULE_GENERATOR_NAME =
         "LegStar Mule Component generator";
 
-    /** Velocity template for ant build jar. */
-    public static final String COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE =
-        "vlc/cixsmule-component-ant-build-jar-xml.vm";
+    /** Velocity template for ant build zip. */
+    public static final String COMPONENT_ANT_BUILD_ZIP_VLC_TEMPLATE =
+        "vlc/cixsmule-component-ant-build-zip-xml.vm";
 
     /** Velocity template for service ant-deploy. */
     public static final String COMPONENT_ANT_DEPLOY_VLC_TEMPLATE =
@@ -76,6 +76,12 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
 
     /** The service model name is it appears in templates. */
     public static final String COMPONENT_MODEL_NAME = "muleComponent";
+    
+    /** The ant script name to create a zip archive.*/
+    public static final String CREATE_ZIP_FILE_NAME = "build-zip.xml";
+    
+    /** The ant script name to deploy the zip archive.*/
+    public static final String DEPLOY_ZIP_FILE_NAME = "deploy.xml";
     
     /**
      * Constructor.
@@ -378,21 +384,21 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
     }
 
     /**
-     * Create the Mule Ant Build Jar file.
+     * Create the Mule Ant Build Zip file.
      * @param component the Mule component description
      * @param parameters miscellaneous help parameters
      * @param componentAntFilesDir where to store the generated file
      * @return the generated file name
      * @throws CodeGenMakeException if generation fails
      */
-    public static String generateAntBuildJar(
+    public static String generateAntBuildZip(
             final CixsMuleComponent component,
             final Map < String, Object > parameters,
             final File componentAntFilesDir)
     throws CodeGenMakeException {
-        String fileName = "build-jar.xml";
+        String fileName = CREATE_ZIP_FILE_NAME;
         generateFile(CIXS_MULE_GENERATOR_NAME,
-                COMPONENT_ANT_BUILD_JAR_VLC_TEMPLATE,
+                COMPONENT_ANT_BUILD_ZIP_VLC_TEMPLATE,
                 COMPONENT_MODEL_NAME,
                 component,
                 parameters,
@@ -568,7 +574,7 @@ public abstract class AbstractCixsMuleGenerator extends AbstractCixsGenerator {
         /* Determine target files locations */
         File serviceAntFilesDir = getTargetAntDir();
 
-        generateAntBuildJar(
+        generateAntBuildZip(
                 getCixsMuleComponent(), parameters, serviceAntFilesDir);
         generateAntDeploy(
                 getCixsMuleComponent(), parameters, serviceAntFilesDir);
