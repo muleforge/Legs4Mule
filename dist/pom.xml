@@ -34,6 +34,19 @@
             <artifactId>commons-cli</artifactId>
         </dependency>
 
+	    <!-- Needed for the custom ant task used to stop Mule -->
+        <dependency>
+            <groupId>ant</groupId>
+            <artifactId>ant</artifactId>
+            <scope>test</scope>
+        </dependency>
+	    <dependency>
+	        <groupId>tanukisoft</groupId>
+	        <artifactId>wrapper</artifactId>
+	        <version>3.2.3</version>
+	        <scope>test</scope>
+	    </dependency>
+
     </dependencies>
 
     <build>
@@ -69,7 +82,10 @@
                         <phase>verify</phase>
                         <configuration>
                             <tasks>
-                                <ant antfile="${basedir}/src/main/ant/test-distribution.xml" />
+                                <path id="maven.classpath">
+                                    <path refid="maven.test.classpath" />
+                                </path>
+                                <ant antfile="${basedir}/src/main/ant/test-distribution.xml" inheritRefs="true" />
                             </tasks>
                         </configuration>
                         <goals>

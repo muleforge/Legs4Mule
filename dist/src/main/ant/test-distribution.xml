@@ -31,20 +31,28 @@
         <property name="sample1.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/legstar_adapter" />
         <property name="sample2.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/legstar_proxy" />
     
+        <taskdef name="stopmule"
+            classname="org.mule.transport.legstar.dist.test.task.StopMuleTask"
+            classpathref="maven.classpath"/>
+
     </target>
 
     <!-- ===========================================================  -->
-    <!-- Install the samples in JBoss ESB
+    <!-- Unzip the distribution and deploy executables to $MULE_HOME/lib/user
     -->
-    <target name="installSamples" depends="init">
+    <target name="unzipDistribution" depends="init">
         <unzip src="${zip.file}" dest="${test.dir}"/>
-
+        <copy todir="${mule.home}/lib/user">
+            <fileset dir="${test.dir}/${dist.name}/lib">
+                <include name="legstar-mule-transport-*-dist.jar"/>
+            </fileset>
+        </copy>
     </target>
     
     <!-- ===========================================================  -->
-    <!-- Build the samples
+    <!-- Build the samples and deploy them to $MULE_HOME/apps
     -->
-    <target name="buildSamples" depends="installSamples">
+    <target name="buildSamples" depends="unzipDistribution">
         
         <!-- Work around because we need to set LEGSTAR_HOME to
              point to the new intall location.
@@ -71,10 +79,30 @@
     </target>
   
     <!-- ===========================================================  -->
+    <!-- start Mule and run tests in parallel.
+    -->
+    <target name="runMule" depends="buildSamples">
+        <echo message="starting ${mule.home}"/>
+    		<parallel>
+            <exec executable="cmd" failonerror="true" dir="${mule.home}/bin">
+                <env key="MULE_HOME" value="${mule.home}"/>
+                <arg value="/c"/>
+                <arg value="mule.bat"/>
+            </exec>
+            <sequential>
+                <!-- Give Mule a chance to start -->
+                <sleep seconds="30"/>
+                <antcall target="runSamples"/>
+                <stopmule/>
+            </sequential>
+    		</parallel>
+    </target>
+
+    <!-- ===========================================================  -->
     <!-- Run the samples. The transport samples need the LEGSTAR-HOME
          environment variable to be set.
     -->
-    <target name="runSamples" depends="buildSamples">
+    <target name="runSamples">
         
         <exec executable="cmd" failonerror="true">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
@@ -100,8 +128,16 @@
     <!-- ===========================================================  -->
     <!-- Remove the samples.
     -->
-    <target name="testDistro" depends="runSamples">
-
+    <target name="testDistro" depends="runMule">
+        <delete dir="${mule.home}/apps/legstar-lsfileae"/>
+        <delete file="${mule.home}/apps/legstar-lsfileae-anchor.txt"/>
+        <delete dir="${mule.home}/apps/legstar-proxy"/>
+        <delete file="${mule.home}/apps/legstar-proxy-anchor.txt"/>
+        <delete>
+            <fileset dir="${mule.home}/lib/user">
+                <include name="legstar-mule-transport-*-dist.jar"/>
+            </fileset>
+        </delete>
     </target>
 
 </project>
