@@ -57,7 +57,7 @@
         <!-- Work around because we need to set LEGSTAR_HOME to
              point to the new intall location.
              Beware: this is os specific -->    
-        <exec executable="cmd" failonerror="true">
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
             <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
@@ -66,7 +66,12 @@
             <arg value="${sample1.dir}/build.xml"/>
             <arg value="generate"/>
         </exec>
-        <exec executable="cmd" failonerror="true">
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
             <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
@@ -75,6 +80,11 @@
             <arg value="${sample2.dir}/build.xml"/>
             <arg value="generate"/>
         </exec>
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
 
     </target>
   
@@ -104,7 +114,7 @@
     -->
     <target name="runSamples">
         
-        <exec executable="cmd" failonerror="true">
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
             <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
@@ -113,7 +123,12 @@
             <arg value="${sample1.dir}/build.xml"/>
             <arg value="runtest"/>
         </exec>
-        <exec executable="cmd" failonerror="true">
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
             <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
             <env key="MULE_HOME" value="${mule.home}"/>
             <arg value="/c"/>
@@ -122,6 +137,11 @@
             <arg value="${sample2.dir}/build.xml"/>
             <arg value="runtest"/>
         </exec>
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
 
     </target>
 
@@ -131,8 +151,8 @@
     <target name="testDistro" depends="runMule">
         <delete dir="${mule.home}/apps/legstar-lsfileae"/>
         <delete file="${mule.home}/apps/legstar-lsfileae-anchor.txt"/>
-        <delete dir="${mule.home}/apps/legstar-proxy"/>
-        <delete file="${mule.home}/apps/legstar-proxy-anchor.txt"/>
+        <delete dir="${mule.home}/apps/legstar-jvmquery"/>
+        <delete file="${mule.home}/apps/legstar-jvmquery-anchor.txt"/>
         <delete>
             <fileset dir="${mule.home}/lib/user">
                 <include name="legstar-mule-transport-*-dist.jar"/>
