@@ -3,13 +3,13 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>3.0.0</version>
+        <version>3.0.1-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
     <artifactId>legstar-mulegen-site</artifactId>
     <packaging>pom</packaging>
     <name>LegStar for Mule Generator Eclipse site</name>
-    <version>3.0.0</version>
+    <version>3.0.1-SNAPSHOT</version>
     <description>Mule Generator Eclipse site.</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
