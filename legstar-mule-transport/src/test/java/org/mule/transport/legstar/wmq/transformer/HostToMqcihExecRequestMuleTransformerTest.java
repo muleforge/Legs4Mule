@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.mule.transport.legstar.wmq.transformer;
 
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.legstar.config.HostProgram;
 import org.mule.transport.legstar.wmq.LegstarWmqConnector;
@@ -92,10 +92,11 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
     }
 
     /** {@inheritDoc} */
-    public AbstractMessageAwareTransformer getTransformer() throws Exception {
+    public AbstractMessageTransformer getTransformer() throws Exception {
         HostToMqcihExecRequestMuleTransformer transformer = new HostToMqcihExecRequestMuleTransformer();
         transformer.setHostProgram(new HostProgram("lsfileae.properties"));
         transformer.setEndpoint(getEndpoint());
+        transformer.setMuleContext(muleContext);
         return transformer;
     }
 
@@ -120,8 +121,8 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
      */
     private OutboundEndpoint getEndpoint() throws Exception {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
-                new URIBuilder(getTestEndpointURI()),
-                muleContext);
+                new URIBuilder(getTestEndpointURI(),
+                        muleContext));
         OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
         LegstarWmqConnector connector = (LegstarWmqConnector) endpoint.getConnector();

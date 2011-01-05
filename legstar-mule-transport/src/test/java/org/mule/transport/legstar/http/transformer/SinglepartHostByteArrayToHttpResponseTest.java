@@ -17,12 +17,11 @@ import java.util.Arrays;
 
 import org.apache.commons.httpclient.HttpVersion;
 import org.mule.RequestContext;
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.http.HttpResponse;
 import org.mule.api.MuleEvent;
 import org.mule.api.transformer.Transformer;
-import org.mule.api.transformer.TransformerException;
 import org.mule.api.transport.OutputHandler;
 
 import com.legstar.coxb.host.HostData;
@@ -35,9 +34,10 @@ import com.legstar.test.coxb.LsfileaeCases;
 public class SinglepartHostByteArrayToHttpResponseTest extends AbstractTransformerTestCase {
 
     /** {@inheritDoc} */
-    public AbstractMessageAwareTransformer getTransformer() throws Exception {
-        AbstractMessageAwareTransformer transformer = new HostByteArrayToHttpResponse();
+    public AbstractMessageTransformer getTransformer() throws Exception {
+    	AbstractMessageTransformer transformer = new HostByteArrayToHttpResponse();
         transformer.initialise();
+        transformer.setMuleContext(muleContext);
         return transformer;
     }
 
@@ -94,8 +94,6 @@ public class SinglepartHostByteArrayToHttpResponseTest extends AbstractTransform
             }
             return false;
         } catch (IOException e) {
-            return false;
-        } catch (TransformerException e) {
             return false;
         }
     }

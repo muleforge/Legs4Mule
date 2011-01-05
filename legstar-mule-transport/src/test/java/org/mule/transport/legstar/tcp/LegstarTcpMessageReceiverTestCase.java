@@ -48,8 +48,8 @@ public class LegstarTcpMessageReceiverTestCase extends AbstractMessageReceiverTe
     /** {@inheritDoc} */
     public InboundEndpoint getEndpoint() throws Exception {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
-                new URIBuilder("legstar-tcp://localhost:1234"),
-                muleContext);
+                new URIBuilder("legstar-tcp://localhost:1234",
+                        muleContext));
         return muleContext.getRegistry().lookupEndpointFactory().getInboundEndpoint(
                 endpointBuilder);
     }

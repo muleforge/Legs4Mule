@@ -31,7 +31,7 @@ public class LegstarTcpConnectorTestCase extends AbstractConnectorTestCase {
 
     /** {@inheritDoc} */
     public Connector createConnector() throws Exception {
-        LegstarTcpConnector c = new LegstarTcpConnector();
+        LegstarTcpConnector c = new LegstarTcpConnector(muleContext);
         c.setName("Test");
         return c;
     }
@@ -52,7 +52,7 @@ public class LegstarTcpConnectorTestCase extends AbstractConnectorTestCase {
      * @throws Exception if test fails.
      */
     public void testProperties() throws Exception {
-        assertTrue(getConnector().isSyncEnabled("legstar-tcp"));
+        assertTrue(((LegstarTcpConnector)getConnector()).isSyncEnabled("legstar-tcp"));
     }
 
     /** {@inheritDoc} */

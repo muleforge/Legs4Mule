@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.mule.transport.legstar.transformer;
 
+import org.mule.transformer.types.DataTypeFactory;
+
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
 import com.legstar.test.coxb.lsfileae.bind.DfhcommareaTransformers;
 
@@ -24,6 +26,6 @@ public class LsfileaeHostToJavaTransformer extends AbstractHostToJavaMuleTransfo
      */
     public LsfileaeHostToJavaTransformer() {
         super(new DfhcommareaTransformers());
-        setReturnClass(Dfhcommarea.class);
+        setReturnDataType(DataTypeFactory.create(Dfhcommarea.class));
     }
 }

@@ -24,14 +24,14 @@ public class LegstarHttpConnectorTestCase extends AbstractConnectorTestCase {
 
     /** {@inheritDoc} */
     public Connector createConnector() throws Exception {
-        Connector connector = new LegstarHttpConnector();
+        Connector connector = new LegstarHttpConnector(muleContext);
         connector.setName("Test-Legstar");
         return connector;
     }
 
     /** {@inheritDoc} */
     public String getTestEndpointURI() {
-        return "legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT);
+        return "legstar://localhost:" + Integer.toString(LEGSTAR_PORT);
     }
 
     /** {@inheritDoc} */

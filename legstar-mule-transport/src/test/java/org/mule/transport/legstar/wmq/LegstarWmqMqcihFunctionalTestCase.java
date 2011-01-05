@@ -55,7 +55,7 @@ public class LegstarWmqMqcihFunctionalTestCase extends FunctionalTestCase {
         Map < String, Object > properties = new HashMap < String, Object >();
         properties.put(LegstarWmqConnector.HOST_USERID_PROPERTY, "P390");
         properties.put(LegstarWmqConnector.HOST_PASSWORD_PROPERTY, "STREAM2");
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         MuleMessage result = client.send("lsfileaeClientEndpoint",
                 getJavaRequest(), properties);
 

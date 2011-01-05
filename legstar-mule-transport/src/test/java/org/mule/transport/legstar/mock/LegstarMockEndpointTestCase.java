@@ -38,7 +38,7 @@ public class LegstarMockEndpointTestCase extends AbstractMuleTestCase {
      * @throws Exception if something goes wrong
      */
     public void testValidEndpointURI() throws Exception  {
-        EndpointURI endpointUri = new MuleEndpointURI("legstar-mock://localhost");
+        EndpointURI endpointUri = new MuleEndpointURI("legstar-mock://localhost", muleContext);
         endpointUri.initialise();
         assertEquals("legstar-mock", endpointUri.getScheme());
         assertEquals("legstar-mock", endpointUri.getSchemeMetaInfo());

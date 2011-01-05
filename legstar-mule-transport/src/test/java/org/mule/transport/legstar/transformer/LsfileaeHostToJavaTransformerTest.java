@@ -26,7 +26,9 @@ public class LsfileaeHostToJavaTransformerTest extends AbstractTransformerTestCa
 
     /** {@inheritDoc} */
     public Transformer getTransformer() throws Exception {
-        return new LsfileaeHostToJavaTransformer();
+    	LsfileaeHostToJavaTransformer transformer = new LsfileaeHostToJavaTransformer();
+    	transformer.setMuleContext(muleContext);
+        return transformer;
     }
 
     /** {@inheritDoc} */

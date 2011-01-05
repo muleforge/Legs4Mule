@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.api.transformer.Transformer;
 
@@ -73,8 +73,9 @@ public class MultipartLegstarExecReplyToHostMuleTransformerTest extends Abstract
     }
     
     /** {@inheritDoc} */
-    public AbstractMessageAwareTransformer getTransformer() throws Exception {
+    public AbstractMessageTransformer getTransformer() throws Exception {
         LegstarExecReplyToHostMuleTransformer transformer = new LegstarExecReplyToHostMuleTransformer();
+        transformer.setMuleContext(muleContext);
         return transformer;
     }
 

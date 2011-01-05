@@ -31,8 +31,9 @@ public class LegstarHttpConnectorFactoryTestCase extends AbstractMuleTestCase {
      * @throws Exception if fails
      */
     public void testCreateFromFactory() throws Exception {
-        EndpointURI url = new MuleEndpointURI(getEndpointURI());
-        Connector connector = TransportFactory.createConnector(url, null);
+        EndpointURI url = new MuleEndpointURI(getEndpointURI(), muleContext);
+        TransportFactory transportFactory = new TransportFactory(muleContext);
+        Connector connector = transportFactory.createConnector(url);
         assertNotNull(connector);
         assertTrue(connector instanceof LegstarHttpConnector);
         assertEquals("legstar", connector.getProtocol());
@@ -42,7 +43,7 @@ public class LegstarHttpConnectorFactoryTestCase extends AbstractMuleTestCase {
      * @return a legstar scheme URI.
      */
     public String getEndpointURI() {
-        return "legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT);
+        return "legstar://localhost:" + Integer.toString(LEGSTAR_PORT);
     }
 
 }
