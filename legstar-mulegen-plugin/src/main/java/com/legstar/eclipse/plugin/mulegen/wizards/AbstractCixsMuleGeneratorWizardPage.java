@@ -42,8 +42,8 @@ extends AbstractCixsGeneratorWizardPage {
     /** Where generated Mule configuration files reside. */
     private Text _targetMuleConfigDirText = null;
 
-    /** Where Mule takes users jars from. */
-    private Text _targetJarDirText = null;
+    /** Where Mule takes deployment archives from. */
+    private Text _targetAppsDirText = null;
 
     /**
      * Construct the page.
@@ -81,9 +81,9 @@ extends AbstractCixsGeneratorWizardPage {
 
     /** {@inheritDoc} */
     public void addWidgetsToDeploymentGroup(final Composite container) {
-        _targetJarDirText = createTextField(container, getStore(),
-                "targetJarDir",
-                Messages.target_mule_jar_location_label + ':');
+        _targetAppsDirText = createTextField(container, getStore(),
+                "targetAppsDir",
+                Messages.target_mule_apps_location_label + ':');
     }
 
     /** {@inheritDoc} */
@@ -94,18 +94,18 @@ extends AbstractCixsGeneratorWizardPage {
                 PreferenceConstants.TARGET_MULE_CONFIG_FOLDER,
                 true));
 
-        setTargetJarDir(getInitTargetJarDir());
+        setTargetAppsDir(getInitTargetAppsDir());
 
     }
     
     /**
      * @return an initial value
      */
-    public String getInitTargetJarDir() {
-        File initValue = getGenModel().getTargetJarDir();
+    public String getInitTargetAppsDir() {
+        File initValue = getGenModel().getTargetAppsDir();
         if (initValue == null) {
             return getStore().getString(
-                    PreferenceConstants.MULE_USER_JAR_FOLDER);
+                    PreferenceConstants.MULE_APPS_FOLDER);
         } else {
             return initValue.getPath();
         }
@@ -119,7 +119,7 @@ extends AbstractCixsGeneratorWizardPage {
                 dialogChanged();
             }
         });
-        _targetJarDirText.addModifyListener(new ModifyListener() {
+        _targetAppsDirText.addModifyListener(new ModifyListener() {
             public void modifyText(final ModifyEvent e) {
                 dialogChanged();
             }
@@ -169,22 +169,22 @@ extends AbstractCixsGeneratorWizardPage {
         } catch (InvocationTargetException e) {
             updateStatus(Messages.unable_to_locate_plugin_installation_msg);
         }
-        getGenModel().setTargetJarDir(new File(getTargetJarDir()));
+        getGenModel().setTargetAppsDir(new File(getTargetAppsDir()));
         getGenModel().setTargetMuleConfigDir(new File(getTargetMuleConfigDir()));
     }
 
     /**
-     * @param targetJarDirLocation Where generated Jar files reside
+     * @param targetAppsDirLocation Where generated deployment archives reside
      */
-    public void setTargetJarDir(final String targetJarDirLocation) {
-        _targetJarDirText.setText(targetJarDirLocation);
+    public void setTargetAppsDir(final String targetAppsDirLocation) {
+        _targetAppsDirText.setText(targetAppsDirLocation);
     }
 
     /**
-     * @return Where generated Jar files reside
+     * @return Where generated deployment archives reside
      */
-    public String getTargetJarDir() {
-        return _targetJarDirText.getText();
+    public String getTargetAppsDir() {
+        return _targetAppsDirText.getText();
     }
 
     /**

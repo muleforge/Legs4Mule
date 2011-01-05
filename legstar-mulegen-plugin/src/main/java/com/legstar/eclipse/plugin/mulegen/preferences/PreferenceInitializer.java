@@ -34,8 +34,8 @@ public class PreferenceInitializer extends AbstractCicxsPreferenceInitializer {
 
         store.setDefault(PreferenceConstants.MULE_INSTALL_FOLDER,
                 getDefaultMuleLocation());
-        store.setDefault(PreferenceConstants.MULE_USER_JAR_FOLDER,
-                getDefaultMuleLocation() + "/lib/user");
+        store.setDefault(PreferenceConstants.MULE_APPS_FOLDER,
+                getDefaultMuleLocation() + "/apps");
 
         store.setDefault(PreferenceConstants.TARGET_MULE_CONFIG_FOLDER, "conf");
         store.setDefault(PreferenceConstants.DEFAULT_COBOL_SAMPLE_FOLDER, "cobol");
@@ -114,7 +114,7 @@ public class PreferenceInitializer extends AbstractCicxsPreferenceInitializer {
     public String getDefaultMuleLocation() {
         String value = System.getenv("MULE_HOME");
         if (value == null) {
-            value = System.getenv("MULE2_HOME");
+            value = System.getenv("MULE3_HOME");
             if (value == null) {
                 return "";
             }

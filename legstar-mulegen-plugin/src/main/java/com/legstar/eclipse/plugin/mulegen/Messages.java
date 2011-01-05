@@ -27,8 +27,8 @@ public class Messages extends NLS {
     public static String preference_page_description;
     /** Mule install location label.*/
     public static String preference_mule_install_location_label;
-    /** Mule jar deployment preference label.*/
-    public static String preference_user_jar_location_label;
+    /** Mule deployment folder preference label.*/
+    public static String preference_apps_location_label;
     /** Mule configurations folder preference label.*/
     public static String preference_mule_config_folder_label;
     /** Cobol samples folder preference label.*/
@@ -69,8 +69,8 @@ public class Messages extends NLS {
 
     /** Target mule configuration files location label.*/
     public static String target_mule_config_location_label;
-    /** Target mule user libraries location label.*/
-    public static String target_mule_jar_location_label;
+    /** Target mule apps folder location label.*/
+    public static String target_mule_apps_location_label;
     /** Invalid mule configuration files location message.*/
     public static String invalid_mule_config_location_msg;
     /** Unable to locate plugin installation message.*/

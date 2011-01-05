@@ -19,9 +19,9 @@ public final class PreferenceConstants {
     public static final String MULE_INSTALL_FOLDER =
         "muleInstallFolder";
 
-    /** Mule folder where user jar files should be deployed. */
-    public static final String MULE_USER_JAR_FOLDER =
-        "com.legstar.eclipse.plugin.mulegen.UserJarFolder";
+    /** Mule folder where applications archives should be deployed. */
+    public static final String MULE_APPS_FOLDER =
+        "com.legstar.eclipse.plugin.mulegen.AppsFolder";
 
     /** Folder where COBOL Client code should be generated. */
     public static final String DEFAULT_COBOL_SAMPLE_FOLDER =

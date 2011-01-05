@@ -59,8 +59,8 @@ public class MuleCixsPreferencePage extends AbstractCixsPreferencePage {
                 getFieldEditorParent()));
 
         addField(new DirectoryFieldEditor(
-                PreferenceConstants.MULE_USER_JAR_FOLDER,
-                Messages.preference_user_jar_location_label + ':',
+                PreferenceConstants.MULE_APPS_FOLDER,
+                Messages.preference_apps_location_label + ':',
                 getFieldEditorParent()));
 
         addField(new StringFieldEditor(

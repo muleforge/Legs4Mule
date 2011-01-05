@@ -13,20 +13,11 @@
     <description>Sample Adapter for program LSFILEAE which uses a COMMAREA with same input and output layout</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
-    <!-- If a mainframe is available for integration testing, set
-    this property to false in settings.xml, it will take precedence. -->
-    <properties>
-        <no-mainframe-available>true</no-mainframe-available>
-    </properties>
-
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.4.2</version>
                 <configuration>
-                    <skipTests>${no-mainframe-available}</skipTests>
                     <excludes> 
                         <exclude>**/LsfileaeTcpClientTest.java</exclude> 
                         <exclude>**/LsfileaeHttpClientTest.java</exclude> 
