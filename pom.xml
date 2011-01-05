@@ -67,6 +67,33 @@
         </site>
     </distributionManagement>
 
+    <modules>
+
+        <!-- Main modules -->
+        <module>legstar-mule-transport</module>
+        <module>legstar-mule-generator</module>
+
+        <!-- Integration test modules -->
+        <module>legstar-mulegen-jvmquery</module>
+        <module>legstar-mulegen-jvmquerywmq</module>
+        <module>legstar-mulegen-lsfileac</module>
+        <module>legstar-mulegen-lsfileae</module>
+        <module>legstar-mulegen-lsfileaewmq</module>
+        <module>legstar-mulegen-lsfileaetcp</module>
+        <module>legstar-mulegen-lsfileaemock</module>
+        <module>legstar-mulegen-lsfileal</module>
+        <module>legstar-mulegen-lsfileax</module>
+
+        <!-- Distribution -->
+        <module>dist</module>
+
+        <!-- Eclipse modules -->
+        <module>legstar-mulegen-plugin</module>
+        <module>legstar-mulegen-feature</module>
+        <module>legstar-mulegen-site</module>
+
+    </modules>
+
     <build>
 
         <extensions>
@@ -80,27 +107,66 @@
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
                     <groupId>org.apache.maven.plugins</groupId> 
                     <artifactId>maven-assembly-plugin</artifactId> 
-                    <version>2.2-beta-3</version> 
+                    <version>2.2-beta-5</version> 
                 </plugin>
+
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId> 
+                    <version>2.1</version> 
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>ant</groupId>
+                            <artifactId>ant-nodeps</artifactId>
+                            <version>1.6.5</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>ant</groupId>
+                                    <artifactId>ant</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                        <dependency>
+                            <groupId>ant-contrib</groupId>
+                            <artifactId>ant-contrib</artifactId>
+                            <version>1.0b3</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>ant</groupId>
+                                    <artifactId>ant</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId> 
                     <artifactId>maven-site-plugin</artifactId> 
                     <version>2.0.1</version> 
                 </plugin>
-            </plugins>
+
+             </plugins>
         </pluginManagement>
 
         <plugins>
-
-            <plugin>
-                <artifactId>maven-release-plugin</artifactId> 
-                <version>2.1</version> 
-                <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                </configuration>
-            </plugin>
 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -111,28 +177,6 @@
                     </descriptors>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-source-plugin</artifactId>
-                <inherited>false</inherited>
-                <executions>
-                    <execution>
-                        <id>aggregate-sources</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>aggregate</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>
@@ -148,41 +192,6 @@
                 </executions>
             </plugin>
       
-            <plugin>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.1</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>ant</groupId>
-                        <artifactId>ant-nodeps</artifactId>
-                        <version>1.6.5</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                    <dependency>
-                        <groupId>ant-contrib</groupId>
-                        <artifactId>ant-contrib</artifactId>
-                        <version>1.0b2</version>
-                        <exclusions>
-                            <exclusion>
-                                <groupId>ant</groupId>
-                                <artifactId>ant</artifactId>
-                            </exclusion>
-                        </exclusions>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-site-plugin</artifactId>
-                <version>2.0-beta-7</version>
-            </plugin>
-
         </plugins>
     </build>
 
@@ -724,32 +733,5 @@
 
         </dependencies>
     </dependencyManagement>
-
-    <modules>
-
-        <!-- Main modules -->
-        <module>legstar-mule-transport</module>
-        <module>legstar-mule-generator</module>
-
-        <!-- Integration test modules -->
-        <module>legstar-mulegen-jvmquery</module>
-        <module>legstar-mulegen-jvmquerywmq</module>
-        <module>legstar-mulegen-lsfileac</module>
-        <module>legstar-mulegen-lsfileae</module>
-        <module>legstar-mulegen-lsfileaewmq</module>
-        <module>legstar-mulegen-lsfileaetcp</module>
-        <module>legstar-mulegen-lsfileaemock</module>
-        <module>legstar-mulegen-lsfileal</module>
-        <module>legstar-mulegen-lsfileax</module>
-
-        <!-- Distribution -->
-        <module>dist</module>
-
-        <!-- Eclipse modules -->
-        <module>legstar-mulegen-plugin</module>
-        <module>legstar-mulegen-feature</module>
-        <module>legstar-mulegen-site</module>
-
-    </modules>
 
 </project>
