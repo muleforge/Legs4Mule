@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Generate a Mule component as an adapter for a mainframe program.
+     Artifacts can be used to call a remote Mainframe function.
+     Prerequisite: Cobol binding classes should have been generated
+     using LegStar Coxbgen prior to using this script.
+     Refer to http://www.legsem.com/legstar for info on generating binding classes.
+  -->
+<project basedir=".." default="signalSuccess" name="generate-mule2cics">
+
+    <!-- ===========================================================  -->
+    <!-- Setup environment
+    -->
+    <target name="init">
+
+        <property environment="env"/>
+#if(${antModel.muleHome})
+        <property name="mule.home" value="${antModel.muleHome}"/>
+#else
+        <property name="mule.home" value="${env.MULE_HOME}"/>
+#end
+        <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
+
+        <!-- Classpath setting -->
+        <path id="classpath">
+            <pathelement location="${antModel.jaxbBinDir}"/>
+            <pathelement location="${antModel.coxbBinDir}"/>
+            <pathelement location="${antModel.custBinDir}"/>
+#if(${antModel.productLocation})
+            <fileset dir="${antModel.productLocation}" includes="lib/*.jar" />
+#else
+            <fileset dir="${legstar.home}" includes="lib/*.jar" />
+#end
+#if(${antModel.mulegenProductLocation})
+            <fileset dir="${antModel.mulegenProductLocation}" includes="lib/*.jar" />
+#end
+            <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
+        </path>
+
+        <!-- Mule component Generator ant task -->
+        <taskdef name="mule2cixsgen"
+          classname="org.mule.transport.legstar.gen.Mule2CixsGenerator"
+          classpathref="classpath" 
+        /> 
+
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- This step creates all the artifacts for a Mule component.    -->
+  
+    <target name="generateMule2Cixs" depends="init">
+    
+        <mule2cixsgen targetSrcDir="${antModel.targetSrcDir}"
+            targetMuleConfigDir="${antModel.targetMuleConfigDir}"
+            targetDistDir="${antModel.targetDistDir}"
+            targetAntDir="${antModel.targetAntDir}"
+            targetAppsDir="${antModel.targetAppsDir}"
+            targetBinDir="${antModel.targetBinDir}"
+            jaxbBinDir="${antModel.jaxbBinDir}"
+            coxbBinDir="${antModel.coxbBinDir}"
+            custBinDir="${antModel.custBinDir}"
+            hostCharset="${antModel.hostCharset}"
+            sampleConfigurationTransport="${antModel.sampleConfigurationTransport}"
+            sampleConfigurationHostMessagingType="${antModel.sampleConfigurationHostMessagingType}"
+            sampleConfigurationPayloadType="${antModel.sampleConfigurationPayloadType}"
+            sampleConfigurationFileName="${antModel.sampleConfigurationFileName}"
+          >
+            <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
+                packageName="${antModel.cixsMuleComponent.packageName}">
+#foreach ($cixsOperation in $antModel.cixsMuleComponent.cixsOperations)
+                <cixsOperation name="${cixsOperation.name}"
+                    cicsProgramName="${cixsOperation.cicsProgramName}"
+#if(!${helper.isEmpty(${cixsOperation.cicsChannel})})
+                    cicsChannel="${cixsOperation.cicsChannel}"
+#end
+                    >
+#foreach ($cixsStructure in $cixsOperation.input)
+                    <input
+                        jaxbType="${cixsStructure.jaxbType}"
+                        jaxbPackageName="${cixsStructure.jaxbPackageName}"
+#if ($cixsStructure.cicsContainer)
+                        cicsContainer="${cixsStructure.cicsContainer}"
+#end
+                    />
+#end
+#foreach ($cixsStructure in $cixsOperation.output)
+                    <output
+                        jaxbType="${cixsStructure.jaxbType}"
+                        jaxbPackageName="${cixsStructure.jaxbPackageName}"
+#if ($cixsStructure.cicsContainer)
+                        cicsContainer="${cixsStructure.cicsContainer}"
+#end
+                    />
+#end
+                </cixsOperation>
+#end
+            </cixsMuleComponent>
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("http")})
+            <!-- HTTP transport parameters -->
+            <httpTransportParameters
+                scheme="${antModel.httpTransportParameters.scheme}"
+                host="${antModel.httpTransportParameters.host}"
+                port="${antModel.httpTransportParameters.port}"
+                path="${antModel.httpTransportParameters.path}"
+            />
+#end
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("wmq")})
+            <!-- WMQ transport parameters -->
+            <wmqTransportParameters
+                jndiUrl="${antModel.wmqTransportParameters.jndiUrl}"
+                jndiContextFactory="${antModel.wmqTransportParameters.jndiContextFactory}"
+                connectionFactory="${antModel.wmqTransportParameters.connectionFactory}"
+                zosQueueManager="${antModel.wmqTransportParameters.zosQueueManager}"
+                requestQueue="${antModel.wmqTransportParameters.requestQueue}"
+                replyQueue="${antModel.wmqTransportParameters.replyQueue}"
+#if(${antModel.wmqTransportParameters.errorQueue})
+#if(${antModel.wmqTransportParameters.errorQueue.length()} > 0)
+                errorQueue="${antModel.wmqTransportParameters.errorQueue}"
+#end
+#end
+            />
+#end
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("tcp")})
+            <!-- TCP transport parameters -->
+            <tcpTransportParameters
+                host="${antModel.tcpTransportParameters.host}"
+                port="${antModel.tcpTransportParameters.port}"
+            />
+#end
+        </mule2cixsgen>
+    
+    </target>
+  
+    <!-- ===========================================================  -->
+    <!-- Delete the probe file to signal success
+    -->
+    <target name="signalSuccess" depends="generateMule2Cixs">
+        <delete file="${antModel.probeFile}" quiet="true"/>
+    </target>
+    
+</project>

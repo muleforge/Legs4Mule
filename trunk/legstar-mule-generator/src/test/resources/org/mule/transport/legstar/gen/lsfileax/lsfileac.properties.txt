@@ -1,0 +1,16 @@
+#
+# Host Program parameters
+# -----------------------
+CICSProgramName=LSFILEAC
+CICSChannel=LSFILEAC-CHANNEL
+CICSInContainers_1=QueryData
+CICSInContainersLength_1=48
+CICSInContainers_2=QueryLimit
+CICSInContainersLength_2=10
+CICSOutContainers_1=ReplyData
+CICSOutContainersLength_1=7905
+CICSOutContainers_2=ReplyStatus
+CICSOutContainersLength_2=151
+#CICSSysID
+#CICSSyncOnReturn
+#CICSTransID

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.mulesoft.org/schema/mule/legstar/wmq"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:mule="http://www.mulesoft.org/schema/mule/core"
+            xmlns:schemadoc="http://www.mulesoft.org/schema/mule/schemadoc"
+            xmlns:mule-jms="http://www.mulesoft.org/schema/mule/jms"
+            xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
+            targetNamespace="http://www.mulesoft.org/schema/mule/legstar/wmq"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.mulesoft.org/schema/mule/core"
+                schemaLocation="http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd" />
+    <xsd:import namespace = "http://www.mulesoft.org/schema/mule/schemadoc"
+                schemaLocation = "http://www.mulesoft.org/schema/mule/schemadoc/3.0/mule-schemadoc.xsd"/>
+    <xsd:import namespace = "http://www.mulesoft.org/schema/mule/jms"
+                schemaLocation = "http://www.mulesoft.org/schema/mule/jms/3.0/mule-jms.xsd"/>
+    <xsd:import namespace = "http://www.mulesoft.org/schema/mule/legstar"
+                schemaLocation = "http://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd"/>
+
+    <xsd:annotation>
+        <xsd:documentation>LegStar over Websphere MQ</xsd:documentation>
+        <xsd:appinfo>
+            <schemadoc:short-name>Legstar-wmq</schemadoc:short-name>
+            <schemadoc:page-title>Legstar-wmq Transport</schemadoc:page-title>
+            <schemadoc:transport-features
+            receiveEvents="true" dispatchEvents="false" responseEvents="true"
+                                          requestEvents="true"
+                                          transactions="true" streaming="false">
+                <schemadoc:inboundMEPs in-only="${receiver}" in-optional-out="true" in-out="true"/>
+                <schemadoc:outboundMEPs out-only="true" out-in="true" out-optional-in="true"/>
+            </schemadoc:transport-features>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <!--==============================================================-->
+    <!--   LegStar WMQ elements                                       -->
+    <!--==============================================================-->
+    <xsd:element name="connector" type="legstarWmqConnectorType" substitutionGroup="mule:abstract-connector">
+        <xsd:annotation>
+            <xsd:documentation>
+                LegStar over WMQ
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+    <xsd:complexType name="legstarWmqConnectorType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-jms:genericConnectorType">
+                <xsd:attribute name="hostUserID" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            The mainframe user ID for authentication
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="hostPassword" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            The mainframe password for authentication
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="inbound-endpoint" type="inboundEndpointType" substitutionGroup="mule:abstract-inbound-endpoint"/>
+    <xsd:complexType name="inboundEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-jms:inboundEndpointType">
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="outbound-endpoint" type="outboundEndpointType" substitutionGroup="mule:abstract-outbound-endpoint"/>
+    <xsd:complexType name="outboundEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-jms:outboundEndpointType">
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="endpoint" type="globalEndpointType" substitutionGroup="mule:abstract-global-endpoint"/>
+    <xsd:complexType name="globalEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-jms:globalEndpointType">
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!--==============================================================-->
+    <!--   CICS MQ Bridge Transformer elements                        -->
+    <!--==============================================================-->
+    <xsd:element name="host-to-mqcih-transformer" type="legstar:hostExecRequestTransformerType"
+        substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that wraps host data into MQCIH formatted
+                messages (as expected by IBM CICS MQ Bridge).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+    <xsd:element name="mqcih-to-host-transformer" type="legstar:hostExecReplyTransformerType"
+        substitutionGroup="mule:abstract-transformer">
+        <xsd:annotation>
+            <xsd:documentation>
+                A transformer that unwraps host data formatted as an MQCIH
+                message (as produced by IBM CICS MQ Bridge).
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+</xsd:schema>

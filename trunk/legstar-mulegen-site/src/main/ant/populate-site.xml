@@ -1,0 +1,55 @@
+<!-- =================================================================================
+     This script brings in features and plugins resulting in a complete Eclipse site
+     hierarchy.
+     For SNAPSHOTS we change hyphens from version names which follow Maven convention
+     to dots which follow Eclipse/OSGI naming conventions.
+ -->
+<project basedir="../../.." default="populateSite" name="populate-site">
+
+    <target name="populateSite">
+
+        <echo message="Removing old site artifacts"/>
+        <mkdir dir="${basedir}/features"/>
+        <mkdir dir="${basedir}/plugins"/>
+        <delete>
+            <fileset dir="${basedir}/features" includes="*.jar"/>
+            <fileset dir="${basedir}/plugins" includes="*.jar"/>
+            <fileset dir="${basedir}" includes="*.jar"/>
+        </delete>
+
+        <echo message="Populating Eclipse site plugins"/>
+        <copy todir="${basedir}/plugins">
+            <fileset dir="${basedir}/../legstar-mulegen-plugin/target">
+                <include name="*.jar"/>
+                <exclude name="*-sources.jar"/>
+                <exclude name="*-javadoc.jar"/>
+            </fileset>
+            <filtermapper>
+                <replacestring from="-SNAPSHOT" to=".SNAPSHOT"/>
+            </filtermapper>
+        </copy>
+  
+        <echo message="Populating Eclipse site features"/>
+        <copy todir="${basedir}/features">
+            <fileset dir="${basedir}/../legstar-mulegen-feature/target">
+                <include name="*.jar"/>
+                <exclude name="*-sources.jar"/>
+            </fileset>
+            <filtermapper>
+                <replacestring from="-SNAPSHOT" to=".SNAPSHOT"/>
+            </filtermapper>
+        </copy>
+
+        <echo message="Create a publish command"/>
+        <copy todir="${basedir}/target">
+            <fileset dir="${basedir}/src/main/templates">
+                <include name="publish.bat.template"/>
+            </fileset>
+            <filterset>
+                <filter token="LEGSTAR-LOCAL-SITE-LOCATION" value="${basedir}"/>
+            </filterset>
+            <globmapper from="*.template" to="*"/>
+        </copy>
+
+  </target>
+</project>

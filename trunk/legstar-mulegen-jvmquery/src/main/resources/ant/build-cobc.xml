@@ -1,0 +1,57 @@
+<!-- =================================================================================
+     This script generates a Cobol data description source that can be used as 
+     a copybook in a regular Cobol program. The Data description is extracted from
+     Cobol annotations within a JAXB class. Such Cobol-annotated JAXB classes are
+     produced by legstar-jaxbgen.
+  -->
+<project basedir=".." default="generateCobol" name="generate-Cobol">
+
+    <!-- ===========================================================  -->
+    <!-- Setup environment
+    -->
+    <target name="init">
+    
+        <!-- JAXB package name   -->
+        <property name="jaxb.package.name" value="com.legstar.test.coxb.jvmquery" />
+        <!-- Location for generated JAXB binaries   -->
+        <property name="jaxb.bin.dir" value="bin" />
+        <!-- JAXB type name   -->
+        <property name="jaxb.type.name" value="JvmQueryReply" />
+        <!-- Cobol root data item name   -->
+        <property name="cobol.root.name" value="CI-REPLY" />
+        <!-- Target location for generated Cobol   -->
+        <property name="cobol.dir" value="cobol" />
+        <!-- Name of generated Cobol description   -->
+        <property name="gen.file.name" value="cireply.cbl" />
+      
+        <!-- Classpath setting -->
+        <path id="classpath">
+            <pathelement location="${basedir}"/>
+            <fileset dir="${basedir}/../../.." includes="lib/*.jar" />
+            <!--JAXB generated classes (needed for reflection) -->
+            <dirset dir="${jaxb.bin.dir}"/>
+        </path>
+
+        <!-- COBOL Structures Generator ant task -->
+        <taskdef name="cobcgen"
+          classname="com.legstar.cobc.gen.CobolGenerator"
+          classpathref="classpath"/>
+  
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- Generate a Cobol data description source.
+      -->
+    <target name="generateCobol" depends="init">
+        <echo message="Generating Cobol data description for ${jaxb.type.name}" />
+        <mkdir dir="${cobol.dir}"/>
+        <cobcgen 
+            jaxbPackageName="${jaxb.package.name}"
+            jaxbTypeName="${jaxb.type.name}"
+            cobolRootDataItemName="${cobol.root.name}"
+            targetDir="${cobol.dir}"
+            targetCobolFileName="${gen.file.name}"
+        />
+    </target>
+
+</project>

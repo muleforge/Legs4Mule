@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Generate Mule artifacts to unable a local Mule component to be accessed
+     for a mainframe program.
+     Artifacts can be used to to expose a Mule component for Mainframe consumption.
+     Prerequisite: Cobol binding classes should have been generated
+     using LegStar Coxbgen prior to using this script.
+     Refer to http://www.legsem.com/legstar for info on generating binding classes.
+  -->
+<project basedir=".." default="signalSuccess" name="generate-cixs2mule">
+
+    <!-- ===========================================================  -->
+    <!-- Setup environment
+    -->
+    <target name="init">
+
+        <property environment="env"/>
+#if(${antModel.muleHome})
+        <property name="mule.home" value="${antModel.muleHome}"/>
+#else
+        <property name="mule.home" value="${env.MULE_HOME}"/>
+#end
+        <property name="legstar.home" value="${env.LEGSTAR_HOME}"/>
+
+        <!-- Classpath setting -->
+        <path id="classpath">
+            <pathelement location="${antModel.jaxbBinDir}"/>
+            <pathelement location="${antModel.coxbBinDir}"/>
+            <pathelement location="${antModel.custBinDir}"/>
+#if(${antModel.productLocation})
+            <fileset dir="${antModel.productLocation}" includes="lib/*.jar" />
+#else
+            <fileset dir="${legstar.home}" includes="lib/*.jar" />
+#end
+#if(${antModel.mulegenProductLocation})
+            <fileset dir="${antModel.mulegenProductLocation}" includes="lib/*.jar" />
+#end
+            <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
+        </path>
+
+        <!-- Mule component Generator ant task -->
+        <taskdef name="cixs2mulegen"
+          classname="org.mule.transport.legstar.gen.Cixs2MuleGenerator"
+          classpathref="classpath" 
+        /> 
+
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- This step creates all the artifacts for a Mule component.    -->
+  
+    <target name="generateCixs2Mule" depends="init">
+    
+        <cixs2mulegen targetSrcDir="${antModel.targetSrcDir}"
+            targetMuleConfigDir="${antModel.targetMuleConfigDir}"
+            targetDistDir="${antModel.targetDistDir}"
+            targetAntDir="${antModel.targetAntDir}"
+            targetAppsDir="${antModel.targetAppsDir}"
+            targetBinDir="${antModel.targetBinDir}"
+            targetCobolDir="${antModel.targetCobolDir}"
+            jaxbBinDir="${antModel.jaxbBinDir}"
+            coxbBinDir="${antModel.coxbBinDir}"
+            custBinDir="${antModel.custBinDir}"
+            hostCharset="${antModel.hostCharset}"
+            sampleConfigurationTransport="${antModel.sampleConfigurationTransport}"
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("http")})
+            sampleCobolHttpClientType="${antModel.sampleCobolHttpClientType}"
+#end
+            sampleConfigurationFileName="${antModel.sampleConfigurationFileName}"
+          >
+            <cixsMuleComponent name="${antModel.cixsMuleComponent.name}"
+                packageName="${antModel.cixsMuleComponent.packageName}"
+            >
+#foreach ($cixsOperation in $antModel.cixsMuleComponent.cixsOperations)
+                <cixsOperation name="${cixsOperation.name}"
+                    cicsProgramName="${cixsOperation.cicsProgramName}"
+                    >
+#foreach ($cixsStructure in $cixsOperation.input)
+                    <input
+                        jaxbType="${cixsStructure.jaxbType}"
+                        jaxbPackageName="${cixsStructure.jaxbPackageName}"
+                    />
+#end
+#foreach ($cixsStructure in $cixsOperation.output)
+                    <output
+                        jaxbType="${cixsStructure.jaxbType}"
+                        jaxbPackageName="${cixsStructure.jaxbPackageName}"
+                    />
+#end
+                </cixsOperation>
+#end
+#if ($antModel.cixsMuleComponent.muleStartupPathElements.size() > 0)
+                <muleStartupPathElement>
+                    <path>
+#foreach ($muleStartupPathElement in $antModel.cixsMuleComponent.muleStartupPathElements)
+                        <pathelement location="${muleStartupPathElement}"/>
+#end
+                    </path>
+                </muleStartupPathElement>
+#end
+            </cixsMuleComponent>
+
+            <!-- Target UMO Component parameters -->
+            <umoComponentTargetParameters
+                implementationName="${antModel.umoComponentTargetParameters.implementationName}"
+            />
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("http")})
+            <!-- HTTP transport parameters -->
+            <httpTransportParameters
+                scheme="${antModel.httpTransportParameters.scheme}"
+                host="${antModel.httpTransportParameters.host}"
+                port="${antModel.httpTransportParameters.port}"
+                path="${antModel.httpTransportParameters.path}"
+            />
+#end
+#if(${antModel.sampleConfigurationTransport.toString().equalsIgnoreCase("wmq")})
+            <!-- WMQ transport parameters -->
+            <wmqTransportParameters
+                jndiUrl="${antModel.wmqTransportParameters.jndiUrl}"
+                jndiContextFactory="${antModel.wmqTransportParameters.jndiContextFactory}"
+                connectionFactory="${antModel.wmqTransportParameters.connectionFactory}"
+                zosQueueManager="${antModel.wmqTransportParameters.zosQueueManager}"
+                requestQueue="${antModel.wmqTransportParameters.requestQueue}"
+                replyQueue="${antModel.wmqTransportParameters.replyQueue}"
+#if(${antModel.wmqTransportParameters.errorQueue})
+#if(${antModel.wmqTransportParameters.errorQueue.length()} > 0)
+                errorQueue="${antModel.wmqTransportParameters.errorQueue}"
+#end
+#end
+            />
+#end
+        </cixs2mulegen>
+    
+    </target>
+ 
+    <!-- ===========================================================  -->
+    <!-- Delete the probe file to signal success
+    -->
+    <target name="signalSuccess" depends="generateCixs2Mule">
+        <delete file="${antModel.probeFile}" quiet="true"/>
+    </target>
+    
+</project>

@@ -1,0 +1,80 @@
+##/////////////////////////////////////////////////////////////////////
+##Mule Component build archive Template.
+##/////////////////////////////////////////////////////////////////////
+#set($zipFile = "${targetDistDir}/legstar-${muleComponent.name}.zip")
+## ==================================================================
+## Macro will help make sure we process packages only once
+## ==================================================================
+#macro(addPackage $list, $newPackage)
+#if (!$list.contains($newPackage))
+#set($ret = $list.add($newPackage))
+#end
+#end
+## ==================================================================
+## Create lists of unique jaxb,coxb,cust package names
+## ==================================================================
+#macro(addPackages $structures, $jaxbPackages, $coxbPackages, $custPackages)
+#foreach($structure in $structures)
+#set($newPackage = ${structure.jaxbPackageName})
+#addPackage($jaxbPackages, $newPackage)
+#set($newPackage = ${structure.coxbPackageName})
+#addPackage($coxbPackages, $newPackage)
+#if(${structure.custPackageName})
+#set($newPackage = ${structure.custPackageName})
+#addPackage($custPackages, $newPackage)
+#end
+#end
+#end
+## ==================================================================
+## Create a list of unique jaxb,coxb,cust package names
+## ==================================================================
+#set($jaxbPackages = [])
+#set($coxbPackages = [])
+#set($custPackages = [])
+#foreach ($cixsOperation in $muleComponent.cixsOperations)
+#addPackages($cixsOperation.getInput(), $jaxbPackages, $coxbPackages, $custPackages)
+#addPackages($cixsOperation.getOutput(), $jaxbPackages, $coxbPackages, $custPackages)
+#end
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Create an zip archive for a legstar component.
+  -->
+<project basedir="${generateBaseDir}" default="create-zip" name="build-zip">
+
+    <target name="clean">
+        <delete file="${zipFile}" quiet="true"/>
+    </target>
+
+   <target name="create-zip" depends="clean">
+        <mkdir dir="${targetDistDir}"/>
+        <zip destfile="${zipFile}">
+            <!-- Generated Mule component binaries -->
+            <zipfileset dir="${targetBinDir}" prefix="classes">
+                <include name="${muleComponent.packageName.replace(".","/")}/*.class"/>
+            </zipfileset>
+            <!-- JAXB binaries -->
+#foreach ($jaxbPackage in $jaxbPackages)
+            <zipfileset dir="${jaxbBinDir}" prefix="classes"
+                includes="${jaxbPackage.replace(".","/")}/*.class"/>
+#end
+            <!-- Binding binaries -->
+#foreach ($coxbPackage in $coxbPackages)
+            <zipfileset dir="${coxbBinDir}" prefix="classes"
+                includes="${coxbPackage.replace(".","/")}/*.class"/>
+#end
+#foreach ($custPackage in $custPackages)
+            <!-- Custom binding binaries if they are external to the project -->
+            <zipfileset dir="${custBinDir}" prefix="classes"
+                includes="${custPackage.replace(".","/")}/*.class"/>
+#end
+            <!-- Any other dependency to distribute -->
+            <zipfileset dir="${targetDistDir}" prefix="lib">
+                <include name="*.jar"/>
+            </zipfileset>
+            <!-- Mule configuration file -->
+            <fileset dir="${targetMuleConfigDir}">
+                <include name="*.xml"/>
+            </fileset>
+        </zip>
+    </target>
+</project>

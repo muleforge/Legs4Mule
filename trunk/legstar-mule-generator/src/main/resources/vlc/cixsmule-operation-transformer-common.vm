@@ -1,0 +1,33 @@
+##/////////////////////////////////////////////////////////////////////
+##Mule Operation Common Velocity Template.
+##These are the directives and macros shared by mule transformer templates
+##@author Fady
+##@version 0.1
+##/////////////////////////////////////////////////////////////////////
+## ==================================================================
+## Multiple input or output operations must use channel/containers
+## In this case, individual objects are packed in a holder.
+## Otherwise the type of Object produced or consumed is
+## either a single JAXB Object or a POJO
+##
+#if($propertyName == "Request")
+#set($holderType = ${cixsOperation.requestHolderType})
+#set($cixsStructures = ${cixsOperation.getInput()})
+#else
+#set($holderType = ${cixsOperation.responseHolderType})
+#set($cixsStructures = ${cixsOperation.getOutput()})
+#end
+#if ($cixsOperation.hasChannel())
+#set($type = $holderType)
+#set($holder = true)
+#else
+#set($cixsStructure = $cixsStructures.get(0))
+#set($javaClassName = ${cixsHelper.getJavaClassName(${cixsStructure.jaxbPackageName}, ${cixsStructure.jaxbType})})
+#set($type = ${helper.getClassName(${javaClassName})})
+#end
+## ==================================================================
+## Set the Operation package name (if any)
+##
+#if(${cixsOperation.packageName})
+package ${cixsOperation.packageName};
+#end

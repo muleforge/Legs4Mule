@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  This Mule configuration implements an adapter service for a mainframe program.
+      Clients of this Mule service are expected to send serialized java objects over HTTP.
+      Transport from Mule service to mainframe is LEGSTAR-HTTP.
+ -->
+<mule xmlns="http://www.mulesoft.org/schema/mule/core"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:http="http://www.mulesoft.org/schema/mule/http"
+        xmlns:legstar="http://www.mulesoft.org/schema/mule/legstar"
+    xsi:schemaLocation=
+        "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
+         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd
+         http://www.mulesoft.org/schema/mule/legstar http://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd
+        ">
+
+    <description>Mule configuration for lsfileal adapter service</description>
+
+
+    <!-- Transform serialized java objects to mainframe data -->
+    <legstar:java-to-host-transformer name="lsfilealJavaToHost"
+        hostCharset="IBM01140"
+        class="org.mule.transport.legstar.test.lsfileal.RequestParmsToHostMuleTransformer" />
+
+    <!-- Transform mainframe data to serialized java objects -->
+    <legstar:host-to-java-transformer name="lsfilealHostToJava"
+        hostCharset="IBM01140"
+        class="org.mule.transport.legstar.test.lsfileal.HostToReplyDataMuleTransformer" />
+
+    <!-- Wrap mainframe data in a LegStar request for mainframe program execution -->
+    <legstar:host-to-legstar-transformer name="lsfilealHostToLegStar"
+        hostCharset="IBM01140"
+    >
+        <legstar:host-program
+            name="LSFILEAL"
+            maxDataLength="8043"
+            dataLength="20"
+        >
+        </legstar:host-program>
+    </legstar:host-to-legstar-transformer>
+    
+    <!-- Unwrap LegStar response to mainframe program execution -->
+    <legstar:legstar-to-host-transformer name="lsfilealLegStarToHost"/>
+
+    <http:endpoint name="lsfilealClientEndpoint" exchange-pattern="request-response"
+        address="http://localhost:3280/lsfileal" >
+        <byte-array-to-object-transformer/>
+    </http:endpoint>
+
+    <legstar:endpoint name="mainframeRequestEndpoint" exchange-pattern="request-response"
+        address="legstar://mainframe:4081/CICS/CWBA/LSWEBBIN" />
+
+    <flow name="lsfilealAdapter">
+        <inbound-endpoint ref="lsfilealClientEndpoint" />
+        <outbound-endpoint ref="mainframeRequestEndpoint"
+            transformer-refs="lsfilealJavaToHost lsfilealHostToLegStar"
+            responseTransformer-refs="lsfilealLegStarToHost lsfilealHostToJava" />
+    </flow>
+</mule>

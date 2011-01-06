@@ -1,0 +1,644 @@
+<project name="add2maven" default="add2maven" basedir=".">
+    <target name="add2maven">
+    
+        <property name="M2.repo" value="C:/Documents and Settings/Fady/.m2/repository" />
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.equinox"/>
+            <arg value="-DartifactId=org.eclipse.equinox.preferences"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/equinox/org.eclipse.equinox.preferences/3.2.1/org.eclipse.equinox.preferences-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.equinox"/>
+            <arg value="-DartifactId=org.eclipse.equinox.registry"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/equinox/org.eclipse.equinox.registry/3.2.1/org.eclipse.equinox.registry-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.equinox"/>
+            <arg value="-DartifactId=org.eclipse.equinox.common"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/equinox/org.eclipse.equinox.common/3.2.0/org.eclipse.equinox.common-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.resources"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.resources/3.2.1/org.eclipse.core.resources-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.runtime.compatibility"/>
+            <arg value="-Dversion=3.1.100"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.runtime.compatibility/3.1.100/org.eclipse.core.runtime.compatibility-3.1.100.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.update"/>
+            <arg value="-DartifactId=org.eclipse.update.configurator"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/update/org.eclipse.update.configurator/3.2.1/org.eclipse.update.configurator-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ant"/>
+            <arg value="-DartifactId=org.eclipse.ant.core"/>
+            <arg value="-Dversion=3.1.100"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ant/org.eclipse.ant.core/3.1.100/org.eclipse.ant.core-3.1.100.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.variables"/>
+            <arg value="-Dversion=3.1.100"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.variables/3.1.100/org.eclipse.core.variables-3.1.100.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.expressions"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.expressions/3.2.1/org.eclipse.core.expressions-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.filesystem"/>
+            <arg value="-Dversion=1.0.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.filesystem/1.0.0/org.eclipse.core.filesystem-1.0.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.osgi"/>
+            <arg value="-DartifactId=org.eclipse.osgi"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/osgi/org.eclipse.osgi/3.2.1/org.eclipse.osgi-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.jdt"/>
+            <arg value="-DartifactId=org.eclipse.jdt.core"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/jdt/org.eclipse.jdt.core/3.2.1/org.eclipse.jdt.core-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.runtime"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.runtime/3.2.0/org.eclipse.core.runtime-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.jobs"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.jobs/3.2.0/org.eclipse.core.jobs-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.contenttype"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.contenttype/3.2.0/org.eclipse.core.contenttype-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.runtime.compatibility.auth"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.runtime.compatibility.auth/3.2.0/org.eclipse.core.runtime.compatibility.auth-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.text"/>
+            <arg value="-DartifactId=org.eclipse.text"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/text/org.eclipse.text/3.2.0/org.eclipse.text-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.team"/>
+            <arg value="-DartifactId=org.eclipse.team.core"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/team/org.eclipse.team.core/3.2.1/org.eclipse.team.core-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.jdt"/>
+            <arg value="-DartifactId=org.eclipse.jdt.ui"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/jdt/org.eclipse.jdt.ui/3.2.1/org.eclipse.jdt.ui-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui/3.2.1/org.eclipse.ui-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.console"/>
+            <arg value="-Dversion=3.1.100"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.console/3.1.100/org.eclipse.ui.console-3.1.100.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.help"/>
+            <arg value="-DartifactId=org.eclipse.help"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/help/org.eclipse.help/3.2.1/org.eclipse.help-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.search"/>
+            <arg value="-DartifactId=org.eclipse.search"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/search/org.eclipse.search/3.2.1/org.eclipse.search-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.filebuffers"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.filebuffers/3.2.1/org.eclipse.core.filebuffers-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.debug"/>
+            <arg value="-DartifactId=org.eclipse.debug.core"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/debug/org.eclipse.debug.core/3.2.1/org.eclipse.debug.core-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.debug"/>
+            <arg value="-DartifactId=org.eclipse.debug.ui"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/debug/org.eclipse.debug.ui/3.2.1/org.eclipse.debug.ui-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.jdt"/>
+            <arg value="-DartifactId=org.eclipse.jdt.launching"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/jdt/org.eclipse.jdt.launching/3.2.1/org.eclipse.jdt.launching-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.jdt"/>
+            <arg value="-DartifactId=org.eclipse.jdt.debug"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/jdt/org.eclipse.jdt.debug/3.2.1/org.eclipse.jdt.debug-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.compare"/>
+            <arg value="-DartifactId=org.eclipse.compare"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/compare/org.eclipse.compare/3.2.1/org.eclipse.compare-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.team"/>
+            <arg value="-DartifactId=org.eclipse.team.ui"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/team/org.eclipse.team.ui/3.2.1/org.eclipse.team.ui-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.navigator.resources"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.navigator.resources/3.2.1/org.eclipse.ui.navigator.resources-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.views.properties.tabbed"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.views.properties.tabbed/3.2.1/org.eclipse.ui.views.properties.tabbed-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.jface"/>
+            <arg value="-DartifactId=org.eclipse.jface.text"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/jface/org.eclipse.jface.text/3.2.1/org.eclipse.jface.text-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.workbench.texteditor"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.workbench.texteditor/3.2.0/org.eclipse.ui.workbench.texteditor-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.ide"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.ide/3.2.1/org.eclipse.ui.ide-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.update"/>
+            <arg value="-DartifactId=org.eclipse.update.core"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/update/org.eclipse.update.core/3.2.1/org.eclipse.update.core-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.update"/>
+            <arg value="-DartifactId=org.eclipse.update.ui"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/update/org.eclipse.update.ui/3.2.1/org.eclipse.update.ui-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.views"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.views/3.2.1/org.eclipse.ui.views-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.editors"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.editors/3.2.1/org.eclipse.ui.editors-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ltk"/>
+            <arg value="-DartifactId=org.eclipse.ltk.core.refactoring"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ltk/org.eclipse.ltk.core.refactoring/3.2.1/org.eclipse.ltk.core.refactoring-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ltk"/>
+            <arg value="-DartifactId=org.eclipse.ltk.ui.refactoring"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ltk/org.eclipse.ltk.ui.refactoring/3.2.1/org.eclipse.ltk.ui.refactoring-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.forms"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.forms/3.2.0/org.eclipse.ui.forms-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.navigator"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.navigator/3.2.1/org.eclipse.ui.navigator-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.jdt"/>
+            <arg value="-DartifactId=org.eclipse.jdt.core.manipulation"/>
+            <arg value="-Dversion=1.0.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/jdt/org.eclipse.jdt.core.manipulation/1.0.1/org.eclipse.jdt.core.manipulation-1.0.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.ui"/>
+            <arg value="-DartifactId=org.eclipse.ui.workbench"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/ui/org.eclipse.ui.workbench/3.2.1/org.eclipse.ui.workbench-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.swt"/>
+            <arg value="-DartifactId=org.eclipse.swt"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/swt/org.eclipse.swt/3.2.1/org.eclipse.swt-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.jface"/>
+            <arg value="-DartifactId=org.eclipse.jface"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/jface/org.eclipse.jface/3.2.1/org.eclipse.jface-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.core"/>
+            <arg value="-DartifactId=org.eclipse.core.commands"/>
+            <arg value="-Dversion=3.2.0"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/core/org.eclipse.core.commands/3.2.0/org.eclipse.core.commands-3.2.0.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+        <exec executable="cmd">
+            <arg value="/c"/>
+            <arg value="mvn"/>
+            <arg value="deploy:deploy-file"/>
+            <arg value="-DgroupId=org.eclipse.swt"/>
+            <arg value="-DartifactId=org.eclipse.swt.win32.win32.x86"/>
+            <arg value="-Dversion=3.2.1"/>
+            <arg value="-Dpackaging=jar"/>
+            <arg value="-Dfile=${M2.repo}/org/eclipse/swt/org.eclipse.swt.win32.win32.x86/3.2.1/org.eclipse.swt.win32.win32.x86-3.2.1.jar"/>
+            <arg value="-DrepositoryId=ftp-release-repository"/>
+            <arg value="-Durl=ftp://ftp.legsem.com/public_html/legstar/maven/repo"/>
+        </exec>
+
+    </target>
+</project>

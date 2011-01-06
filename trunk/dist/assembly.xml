@@ -1,0 +1,159 @@
+<!--
+Assembly descriptor for the full distribution.
+-->
+<assembly>
+    <id></id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <fileSets>
+
+        <!-- The COBOL to XML Schema translator dependencies -->
+        <fileSet>
+            <directory>${legstarTempLocation}/legstar-distribution-${legstarVersion}/lib</directory>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>legstar-cob2xsd-*.jar</include>
+                <include>antlr-runtime-*.jar</include>
+            </includes>
+        </fileSet>
+
+        <!-- ====================================== -->
+        <!-- Includes the quickstart adapter sample -->
+        <!-- COBOL sample source code -->
+        <fileSet>
+            <directory>${legstarTempLocation}/legstar-distribution-${legstarVersion}/samples/quickstarts/adapter_lsfileae/cobol</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_adapter/cobol</outputDirectory>
+        </fileSet>
+        <!-- Set of generation ant scripts -->
+        <fileSet>
+            <directory>../legstar-mulegen-lsfileae/src/main/resources/ant</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_adapter/ant</outputDirectory>
+            <includes>
+                <include>*.xml</include>
+            </includes>
+        </fileSet>
+        <!-- Documentation -->
+        <fileSet>
+            <directory>../legstar-mulegen-lsfileae/src/main/resources</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_adapter</outputDirectory>
+            <includes>
+                <include>*.txt</include>
+            </includes>
+        </fileSet>
+        <!-- Test class -->
+        <fileSet>
+            <directory>../legstar-mulegen-lsfileae/src/test/java</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_adapter/src</outputDirectory>
+            <includes>
+                <include>**/LsfileaeHttpClientTest.java</include>
+            </includes>
+        </fileSet>
+        <!-- Set of test parameters -->
+        <fileSet>
+            <directory>../legstar-mulegen-lsfileae/src/test/resources</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_adapter</outputDirectory>
+            <includes>
+                <include>*.xml</include>
+                <include>*.properties</include>
+            </includes>
+        </fileSet>
+
+        <!-- ==================================== -->
+        <!-- Includes the quickstart proxy sample -->
+        <!-- Target POJO sources  -->
+        <fileSet>
+            <directory>${legstarTempLocation}/legstar-distribution-${legstarVersion}/samples/quickstarts/proxy_pojo_jvmquery/src</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_proxy/src</outputDirectory>
+        </fileSet>
+        <!-- Set of generation ant scripts -->
+        <fileSet>
+            <directory>../legstar-mulegen-jvmquery/src/main/resources/ant</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_proxy/ant</outputDirectory>
+            <includes>
+                <include>*.xml</include>
+            </includes>
+        </fileSet>
+        <!-- Documentation -->
+        <fileSet>
+            <directory>../legstar-mulegen-jvmquery/src/main/resources</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_proxy</outputDirectory>
+            <includes>
+                <include>*.txt</include>
+            </includes>
+        </fileSet>
+        <!-- Test class -->
+        <fileSet>
+            <directory>../legstar-mulegen-jvmquery/src/test/java</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_proxy/src</outputDirectory>
+            <includes>
+                <include>**/JvmqueryHttpClientTest.java</include>
+            </includes>
+        </fileSet>
+        <!-- Set of test parameters -->
+        <fileSet>
+            <directory>../legstar-mulegen-jvmquery/src/test/resources</directory>
+            <outputDirectory>samples/mule/quickstarts/legstar_proxy</outputDirectory>
+            <includes>
+                <include>*.xml</include>
+                <include>*.properties</include>
+            </includes>
+        </fileSet>
+
+        <!-- ======================================================== -->
+        <!-- Special transport assembly that bundles all dependencies -->
+        <fileSet>
+            <directory>../legstar-mule-transport/target</directory>
+            <outputDirectory>lib</outputDirectory>
+            <includes>
+                <include>*-dist.jar</include>
+            </includes>
+        </fileSet>
+
+    </fileSets>
+
+    <files>
+
+        <!--  Licence text -->
+        <file>
+            <source>${legstarTempLocation}/legstar-distribution-${legstarVersion}/LICENSE</source>
+            <outputDirectory></outputDirectory>
+        </file>
+        <!--  Readme -->
+        <file>
+            <source>${legstar-mule-dev-local-dir}/wiki/InstallInstructions.wiki</source>
+            <outputDirectory></outputDirectory>
+            <destName>README</destName>
+        </file>
+
+        <!-- Includes the quickstart adapter sample build -->
+        <file>
+            <source>../legstar-mulegen-lsfileae/src/main/resources/build.xml.quickstart</source>
+            <outputDirectory>samples/mule/quickstarts/legstar_adapter</outputDirectory>
+            <destName>build.xml</destName>
+        </file>
+        <!-- Includes the quickstart proxy sample build -->
+        <file>
+            <source>../legstar-mulegen-jvmquery/src/main/resources/build.xml.quickstart</source>
+            <outputDirectory>samples/mule/quickstarts/legstar_proxy</outputDirectory>
+            <destName>build.xml</destName>
+        </file>
+
+    </files>
+
+    <dependencySets>
+        <!-- Transport and Generator dependencies -->
+        <dependencySet>
+            <outputDirectory>lib</outputDirectory>
+            <scope>runtime</scope>
+            <excludes>
+                <exclude>org.mule.transports:${pom.artifactId}:jar</exclude>
+                <exclude>com.ibm:*</exclude>
+                <exclude>com.sun.xml.ws:*</exclude>
+            </excludes>
+        </dependencySet>
+
+     </dependencySets>
+</assembly>

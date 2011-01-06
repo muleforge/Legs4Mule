@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  This Mule configuration implements an adapter service for a mainframe program.
+      Clients of this Mule service are expected to send XML strings over HTTP.
+      Transport from Mule service to mainframe is LEGSTAR-HTTP.
+ -->
+<mule xmlns="http://www.mulesource.org/schema/mule/core/2.2"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:http="http://www.mulesource.org/schema/mule/http/2.2"
+        xmlns:legstar="http://www.mulesource.org/schema/mule/legstar/2.2"
+    xsi:schemaLocation=
+        "http://www.mulesource.org/schema/mule/core/2.2 http://www.mulesource.org/schema/mule/core/2.2/mule.xsd
+         http://www.mulesource.org/schema/mule/http/2.2 http://www.mulesource.org/schema/mule/http/2.2/mule-http.xsd
+         http://www.mulesource.org/schema/mule/legstar/2.2 http://www.legsem.com/legstar/xml/mule-legstar-1.0.xsd
+        ">
+
+    <description>Mule configuration for lsfileac adapter service</description>
+
+
+    <http:endpoint name="lsfileacClientEndpoint" synchronous="true"
+        address="http://localhost:3280/lsfileac" />
+
+    <legstar:endpoint name="mainframeRequestEndpoint" synchronous="true"
+        address="legstar:http://mainframe:4081/CICS/CWBA/LSWEBBIN" />
+
+    <model name="lsfileacModel">
+
+        <service name="lsfileacAdapterService">
+            <inbound>
+                <inbound-endpoint ref="lsfileacClientEndpoint" >
+                    <transformers>
+                        <byte-array-to-object-transformer />
+                    </transformers>
+                </inbound-endpoint>
+            </inbound>
+            <outbound>
+                <pass-through-router>
+                    <outbound-endpoint ref="mainframeRequestEndpoint" >
+                        <transformers>
+                            <legstar:xml-to-host-transformer
+                                hostCharset="IBM01140"
+                                class="org.mule.transport.legstar.test.lsfileac.LsfileacRequestHolderXmlToHostMuleTransformer" />
+                            <legstar:host-to-legstar-transformer
+                                hostCharset="IBM01140"
+                            >
+                                <legstar:host-program
+                                    name="LSFILEAC"
+                                    channelName="LSFILEAC-CHANNEL"
+                                >
+                                    <legstar:input-container name="QueryData" maxLength="48" />
+                                    <legstar:input-container name="QueryLimit" maxLength="10" />
+                                    <legstar:output-container name="ReplyData" maxLength="7905" />
+                                    <legstar:output-container name="ReplyStatus" maxLength="151" />
+                                </legstar:host-program>
+                            </legstar:host-to-legstar-transformer>
+                        </transformers>
+                        <response-transformers>
+                            <legstar:legstar-to-host-transformer />
+                            <legstar:host-to-xml-transformer
+                                hostCharset="IBM01140"
+                                class="org.mule.transport.legstar.test.lsfileac.HostToLsfileacResponseHolderXmlMuleTransformer" />
+                        </response-transformers>
+                    </outbound-endpoint>
+                </pass-through-router>
+            </outbound>
+        </service>
+
+    </model>
+</mule>

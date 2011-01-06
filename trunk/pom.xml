@@ -1,0 +1,754 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.mule.transports</groupId>
+    <artifactId>mule-transport-legstar-pom</artifactId>
+    <packaging>pom</packaging>
+    <version>3.0.0</version>
+    <name>LegStar for Mule</name>
+    <description>Mainframe transport for Mule based on open-source LegStar</description>
+    <properties>
+        <muleVersion>3.0.1</muleVersion>
+        <legstarVersion>1.4.3</legstarVersion>
+        <springVersion>3.0.3.RELEASE</springVersion>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- If a mainframe is available for integration testing, set
+        this property to false in settings.xml, it will take precedence. -->
+        <no-mainframe-available>true</no-mainframe-available>
+    </properties>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
+
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License</name>
+            <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>fady</id>
+            <name>Fady Moussallam</name>
+            <email>fady@legsem.com</email>
+            <organization>Legsem.com</organization>
+            <roles>
+                <role>Project despot</role>
+            </roles>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>Jira</system>
+        <url>http://mule.mulesource.org/jira/browse/LEGSTAR</url>
+    </issueManagement>
+
+    <scm>
+        <connection>scm:svn:http://svn.muleforge.org/legstar-transport/tags/mule-transport-legstar-pom-3.0.0</connection>
+        <developerConnection>scm:svn:https://svn.muleforge.org/legstar-transport/tags/mule-transport-legstar-pom-3.0.0</developerConnection>
+        <url>http://svn.muleforge.org/legstar-transport/tags/mule-transport-legstar-pom-3.0.0</url>
+    </scm>
+
+    <ciManagement>
+        <system>Bamboo</system>
+        <url>http://bamboo.muleforge.org/browse/LEGSTAR</url>
+        <notifiers />
+    </ciManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>muleforge.webdav.releases</id>
+            <url>dav:https://dav.muleforge.org/repository/legstar-transport/</url>
+        </repository>
+        <snapshotRepository>
+            <id>muleforge.webdav.snapshots</id>
+            <url>dav:https://dav.muleforge.org/snapshots.repository/legstar-transport/</url>
+        </snapshotRepository>
+        <site>
+            <id>muleforge.webdav.sites</id>
+            <url>dav:https://dav.muleforge.org/legstar-transport/maven</url>
+        </site>
+    </distributionManagement>
+
+    <modules>
+
+        <!-- Main modules -->
+        <module>legstar-mule-transport</module>
+        <module>legstar-mule-generator</module>
+
+        <!-- Integration test modules -->
+        <module>legstar-mulegen-jvmquery</module>
+        <module>legstar-mulegen-jvmquerywmq</module>
+        <module>legstar-mulegen-lsfileac</module>
+        <module>legstar-mulegen-lsfileae</module>
+        <module>legstar-mulegen-lsfileaewmq</module>
+        <module>legstar-mulegen-lsfileaetcp</module>
+        <module>legstar-mulegen-lsfileaemock</module>
+        <module>legstar-mulegen-lsfileal</module>
+        <module>legstar-mulegen-lsfileax</module>
+
+        <!-- Distribution -->
+        <module>dist</module>
+
+        <!-- Eclipse modules -->
+        <module>legstar-mulegen-plugin</module>
+        <module>legstar-mulegen-feature</module>
+        <module>legstar-mulegen-site</module>
+
+    </modules>
+
+    <build>
+
+        <extensions>
+            <extension>
+                <groupId>org.apache.maven.wagon</groupId>
+                <artifactId>wagon-webdav</artifactId>
+                <version>1.0-beta-2</version>
+            </extension>
+        </extensions>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>1.5</source>
+                        <target>1.5</target>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.4.2</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId> 
+                    <artifactId>maven-assembly-plugin</artifactId> 
+                    <version>2.2-beta-5</version> 
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId> 
+                    <version>2.1</version> 
+                    <configuration>
+                        <autoVersionSubmodules>true</autoVersionSubmodules>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>1.1</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>ant</groupId>
+                            <artifactId>ant-nodeps</artifactId>
+                            <version>1.6.5</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>ant</groupId>
+                                    <artifactId>ant</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                        <dependency>
+                            <groupId>ant-contrib</groupId>
+                            <artifactId>ant-contrib</artifactId>
+                            <version>1.0b3</version>
+                            <exclusions>
+                                <exclusion>
+                                    <groupId>ant</groupId>
+                                    <artifactId>ant</artifactId>
+                                </exclusion>
+                            </exclusions>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId> 
+                    <artifactId>maven-site-plugin</artifactId> 
+                    <version>2.0.1</version> 
+                </plugin>
+
+             </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>${no-mainframe-available}</skipTests>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <finalName>${pom.artifactId}-${pom.version}</finalName>
+                    <descriptors>
+                        <descriptor>assembly.xml</descriptor>
+                    </descriptors>
+                    <appendAssemblyId>false</appendAssemblyId>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-source-plugin</artifactId>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <id>project-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+      
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+
+            <!-- Allows other reports to link to source -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>taglist-maven-plugin</artifactId>
+                <configuration>
+                    <tags>
+                        <tag>TODO</tag>
+                        <tag>@todo</tag>
+                        <tag>FIXME</tag>
+                        <tag>@fixme</tag>
+                        <tag>@deprecated</tag>
+                    </tags>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <configuration>
+                    <targetJdk>1.5</targetJdk>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>cobertura-maven-plugin</artifactId>
+                <version>2.4</version> 
+                <configuration>
+                    <instrumentation>
+                        <excludes>
+                            <exclude>com/example/**/*Test.class</exclude>
+                        </excludes>
+                    </instrumentation>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <excludePackageNames>com.legstar.cixs.jbossesb.test.*:com.legstar.xsdc.test.*:com.legstar.coxb.cust.*</excludePackageNames>
+                    <links>
+                        <link>http://java.sun.com/j2ee/1.4/docs/api</link>
+                        <link>http://java.sun.com/j2se/1.4.2/docs/api</link>
+                        <link>http://java.sun.com/j2se/1.5.0/docs/api</link>
+                        <link>http://www.legsem.com/legstar/apidocs</link>
+                    </links>
+                </configuration>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>aggregate</report>
+                        <!-- <report>test-javadoc</report> -->
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jdepend-maven-plugin</artifactId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <!-- Apache Velocity framework. -->    
+            <dependency>
+                <groupId>org.apache.velocity</groupId>
+                <artifactId>velocity</artifactId>
+                <version>1.6.1</version>
+            </dependency>
+
+            <!-- Apache Configuration API. -->    
+            <dependency>
+                <groupId>commons-configuration</groupId>
+                <artifactId>commons-configuration</artifactId>
+                <version>1.5</version>
+            </dependency>
+
+            <!-- There seems to be some version conflict between velocity and
+            commons-configuration. This ensures we have the correct version of commons-lang -->
+            <dependency> 
+                <groupId>commons-lang</groupId> 
+                <artifactId>commons-lang</artifactId> 
+                <version>2.4</version> 
+            </dependency> 
+
+            <!-- Ant dependencies -->    
+            <dependency>
+                <groupId>ant</groupId>
+                <artifactId>ant</artifactId>
+                <version>1.6.5</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.ant</groupId>
+                <artifactId>ant-launcher</artifactId>
+                <version>1.7.0</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Apache Logging API -->    
+            <dependency>
+                <groupId>commons-logging</groupId>
+                <artifactId>commons-logging</artifactId>
+                <version>1.1</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>logkit</groupId>
+                        <artifactId>logkit</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>avalon-framework</groupId>
+                        <artifactId>avalon-framework</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>javax.servlet</groupId>
+                        <artifactId>servlet-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Commons client (used by Mule junit framework) -->    
+            <dependency>
+                <groupId>commons-cli</groupId>
+                <artifactId>commons-cli</artifactId>
+                <version>1.0-osgi</version>
+            </dependency>
+
+            <!-- LegStar for Mule transport -->    
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>legstar-mule-transport</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <!-- LegStar for Mule generator -->    
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>legstar-mule-generator</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <!-- LegStar for Mule adapter sample -->    
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>legstar-mulegen-lsfileae</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <!-- LegStar for Mule proxy sample -->    
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>legstar-mulegen-jvmquery</artifactId>
+                <version>${version}</version>
+            </dependency>
+
+            <!-- Mule intra-vm transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-vm</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule TCP transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-tcp</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule HTTP transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-http</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule JMS transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-jms</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule file transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-file</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule stream transport -->
+            <dependency>
+                <groupId>org.mule.transports</groupId>
+                <artifactId>mule-transport-stream</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule client -->
+            <dependency>
+                <groupId>org.mule.modules</groupId>
+                <artifactId>mule-module-client</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Mule core -->
+            <dependency>
+                <groupId>org.mule</groupId>
+                <artifactId>mule-core</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- Xml configuration -->
+            <dependency>
+                <groupId>org.mule.modules</groupId>
+                <artifactId>mule-module-spring-config</artifactId>
+                <version>${muleVersion}</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- IBM WebSphere MQ client -->
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>mq</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>mqjms</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>fscontext</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>providerutil</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.ibm</groupId>
+                <artifactId>dhbcore</artifactId>
+                <version>6.0.2</version>
+                <scope>provided</scope>
+            </dependency>
+
+            <!-- LegStar Messaging -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-messaging</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Binding API -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-coxbapi</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Binding runtime -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-coxbrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar pooling engine -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-engine</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Adapter Runtime -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-invoker</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Standard HTTP transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-chttprt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Standard WMQ transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cmqrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Standard TCP transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-csokrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Service Model -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixsgen-model</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Service Generator -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixsgen</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Binding Generator -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-coxbgen</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Code Generator -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-codegen</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Common Eclipse plugin -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-common-plugin</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- LegStar Common Services Eclipse plugin -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixscom-plugin</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- Test cases for POJOs and Web Services -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-xsdcgen-cases</artifactId>
+                <version>${legstarVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Test cases for JAXB binding -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-jaxbgen-cases</artifactId>
+                <version>${legstarVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Test cases for COBOL binding -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-coxbgen-cases</artifactId>
+                <version>${legstarVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Test cases for Mainframe services -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixsgen-model-cases</artifactId>
+                <version>${legstarVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- LegStar test helpers -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-tests</artifactId>
+                <version>${legstarVersion}</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- LegStar Mock transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cmockrt</artifactId>
+                <version>${legstarVersion}</version>
+            </dependency>
+
+            <!-- Mule test helpers -->    
+            <dependency>
+                <groupId>org.mule.tests</groupId>
+                <artifactId>mule-tests-functional</artifactId>
+                <version>${muleVersion}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>mockobjects</groupId>
+                <artifactId>mockobjects-core</artifactId>
+                <version>0.09</version>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- Spring framework -->    
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-beans</artifactId>
+                <version>${springVersion}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>commons-logging</artifactId>
+                        <groupId>commons-logging</groupId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <!-- Eclipse dependencies. -->
+            <dependency>
+                <groupId>org.eclipse.platform</groupId>
+                <artifactId>org.eclipse.platform</artifactId>
+                <version>3.2.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>org.eclipse.equinox.common</artifactId>
+                <version>3.2.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.equinox</groupId>
+                <artifactId>org.eclipse.equinox.preferences</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.core</groupId>
+                <artifactId>org.eclipse.core.runtime</artifactId>
+                <version>3.2.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.core</groupId>
+                <artifactId>org.eclipse.core.jobs</artifactId>
+                <version>3.2.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.core</groupId>
+                <artifactId>org.eclipse.core.resources</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.osgi</groupId>
+                <artifactId>org.eclipse.osgi</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jdt</groupId>
+                <artifactId>org.eclipse.jdt.core</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jdt</groupId>
+                <artifactId>org.eclipse.jdt.ui</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.swt</groupId>
+                <artifactId>org.eclipse.swt.win32.win32.x86</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.ui</groupId>
+                <artifactId>org.eclipse.ui.ide</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.ui</groupId>
+                <artifactId>org.eclipse.ui.workbench</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jface</groupId>
+                <artifactId>org.eclipse.jface</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.ant</groupId>
+                <artifactId>org.eclipse.ant.ui</artifactId>
+                <version>3.2.1</version>
+                <scope>provided</scope>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+</project>

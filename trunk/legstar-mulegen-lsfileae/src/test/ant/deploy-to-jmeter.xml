@@ -1,0 +1,24 @@
+<!-- =================================================================================
+     This script bundles junit tests subject to jmeter and copies the jar to jmeter.
+ -->
+<project basedir="../../.." default="deploy2jmeter">
+    <xmlproperty file="${basedir}/../pom.xml"/>
+	<property environment="env"/>
+	<property name="jar.dir" value="${env.JMETER_HOME}/lib/junit"/>
+	<property name="jar.file" value="${jar.dir}/legstar-mulegen-lsfileae-test-jmeter.jar"/>
+	<property name="mule.dir" value="${env.MULE_HOME}"/>
+    <property name="legstar.repo" value="${env.M2_REPO}/com/legsem/legstar"/>
+    <property name="legstar.version" value="${project.properties.legstarVersion}"/>
+	
+    <target name="deploy2jmeter">
+    	<delete>
+			<fileset dir="${jar.dir}" includes="*.jar"/>
+    	</delete>
+		<jar destfile="${jar.file}">
+			<fileset dir="target/test-classes"/>
+		</jar>
+    	<copy todir="${jar.dir}">
+            <fileset dir="${legstar.repo}/legstar-jaxbgen-cases/${legstar.version}/" includes="*.jar" excludes="*sources.jar *javadoc.jar"/>
+    	</copy>
+    </target>
+</project>

@@ -1,0 +1,163 @@
+<!-- =================================================================================
+     This script tests the distribution file. It unzips the distro to a temporary
+     location and runs the quickstarts.
+ -->
+<project basedir="../../.." default="testDistro" name="build-sample">
+
+    <!-- ===========================================================  -->
+    <!-- Setup environment
+    -->
+    <target name="init">
+        <xmlproperty file="${basedir}/pom.xml"/>
+        
+        <property environment="env"/>
+        <!-- MULE location -->
+        <property name="mule.home" value="${env.MULE3_HOME}" />
+        <!-- Temporary location  -->
+        <property name="test.dir" value="${basedir}/target/test-distro" />
+        <!-- Source XML schema location  -->
+        <property name="xsd.dir" value="schema" />
+        <!-- Distribution name  -->
+        <property name="dist.name" value="legstar-mule-${project.version}" />
+        <!-- Distribution zip file  -->
+        <property name="dist.zip" value="${dist.name}.zip" />
+        <!-- Distribution file location   -->
+        <property name="dist.dir" value="${basedir}/target" />
+        <!-- Distribution zip file   -->
+        <property name="zip.file" value="${dist.dir}/${dist.zip}" />
+        <!-- Whether to fork the java compiler or not   -->
+        <property name="javac.fork" value="yes" />
+        <!-- Distribution samples origin location   -->
+        <property name="sample1.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/legstar_adapter" />
+        <property name="sample2.dir" value="${test.dir}/${dist.name}/samples/mule/quickstarts/legstar_proxy" />
+    
+        <taskdef name="stopmule"
+            classname="org.mule.transport.legstar.dist.test.task.StopMuleTask"
+            classpathref="maven.classpath"/>
+
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- Unzip the distribution and deploy executables to $MULE_HOME/lib/user
+    -->
+    <target name="unzipDistribution" depends="init">
+        <unzip src="${zip.file}" dest="${test.dir}"/>
+        <copy todir="${mule.home}/lib/user">
+            <fileset dir="${test.dir}/${dist.name}/lib">
+                <include name="legstar-mule-transport-*-dist.jar"/>
+            </fileset>
+        </copy>
+    </target>
+    
+    <!-- ===========================================================  -->
+    <!-- Build the samples and deploy them to $MULE_HOME/apps
+    -->
+    <target name="buildSamples" depends="unzipDistribution">
+        
+        <!-- Work around because we need to set LEGSTAR_HOME to
+             point to the new intall location.
+             Beware: this is os specific -->    
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
+            <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
+            <arg value="/c"/>
+            <arg value="ant"/>
+            <arg value="-f"/>
+            <arg value="${sample1.dir}/build.xml"/>
+            <arg value="generate"/>
+        </exec>
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
+            <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
+            <arg value="/c"/>
+            <arg value="ant"/>
+            <arg value="-f"/>
+            <arg value="${sample2.dir}/build.xml"/>
+            <arg value="generate"/>
+        </exec>
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
+
+    </target>
+  
+    <!-- ===========================================================  -->
+    <!-- start Mule and run tests in parallel.
+    -->
+    <target name="runMule" depends="buildSamples">
+        <echo message="starting ${mule.home}"/>
+    		<parallel>
+            <exec executable="cmd" failonerror="true" dir="${mule.home}/bin">
+                <env key="MULE_HOME" value="${mule.home}"/>
+                <arg value="/c"/>
+                <arg value="mule.bat"/>
+            </exec>
+            <sequential>
+                <!-- Give Mule a chance to start -->
+                <sleep seconds="30"/>
+                <antcall target="runSamples"/>
+                <stopmule/>
+            </sequential>
+    		</parallel>
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- Run the samples. The transport samples need the LEGSTAR-HOME
+         environment variable to be set.
+    -->
+    <target name="runSamples">
+        
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
+            <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
+            <arg value="/c"/>
+            <arg value="ant"/>
+            <arg value="-f"/>
+            <arg value="${sample1.dir}/build.xml"/>
+            <arg value="runtest"/>
+        </exec>
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
+        <exec executable="cmd" failonerror="true" errorproperty="exec.err">
+            <env key="LEGSTAR_HOME" value="${test.dir}/${dist.name}"/>
+            <env key="MULE_HOME" value="${mule.home}"/>
+            <arg value="/c"/>
+            <arg value="ant"/>
+            <arg value="-f"/>
+            <arg value="${sample2.dir}/build.xml"/>
+            <arg value="runtest"/>
+        </exec>
+        <fail>
+            <condition>
+                <contains string="${exec.err}" substring="FAILED" />
+            </condition>
+        </fail>
+
+    </target>
+
+    <!-- ===========================================================  -->
+    <!-- Remove the samples.
+    -->
+    <target name="testDistro" depends="runMule">
+        <delete dir="${mule.home}/apps/legstar-lsfileae"/>
+        <delete file="${mule.home}/apps/legstar-lsfileae-anchor.txt"/>
+        <delete dir="${mule.home}/apps/legstar-jvmquery"/>
+        <delete file="${mule.home}/apps/legstar-jvmquery-anchor.txt"/>
+        <delete>
+            <fileset dir="${mule.home}/lib/user">
+                <include name="legstar-mule-transport-*-dist.jar"/>
+            </fileset>
+        </delete>
+    </target>
+
+</project>

@@ -1,0 +1,66 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.mule.transports</groupId>
+        <artifactId>mule-transport-legstar-pom</artifactId>
+        <version>3.0.0</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>legstar-mulegen-site</artifactId>
+    <packaging>pom</packaging>
+    <name>LegStar for Mule Generator Eclipse site</name>
+    <version>3.0.0</version>
+    <description>Mule Generator Eclipse site.</description>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
+
+    <dependencies>
+    
+
+    </dependencies>
+
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- Update version numbers in PDE resources so that they match Maven versions -->
+                        <id>maven-to-pde</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="${basedir}/src/main/ant/maven-to-pde.xml">
+                                    <property name="legstarVersion" value="${legstarVersion}" />
+                                    <property name="legstarMuleVersion" value="${pom.parent.version}" />
+                                    <property name="muleVersion" value="${muleVersion}" />
+                                </ant>
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <!-- Populate Eclipse site -->
+                        <id>populate-site</id>
+                        <phase>package</phase>
+                        <configuration>
+                            <tasks>
+                                <ant antfile="${basedir}/src/main/ant/populate-site.xml" />
+                                <exec dir="${basedir}" executable="${basedir}/target/publish.bat" failonerror="true" />
+                            </tasks>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        
+        </plugins>
+    
+    </build>
+    
+</project>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- =================================================================================
+     Create an zip archive for a legstar component.
+  -->
+<project basedir="." default="create-zip" name="build-zip">
+
+    <target name="clean">
+        <delete file="target/dist/legstar-lsfileac.zip" quiet="true"/>
+    </target>
+
+   <target name="create-zip" depends="clean">
+        <mkdir dir="target/dist"/>
+        <zip destfile="target/dist/legstar-lsfileac.zip">
+            <!-- Generated Mule component binaries -->
+            <zipfileset dir="target/gen-classes" prefix="classes">
+                <include name="org/mule/transport/legstar/test/lsfileac/*.class"/>
+            </zipfileset>
+            <!-- JAXB binaries -->
+            <zipfileset dir="target/classes" prefix="classes"
+                includes="com/legstar/test/coxb/lsfileac/*.class"/>
+            <!-- Binding binaries -->
+            <zipfileset dir="target/classes" prefix="classes"
+                includes="com/legstar/test/coxb/lsfileac/bind/*.class"/>
+            <!-- Any other dependency to distribute -->
+            <zipfileset dir="target/dist" prefix="lib">
+                <include name="*.jar"/>
+            </zipfileset>
+            <!-- Mule configuration file -->
+            <fileset dir="target/src/gen/conf">
+                <include name="*.xml"/>
+            </fileset>
+        </zip>
+    </target>
+</project>

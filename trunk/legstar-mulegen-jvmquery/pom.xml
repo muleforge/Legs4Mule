@@ -1,0 +1,123 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.mule.transports</groupId>
+        <artifactId>mule-transport-legstar-pom</artifactId>
+        <version>3.0.0</version>
+        <relativePath>..</relativePath>
+    </parent>
+    <artifactId>legstar-mulegen-jvmquery</artifactId>
+    <packaging>jar</packaging>
+    <version>3.0.0</version>
+    <name>Sample Proxy for POJO JVMQuery over HTTP</name>
+    <description>Sample Proxy for POJO JVMQuery over HTTP</description>
+    <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludes> 
+                        <exclude>**/JvmqueryHttpClientTest.java</exclude> 
+                    </excludes> 
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencies>
+
+        <!-- LegStar for Mule transport -->    
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>legstar-mule-transport</artifactId>
+        </dependency>
+
+        <!-- Mule core -->
+        <dependency>
+            <groupId>org.mule</groupId>
+            <artifactId>mule-core</artifactId>
+        </dependency>
+
+        <!-- COBOL binding API -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-coxbapi</artifactId>
+        </dependency>
+
+        <!-- Test cases for POJOs and Web Services -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-xsdcgen-cases</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Test cases for COBOL binding -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-coxbgen-cases</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Test cases for COBOL binding -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Mule HTTP transport -->
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-http</artifactId>
+        </dependency>
+
+        <!-- Mule JMS transport -->
+        <dependency>
+            <groupId>org.mule.transports</groupId>
+            <artifactId>mule-transport-jms</artifactId>
+        </dependency>
+
+        <!-- IBM WebSphere MQ client -->
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mq</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>mqjms</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>fscontext</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>providerutil</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ibm</groupId>
+            <artifactId>dhbcore</artifactId>
+        </dependency>
+
+        <!-- LegStar test helpers -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-tests</artifactId>
+        </dependency>
+
+        <!-- Mule test helpers -->    
+        <dependency>
+            <groupId>org.mule.tests</groupId>
+            <artifactId>mule-tests-functional</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mule.modules</groupId>
+            <artifactId>mule-module-client</artifactId>
+        </dependency>
+
+    </dependencies>
+  
+</project>
