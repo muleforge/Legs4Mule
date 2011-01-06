@@ -31,7 +31,7 @@ public class LegstarMockConnectorTestCase extends AbstractConnectorTestCase {
 
     /** {@inheritDoc} */
     public Connector createConnector() throws Exception {
-        LegstarMockConnector c = new LegstarMockConnector();
+        LegstarMockConnector c = new LegstarMockConnector(muleContext);
         c.setName("Test");
         return c;
     }

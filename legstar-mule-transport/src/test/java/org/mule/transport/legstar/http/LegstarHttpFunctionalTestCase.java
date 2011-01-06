@@ -55,7 +55,7 @@ public class LegstarHttpFunctionalTestCase extends FunctionalTestCase {
         Map < String, Object > properties = new HashMap < String, Object >();
         properties.put(LegstarHttpConnector.HOST_USERID_PROPERTY, "P390");
         properties.put(LegstarHttpConnector.HOST_PASSWORD_PROPERTY, "STREAM2");
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         MuleMessage result = client.send("lsfileaeClientEndpoint",
                 getJavaRequest(), properties);
 

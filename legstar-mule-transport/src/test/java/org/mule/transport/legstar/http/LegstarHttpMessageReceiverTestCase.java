@@ -34,18 +34,18 @@ public class LegstarHttpMessageReceiverTestCase extends AbstractMessageReceiverT
 
     /** {@inheritDoc} */
     public MessageReceiver getMessageReceiver() throws Exception {
-        Mock mockComponent = new Mock(Service.class);
-        mockComponent.expectAndReturn("getResponseTransformer", null);
-        mockComponent.expectAndReturn("getResponseRouter", null);
-        return new LegstarHttpMessageReceiver(endpoint.getConnector(), (Service) mockComponent.proxy(), endpoint);
+        Mock mockService = new Mock(Service.class);
+        mockService.expectAndReturn("getResponseTransformer", null);
+        mockService.expectAndReturn("getResponseRouter", null);
+        return new LegstarHttpMessageReceiver(endpoint.getConnector(), (Service) mockService.proxy(), endpoint);
     }
 
     /** {@inheritDoc} */
-    public InboundEndpoint getEndpoint() throws Exception {
+    @SuppressWarnings("unchecked")
+	public InboundEndpoint getEndpoint() throws Exception {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
-                new URIBuilder("legstar:http://localhost:" + Integer.toString(LEGSTAR_PORT)),
-                muleContext);
-        endpointBuilder.setResponseTransformers(CollectionUtils.singletonList(
+                new URIBuilder("legstar://localhost:" + Integer.toString(LEGSTAR_PORT), muleContext));
+        endpointBuilder.setResponseMessageProcessors(CollectionUtils.singletonList(
                 new HostByteArrayToHttpResponse()));
         endpoint = muleContext.getRegistry().lookupEndpointFactory().getInboundEndpoint(endpointBuilder);
         return endpoint;

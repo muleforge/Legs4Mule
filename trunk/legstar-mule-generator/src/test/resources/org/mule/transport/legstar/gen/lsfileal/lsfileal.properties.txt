@@ -1,9 +1,0 @@
-#
-# Host Program parameters
-# -----------------------
-CICSProgramName=LSFILEAL
-CICSLength=8043
-CICSDataLength=20
-#CICSSysID
-#CICSSyncOnReturn
-#CICSTransID

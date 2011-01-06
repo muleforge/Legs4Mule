@@ -35,7 +35,7 @@ public class LegstarWmqEndpointTestCase extends AbstractMuleTestCase {
      * @throws Exception if something goes wrong
      */
     public void testValidEndpointURI() throws Exception {
-        EndpointURI endpointUri = new MuleEndpointURI("legstar-wmq://CICS01.BRIDGE.REQUEST.QUEUE");
+        EndpointURI endpointUri = new MuleEndpointURI("legstar-wmq://CICS01.BRIDGE.REQUEST.QUEUE", muleContext);
         endpointUri.initialise();
         assertEquals("legstar-wmq", endpointUri.getScheme());
         assertEquals("legstar-wmq", endpointUri.getSchemeMetaInfo());
@@ -47,7 +47,7 @@ public class LegstarWmqEndpointTestCase extends AbstractMuleTestCase {
      * @throws Exception if something goes wrong
      */
     public void testUserPasswordURI() throws Exception {
-        EndpointURI endpointUri = new MuleEndpointURI("legstar-wmq://user:password@CICS01.BRIDGE.REQUEST.QUEUE");
+        EndpointURI endpointUri = new MuleEndpointURI("legstar-wmq://user:password@CICS01.BRIDGE.REQUEST.QUEUE", muleContext);
         endpointUri.initialise();
         assertEquals("legstar-wmq", endpointUri.getScheme());
         assertEquals("legstar-wmq", endpointUri.getSchemeMetaInfo());

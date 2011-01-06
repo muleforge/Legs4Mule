@@ -20,6 +20,7 @@
 
 package org.mule.transport.legstar.tcp;
 
+import org.mule.MessageExchangePattern;
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.EndpointURI;
 import org.mule.api.endpoint.OutboundEndpoint;
@@ -39,7 +40,7 @@ public class LegstarTcpEndpointTestCase extends AbstractMuleTestCase {
      * @throws Exception if something goes wrong
      */
     public void testValidEndpointURI() throws Exception {
-        EndpointURI endpointUri = new MuleEndpointURI("legstar-tcp://localhost:1234");
+        EndpointURI endpointUri = new MuleEndpointURI("legstar-tcp://localhost:1234", muleContext);
         endpointUri.initialise();
         assertEquals("legstar-tcp", endpointUri.getScheme());
         assertEquals("legstar-tcp", endpointUri.getSchemeMetaInfo());
@@ -53,13 +54,12 @@ public class LegstarTcpEndpointTestCase extends AbstractMuleTestCase {
      * Check the endpoint properties when used for outbound requests.
      * @throws Exception if test fails
      */
-    public void testEndpoint() throws Exception {
-        EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
-                new URIBuilder("legstar-tcp://mainframe:3011"),
-                muleContext);
-        OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
-                endpointBuilder);
-        assertTrue(endpoint.isSynchronous());
-    }
+	public void testEndpoint() throws Exception {
+		EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
+				new URIBuilder("legstar-tcp://mainframe:3011", muleContext));
+		OutboundEndpoint endpoint = muleContext.getRegistry()
+				.lookupEndpointFactory().getOutboundEndpoint(endpointBuilder);
+		assertTrue(endpoint.getExchangePattern() == MessageExchangePattern.REQUEST_RESPONSE);
+	}
 
 }

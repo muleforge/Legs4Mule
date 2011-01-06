@@ -101,7 +101,9 @@ public class LsfileacHostToXmlTransformerTest extends AbstractTransformerTestCas
     
     /** {@inheritDoc} */
     public Transformer getTransformer() throws Exception {
-        return new LsfileacHostToXmlTransformer();
+    	LsfileacHostToXmlTransformer transformer = new LsfileacHostToXmlTransformer();
+    	transformer.setMuleContext(muleContext);
+        return transformer;
     }
 
     /** {@inheritDoc} */

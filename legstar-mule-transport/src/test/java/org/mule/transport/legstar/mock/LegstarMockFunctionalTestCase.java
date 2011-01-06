@@ -51,7 +51,7 @@ public class LegstarMockFunctionalTestCase extends FunctionalTestCase {
         assertNotNull(service);
 
         /* Simulate a call coming from a mainframe */
-        MuleClient client = new MuleClient();
+        MuleClient client = new MuleClient(muleContext);
         MuleMessage result = client.send("lsfileaeClientEndpoint",
                 getJavaRequest(), null);
 

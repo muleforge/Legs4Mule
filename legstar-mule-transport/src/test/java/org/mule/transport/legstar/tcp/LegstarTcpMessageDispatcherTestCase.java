@@ -57,7 +57,7 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         MessageDispatcher dispatcher = factory.create(getEndpoint());
         dispatcher.initialise();
         try {
-            dispatcher.send(getTestEvent(getEndpoint()));
+            dispatcher.process(getTestEvent(getEndpoint()));
             fail();
         } catch (Exception e) {
             assertTrue(e.getMessage().startsWith("Mule message body is not a LegStar message."));
@@ -73,8 +73,8 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         OutboundEndpoint endpoint = getEndpoint();
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
-        MuleMessage muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), endpoint));
+        MuleMessage muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), endpoint)).getMessage();
         checkLsfileae100Reply(muleReplyMessage);
     }
     
@@ -89,11 +89,11 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         OutboundEndpoint endpoint = getEndpoint();
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
-        MuleMessage muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), endpoint));
+        MuleMessage muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), endpoint)).getMessage();
         checkLsfileae100Reply(muleReplyMessage);
-        muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), endpoint));
+        muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), endpoint)).getMessage();
         checkLsfileae100Reply(muleReplyMessage);
     }
 
@@ -107,11 +107,11 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         ((LegstarTcpConnector) endpoint.getConnector()).setKeepSendSocketOpen(true);
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
-        MuleMessage muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), endpoint));
+        MuleMessage muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), endpoint)).getMessage();
         checkLsfileae100Reply(muleReplyMessage);
-        muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), endpoint));
+        muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), endpoint)).getMessage();
         checkLsfileae100Reply(muleReplyMessage);
     }
 
@@ -126,13 +126,13 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         ((LegstarTcpConnector) endpoint.getConnector()).setKeepSendSocketOpen(true);
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
-        MuleMessage muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), endpoint));
+        MuleMessage muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), endpoint)).getMessage();
         checkLsfileae100Reply(muleReplyMessage);
         /* Simulate some processing so that the mainframe transaction times out */
         Thread.sleep(3000L);
-        muleReplyMessage = dispatcher.send(
-                getTestEvent(getLsfileaeMessage100(), endpoint));
+        muleReplyMessage = dispatcher.process(
+                getTestEvent(getLsfileaeMessage100(), endpoint)).getMessage();
         checkLsfileae100Reply(muleReplyMessage);
     }
 
@@ -150,7 +150,7 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
         try {
-            dispatcher.send(
+            dispatcher.process(
                     getTestEvent(getLsfileaeMessage100(), endpoint));
             fail();
         } catch (Exception e) {
@@ -170,7 +170,7 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
         try {
-            dispatcher.send(
+            dispatcher.process(
                     getTestEvent(getNonExistentProgramMessage100(), endpoint));
             fail();
         } catch (Exception e) {
@@ -191,7 +191,7 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
         try {
-            dispatcher.send(
+            dispatcher.process(
                     getTestEvent(getDataStructureMismatchMessage100(), endpoint));
             fail();
         } catch (Exception e) {
@@ -211,7 +211,7 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         MessageDispatcher dispatcher = factory.create(endpoint);
         dispatcher.initialise();
         try {
-            dispatcher.send(
+            dispatcher.process(
                     getTestEvent(getNonExistentProgramMessage100(), endpoint));
             fail();
         } catch (Exception e) {
@@ -225,8 +225,8 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
      */
     private OutboundEndpoint getEndpoint() throws Exception {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
-                new URIBuilder("legstar-tcp://mainframe:3011"),
-                muleContext);
+                new URIBuilder("legstar-tcp://mainframe:3011",
+                        muleContext));
         OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
         LegstarTcpConnector connector = (LegstarTcpConnector) endpoint.getConnector();
@@ -241,8 +241,8 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
      */
     private OutboundEndpoint getNonExistentEndpoint() throws Exception {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
-                new URIBuilder("legstar-tcp://mainframe:65101"),
-                muleContext);
+                new URIBuilder("legstar-tcp://mainframe:65101",
+                        muleContext));
         OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
         LegstarTcpConnector connector = (LegstarTcpConnector) endpoint.getConnector();

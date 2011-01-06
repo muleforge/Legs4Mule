@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.mule.transport.legstar.cixs.transformer;
 
-import org.mule.transformer.AbstractMessageAwareTransformer;
+import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.legstar.config.HostProgram;
 import org.mule.api.transformer.Transformer;
@@ -55,9 +55,10 @@ public class HostToSinglepartLegstarExecRequestMuleTransformerTest extends Abstr
     }
     
     /** {@inheritDoc} */
-    public AbstractMessageAwareTransformer getTransformer() throws Exception {
+    public AbstractMessageTransformer getTransformer() throws Exception {
         HostToLegstarExecRequestMuleTransformer transformer = new HostToLegstarExecRequestMuleTransformer();
         transformer.setHostProgram(new HostProgram("lsfileae.properties"));
+        transformer.setMuleContext(muleContext);
         return transformer;
     }
 
