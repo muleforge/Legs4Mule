@@ -56,7 +56,7 @@ public class HostCredentials implements Credentials {
      * @return a concatenation of user password HTTP style
      */
     public String getUserInfo() {
-        return (_username == null) ? null 
+        return (_username == null || _username.length() == 0) ? null 
                 : ((_password == null) ? _username
                         : _username + ':' + new String(_password)); 
     }

@@ -8,7 +8,8 @@
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>3.0.1</muleVersion>
-        <legstarVersion>1.4.3</legstarVersion>
+        <legstarVersion>1.4.4</legstarVersion>
+        <legstarCoreVersion>1.5.1</legstarCoreVersion>
         <springVersion>3.0.3.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -501,7 +502,7 @@
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
                 <artifactId>legstar-coxbapi</artifactId>
-                <version>${legstarVersion}</version>
+                <version>${legstarCoreVersion}</version>
             </dependency>
 
             <!-- LegStar Binding runtime -->    
@@ -571,7 +572,7 @@
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
                 <artifactId>legstar-codegen</artifactId>
-                <version>${legstarVersion}</version>
+                <version>${legstarCoreVersion}</version>
             </dependency>
 
             <!-- LegStar Common Eclipse plugin -->    

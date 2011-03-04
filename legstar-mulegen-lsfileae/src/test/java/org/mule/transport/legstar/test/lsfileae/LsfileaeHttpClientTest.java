@@ -97,7 +97,7 @@ public class LsfileaeHttpClientTest extends TestCase {
             Dfhcommarea reply = (Dfhcommarea) in.readObject();
             return reply;
         } catch (ClassNotFoundException e) {
-            throw new IOException(e);
+            throw new IOException(e.getMessage());
         }
        
     }
