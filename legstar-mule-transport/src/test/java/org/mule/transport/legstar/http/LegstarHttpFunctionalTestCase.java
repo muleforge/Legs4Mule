@@ -35,7 +35,7 @@ public class LegstarHttpFunctionalTestCase extends FunctionalTestCase {
      */
     public LegstarHttpFunctionalTestCase() {
         super();
-        System.setProperty(PROPERTY_MULE_TEST_TIMEOUT, "600");
+        System.setProperty(PROPERTY_MULE_TEST_TIMEOUT, "60000000");
     }
     
     /** {@inheritDoc}*/

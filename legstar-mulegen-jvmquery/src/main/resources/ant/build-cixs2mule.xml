@@ -69,7 +69,7 @@
             <pathelement location="${cust.bin.dir}"/>
             <fileset dir="${legstar.home}" includes="lib/*.jar" />
             <fileset dir="${mule.home}" includes="lib/mule/*.jar" />
-            <fileset dir="${mule.home}" includes="lib/opt/*.jar" />
+            <!-- <fileset dir="${mule.home}" includes="lib/opt/*.jar" /> -->
         </path>
 
         <!-- Mule service Generator ant task -->

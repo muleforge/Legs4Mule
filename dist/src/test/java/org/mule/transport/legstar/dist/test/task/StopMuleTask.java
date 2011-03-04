@@ -3,8 +3,8 @@ package org.mule.transport.legstar.dist.test.task;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-import javax.management.JMX;
 import javax.management.MBeanServerConnection;
+import javax.management.MBeanServerInvocationHandler;
 import javax.management.MalformedObjectNameException;
 import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
@@ -45,8 +45,10 @@ public class StopMuleTask extends Task {
 			MBeanServerConnection mbsc = jmxc.getMBeanServerConnection();
 
 			ObjectName mbeanName = new ObjectName(_wrapperBeanName);
-			WrapperManagerMBean mbeanProxy = JMX.newMBeanProxy(mbsc, mbeanName,
-					WrapperManagerMBean.class, true);
+			WrapperManagerMBean mbeanProxy = (WrapperManagerMBean) MBeanServerInvocationHandler.newProxyInstance(mbsc, mbeanName,
+                    WrapperManagerMBean.class, true);
+//			WrapperManagerMBean mbeanProxy = JMX.newMBeanProxy(mbsc, mbeanName,
+//					WrapperManagerMBean.class, true);
 
 			mbeanProxy.stop(0);
 
