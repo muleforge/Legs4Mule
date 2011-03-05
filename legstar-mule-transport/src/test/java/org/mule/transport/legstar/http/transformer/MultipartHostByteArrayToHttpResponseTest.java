@@ -13,7 +13,6 @@ package org.mule.transport.legstar.http.transformer;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,13 +23,16 @@ import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.http.HttpResponse;
 import org.mule.transport.legstar.cixs.transformer.HostToLegstarExecRequestMuleTransformer;
 import org.mule.transport.legstar.cixs.transformer.HostToMultipartLegstarExecRequestMuleTransformerTest;
-import org.mule.transport.legstar.config.HostProgram;
+import org.mule.transport.legstar.config.ConfigUtils;
 import org.mule.api.MuleEvent;
 import org.mule.api.transformer.Transformer;
-import org.mule.api.transformer.TransformerException;
 import org.mule.api.transport.OutputHandler;
 
 import com.legstar.coxb.host.HostData;
+import com.legstar.messaging.HeaderPartException;
+import com.legstar.messaging.HostMessageFormatException;
+import com.legstar.messaging.LegStarMessage;
+import com.legstar.messaging.LegStarMessagePart;
 import com.legstar.test.coxb.LsfileacCases;
 
 /**
@@ -62,10 +64,10 @@ public class MultipartHostByteArrayToHttpResponseTest extends AbstractTransforme
  
             HostToLegstarExecRequestMuleTransformer transformer = new HostToLegstarExecRequestMuleTransformer();
             transformer.setMuleContext(muleContext);
-            transformer.setHostProgram(new HostProgram("lsfileac.properties"));
+            transformer.setHostProgram(ConfigUtils.getHostProgram("lsfileac.properties"));
             
             return transformer.transform(testData);
-        } catch (TransformerException e) {
+        } catch (Exception e) {
             fail(e.toString());
             return null;
         }
@@ -111,14 +113,37 @@ public class MultipartHostByteArrayToHttpResponseTest extends AbstractTransforme
                 ByteArrayOutputStream outResult = new ByteArrayOutputStream();
                 httpResult.getBody().write(RequestContext.getEvent(), outResult);
                 byte[] bodyResult = outResult.toByteArray();
-
-                if (!Arrays.equals(bodyExpected, bodyResult)) {
-                    return false;
+                
+                LegStarMessage msgExpected = new LegStarMessage();
+                msgExpected.fromByteArray(bodyExpected, 0);
+                
+                LegStarMessage msgResult = new LegStarMessage();
+                msgResult.fromByteArray(bodyResult, 0);
+                
+                assertTrue(msgExpected.getHeaderPart().equals(msgResult.getHeaderPart()));
+                for (LegStarMessagePart partExpected : msgExpected.getDataParts()) {
+                    boolean matched = false;
+                    for (LegStarMessagePart partResult : msgResult.getDataParts()) {
+                        if (partExpected.getPartID().equals(partResult.getPartID())) {
+                            if (partExpected.equals(partResult)) {
+                                matched = true;
+                            }
+                        }
+                    }
+                    if (!matched) {
+                        return false;
+                    }
+                    
                 }
+
                 return true;
             }
             return false;
         } catch (IOException e) {
+            return false;
+        } catch (HostMessageFormatException e) {
+            return false;
+        } catch (HeaderPartException e) {
             return false;
         }
     }

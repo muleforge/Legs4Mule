@@ -12,7 +12,7 @@ package org.mule.transport.legstar.wmq.transformer;
 
 import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
-import org.mule.transport.legstar.config.HostProgram;
+import org.mule.transport.legstar.config.ConfigUtils;
 import org.mule.transport.legstar.wmq.LegstarWmqConnector;
 import org.mule.api.endpoint.EndpointBuilder;
 import org.mule.api.endpoint.OutboundEndpoint;
@@ -94,7 +94,7 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
     /** {@inheritDoc} */
     public AbstractMessageTransformer getTransformer() throws Exception {
         HostToMqcihExecRequestMuleTransformer transformer = new HostToMqcihExecRequestMuleTransformer();
-        transformer.setHostProgram(new HostProgram("lsfileae.properties"));
+        transformer.setHostProgram(ConfigUtils.getHostProgram("lsfileae.properties"));
         transformer.setEndpoint(getEndpoint());
         transformer.setMuleContext(muleContext);
         return transformer;

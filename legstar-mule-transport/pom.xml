@@ -11,7 +11,7 @@
     <version>3.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>LegStar for Mule 3.0 Transport</name>
+    <name>LegStar for Mule 3.x Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
@@ -95,6 +95,11 @@
         <dependency>
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-messaging</artifactId>
+        </dependency>
+        <!-- LegStar invoker -->
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-invoker</artifactId>
         </dependency>
         <!-- LegStar MQ transport (we need the MQCIH classes) -->
         <dependency>

@@ -13,7 +13,11 @@ package org.mule.transport.legstar.config;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Properties;
+
+import com.legstar.config.Constants;
+import com.legstar.host.invoke.model.HostContainer;
 
 /**
  * Helper methods for configuration.
@@ -65,4 +69,53 @@ public final class ConfigUtils {
         String s = props.getProperty(key, "0");
         return Integer.parseInt(s);
     }
+
+    /**
+     * A helper to create a hostProgram configuration from a properties file.
+     * @param propertyFileName the property file name
+     * @return a configured host program
+     * @throws IOException if properties file cannot be read
+     */
+    public static HostProgram getHostProgram(final String propertyFileName) throws IOException {
+        HostProgram hostProgram = new HostProgram();
+        Properties props = loadFromPropFile(propertyFileName);
+        hostProgram.setName(props.getProperty(Constants.CICS_PROGRAM_NAME_KEY));
+        hostProgram.setMaxDataLength(ConfigUtils.getInt(props, Constants.CICS_LENGTH_KEY));
+        hostProgram.setDataLength(ConfigUtils.getInt(props, Constants.CICS_DATALEN_KEY));
+        hostProgram.setChannelName(props.getProperty(Constants.CICS_CHANNEL_KEY));
+        loadContainer(props, hostProgram.getInputContainers(),
+                Constants.CICS_IN_CONTAINERS_KEY,
+                Constants.CICS_IN_CONTAINERS_LEN_KEY);
+        loadContainer(props, hostProgram.getOutputContainers(),
+                Constants.CICS_OUT_CONTAINERS_KEY,
+                Constants.CICS_OUT_CONTAINERS_LEN_KEY);
+        return hostProgram;
+    }
+
+    /**
+     * Create a map with container names and associated max size from entries
+     * in a property file.
+     * List of items are expected to be stored as a set of properties suffixed
+     * with _n where n in the item rank. 
+     * @param props program attributes as properties 
+     * @param containers a list of containers to fill
+     * @param nameKey the properties key for container name
+     * @param lengthKey the properties key for container size
+     */
+    public static void loadContainer(
+            final Properties props,
+            final List < HostContainer > containers,
+            final String nameKey,
+            final String lengthKey) {
+        int i = 1;
+        String name = props.getProperty(nameKey + '_' + i);
+        while (name != null && name.length() > 0) {
+            HostContainer container = new HostContainer();
+            container.setName(name);
+            container.setLength(ConfigUtils.getInt(props, lengthKey + '_' + i));
+            containers.add(container);
+            name = props.getProperty(nameKey + '_' + ++i);
+        }
+    }
+
 }

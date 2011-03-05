@@ -23,6 +23,8 @@ import org.mule.transport.legstar.http.LegstarHttpConnector;
 import org.mule.transport.legstar.http.transformer.HostByteArrayToHttpResponse;
 import org.mule.transport.http.HttpConstants;
 
+import com.legstar.host.invoke.model.HostContainer;
+
 /**
  * Registers a Bean Definition Parser for handling <code>&lt;legstar:connector&gt;</code> elements.
  */

@@ -15,10 +15,14 @@ import java.util.Map;
 
 import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
-import org.mule.transport.legstar.config.HostProgram;
+import org.mule.transport.legstar.config.ConfigUtils;
 import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
+import com.legstar.messaging.HeaderPartException;
+import com.legstar.messaging.HostMessageFormatException;
+import com.legstar.messaging.LegStarMessage;
+import com.legstar.messaging.LegStarMessagePart;
 import com.legstar.test.coxb.LsfileacCases;
 
 /**
@@ -37,27 +41,27 @@ public class HostToMultipartLegstarExecRequestMuleTransformerTest extends Abstra
         + "00000002"
         /*      111                       (Header part JSON string length)*/
         + "0000006f"
-        /* { " C I C S O u t C o n t a i n e r s " : [ " R e p l y D a t a " , " R e p l y S t a t u s " ] , */
-        + "c07fc3c9c3e2d6a4a3c39695a38189958599a27f7aad7fd9859793a8c481a3817f6b7fd9859793a8e2a381a3a4a27fbd6b"
+        /* { " C I C S P r o g r a m N a m e " : " L S F I L E A C " , */
+        + "c07fc3c9c3e2d7999687998194d58194857f7a7fd3e2c6c9d3c5c1c37f6b"
         /* " C I C S C h a n n e l " : " L S F I L E A C - C H A N N E L " , */
         + "7fc3c9c3e2c38881959585937f7a7fd3e2c6c9d3c5c1c360c3c8c1d5d5c5d37f6b"
-        /* " C I C S P r o g r a m N a m e " : " L S F I L E A C " } */
-        + "7fc3c9c3e2d7999687998194d58194857f7a7fd3e2c6c9d3c5c1c37fd0"
+        /* " C I C S O u t C o n t a i n e r s " : [ " R e p l y D a t a " , " R e p l y S t a t u s " ] } */
+        + "7fc3c9c3e2d6a4a3c39695a38189958599a27f7aad7fd9859793a8c481a3817f6b7fd9859793a8e2a381a3a4a27fbdd0"
  
-        /* R e p l y D a t a              (Message part ID)*/
-        + "d9859793a8c481a38140404040404040"
-        /*        ?                       (Message part content length)*/
-        + integerToString(LsfileacCases.getHostBytesHexReplyData().length() / 2)
-        + LsfileacCases.getHostBytesHexReplyData()
-        
         /* R e p l y S t a t u s           (Message part ID)*/
         + "d9859793a8e2a381a3a4a24040404040"
         /*         2                       (Message part content length)*/
         + integerToString(LsfileacCases.getHostBytesHexReplyStatus().length() / 2)
-        + LsfileacCases.getHostBytesHexReplyStatus();
+        + LsfileacCases.getHostBytesHexReplyStatus()
 
+        /* R e p l y D a t a              (Message part ID)*/
+        + "d9859793a8c481a38140404040404040"
+        /*        ?                       (Message part content length)*/
+        + integerToString(LsfileacCases.getHostBytesHexReplyData().length() / 2)
+        + LsfileacCases.getHostBytesHexReplyData();
+        
     /** This makes sure there is a single instance of test data. */
-    private static Map < String, byte[]> _TestData;
+    private static Map < String, byte[]> _testData;
     
     
     /**
@@ -65,17 +69,17 @@ public class HostToMultipartLegstarExecRequestMuleTransformerTest extends Abstra
      */
     public HostToMultipartLegstarExecRequestMuleTransformerTest() {
         super();
-        _TestData = new HashMap < String, byte[]>();
-        _TestData.put("ReplyData",
+        _testData = new HashMap < String, byte[]>();
+        _testData.put("ReplyData",
                 HostData.toByteArray(LsfileacCases.getHostBytesHexReplyData()));
-        _TestData.put("ReplyStatus",
+        _testData.put("ReplyStatus",
                 HostData.toByteArray(LsfileacCases.getHostBytesHexReplyStatus()));
     }
     
     /** {@inheritDoc} */
     public AbstractMessageTransformer getTransformer() throws Exception {
         HostToLegstarExecRequestMuleTransformer transformer = new HostToLegstarExecRequestMuleTransformer();
-        transformer.setHostProgram(new HostProgram("lsfileac.properties"));
+        transformer.setHostProgram(ConfigUtils.getHostProgram("lsfileac.properties"));
         transformer.setMuleContext(muleContext);
         return transformer;
     }
@@ -92,9 +96,45 @@ public class HostToMultipartLegstarExecRequestMuleTransformerTest extends Abstra
 
     /** {@inheritDoc} */
     public Object getTestData() {
-        return _TestData;
+        return _testData;
     }
 
+    /** {@inheritDoc} */
+    public boolean compareResults(final Object expected, final Object result) {
+        try {
+            if (expected instanceof byte[] && result instanceof byte[]) {
+                
+                LegStarMessage msgExpected = new LegStarMessage();
+                msgExpected.fromByteArray((byte[]) expected, 0);
+                
+                LegStarMessage msgResult = new LegStarMessage();
+                msgResult.fromByteArray((byte[]) result, 0);
+                
+                assertTrue(msgExpected.getHeaderPart().equals(msgResult.getHeaderPart()));
+                for (LegStarMessagePart partExpected : msgExpected.getDataParts()) {
+                    boolean matched = false;
+                    for (LegStarMessagePart partResult : msgResult.getDataParts()) {
+                        if (partExpected.getPartID().equals(partResult.getPartID())) {
+                            if (partExpected.equals(partResult)) {
+                                matched = true;
+                            }
+                        }
+                    }
+                    if (!matched) {
+                        return false;
+                    }
+                    
+                }
+
+                return true;
+            }
+            return false;
+        } catch (HostMessageFormatException e) {
+            return false;
+        } catch (HeaderPartException e) {
+            return false;
+        }
+    }
     /**
      * @param i an integer to convert
      * @return a String with the hex representation on 4 bytes of an integer.

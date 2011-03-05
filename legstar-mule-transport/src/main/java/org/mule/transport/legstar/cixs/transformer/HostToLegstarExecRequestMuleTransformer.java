@@ -17,6 +17,7 @@ import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transport.legstar.config.HostProgram;
 
+import com.legstar.host.invoke.model.HostProgramException;
 import com.legstar.messaging.CommareaPart;
 import com.legstar.messaging.ContainerPart;
 import com.legstar.messaging.HeaderPartException;
@@ -103,11 +104,12 @@ public class HostToLegstarExecRequestMuleTransformer extends AbstractHostToExecR
             final HostProgram hostProgram) throws TransformerException {
         try {
             LegStarMessage legStarMessage = new LegStarMessage();
-            LegStarHeaderPart headerPart = new LegStarHeaderPart(
-                    hostProgram.getLegstarAttributesMap(), 0);
-            legStarMessage.setHeaderPart(headerPart);
+            legStarMessage.setHeaderPart(new LegStarHeaderPart(0, getHostProgram().toJSONHost()));
             return legStarMessage;
         } catch (HeaderPartException e) {
+            throw new TransformerException(
+                    getI18NMessages().hostTransformFailure(), this, e);
+        } catch (HostProgramException e) {
             throw new TransformerException(
                     getI18NMessages().hostTransformFailure(), this, e);
         }
