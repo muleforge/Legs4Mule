@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Properties;
 
 import com.legstar.config.Constants;
-import com.legstar.host.invoke.model.HostContainer;
 
 /**
  * Helper methods for configuration.
@@ -112,7 +111,8 @@ public final class ConfigUtils {
         while (name != null && name.length() > 0) {
             HostContainer container = new HostContainer();
             container.setName(name);
-            container.setLength(ConfigUtils.getInt(props, lengthKey + '_' + i));
+            container.setMaxLength(ConfigUtils.getInt(props, lengthKey + '_'
+                    + i));
             containers.add(container);
             name = props.getProperty(nameKey + '_' + ++i);
         }

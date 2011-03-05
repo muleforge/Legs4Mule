@@ -13,11 +13,11 @@ package org.mule.transport.legstar.cixs.transformer;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.json.JSONException;
 import org.mule.api.MuleMessage;
 import org.mule.api.transformer.TransformerException;
 import org.mule.transport.legstar.config.HostProgram;
 
-import com.legstar.host.invoke.model.HostProgramException;
 import com.legstar.messaging.CommareaPart;
 import com.legstar.messaging.ContainerPart;
 import com.legstar.messaging.HeaderPartException;
@@ -109,7 +109,7 @@ public class HostToLegstarExecRequestMuleTransformer extends AbstractHostToExecR
         } catch (HeaderPartException e) {
             throw new TransformerException(
                     getI18NMessages().hostTransformFailure(), this, e);
-        } catch (HostProgramException e) {
+        } catch (JSONException e) {
             throw new TransformerException(
                     getI18NMessages().hostTransformFailure(), this, e);
         }

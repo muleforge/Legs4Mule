@@ -13,10 +13,10 @@ package org.mule.transport.legstar.cixs.transformer;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.mule.api.transformer.Transformer;
 import org.mule.transformer.AbstractMessageTransformer;
 import org.mule.transformer.AbstractTransformerTestCase;
 import org.mule.transport.legstar.config.ConfigUtils;
-import org.mule.api.transformer.Transformer;
 
 import com.legstar.coxb.host.HostData;
 import com.legstar.messaging.HeaderPartException;
@@ -110,7 +110,8 @@ public class HostToMultipartLegstarExecRequestMuleTransformerTest extends Abstra
                 LegStarMessage msgResult = new LegStarMessage();
                 msgResult.fromByteArray((byte[]) result, 0);
                 
-                assertTrue(msgExpected.getHeaderPart().equals(msgResult.getHeaderPart()));
+                assertTrue(msgResult.getHeaderPart().toString(), msgExpected
+                        .getHeaderPart().equals(msgResult.getHeaderPart()));
                 for (LegStarMessagePart partExpected : msgExpected.getDataParts()) {
                     boolean matched = false;
                     for (LegStarMessagePart partResult : msgResult.getDataParts()) {

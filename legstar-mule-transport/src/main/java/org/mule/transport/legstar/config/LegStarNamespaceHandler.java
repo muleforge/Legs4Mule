@@ -17,13 +17,12 @@ import org.mule.config.spring.handlers.AbstractMuleNamespaceHandler;
 import org.mule.config.spring.parsers.generic.ChildDefinitionParser;
 import org.mule.config.spring.parsers.specific.MessageProcessorDefinitionParser;
 import org.mule.endpoint.URIBuilder;
+import org.mule.transport.http.HttpConstants;
 import org.mule.transport.legstar.cixs.transformer.HostToLegstarExecRequestMuleTransformer;
 import org.mule.transport.legstar.cixs.transformer.LegstarExecReplyToHostMuleTransformer;
 import org.mule.transport.legstar.http.LegstarHttpConnector;
 import org.mule.transport.legstar.http.transformer.HostByteArrayToHttpResponse;
-import org.mule.transport.http.HttpConstants;
 
-import com.legstar.host.invoke.model.HostContainer;
 
 /**
  * Registers a Bean Definition Parser for handling <code>&lt;legstar:connector&gt;</code> elements.

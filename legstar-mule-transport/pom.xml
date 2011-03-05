@@ -96,11 +96,6 @@
             <groupId>com.legsem.legstar</groupId>
             <artifactId>legstar-messaging</artifactId>
         </dependency>
-        <!-- LegStar invoker -->
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-invoker</artifactId>
-        </dependency>
         <!-- LegStar MQ transport (we need the MQCIH classes) -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
