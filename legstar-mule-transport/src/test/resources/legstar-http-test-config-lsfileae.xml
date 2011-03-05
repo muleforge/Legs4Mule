@@ -48,6 +48,9 @@
                             <legstar:host-program
                                 name="LSFILEAE"
                                 maxDataLength="79"
+                                transID="LALT"
+                                syncOnReturn="true"
+                                sysID="CICS"
                             >
                             </legstar:host-program>
                         </legstar:host-to-legstar-transformer>

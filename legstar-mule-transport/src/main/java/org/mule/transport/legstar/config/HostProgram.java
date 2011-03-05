@@ -36,7 +36,7 @@ public class HostProgram {
     private String _sysID;
 
     /** Syncpoint forced on return. */
-    private Boolean _syncOnReturn;
+    private boolean _syncOnReturn;
 
     /** The remote CICS transaction ID to use. */
     private String _transID;
@@ -153,7 +153,7 @@ public class HostProgram {
     /**
      * @return Returns the Syncpoint forced on return mode.
      */
-    public Boolean getSyncOnReturn() {
+    public boolean isSyncOnReturn() {
         return _syncOnReturn;
     }
 
@@ -203,45 +203,45 @@ public class HostProgram {
      * @throws JSONException if something is wrong with the attributes
      */
     public String toJSONHost() throws JSONException {
-            JSONStringer stringer = new JSONStringer();
-            stringer.object();
-            stringer.key(Constants.CICS_PROGRAM_NAME_KEY);
-            stringer.value(getName());
-            if (hasChannel()) {
-                stringer.key(Constants.CICS_CHANNEL_KEY);
-                stringer.value(getChannelName());
-                /*
-                 * Host has no interest in input containers (there is enough
-                 * info in the message data parts). It also has no interest in
-                 * output containers maximum length.
-                 */
-                if (getOutputContainers() != null
-                        && getOutputContainers().size() > 0) {
-                    stringer.key(Constants.CICS_OUT_CONTAINERS_KEY);
-                    stringer.value(toJSONNames(getOutputContainers()));
-                }
-            } else {
-                stringer.key(Constants.CICS_LENGTH_KEY);
-                /* Host is not expecting int types, only strings */
-                stringer.value(Integer.toString(getMaxDataLength()));
-                stringer.key(Constants.CICS_DATALEN_KEY);
-                stringer.value(Integer.toString(getDataLength()));
+        JSONStringer stringer = new JSONStringer();
+        stringer.object();
+        stringer.key(Constants.CICS_PROGRAM_NAME_KEY);
+        stringer.value(getName());
+        if (hasChannel()) {
+            stringer.key(Constants.CICS_CHANNEL_KEY);
+            stringer.value(getChannelName());
+            /*
+             * Host has no interest in input containers (there is enough info in
+             * the message data parts). It also has no interest in output
+             * containers maximum length.
+             */
+            if (getOutputContainers() != null
+                    && getOutputContainers().size() > 0) {
+                stringer.key(Constants.CICS_OUT_CONTAINERS_KEY);
+                stringer.value(toJSONNames(getOutputContainers()));
             }
-            if (getSysID() != null) {
-                stringer.key(Constants.CICS_SYSID_KEY);
-                stringer.value(getSysID());
-            }
-            if (getSyncOnReturn() != null) {
-                stringer.key(Constants.CICS_SYNCONRET_KEY);
-                /* Host is not expecting boolean types, only strings */
-                stringer.value(getSyncOnReturn().toString());
-            }
-            if (getTransID() != null) {
-                stringer.key(Constants.CICS_TRANSID_KEY);
-                stringer.value(getTransID());
-            }
-            stringer.endObject();
-            return stringer.toString();
+        } else {
+            stringer.key(Constants.CICS_LENGTH_KEY);
+            /* Host is not expecting int types, only strings */
+            stringer.value(Integer.toString(getMaxDataLength()));
+            stringer.key(Constants.CICS_DATALEN_KEY);
+            stringer.value(Integer.toString(getDataLength()));
+        }
+        if (getSysID() != null) {
+            stringer.key(Constants.CICS_SYSID_KEY);
+            stringer.value(getSysID());
+        }
+        if (isSyncOnReturn()) {
+            stringer.key(Constants.CICS_SYNCONRET_KEY);
+            /* Host is not expecting boolean types, only strings */
+            stringer.value("1");
+        }
+        if (getTransID() != null) {
+            stringer.key(Constants.CICS_TRANSID_KEY);
+            stringer.value(getTransID());
+        }
+        stringer.endObject();
+        return stringer.toString();
     }
 
     /**

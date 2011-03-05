@@ -215,6 +215,27 @@
                         </xsd:documentation>
                     </xsd:annotation>
                 </xsd:attribute>
+                <xsd:attribute name="sysID" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            Specifies on which CICS region the LINK is to run.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="syncOnReturn" type="xsd:boolean">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            Specifies that the remote region requested by the SYSID option is to take a syncpoint on successful completion of the linked-to program.
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="transID" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            Specifies the name of the mirror transaction that the remote region is to attach, and under which it is to run the linked-to program..
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
