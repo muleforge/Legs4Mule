@@ -76,8 +76,14 @@ public class HostToMqcihExecRequestMuleTransformer extends AbstractHostToExecReq
                 new byte[mqcihBytes.length + CICS_PROGRAM_NAME_LEN + hostData.length];
             System.arraycopy(mqcihBytes, 0,
                     result, 0, mqcihBytes.length);
+
+            /* Add program name (pad with spaces if too short) */
+            byte[] programBytes = "        ".getBytes(getHostCharset());
             System.arraycopy(getHostProgram().getName().getBytes(getHostCharset()), 0,
-                    result, mqcihBytes.length, CICS_PROGRAM_NAME_LEN);
+                    programBytes, 0, getHostProgram().getName().length());
+            System.arraycopy(programBytes, 0, result, mqcihBytes.length,
+                    CICS_PROGRAM_NAME_LEN);
+
             System.arraycopy(hostData, 0,
                     result, mqcihBytes.length + CICS_PROGRAM_NAME_LEN, hostData.length);
             
