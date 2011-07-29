@@ -21,7 +21,7 @@
 
         <!-- COBOL Structure to XSD translator ant task  -->
         <taskdef name="cob2xsd"
-            classname="com.legstar.cob2xsd.task.CobolStructureToXsdTask">
+            classname="com.legstar.cob2xsd.Cob2XsdTask">
             <classpath>
                 <pathelement location="${basedir}"/>
                 <fileset dir="${legstar.home}" includes="lib/*.jar"/>

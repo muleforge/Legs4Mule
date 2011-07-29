@@ -38,8 +38,8 @@ public class LegstarMockConnectorFactoryTestCase extends AbstractMuleTestCase {
      * @throws Exception if creation fails
      */
     public void testCreateFromFactory() throws Exception  {
-        InboundEndpoint endpoint = muleContext.getRegistry()
-                .lookupEndpointFactory().getInboundEndpoint(getEndpointURI());
+        InboundEndpoint endpoint = muleContext.getEndpointFactory()
+                .getInboundEndpoint(getEndpointURI());
         assertNotNull(endpoint);
         assertNotNull(endpoint.getConnector());
         assertTrue(endpoint.getConnector() instanceof LegstarMockConnector);

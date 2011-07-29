@@ -227,7 +227,8 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
                 new URIBuilder("legstar-tcp://mainframe:3011",
                         muleContext));
-        OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
+        OutboundEndpoint endpoint = muleContext.getEndpointFactory()
+                .getOutboundEndpoint(
                 endpointBuilder);
         LegstarTcpConnector connector = (LegstarTcpConnector) endpoint.getConnector();
         connector.setHostUserID("P390");
@@ -243,7 +244,8 @@ public class LegstarTcpMessageDispatcherTestCase extends AbstractMuleTestCase {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
                 new URIBuilder("legstar-tcp://mainframe:65101",
                         muleContext));
-        OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
+        OutboundEndpoint endpoint = muleContext.getEndpointFactory()
+                .getOutboundEndpoint(
                 endpointBuilder);
         LegstarTcpConnector connector = (LegstarTcpConnector) endpoint.getConnector();
         connector.setHostUserID("P390");

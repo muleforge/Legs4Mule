@@ -47,7 +47,7 @@ public class LegstarHttpMessageReceiverTestCase extends AbstractMessageReceiverT
                 new URIBuilder("legstar://localhost:" + Integer.toString(LEGSTAR_PORT), muleContext));
         endpointBuilder.setResponseMessageProcessors(CollectionUtils.singletonList(
                 new HostByteArrayToHttpResponse()));
-        endpoint = muleContext.getRegistry().lookupEndpointFactory().getInboundEndpoint(endpointBuilder);
+        endpoint = muleContext.getEndpointFactory().getInboundEndpoint(endpointBuilder);
         return endpoint;
     }
 

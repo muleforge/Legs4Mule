@@ -17,6 +17,8 @@ Assembly descriptor for the full distribution.
             <includes>
                 <include>legstar-cob2xsd-*.jar</include>
                 <include>antlr-runtime-*.jar</include>
+                <include>legstar-xsd2cob-*.jar</include>
+                <include>legstar-java2cob-*.jar</include>
             </includes>
         </fileSet>
 

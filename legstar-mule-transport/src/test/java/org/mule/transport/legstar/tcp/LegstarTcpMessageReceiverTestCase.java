@@ -50,7 +50,7 @@ public class LegstarTcpMessageReceiverTestCase extends AbstractMessageReceiverTe
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
                 new URIBuilder("legstar-tcp://localhost:1234",
                         muleContext));
-        return muleContext.getRegistry().lookupEndpointFactory().getInboundEndpoint(
+        return muleContext.getEndpointFactory().getInboundEndpoint(
                 endpointBuilder);
     }
 

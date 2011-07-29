@@ -18,7 +18,7 @@
         <!-- Source XML schema location  -->
         <property name="xsd.dir" value="schema" />
         <!-- Distribution name  -->
-        <property name="dist.name" value="legstar-mule-${project.version}" />
+        <property name="dist.name" value="legstar-mule-${project.parent.version}" />
         <!-- Distribution zip file  -->
         <property name="dist.zip" value="${dist.name}.zip" />
         <!-- Distribution file location   -->

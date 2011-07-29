@@ -86,7 +86,7 @@ public class LegstarMockMessageDispatcherTestCase extends AbstractMuleTestCase {
                 new URIBuilder("legstar-mock://localhost",
                         muleContext));
         endpointBuilder.setExchangePattern(MessageExchangePattern.REQUEST_RESPONSE);
-        return muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
+        return muleContext.getEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
     }
     

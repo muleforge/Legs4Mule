@@ -95,7 +95,7 @@ public class LegstarTcpSocketKeyTestCase extends AbstractMuleTestCase {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
                 new URIBuilder("legstar-tcp://mainframe:3011",
                         muleContext));
-        return muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
+        return muleContext.getEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
     }
 
@@ -107,7 +107,7 @@ public class LegstarTcpSocketKeyTestCase extends AbstractMuleTestCase {
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
                 new URIBuilder("legstar-tcp://mainframe:3012",
                         muleContext));
-        return muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
+        return muleContext.getEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
     }
 }

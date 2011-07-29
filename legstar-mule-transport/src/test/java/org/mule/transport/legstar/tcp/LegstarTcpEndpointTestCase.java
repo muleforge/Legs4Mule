@@ -57,8 +57,8 @@ public class LegstarTcpEndpointTestCase extends AbstractMuleTestCase {
 	public void testEndpoint() throws Exception {
 		EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
 				new URIBuilder("legstar-tcp://mainframe:3011", muleContext));
-		OutboundEndpoint endpoint = muleContext.getRegistry()
-				.lookupEndpointFactory().getOutboundEndpoint(endpointBuilder);
+        OutboundEndpoint endpoint = muleContext.getEndpointFactory()
+                .getOutboundEndpoint(endpointBuilder);
 		assertTrue(endpoint.getExchangePattern() == MessageExchangePattern.REQUEST_RESPONSE);
 	}
 

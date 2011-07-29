@@ -23,16 +23,16 @@ import com.legstar.test.cixs.LsfilealOperationCases;
 public final class Samples {
 
     /** Target package for generated Mule component. */
-    public static final String LEGS4MULE_PKG_PREFIX =
-        "org.mule.transport.legstar.test";
+    public static final String LEGS4MULE_PKG_PREFIX = "org.mule.transport.legstar.test";
 
-    /** Defeats instantiation.*/
+    /** Defeats instantiation. */
     private Samples() {
-        
+
     }
 
     /**
      * Create a service without any operations.
+     * 
      * @param serviceName the service name
      * @return a new service
      */
@@ -45,13 +45,14 @@ public final class Samples {
 
     /**
      * Case with a regular commarea.
+     * 
      * @return a Mule component to serve as model for velocity templates.
      */
     public static CixsMuleComponent getLsfileaeMuleComponent() {
         CixsMuleComponent muleComponent = getNewService("lsfileae");
         muleComponent.getCixsOperations().add(
-                LsfileaeOperationCases.getOperation(
-                        muleComponent.getName(), muleComponent.getPackageName()));
+                LsfileaeOperationCases.getOperation(muleComponent.getName(),
+                        muleComponent.getPackageName()));
         return muleComponent;
     }
 
@@ -61,41 +62,44 @@ public final class Samples {
     public static CixsMuleComponent getLsfilealMuleComponent() {
         CixsMuleComponent muleComponent = getNewService("lsfileal");
         muleComponent.getCixsOperations().add(
-                LsfilealOperationCases.getOperation(
-                        muleComponent.getName(), muleComponent.getPackageName()));
+                LsfilealOperationCases.getOperation(muleComponent.getName(),
+                        muleComponent.getPackageName()));
         return muleComponent;
     }
+
     /**
      * @return a Mule component to serve as model for velocity templates.
      */
     public static CixsMuleComponent getLsfileacMuleComponent() {
         CixsMuleComponent muleComponent = getNewService("lsfileac");
         muleComponent.getCixsOperations().add(
-                LsfileacOperationCases.getOperation(
-                        muleComponent.getName(), muleComponent.getPackageName()));
+                LsfileacOperationCases.getOperation(muleComponent.getName(),
+                        muleComponent.getPackageName()));
         return muleComponent;
     }
+
     /**
      * @return a Mule component to serve as model for velocity templates.
      */
     public static CixsMuleComponent getLsfileaxMuleComponent() {
         CixsMuleComponent muleComponent = getNewService("lsfileax");
         muleComponent.getCixsOperations().add(
-                LsfileaeOperationCases.getOperation(
-                        muleComponent.getName(), muleComponent.getPackageName()));
+                LsfileaeOperationCases.getOperation("lsfileae",
+                        muleComponent.getPackageName()));
         muleComponent.getCixsOperations().add(
-                LsfileacOperationCases.getOperation(
-                        muleComponent.getName(), muleComponent.getPackageName()));
+                LsfileacOperationCases.getOperation("lsfileac",
+                        muleComponent.getPackageName()));
         return muleComponent;
     }
+
     /**
      * @return a Mule component to serve as model for velocity templates.
      */
     public static CixsMuleComponent getJvmQueryMuleComponent() {
         CixsMuleComponent muleComponent = getNewService("jvmquery");
         muleComponent.getCixsOperations().add(
-                JvmqueryOperationCases.getOperation(
-                        muleComponent.getName(), muleComponent.getPackageName()));
+                JvmqueryOperationCases.getOperation(muleComponent.getName(),
+                        muleComponent.getPackageName()));
         return muleComponent;
     }
 }

@@ -3,15 +3,16 @@
     <groupId>org.mule.transports</groupId>
     <artifactId>mule-transport-legstar-pom</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.1-SNAPSHOT</version>
+    <version>3.1.0-SNAPSHOT</version>
     <name>LegStar for Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
         <muleVersion>3.1.2</muleVersion>
+        <legstarVersion>1.5.1</legstarVersion>
         <legstarCoreVersion>1.5.5</legstarCoreVersion>
-        <legstarTransportVersion>1.5.1</legstarTransportVersion>
-        <legstarCixsgenVersion>1.5.1</legstarCixsgenVersion>
-        <legstarPluginVersion>1.5.1</legstarPluginVersion>
+        <legstarTransportVersion>${legstarVersion}</legstarTransportVersion>
+        <legstarCixsgenVersion>${legstarVersion}</legstarCixsgenVersion>
+        <legstarPluginVersion>${legstarVersion}</legstarPluginVersion>
         <legstarSamplesVersion>0.2.2</legstarSamplesVersion>
         <springVersion>3.0.3.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

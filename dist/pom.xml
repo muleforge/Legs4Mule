@@ -4,12 +4,12 @@
     <parent>
         <groupId>org.mule.transports</groupId>
         <artifactId>mule-transport-legstar-pom</artifactId>
-        <version>3.0.1-SNAPSHOT</version>
+        <version>3.1.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
+
     <artifactId>mule-transport-legstar-dist</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+
     <name>LegStar for Mule Distribution</name>
     <description>Distribution project for the Mule LegStar transport and tools</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
@@ -99,7 +99,7 @@
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <configuration>
-                    <finalName>legstar-mule-${project.version}</finalName>
+                    <finalName>legstar-mule-${parent.version}</finalName>
                     <descriptors>
                         <descriptor>assembly.xml</descriptor>
                     </descriptors>

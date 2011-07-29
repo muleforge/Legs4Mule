@@ -123,7 +123,7 @@ public class HostToMqcihExecRequestMuleTransformerTest extends AbstractTransform
         EndpointBuilder endpointBuilder = new EndpointURIEndpointBuilder(
                 new URIBuilder(getTestEndpointURI(),
                         muleContext));
-        OutboundEndpoint endpoint = muleContext.getRegistry().lookupEndpointFactory().getOutboundEndpoint(
+        OutboundEndpoint endpoint = muleContext.getEndpointFactory().getOutboundEndpoint(
                 endpointBuilder);
         LegstarWmqConnector connector = (LegstarWmqConnector) endpoint.getConnector();
         connector.setHostUserID("P390");
