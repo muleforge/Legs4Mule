@@ -7,9 +7,8 @@
         <version>3.0.1-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
+
     <artifactId>legstar-mule-transport</artifactId>
-    <version>3.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
 
     <name>LegStar for Mule 3.x Transport</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
@@ -148,12 +147,14 @@
         <!-- LegStar JAXB test cases  -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <artifactId>legstar-jaxbgen</artifactId>
+            <type>test-jar</type>
         </dependency>
         <!-- LegStar Binding test cases  -->
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-coxbgen-cases</artifactId>
+            <artifactId>legstar-coxbgen</artifactId>
+            <type>test-jar</type>
         </dependency>
 
     </dependencies>

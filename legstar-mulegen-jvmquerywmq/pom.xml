@@ -6,9 +6,9 @@
         <version>3.0.1-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
+
     <artifactId>legstar-mulegen-jvmquerywmq</artifactId>
-    <packaging>jar</packaging>
-    <version>3.0.1-SNAPSHOT</version>
+
     <name>Sample Proxy for POJO JVMQuery over WMQ</name>
     <description>Sample Proxy for POJO JVMQuery over WebSphere MQ</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
@@ -36,21 +36,24 @@
         <!-- Test cases for POJOs and Web Services -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-xsdcgen-cases</artifactId>
+            <artifactId>legstar-test-jvmquery</artifactId>
+            <classifier>classes</classifier>
+        <scope>compile</scope>
+        </dependency>
+
+        <!-- Test cases for COBOL binding -->    
+        <dependency>
+            <groupId>com.legsem.legstar</groupId>
+            <artifactId>legstar-coxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 
         <!-- Test cases for COBOL binding -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-coxbgen-cases</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- Test cases for COBOL binding -->    
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <artifactId>legstar-jaxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 
@@ -86,12 +89,6 @@
         <dependency>
             <groupId>com.ibm</groupId>
             <artifactId>dhbcore</artifactId>
-        </dependency>
-
-        <!-- LegStar test helpers -->    
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-tests</artifactId>
         </dependency>
 
         <!-- Mule test helpers -->    

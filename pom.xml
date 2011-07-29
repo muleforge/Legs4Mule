@@ -7,11 +7,15 @@
     <name>LegStar for Mule</name>
     <description>Mainframe transport for Mule based on open-source LegStar</description>
     <properties>
-        <muleVersion>3.0.1</muleVersion>
-        <legstarVersion>1.4.4</legstarVersion>
-        <legstarCoreVersion>1.5.1</legstarCoreVersion>
+        <muleVersion>3.1.2</muleVersion>
+        <legstarCoreVersion>1.5.5</legstarCoreVersion>
+        <legstarTransportVersion>1.5.1</legstarTransportVersion>
+        <legstarCixsgenVersion>1.5.1</legstarCixsgenVersion>
+        <legstarPluginVersion>1.5.1</legstarPluginVersion>
+        <legstarSamplesVersion>0.2.2</legstarSamplesVersion>
         <springVersion>3.0.3.RELEASE</springVersion>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- If a mainframe is available for integration testing, set
         this property to false in settings.xml, it will take precedence. -->
@@ -116,6 +120,7 @@
                     <configuration>
                         <source>1.5</source>
                         <target>1.5</target>
+                        <encoding>UTF-8</encoding>
                     </configuration>
                 </plugin>
 
@@ -363,28 +368,28 @@
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mule-transport</artifactId>
-                <version>${version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <!-- LegStar for Mule generator -->    
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mule-generator</artifactId>
-                <version>${version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <!-- LegStar for Mule adapter sample -->    
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mulegen-lsfileae</artifactId>
-                <version>${version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <!-- LegStar for Mule proxy sample -->    
             <dependency>
                 <groupId>org.mule.transports</groupId>
                 <artifactId>legstar-mulegen-jvmquery</artifactId>
-                <version>${version}</version>
+                <version>${parent.version}</version>
             </dependency>
 
             <!-- Mule intra-vm transport -->
@@ -491,11 +496,12 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- LegStar Messaging -->    
+           
+            <!-- LegStar Binding runtime -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-messaging</artifactId>
-                <version>${legstarVersion}</version>
+                <artifactId>legstar-coxbrt</artifactId>
+                <version>${legstarCoreVersion}</version>
             </dependency>
 
             <!-- LegStar Binding API -->    
@@ -505,67 +511,11 @@
                 <version>${legstarCoreVersion}</version>
             </dependency>
 
-            <!-- LegStar Binding runtime -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-coxbrt</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar pooling engine -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-engine</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar Adapter Runtime -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-invoker</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar Standard HTTP transport -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-chttprt</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar Standard WMQ transport -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-cmqrt</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar Standard TCP transport -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-csokrt</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar Service Model -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-cixsgen-model</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar Service Generator -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-cixsgen</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
             <!-- LegStar Binding Generator -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
                 <artifactId>legstar-coxbgen</artifactId>
-                <version>${legstarVersion}</version>
+                <version>${legstarCoreVersion}</version>
             </dependency>
 
             <!-- LegStar Code Generator -->    
@@ -575,65 +525,124 @@
                 <version>${legstarCoreVersion}</version>
             </dependency>
 
-            <!-- LegStar Common Eclipse plugin -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-common-plugin</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- LegStar Common Services Eclipse plugin -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-cixscom-plugin</artifactId>
-                <version>${legstarVersion}</version>
-            </dependency>
-
-            <!-- Test cases for POJOs and Web Services -->    
-            <dependency>
-                <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-xsdcgen-cases</artifactId>
-                <version>${legstarVersion}</version>
-                <scope>test</scope>
-            </dependency>
-
             <!-- Test cases for JAXB binding -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-jaxbgen-cases</artifactId>
-                <version>${legstarVersion}</version>
+                <artifactId>legstar-jaxbgen</artifactId>
+                <version>${legstarCoreVersion}</version>
+                <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
 
             <!-- Test cases for COBOL binding -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-coxbgen-cases</artifactId>
-                <version>${legstarVersion}</version>
+                <artifactId>legstar-coxbgen</artifactId>
+                <version>${legstarCoreVersion}</version>
+                <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
 
-            <!-- Test cases for Mainframe services -->    
+            <!-- LegStar Messaging -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-cixsgen-model-cases</artifactId>
-                <version>${legstarVersion}</version>
-                <scope>test</scope>
+                <artifactId>legstar-messaging</artifactId>
+                <version>${legstarTransportVersion}</version>
             </dependency>
 
-            <!-- LegStar test helpers -->    
+            <!-- LegStar pooling engine -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
-                <artifactId>legstar-tests</artifactId>
-                <version>${legstarVersion}</version>
-                <scope>test</scope>
+                <artifactId>legstar-engine</artifactId>
+                <version>${legstarTransportVersion}</version>
+            </dependency>
+
+            <!-- LegStar Adapter Runtime -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-invoker</artifactId>
+                <version>${legstarTransportVersion}</version>
+            </dependency>
+
+            <!-- LegStar Standard HTTP transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-chttprt</artifactId>
+                <version>${legstarTransportVersion}</version>
+            </dependency>
+
+            <!-- LegStar Standard WMQ transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cmqrt</artifactId>
+                <version>${legstarTransportVersion}</version>
+            </dependency>
+
+            <!-- LegStar Standard TCP transport -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-csokrt</artifactId>
+                <version>${legstarTransportVersion}</version>
             </dependency>
 
             <!-- LegStar Mock transport -->    
             <dependency>
                 <groupId>com.legsem.legstar</groupId>
                 <artifactId>legstar-cmockrt</artifactId>
-                <version>${legstarVersion}</version>
+                <version>${legstarTransportVersion}</version>
+            </dependency>
+
+            <!-- LegStar Service Model -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixsgen-model</artifactId>
+                <version>${legstarCixsgenVersion}</version>
+            </dependency>
+
+            <!-- LegStar Service Generator -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-jaxws-generator</artifactId>
+                <version>${legstarCixsgenVersion}</version>
+            </dependency>
+
+            <!-- Test cases for Mainframe services -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixsgen-model</artifactId>
+                <version>${legstarCixsgenVersion}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
+
+            <!-- LegStar Common Eclipse plugin -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-common-plugin</artifactId>
+                <version>${legstarPluginVersion}</version>
+            </dependency>
+
+            <!-- LegStar Common Services Eclipse plugin -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-cixscom-plugin</artifactId>
+                <version>${legstarPluginVersion}</version>
+            </dependency>
+
+            <!-- Test cases for POJOs and Web Services -->    
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-test-jvmquery</artifactId>
+                <version>${legstarSamplesVersion}</version>
+                <classifier>classes</classifier>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.legsem.legstar</groupId>
+                <artifactId>legstar-test-cultureinfo</artifactId>
+                <version>${legstarSamplesVersion}</version>
+                <classifier>classes</classifier>
+                <scope>test</scope>
             </dependency>
 
             <!-- Mule test helpers -->    

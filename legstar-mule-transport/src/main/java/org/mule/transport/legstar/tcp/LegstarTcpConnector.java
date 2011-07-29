@@ -23,15 +23,15 @@ package org.mule.transport.legstar.tcp;
 import java.net.Socket;
 
 import org.apache.commons.pool.impl.GenericKeyedObjectPool;
-import org.mule.transport.legstar.LegstarConnector;
-import org.mule.transport.legstar.LegstarConnectorHelper;
-import org.mule.transport.legstar.config.HostCredentials;
-import org.mule.transport.tcp.TcpConnector;
 import org.mule.api.MuleContext;
 import org.mule.api.MuleEvent;
 import org.mule.api.MuleMessage;
 import org.mule.api.endpoint.ImmutableEndpoint;
 import org.mule.api.lifecycle.InitialisationException;
+import org.mule.transport.legstar.LegstarConnector;
+import org.mule.transport.legstar.LegstarConnectorHelper;
+import org.mule.transport.legstar.config.HostCredentials;
+import org.mule.transport.tcp.TcpConnector;
 
 /**
  * <code>LegstarTcpConnector</code> is a mainframe connector over sockets.
@@ -90,7 +90,6 @@ public class LegstarTcpConnector extends TcpConnector implements LegstarConnecto
         } catch (Exception e) {
             logger.warn("Failed to close dispatcher socket pool: " + e.getMessage());
         }
-        super.doDispose();
     }
 
     /** {@inheritDoc} */

@@ -6,9 +6,9 @@
         <version>3.0.1-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
+
     <artifactId>legstar-mulegen-lsfileaetcp</artifactId>
-    <packaging>jar</packaging>
-    <version>3.0.1-SNAPSHOT</version>
+
     <name>Sample Adapter for program LSFILEAE over TCP</name>
     <description>Sample Adapter for program LSFILEAE which uses a COMMAREA with same input and output layout over TCP</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
@@ -36,14 +36,16 @@
         <!-- Test cases for COBOL binding -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-coxbgen-cases</artifactId>
+            <artifactId>legstar-coxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Test cases for JAXB classes -->    
+        <!-- Test cases for COBOL binding -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <artifactId>legstar-jaxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 

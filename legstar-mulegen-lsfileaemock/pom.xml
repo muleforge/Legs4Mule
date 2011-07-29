@@ -36,14 +36,16 @@
         <!-- Test cases for COBOL binding -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-coxbgen-cases</artifactId>
+            <artifactId>legstar-coxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Test cases for JAXB classes -->    
+        <!-- Test cases for COBOL binding -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <artifactId>legstar-jaxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 

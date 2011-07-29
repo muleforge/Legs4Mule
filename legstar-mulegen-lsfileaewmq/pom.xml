@@ -33,24 +33,19 @@
             <artifactId>legstar-coxbapi</artifactId>
         </dependency>
 
-        <!-- Test cases for POJOs and Web Services -->    
+        <!-- Test cases for COBOL binding -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-xsdcgen-cases</artifactId>
+            <artifactId>legstar-coxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 
         <!-- Test cases for COBOL binding -->    
         <dependency>
             <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-coxbgen-cases</artifactId>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- Test cases for COBOL binding -->    
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-jaxbgen-cases</artifactId>
+            <artifactId>legstar-jaxbgen</artifactId>
+            <type>test-jar</type>
             <scope>compile</scope>
         </dependency>
 
@@ -86,12 +81,6 @@
         <dependency>
             <groupId>com.ibm</groupId>
             <artifactId>dhbcore</artifactId>
-        </dependency>
-
-        <!-- LegStar test helpers -->    
-        <dependency>
-            <groupId>com.legsem.legstar</groupId>
-            <artifactId>legstar-tests</artifactId>
         </dependency>
 
         <!-- Mule test helpers -->    
