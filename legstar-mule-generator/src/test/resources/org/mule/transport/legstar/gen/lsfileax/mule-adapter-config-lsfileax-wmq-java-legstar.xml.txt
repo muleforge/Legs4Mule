@@ -10,11 +10,11 @@
         xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
         xmlns:legstar-wmq="http://www.mulesoft.org/schema/mule/legstar/wmq"
     xsi:schemaLocation=
-        "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
-         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.0/mule-http.xsd
-         http://www.mulesoft.org/schema/mule/legstar http://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd
-         http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/3.0/mule-jms.xsd
-         http://www.mulesoft.org/schema/mule/legstar/wmq http://www.legsem.com/legstar/xml/mule-legstar-wmq-3.0.xsd
+        "http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
+         http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/3.1/mule-http.xsd
+         http://www.mulesoft.org/schema/mule/legstar http://www.legsem.com/legstar/xml/mule-legstar-3.1.xsd
+         http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/3.1/mule-jms.xsd
+         http://www.mulesoft.org/schema/mule/legstar/wmq http://www.legsem.com/legstar/xml/mule-legstar-wmq-3.1.xsd
         ">
 
     <description>Mule configuration for lsfileax adapter service</description>

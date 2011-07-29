@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<xsd:schema xmlns="http://www.mulesoft.org/schema/mule/legstar/tcp"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:mule="http://www.mulesoft.org/schema/mule/core"
+            xmlns:schemadoc="http://www.mulesoft.org/schema/mule/schemadoc"
+            xmlns:mule-tcp="http://www.mulesoft.org/schema/mule/tcp"
+            targetNamespace="http://www.mulesoft.org/schema/mule/legstar/tcp"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified">
+
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+    <xsd:import namespace="http://www.mulesoft.org/schema/mule/core"
+                schemaLocation="http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd" />
+    <xsd:import namespace = "http://www.mulesoft.org/schema/mule/schemadoc"
+                schemaLocation = "http://www.mulesoft.org/schema/mule/schemadoc/3.1/mule-schemadoc.xsd"/>
+    <xsd:import namespace = "http://www.mulesoft.org/schema/mule/tcp"
+                schemaLocation = "http://www.mulesoft.org/schema/mule/tcp/3.1/mule-tcp.xsd"/>
+
+    <xsd:annotation>
+        <xsd:documentation>LegStar Sockets</xsd:documentation>
+        <xsd:appinfo>
+            <schemadoc:short-name>Legstar-tcp</schemadoc:short-name>
+            <schemadoc:page-title>Legstar-tcp Transport</schemadoc:page-title>
+            <schemadoc:transport-features
+            receiveEvents="true" dispatchEvents="false" responseEvents="true"
+                                          requestEvents="false"
+                                          transactions="false" streaming="false">
+                <schemadoc:inboundMEPs in-only="${receiver}" in-optional-out="true" in-out="true"/>
+                <schemadoc:outboundMEPs out-only="true" out-in="true" out-optional-in="true"/>
+            </schemadoc:transport-features>
+        </xsd:appinfo>
+    </xsd:annotation>
+
+    <xsd:element name="connector" type="legstarTcpConnectorType" substitutionGroup="mule:abstract-connector">
+        <xsd:annotation>
+            <xsd:documentation>
+                LegStar Sockets
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:element>
+
+
+    <xsd:complexType name="legstarTcpConnectorType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-tcp:tcpConnectorType">
+                <xsd:attribute name="hostUserID" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            The mainframe user ID for authentication
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="hostPassword" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            The mainframe password for authentication
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <!--
+    The following define endpoint elements for this transport. Attributes for the endpoint can be defined at the section
+    at the bottom
+    -->
+    <xsd:element name="inbound-endpoint" type="inboundEndpointType" substitutionGroup="mule:abstract-inbound-endpoint"/>
+    <xsd:complexType name="inboundEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-tcp:inboundEndpointType">
+                <xsd:attributeGroup ref="addressAttributes"/>
+                <xsd:attributeGroup ref="propertyAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="outbound-endpoint" type="outboundEndpointType" substitutionGroup="mule:abstract-outbound-endpoint"/>
+    <xsd:complexType name="outboundEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-tcp:outboundEndpointType">
+                <xsd:attributeGroup ref="addressAttributes"/>
+                <xsd:attributeGroup ref="propertyAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:element name="endpoint" type="globalEndpointType" substitutionGroup="mule:abstract-global-endpoint"/>
+    <xsd:complexType name="globalEndpointType">
+        <xsd:complexContent>
+            <xsd:extension base="mule-tcp:globalEndpointType">
+                <xsd:attributeGroup ref="addressAttributes"/>
+                <xsd:attributeGroup ref="propertyAttributes"/>
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+
+    <xsd:attributeGroup name="addressAttributes">
+    <!--
+        TODO define address attributes for this endpoints i.e. queue, host, port, etc
+        <xsd:attribute name="foo" type="xsd:string"/>
+    -->
+    </xsd:attributeGroup>
+
+    <xsd:attributeGroup name="propertyAttributes">
+         <!--
+        TODO define property attributes for this endpoint. These are properties that can configure the way the
+        transport behaves but are not used to create the endpoint address.
+        <xsd:attribute name="bar" type="xsd:string"/>
+    -->
+    </xsd:attributeGroup>
+
+</xsd:schema>

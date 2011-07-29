@@ -3,8 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:legstar-wmq="http://www.mulesoft.org/schema/mule/legstar/wmq"
     xsi:schemaLocation="
-       http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.0/mule.xsd
-       http://www.mulesoft.org/schema/mule/legstar/wmq http://www.legsem.com/legstar/xml/mule-legstar-wmq-3.0.xsd">
+       http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/3.1/mule.xsd
+       http://www.mulesoft.org/schema/mule/legstar/wmq http://www.legsem.com/legstar/xml/mule-legstar-wmq-3.1.xsd">
 
     <legstar-wmq:connector name="legstarWmqConnector"
         jndiInitialFactory="com.sun.jndi.fscontext.RefFSContextFactory"

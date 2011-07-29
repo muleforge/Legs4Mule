@@ -12,12 +12,12 @@ package org.mule.transport.legstar.gen;
 
 import java.io.File;
 
-import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
-import org.mule.transport.legstar.model.CixsMuleComponent;
-import org.mule.transport.legstar.model.UmoComponentParameters;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationHostMessagingType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
+import org.mule.transport.legstar.model.AntBuildMule2CixsModel;
+import org.mule.transport.legstar.model.CixsMuleComponent;
+import org.mule.transport.legstar.model.UmoComponentParameters;
 import org.mule.transport.legstar.model.options.TcpTransportParameters;
 
 import com.legstar.cixs.gen.model.options.HttpTransportParameters;

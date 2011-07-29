@@ -24,6 +24,7 @@ import javax.jms.TextMessage;
 
 import org.mule.api.transport.Connector;
 import org.mule.transport.AbstractConnectorTestCase;
+import org.mule.transport.jms.jndi.SimpleJndiNameResolver;
 
 import com.ibm.disthub2.impl.jms.TextMessageImpl;
 
@@ -35,12 +36,16 @@ public class LegstarWmqConnectorTestCase extends AbstractConnectorTestCase {
 
     /** {@inheritDoc} */
     public Connector createConnector() throws Exception {
+        SimpleJndiNameResolver jndiNameResolver = new SimpleJndiNameResolver();
+        jndiNameResolver.setJndiProviderUrl("file:///JNDI-Directory");
+        jndiNameResolver
+                .setJndiInitialFactory("com.sun.jndi.fscontext.RefFSContextFactory");
+
         LegstarWmqConnector c = new LegstarWmqConnector(muleContext);
         c.setName("Test");
         c.setHostUserID("champ");
         c.setHostPassword("polion");
-        c.setJndiInitialFactory("com.sun.jndi.fscontext.RefFSContextFactory");
-        c.setJndiProviderUrl("file:///JNDI-Directory");
+        c.setJndiNameResolver(jndiNameResolver);
         c.setConnectionFactoryJndiName("ConnectionFactory");
         return c;
     }

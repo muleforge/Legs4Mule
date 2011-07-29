@@ -1,4 +1,4 @@
-http\://www.legsem.com/legstar/xml/mule-legstar-3.0.xsd=META-INF/mule-legstar-3.0.xsd
-http\://www.legsem.com/legstar/xml/mule-legstar-mock-3.0.xsd=META-INF/mule-legstar-mock-3.0.xsd
-http\://www.legsem.com/legstar/xml/mule-legstar-tcp-3.0.xsd=META-INF/mule-legstar-tcp-3.0.xsd
-http\://www.legsem.com/legstar/xml/mule-legstar-wmq-3.0.xsd=META-INF/mule-legstar-wmq-3.0.xsd
+http\://www.legsem.com/legstar/xml/mule-legstar-3.1.xsd=META-INF/mule-legstar-3.1.xsd
+http\://www.legsem.com/legstar/xml/mule-legstar-mock-3.1.xsd=META-INF/mule-legstar-mock-3.1.xsd
+http\://www.legsem.com/legstar/xml/mule-legstar-tcp-3.1.xsd=META-INF/mule-legstar-tcp-3.1.xsd
+http\://www.legsem.com/legstar/xml/mule-legstar-wmq-3.1.xsd=META-INF/mule-legstar-wmq-3.1.xsd
