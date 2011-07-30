@@ -37,9 +37,9 @@ public class LegstarWmqConnectorTestCase extends AbstractConnectorTestCase {
     /** {@inheritDoc} */
     public Connector createConnector() throws Exception {
         SimpleJndiNameResolver jndiNameResolver = new SimpleJndiNameResolver();
-        jndiNameResolver.setJndiProviderUrl("file:///JNDI-Directory");
+        jndiNameResolver.setJndiProviderUrl("src/test/resources/host-jndi");
         jndiNameResolver
-                .setJndiInitialFactory("com.sun.jndi.fscontext.RefFSContextFactory");
+                .setJndiInitialFactory("org.mule.transport.legstar.config.HostContextFactory");
 
         LegstarWmqConnector c = new LegstarWmqConnector(muleContext);
         c.setName("Test");
@@ -53,8 +53,8 @@ public class LegstarWmqConnectorTestCase extends AbstractConnectorTestCase {
     /** {@inheritDoc} */
     public String getTestEndpointURI() {
         return "legstar-wmq://CICS01.BRIDGE.REQUEST.QUEUE"
-        + "?jndiInitialFactory=com.sun.jndi.fscontext.RefFSContextFactory"
-        + "&jndiProviderUrl=file:///JNDI-Directory"
+        + "?jndiInitialFactory=org.mule.transport.legstar.config.HostContextFactory"
+        + "&jndiProviderUrl=src/test/resources/host-jndi"
         + "&connectionFactoryJndiName=ConnectionFactory";
     }
 

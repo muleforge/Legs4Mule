@@ -12,10 +12,10 @@ package org.mule.transport.legstar.test.lsfileae;
 
 import java.io.ObjectInputStream;
 
+import org.mule.api.MuleMessage;
 import org.mule.module.client.MuleClient;
 import org.mule.tck.FunctionalTestCase;
 import org.mule.transport.http.ReleasingInputStream;
-import org.mule.api.MuleMessage;
 
 import com.legstar.test.coxb.lsfileae.Dfhcommarea;
 import com.legstar.test.coxb.lsfileae.ObjectFactory;

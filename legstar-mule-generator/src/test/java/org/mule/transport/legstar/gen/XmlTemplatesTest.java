@@ -32,7 +32,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
     /** True when references should be created. */
     private static final boolean CREATE_REFERENCES = false;
 
-    /** @{inheritDoc}*/
+    /** @{inheritDoc */
     public void setUp() {
         super.setUp();
         getParameters().put("targetAppsDir", GEN_APPS_DIR.getPath());
@@ -49,6 +49,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * build-zip.xml creates the mule component ready for deployment.
+     * 
      * @throws Exception if generation fails
      */
     public void testAntBuildZip() throws Exception {
@@ -56,16 +57,17 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         getParameters().put("generationTarget", "adapter");
 
-        File componentAntFilesDir = new File(GEN_ANT_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentAntFilesDir, true);
-        String filename = Mule2CixsGenerator.generateAntBuildZip(
-                muleComponent, getParameters(), componentAntFilesDir);
-        compare(componentAntFilesDir, filename,
+        File componentAntFilesDir = new File(GEN_ANT_DIR,
                 muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentAntFilesDir, true);
+        String filename = Mule2CixsGenerator.generateAntBuildZip(muleComponent,
+                getParameters(), componentAntFilesDir);
+        compare(componentAntFilesDir, filename, muleComponent.getName());
     }
 
     /**
      * deploy.xml deploys the jar archive to a Mule server.
+     * 
      * @throws Exception if generation fails
      */
     public void testAntDeploy() throws Exception {
@@ -73,27 +75,28 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         CixsMuleComponent muleComponent = Samples.getLsfileaeMuleComponent();
         getParameters().put("generationTarget", "adapter");
 
-        File componentAntFilesDir = new File(GEN_ANT_DIR, muleComponent.getName());
-        CodeGenUtil.checkDirectory(componentAntFilesDir, true);
-        String filename = Mule2CixsGenerator.generateAntDeploy(
-                muleComponent, getParameters(), componentAntFilesDir);
-        compare(componentAntFilesDir, filename,
+        File componentAntFilesDir = new File(GEN_ANT_DIR,
                 muleComponent.getName());
+        CodeGenUtil.checkDirectory(componentAntFilesDir, true);
+        String filename = Mule2CixsGenerator.generateAntDeploy(muleComponent,
+                getParameters(), componentAntFilesDir);
+        compare(componentAntFilesDir, filename, muleComponent.getName());
     }
 
     /**
      * Creates a mule adapter config generation.
+     * 
      * @param muleComponent the component under test
      * @param transport HTTP or WMQ
      * @param payload XML or JAVA
      * @param messaging the type of messaging expected by the mainframe
      * @throws Exception if generation fails
      */
-    private void testAdapterConfigXml(
-            final CixsMuleComponent muleComponent,
+    private void testAdapterConfigXml(final CixsMuleComponent muleComponent,
             final SampleConfigurationTransport transport,
             final SampleConfigurationPayloadType payload,
-            final SampleConfigurationHostMessagingType messaging) throws Exception {
+            final SampleConfigurationHostMessagingType messaging)
+            throws Exception {
 
         getParameters().put("hostCharset", "IBM01140");
         switch (transport) {
@@ -110,16 +113,15 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
             break;
         }
 
-        File componentConfFilesDir = new File(
-                GEN_CONF_DIR, muleComponent.getName());
+        File componentConfFilesDir = new File(GEN_CONF_DIR,
+                muleComponent.getName());
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
         String fileName = AbstractCixsMuleGenerator.generateAdapterConfigXml(
                 muleComponent,
                 getParameters(),
                 componentConfFilesDir,
-                getAdapterConfigurationFileName(muleComponent.getName(), transport, payload, messaging),
-                transport,
-                payload,
+                getAdapterConfigurationFileName(muleComponent.getName(),
+                        transport, payload, messaging), transport, payload,
                 messaging);
 
         compare(componentConfFilesDir, fileName, muleComponent.getName());
@@ -127,18 +129,19 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * Creates a mule proxy config generation.
+     * 
      * @param muleComponent the component under test
      * @param transport HTTP or WMQ
      * @throws Exception if generation fails
      */
-    private void testProxyConfigXml(
-            final CixsMuleComponent muleComponent,
+    private void testProxyConfigXml(final CixsMuleComponent muleComponent,
             final SampleConfigurationTransport transport) throws Exception {
 
         getParameters().put("hostCharset", "IBM01140");
 
         UmoComponentParameters umoComponentParameters = new UmoComponentParameters();
-        umoComponentParameters.setImplementationName("com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
+        umoComponentParameters
+                .setImplementationName("com.legstar.xsdc.test.cases.jvmquery.JVMQuery");
         umoComponentParameters.add(getParameters());
 
         switch (transport) {
@@ -152,15 +155,15 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
             break;
         }
 
-        File componentConfFilesDir = new File(
-                GEN_CONF_DIR, muleComponent.getName());
+        File componentConfFilesDir = new File(GEN_CONF_DIR,
+                muleComponent.getName());
         CodeGenUtil.checkDirectory(componentConfFilesDir, true);
         String fileName = AbstractCixsMuleGenerator.generateProxyConfigXml(
                 muleComponent,
                 getParameters(),
                 componentConfFilesDir,
-                getProxyConfigurationFileName(muleComponent.getName(), transport),
-                transport);
+                getProxyConfigurationFileName(muleComponent.getName(),
+                        transport), transport);
 
         compare(componentConfFilesDir, fileName, muleComponent.getName());
     }
@@ -170,13 +173,15 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
      */
     private void addAdapterHttpParameters() {
         HttpTransportParameters httpTransportParameters = new HttpTransportParameters();
-        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
-        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
-        httpTransportParameters.setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
+        httpTransportParameters
+                .setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_HOST);
+        httpTransportParameters
+                .setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_HTTP_PORT);
+        httpTransportParameters
+                .setPath(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_SERVER_PATH);
         httpTransportParameters.add(getParameters());
         getParameters().put("legstarHttpAddress",
-        		httpTransportParameters.getUrl().replace("http:",
-						"legstar:"));
+                httpTransportParameters.getUrl().replace("http:", "legstar:"));
     }
 
     /**
@@ -184,10 +189,9 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
      */
     private void addAdapterWmqParameters() {
         WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
-        wmqTransportParameters.setJndiUrl(
-                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
-        wmqTransportParameters.setJndiContextFactory(
-                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        wmqTransportParameters.setJndiUrl("src/test/resources/host-jndi");
+        wmqTransportParameters
+                .setJndiContextFactory("org.mule.transport.legstar.config.HostContextFactory");
         wmqTransportParameters.setConnectionFactory("ConnectionFactory");
         wmqTransportParameters.setRequestQueue("CICSA.REQUEST.QUEUE");
         wmqTransportParameters.setReplyQueue("CICSA.REPLY.QUEUE");
@@ -199,8 +203,10 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
      */
     private void addAdapterTcpParameters() {
         TcpTransportParameters httpTransportParameters = new TcpTransportParameters();
-        httpTransportParameters.setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_TCP_HOST);
-        httpTransportParameters.setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_TCP_PORT);
+        httpTransportParameters
+                .setHost(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_TCP_HOST);
+        httpTransportParameters
+                .setPort(AntBuildMule2CixsModel.ADAPTER_TO_MAINFRAME_DEFAULT_TCP_PORT);
         httpTransportParameters.add(getParameters());
     }
 
@@ -214,8 +220,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
         httpTransportParameters.setPath("/legstar/services/jvmquery");
         httpTransportParameters.add(getParameters());
         getParameters().put("legstarHttpAddress",
-        		httpTransportParameters.getUrl().replace("http:",
-						"legstar:"));
+                httpTransportParameters.getUrl().replace("http:", "legstar:"));
     }
 
     /**
@@ -223,17 +228,18 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
      */
     private void addProxyWmqParameters() {
         WmqTransportParameters wmqTransportParameters = new WmqTransportParameters();
-        wmqTransportParameters.setJndiUrl(
-                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
-        wmqTransportParameters.setJndiContextFactory(
-                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+        wmqTransportParameters.setJndiUrl("src/test/resources/host-jndi");
+        wmqTransportParameters
+                .setJndiContextFactory("org.mule.transport.legstar.config.HostContextFactory");
         wmqTransportParameters.setConnectionFactory("ConnectionFactory");
         wmqTransportParameters.setRequestQueue("JVMQUERY.POJO.REQUEST.QUEUE");
         wmqTransportParameters.setReplyQueue("JVMQUERY.POJO.REPLY.QUEUE");
         wmqTransportParameters.add(getParameters());
     }
+
     /**
      * LSFILEAE HTTP JAVA test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaeAdapterHttpJavaConfigXml() throws Exception {
@@ -245,6 +251,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAE HTTP XML test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaeAdapterHttpXmlConfigXml() throws Exception {
@@ -256,6 +263,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAE WMQ JAVA LEGSTAR test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaeAdapterWmqJavaLegstarConfigXml() throws Exception {
@@ -267,6 +275,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAE WMQ JAVA MQCIH test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaeAdapterWmqJavaMqcihConfigXml() throws Exception {
@@ -278,6 +287,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAE TCP JAVA test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaeAdapterTcpJavaConfigXml() throws Exception {
@@ -289,6 +299,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAE MOCK JAVA test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaeAdapterMockJavaConfigXml() throws Exception {
@@ -300,6 +311,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAX HTTP JAVA test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaxAdapterHttpJavaConfigXml() throws Exception {
@@ -311,6 +323,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAX HTTP XML test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaxAdapterHttpXmlConfigXml() throws Exception {
@@ -322,6 +335,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * LSFILEAX WMQ JAVA test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testLsfileaxAdapterWmqJavaConfigXml() throws Exception {
@@ -333,6 +347,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * JVMQUERY HTTP test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testJvmqueryProxyHttpConfigXml() throws Exception {
@@ -342,6 +357,7 @@ public class XmlTemplatesTest extends AbstractTestTemplate {
 
     /**
      * JVMQUERY WMQ test case.
+     * 
      * @throws Exception if generation fails
      */
     public void testJvmqueryProxyWmqConfigXml() throws Exception {

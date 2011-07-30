@@ -15,8 +15,6 @@ import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConf
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationPayloadType;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
-import com.legstar.cixs.gen.model.options.WmqTransportParameters;
-
 /**
  * Adapter Generator ant tests.
  * <p/>
@@ -63,9 +61,9 @@ public class AntBuildMule2CixsModelTest extends AbstractAntBuildCixsMuleModelTes
 
         getAntModel().getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
         getAntModel().getWmqTransportParameters().setJndiUrl(
-                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+                "src/test/resources/host-jndi");
         getAntModel().getWmqTransportParameters().setJndiContextFactory(
-                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+                "org.mule.transport.legstar.config.HostContextFactory");
         getAntModel().getWmqTransportParameters().setZosQueueManager("CSQ1");
         getAntModel().getWmqTransportParameters().setRequestQueue(
                 "CICS01.BRIDGE.REQUEST.QUEUE");

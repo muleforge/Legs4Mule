@@ -15,8 +15,6 @@ import java.io.File;
 import org.mule.transport.legstar.gen.Samples;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
 
-import com.legstar.cixs.gen.model.options.WmqTransportParameters;
-
 /**
  * Proxy Generator ant tests.
  * <p/>
@@ -63,9 +61,9 @@ public class AntBuildCixs2MuleModelTest extends AbstractAntBuildCixsMuleModelTes
         getAntModel().setSampleConfigurationTransport(SampleConfigurationTransport.WMQ);
         getAntModel().getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
         getAntModel().getWmqTransportParameters().setJndiUrl(
-                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+                "src/test/resources/host-jndi");
         getAntModel().getWmqTransportParameters().setJndiContextFactory(
-                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+                "org.mule.transport.legstar.config.HostContextFactory");
         getAntModel().getWmqTransportParameters().setZosQueueManager("CSQ1");
         getAntModel().getWmqTransportParameters().setRequestQueue(
                 "JVMQUERY.POJO.REQUEST.QUEUE");

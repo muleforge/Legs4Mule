@@ -25,8 +25,8 @@
         address="http://localhost:3280/lsfileae" />
 
     <legstar-wmq:connector name="mainframeConnector"
-        jndiInitialFactory="com.sun.jndi.fscontext.RefFSContextFactory"
-        jndiProviderUrl="file:///JNDI-Directory"
+        jndiInitialFactory="org.mule.transport.legstar.config.HostContextFactory"
+        jndiProviderUrl="src/test/resources/host-jndi"
         connectionFactoryJndiName="ConnectionFactory"
         specification="1.1"
         jndiDestinations="true"

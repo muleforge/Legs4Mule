@@ -7,8 +7,8 @@
        http://www.mulesoft.org/schema/mule/legstar/wmq http://www.legsem.com/legstar/xml/mule-legstar-wmq-3.1.xsd">
 
     <legstar-wmq:connector name="legstarWmqConnector"
-        jndiInitialFactory="com.sun.jndi.fscontext.RefFSContextFactory"
-        jndiProviderUrl="file:///JNDI-Directory"
+        jndiInitialFactory="org.mule.transport.legstar.config.HostContextFactory"
+        jndiProviderUrl="src/test/resources/host-jndi"
         connectionFactoryJndiName="ConnectionFactory">
     </legstar-wmq:connector>
 

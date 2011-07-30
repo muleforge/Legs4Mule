@@ -46,8 +46,8 @@ public class LegstarWmqConnectorFactoryTestCase extends AbstractMuleTestCase {
     /** {@inheritDoc} */
     public String getEndpointURI() {
         return "legstar-wmq://CICS01.BRIDGE.REQUEST.QUEUE"
-        + "?jndiInitialFactory=com.sun.jndi.fscontext.RefFSContextFactory"
-        + "&jndiProviderUrl=file:///JNDI-Directory"
+        + "?jndiInitialFactory=org.mule.transport.legstar.config.HostContextFactory"
+        + "&jndiProviderUrl=src/test/resources/host-jndi"
         + "&connectionFactoryJndiName=ConnectionFactory";
     }
 

@@ -15,7 +15,6 @@ import java.io.File;
 import org.mule.transport.legstar.model.CixsMuleComponent;
 
 import com.legstar.cixs.gen.model.CixsOperation;
-import com.legstar.cixs.gen.model.options.WmqTransportParameters;
 import com.legstar.codegen.CodeGenUtil;
 
 /**
@@ -220,9 +219,9 @@ public class Cixs2MuleGeneratorTest extends AbstractTestTemplate {
         _generator.setSampleConfigurationTransport("wmq");
         _generator.getWmqTransportParameters().setConnectionFactory("ConnectionFactory");
         _generator.getWmqTransportParameters().setJndiUrl(
-                WmqTransportParameters.DEFAULT_JNDI_FS_DIRECTORY);
+                "src/test/resources/host-jndi");
         _generator.getWmqTransportParameters().setJndiContextFactory(
-                WmqTransportParameters.DEFAULT_JNDI_CONTEXT_FACTORY);
+                "org.mule.transport.legstar.config.HostContextFactory");
         _generator.getWmqTransportParameters().setZosQueueManager("CSQ1");
         _generator.getWmqTransportParameters().setRequestQueue(
                 "JVMQUERY.POJO.REQUEST.QUEUE");

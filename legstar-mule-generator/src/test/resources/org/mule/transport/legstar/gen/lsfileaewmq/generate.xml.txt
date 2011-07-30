@@ -71,8 +71,8 @@
             </cixsMuleComponent>
             <!-- WMQ transport parameters -->
             <wmqTransportParameters
-                jndiUrl="file:///JNDI-Directory"
-                jndiContextFactory="com.sun.jndi.fscontext.RefFSContextFactory"
+                jndiUrl="src/test/resources/host-jndi"
+                jndiContextFactory="org.mule.transport.legstar.config.HostContextFactory"
                 connectionFactory="ConnectionFactory"
                 zosQueueManager="CSQ1"
                 requestQueue="CICS01.BRIDGE.REQUEST.QUEUE"
