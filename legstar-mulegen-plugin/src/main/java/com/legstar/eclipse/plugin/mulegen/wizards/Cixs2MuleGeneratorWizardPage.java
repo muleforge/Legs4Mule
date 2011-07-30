@@ -23,8 +23,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
-import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 import org.mule.transport.legstar.model.AbstractAntBuildCixsMuleModel.SampleConfigurationTransport;
+import org.mule.transport.legstar.model.AntBuildCixs2MuleModel;
 
 import com.legstar.eclipse.plugin.mulegen.Messages;
 import com.legstar.eclipse.plugin.mulegen.preferences.PreferenceConstants;
@@ -205,6 +205,9 @@ public class Cixs2MuleGeneratorWizardPage extends AbstractCixsMuleGeneratorWizar
         if (getCixsHostToProxyHttpGroup().isSelected()) {
             getCixsHostToProxyHttpGroup().updateGenModel();
             getGenModel().setSampleConfigurationTransport(SampleConfigurationTransport.HTTP);
+            getGenModel().setSampleCobolHttpClientType(
+                    getCixsHostToProxyHttpGroup()
+                            .getSampleCobolHttpClientType());
         }
         if (getCixsHostToProxyWmqGroup().isSelected()) {
             getCixsHostToProxyWmqGroup().updateGenModel();
