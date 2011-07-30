@@ -45,7 +45,22 @@
     </xsd:element>
     <xsd:complexType name="legstarHttpConnectorType">
         <xsd:complexContent>
-            <xsd:extension base="http:httpConnectorType" />
+            <xsd:extension base="http:httpConnectorType" >
+                <xsd:attribute name="hostUserID" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            The mainframe user ID for authentication
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+                <xsd:attribute name="hostPassword" type="xsd:string">
+                    <xsd:annotation>
+                        <xsd:documentation>
+                            The mainframe password for authentication
+                        </xsd:documentation>
+                    </xsd:annotation>
+                </xsd:attribute>
+            </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
 

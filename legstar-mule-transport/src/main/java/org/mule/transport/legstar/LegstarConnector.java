@@ -49,4 +49,14 @@ public interface LegstarConnector {
      */
     String getHostPassword();
  
+    /**
+     * @param userID the host user ID to set
+     */
+    void setHostUserID(final String userID);
+
+    /**
+     * @param password the host Password to set
+     */
+    void setHostPassword(final String password);
+
 }

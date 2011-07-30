@@ -19,10 +19,17 @@
     <http:endpoint name="lsfileaeClientEndpoint" exchange-pattern="request-response"
         address="http://localhost:3280" />
 
+    <!-- Host credentials can be passed at the connector level 
+     <legstar:connector name="mainframeConnector" hostUserID="P390" hostPassword="STREAM2"/>
+      -->
+      
     <legstar:connector name="mainframeConnector"/>
 
-    <legstar:endpoint name="MainframeRequestEndpoint" exchange-pattern="request-response"
-        address="legstar://mainframe:4080/CICS/CWBA/LSWEBBIN" connector-ref="mainframeConnector" />
+    <!-- Host credentials can be passed in the URL user info -->
+    <legstar:endpoint name="MainframeRequestEndpoint"
+    	exchange-pattern="request-response"
+    	address="legstar://P390:STREAM2@mainframe:4080/CICS/CWBA/LSWEBBIN"
+    	connector-ref="mainframeConnector" />
 
     <model name="lsfileaeModel">
 
