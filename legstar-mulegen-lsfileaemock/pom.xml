@@ -13,6 +13,20 @@
     <description>Sample Adapter for program LSFILEAE which uses a COMMAREA with same input and output layout using MOCK transport</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <generateReports>false</generateReports>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
     <dependencies>
 
         <!-- LegStar for Mule transport -->    

@@ -13,6 +13,20 @@
     <description>Sample Adapter for programs LSFILEAE and LSFILEAC a case with two methods in the same adapter</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <generateReports>false</generateReports>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
     <dependencies>
 
         <!-- LegStar for Mule transport -->    

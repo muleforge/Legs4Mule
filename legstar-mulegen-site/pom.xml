@@ -6,17 +6,14 @@
         <version>3.1.0-SNAPSHOT</version>
         <relativePath>..</relativePath>
     </parent>
+
     <artifactId>legstar-mulegen-site</artifactId>
     <packaging>pom</packaging>
+
     <name>LegStar for Mule Generator Eclipse site</name>
-    <version>3.1.0-SNAPSHOT</version>
     <description>Mule Generator Eclipse site.</description>
     <url>http://www.mulesource.org/display/LEGSTAR/Home</url>
 
-    <dependencies>
-    
-
-    </dependencies>
 
     <build>
 
@@ -26,9 +23,9 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <executions>
                     <execution>
-                        <!-- Update version numbers in PDE resources so that they match Maven versions -->
-                        <id>maven-to-pde</id>
-                        <phase>generate-sources</phase>
+                        <!-- Populate Eclipse site -->
+                        <id>populate-site</id>
+                        <phase>package</phase>
                         <configuration>
                             <tasks>
                                 <ant antfile="${basedir}/src/main/ant/maven-to-pde.xml">
@@ -36,18 +33,6 @@
                                     <property name="legstarMuleVersion" value="${pom.parent.version}" />
                                     <property name="muleVersion" value="${muleVersion}" />
                                 </ant>
-                            </tasks>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <!-- Populate Eclipse site -->
-                        <id>populate-site</id>
-                        <phase>package</phase>
-                        <configuration>
-                            <tasks>
                                 <ant antfile="${basedir}/src/main/ant/populate-site.xml" />
                                 <exec dir="${basedir}" executable="${basedir}/target/publish.bat" failonerror="true" />
                             </tasks>
@@ -59,6 +44,14 @@
                 </executions>
             </plugin>
         
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <generateReports>false</generateReports>
+                </configuration>
+            </plugin>
+
         </plugins>
     
     </build>
